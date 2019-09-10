@@ -7,9 +7,39 @@
 
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
+
   </head>
 
   <body>
+    <% if logged_in? %>
+      <%= 'Welcome, ' + current_user.username %>
+    <% else %>
+      No one is logged in.
+    <% end %>
+    <br>
+    <br>
+    PostMan Lite
+    <form action="<%= api_users_url %>" method="POST">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="text" name="user[username]" placeholder="username">
+    <input type="text" name="user[email]" placeholder="email">
+    <input type="password" name="user[password]" placeholder="password">
+    <input type="submit" value="Create New User">
+    </form>
+    <br>
+    <form action="<%= api_session_url %>" method="POST">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="text" name="user[username]" placeholder="username">
+    <input type="password" name="user[password]" placeholder="password">
+    <input type="submit" value="Log In">
+    </form>
+    <br>
+    <form action="<%= api_session_url %>" method="POST">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="submit" value="Log Out">
+    </form>
+
     <%= yield %>
   </body>
 </html>
