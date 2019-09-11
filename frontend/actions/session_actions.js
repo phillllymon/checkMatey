@@ -25,10 +25,18 @@ export const receiveErrors = (errors) => {
     };
 };
 
+export const receiveSessionErrors = (errors) => {
+    return {
+        type: RECEIVE_SESSION_ERRORS,
+        errors: errors
+    };
+};
+
 export const login = (user) => {
     return (dispatch) => {
         SessionApiUtil.login(user)
-        .then( (res) => dispatch(receiveCurrentUser(res)));
+        .then( (res) => dispatch(receiveCurrentUser(res)))
+        .fail( (res) => dispatch(receiveSessionErrors(res)));
     };
 };
 
@@ -42,6 +50,7 @@ export const logout = () => {
 export const signup = (user) => {
     return (dispatch) => {
         SessionApiUtil.signup(user)
-        .then( (res) => dispatch(receiveCurrentUser(res)));
+        .then( (res) => dispatch(receiveCurrentUser(res)))
+        .fail((res) => dispatch(receiveSessionErrors(res)));
     };
 };
