@@ -1,3 +1,13 @@
+
+<% if logged_in? %>
+    <script type="text/javascript">
+        window.currentUser = {
+            id: `<%= current_user.id %>`,
+            username: `<%= current_user.username %>`,
+            rating: `<%= current_user.rating %>`
+        };
+    </script>
+<% end %>
 <main id="root">
     react no worky
 </main>

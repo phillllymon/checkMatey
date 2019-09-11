@@ -17,8 +17,6 @@
       No one is logged in.
     <% end %>
     <br>
-    <br>
-    PostMan Lite
     <form action="<%= api_users_url %>" method="POST">
     <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
     <input type="text" name="user[username]" placeholder="username">
@@ -39,6 +37,8 @@
     <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
     <input type="submit" value="Log Out">
     </form>
+    <br>
+    ^^ PostMan lite ^^
 
     <%= yield %>
   </body>
