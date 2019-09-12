@@ -9,6 +9,8 @@ class SignupForm extends React.Component {
             email: '',
             password: ''
         };
+        this.props.clearErrors();
+
         this.updateField = this.updateField.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -32,7 +34,7 @@ class SignupForm extends React.Component {
                     this.props.errors.map((error, idx) => {
                         return (
                             <div key={idx}>
-                                {error.responseText}
+                                {error}
                             </div>
                         );
                     })

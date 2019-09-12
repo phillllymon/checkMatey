@@ -14,11 +14,25 @@
  *= require_self
  */
 
- body {
-     background-color: rgb(49, 46, 43);
- }
+body {
+    background-color: rgb(49, 46, 43);
+}
 
- #splash {
-     color: white;
-     font-family: sans-serif;
- }
+#splash {
+    color: white;
+    font-family: sans-serif;
+}
+
+.splash_bar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.splash_option {
+    color: lightgray;
+    padding: 20px;
+}
+
+.splash_option:hover {
+    color: white;
+}

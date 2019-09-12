@@ -140,7 +140,7 @@ var login = function login(user) {
     _util_session_api_util__WEBPACK_IMPORTED_MODULE_0__["login"](user).then(function (res) {
       return dispatch(receiveCurrentUser(res));
     }).fail(function (res) {
-      return dispatch(receiveSessionErrors(res));
+      return dispatch(receiveSessionErrors(res.responseJSON));
     });
   };
 };
@@ -156,7 +156,7 @@ var signup = function signup(user) {
     _util_session_api_util__WEBPACK_IMPORTED_MODULE_0__["signup"](user).then(function (res) {
       return dispatch(receiveCurrentUser(res));
     }).fail(function (res) {
-      return dispatch(receiveSessionErrors(res));
+      return dispatch(receiveSessionErrors(res.responseJSON));
     });
   };
 };
@@ -529,6 +529,9 @@ function (_React$Component) {
       username: '',
       password: ''
     };
+
+    _this.props.clearErrors();
+
     _this.updateField = _this.updateField.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     return _this;
@@ -558,7 +561,7 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.errors.map(function (error, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: idx
-        }, error.responseText);
+        }, error);
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Username", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -614,6 +617,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     login: function login(user) {
       return dispatch(Object(_actions_session_actions__WEBPACK_IMPORTED_MODULE_0__["login"])(user));
+    },
+    clearErrors: function clearErrors() {
+      return dispatch(Object(_actions_session_actions__WEBPACK_IMPORTED_MODULE_0__["receiveSessionErrors"])([]));
     }
   };
 };
@@ -673,6 +679,9 @@ function (_React$Component) {
       email: '',
       password: ''
     };
+
+    _this.props.clearErrors();
+
     _this.updateField = _this.updateField.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     return _this;
@@ -702,7 +711,7 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.errors.map(function (error, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: idx
-        }, error.responseText);
+        }, error);
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Username", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -772,6 +781,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     signup: function signup(user) {
       return dispatch(Object(_actions_session_actions__WEBPACK_IMPORTED_MODULE_0__["signup"])(user));
+    },
+    clearErrors: function clearErrors() {
+      return dispatch(Object(_actions_session_actions__WEBPACK_IMPORTED_MODULE_0__["receiveSessionErrors"])([]));
     }
   };
 };
@@ -796,13 +808,27 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Splash = function Splash(props) {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "splash"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "CheckMatey"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Play Chess Online", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "on the High Seas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Play with over 2.5 members"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Improve over time"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Learn from your mistakes")), "Learn Play vsComputer ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "CheckMatey"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Play Chess Online", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "on the High Seas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Play with over 2.5 members"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Improve over time"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Learn from your mistakes")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    "class": "spash_bar"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    to: "/learn"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    "class": "splash_option"
+  }, "Learn to Play")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    to: "/play"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    "class": "splash_option"
+  }, "Play Computer")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: "/login"
-  }, "Log In"), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    "class": "splash_option"
+  }, "Log In")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: "/signup"
-  }, "Sign Up"));
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    "class": "splash_option"
+  }, "Sign Up")))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Splash);
@@ -894,7 +920,7 @@ var sessionErrorsReducer = function sessionErrorsReducer() {
 
   switch (action.type) {
     case _actions_session_actions__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_SESSION_ERRORS"]:
-      return state.concat(action.errors);
+      return action.errors;
 
     case _actions_session_actions__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_CURRENT_USER"]:
       return [];

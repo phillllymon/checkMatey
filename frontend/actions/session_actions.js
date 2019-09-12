@@ -36,7 +36,7 @@ export const login = (user) => {
     return (dispatch) => {
         SessionApiUtil.login(user)
         .then( (res) => dispatch(receiveCurrentUser(res)))
-        .fail( (res) => dispatch(receiveSessionErrors(res)));
+        .fail( (res) => dispatch(receiveSessionErrors(res.responseJSON)));
     };
 };
 
@@ -51,6 +51,6 @@ export const signup = (user) => {
     return (dispatch) => {
         SessionApiUtil.signup(user)
         .then( (res) => dispatch(receiveCurrentUser(res)))
-        .fail((res) => dispatch(receiveSessionErrors(res)));
+        .fail( (res) => dispatch(receiveSessionErrors(res.responseJSON)));
     };
 };

@@ -8,6 +8,8 @@ class LoginForm extends React.Component {
             username: '',
             password: ''
         };
+        this.props.clearErrors();
+
         this.updateField = this.updateField.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -31,7 +33,7 @@ class LoginForm extends React.Component {
                     this.props.errors.map( (error, idx) => {
                         return (
                             <div key={idx}>
-                                {error.responseText}
+                                {error}
                             </div>
                         );
                     })
