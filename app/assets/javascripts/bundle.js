@@ -346,12 +346,12 @@ var mapStateToProps = function mapStateToProps(state) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _menu_menu_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./menu/menu_container */ "./frontend/components/menu/menu_container.js");
+/* harmony import */ var _menu_menu_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./menu/menu_container */ "./frontend/components/menu/menu_container.js");
 
 
 
 var Home = function Home(props) {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_menu_menu_container__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "feed play");
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_menu_menu_container__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "feed play");
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Home);
@@ -808,27 +808,43 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Splash = function Splash(props) {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "splash"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "CheckMatey"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Play Chess Online", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "on the High Seas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Play with over 2.5 members"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Improve over time"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Learn from your mistakes")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    "class": "spash_bar"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "splash_top"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "top_content"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "splash_set"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "splash_logo"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Play Chess on the High Seas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Play with over 2.5 members")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Improve over time")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Learn from your mistakes"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    "class": "play_now"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    "class": "fas fa-chess-knight"
+  }), " Play Now"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    "class": "splash_bar"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    "class": "splash_option",
     to: "/learn"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    "class": "splash_option"
-  }, "Learn to Play")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    "class": "fab fa-leanpub"
+  }), " Learn to Play"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    "class": "splash_option",
     to: "/play"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    "class": "splash_option"
-  }, "Play Computer")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    to: "/login"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    "class": "splash_option"
-  }, "Log In")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    "class": "fas fa-robot"
+  }), " Play Computer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    "class": "splash_option",
     to: "/signup"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    "class": "splash_option"
-  }, "Sign Up")))));
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    "class": "fas fa-user-plus"
+  }), " Sign Up"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    "class": "splash_option",
+    to: "/login"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    "class": "fas fa-sign-in-alt"
+  }), " Log In")));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Splash);
