@@ -1,15 +1,17 @@
 import React from 'react';
 import MenuContainer from './menu/menu_container';
+import FeedContainer from './feed/feed_container';
+import PlayBarContainer from './play_bar/play_bar_container';
 
 
 
 const Home = (props) => (
     <div>
-        <h1>Home</h1>
         <MenuContainer />
-        <br/>
-        <br/>
-        feed play
+        <div className="home">
+            <FeedContainer />
+            <PlayBarContainer />
+        </div>
     </div>
 );
 

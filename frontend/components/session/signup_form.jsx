@@ -15,6 +15,7 @@ class SignupForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.backToSplash = this.backToSplash.bind(this);
         this.toLogin = this.toLogin.bind(this);
+        this.demoLogin = this.demoLogin.bind(this);
     }
     
     updateField(field) {
@@ -35,6 +36,12 @@ class SignupForm extends React.Component {
 
     toLogin(e) {
         this.props.history.push('/login');
+    }
+
+    demoLogin(e) {
+        e.preventDefault();
+        this.props.login({ username: 'gMaster42', password: '123456' });
+        <Redirect to='/home' />
     }
 
     render() {
@@ -110,7 +117,7 @@ class SignupForm extends React.Component {
                         <div className="submit_bar">
                             <button className="session_button" type="submit" >Create Account</button>
                             <i>or</i>
-                            <button className="session_button" >Demo Login</button>
+                            <button onClick={this.demoLogin} className="session_button" >Demo Login</button>
                         </div>
                     </form>
                     <div className="submit_bar">

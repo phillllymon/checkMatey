@@ -7,8 +7,8 @@ class Menu extends React.Component {
 
     render() {
         return (
-            <div>
-                Welcome, {this.props.user.username}
+            <div className="menu">
+                Welcome, {this.props.user.username} ({this.props.user.rating})
                 <br/>
                 Home
                 <br/>

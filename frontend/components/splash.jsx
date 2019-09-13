@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-
-
 const Splash = (props) => (
     
         <div id="splash">
@@ -17,9 +15,11 @@ const Splash = (props) => (
                         <li><h3>Improve over time</h3></li>
                         <li><h3>Learn from your mistakes</h3></li>
                     </ul>
+                    <Link to="/signup">
                     <button className="play_now">
-                    <i className="fas fa-chess-knight"></i> Play Now
+                        <i className="fas fa-chess-knight"></i> Play Now
                     </button>
+                    </Link>
                 </div>
             </div>
             <div className="splash_bar">

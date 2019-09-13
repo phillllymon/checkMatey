@@ -5,6 +5,7 @@ import configureStore from './store/store';
 
 import * as SessionApiUtil from './util/session_api_util';
 import * as SessionActions from './actions/session_actions';
+import * as PostActions from './actions/post_actions';
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -32,6 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const store = configureStore(preloadedState);
 
     //test BELOW
+    window.fetchAllPosts = PostActions.fetchAllPosts;
+    window.deletePost = PostActions.deletePost;
+
     window.signup = SessionApiUtil.signup;
     window.login = SessionApiUtil.login;
     window.logout = SessionApiUtil.logout;
