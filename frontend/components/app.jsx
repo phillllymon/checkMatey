@@ -22,10 +22,10 @@ class App extends React.Component {
         else {
             return (
                 <div>
-                    <Splash />
+                    <Splash />                                  
                     <Route path="/login" component={LoginFormContainer} />
                     <Route path="/signup" component={SignupFormContainer} />
-
+                    
                 </div>
             );
         }

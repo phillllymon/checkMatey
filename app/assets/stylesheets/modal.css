@@ -1,0 +1,73 @@
+.modal_back {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.session_modal {
+    position: fixed;
+    z-index: 2;
+    left: 25%;
+    top: 15%;
+    width: 50%;
+    height: 50%;
+    background-color: rgb(230, 230, 230);
+    border-radius: 5px;
+    font-family: sans-serif;
+    font-size: 15px;
+    color: rgb(60, 60, 60);
+}
+
+.session_form {
+    margin: auto;
+}
+
+.form_label {
+    width: 50%;
+}
+
+.med_pirate {
+    float: right;
+    margin-right: 10%;
+    background-image: url("medium_transparent.png");
+    width: 120px;
+    height: 127px;
+}
+
+.input_field {
+    width: 100%;
+    height: 30px;
+    font-size: 20px;
+}
+
+.submit_bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.session_button {
+    font-size: 20px;
+    height: 30px;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.session_button:hover {
+    font-size: 20px;
+    height: 30px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: lightgray;
+}
+
+.errors {
+    margin: auto;
+    height: 30px;
+    color: red;
+    text-decoration: none;
+}

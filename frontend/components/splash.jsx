@@ -17,16 +17,16 @@ const Splash = (props) => (
                         <li><h3>Improve over time</h3></li>
                         <li><h3>Learn from your mistakes</h3></li>
                     </ul>
-                    <button class="play_now">
-                    <i class="fas fa-chess-knight"></i> Play Now
+                    <button className="play_now">
+                    <i className="fas fa-chess-knight"></i> Play Now
                     </button>
                 </div>
             </div>
-            <div class="splash_bar">
-                <Link class="splash_option" to="/learn"><i class="fab fa-leanpub"></i> Learn to Play</Link> 
-                <Link class="splash_option" to="/play"><i class="fas fa-robot"></i> Play Computer</Link> 
-            <Link class="splash_option" to="/signup"><i class="fas fa-user-plus"></i> Sign Up</Link>
-                <Link class="splash_option" to="/login"><i class="fas fa-sign-in-alt"></i> Log In</Link> 
+            <div className="splash_bar">
+                <Link className="splash_option" to="/learn"><i className="fab fa-leanpub"></i> Learn to Play</Link> 
+                <Link className="splash_option" to="/play"><i className="fas fa-robot"></i> Play Computer</Link> 
+                <Link className="splash_option" to="/signup"><i className="fas fa-user-plus"></i> Sign Up</Link>
+                <Link className="splash_option" to="/login"><i className="fas fa-sign-in-alt"></i> Log In</Link> 
             </div>
             
         </div>

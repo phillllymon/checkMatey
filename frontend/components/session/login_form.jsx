@@ -12,6 +12,8 @@ class LoginForm extends React.Component {
 
         this.updateField = this.updateField.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.backToSplash = this.backToSplash.bind(this);
+        this.toSignup = this.toSignup.bind(this);
     }
 
     updateField(field) {
@@ -26,35 +28,72 @@ class LoginForm extends React.Component {
         <Redirect to='/home' />
     }
 
+    backToSplash(e) {
+        this.props.history.push('/');
+    }
+
+    toSignup(e) {
+        this.props.history.push('/signup');
+    }
+
     render() {
         return (
             <div>
-                {
-                    this.props.errors.map( (error, idx) => {
-                        return (
-                            <div key={idx}>
-                                {error}
-                            </div>
-                        );
-                    })
-                }
-                <form onSubmit={this.handleSubmit}>
-                    <label>Username
-                        <input
-                            type="text"
-                            value={this.state.username}
-                            onChange={this.updateField('username')}
-                        />
-                    </label>
-                    <label>Password
-                        <input
-                            type="password"
-                            value={this.state.password}
-                            onChange={this.updateField('password')}
-                        />
-                    </label>
-                    <input type="submit" value="Log In" />
-                </form>
+                <div className="modal_back" onClick={this.backToSplash}></div>
+                <div className="session_modal">
+                    <br/>
+                    <div className="errors">   
+                        <center>
+                            {
+                                this.props.errors.map( (error, idx) => {
+                                    return (
+                                        <div key={idx}>
+                                            {error}
+                                        </div>
+                                    );
+                                })
+                            }
+                        </center>
+                    </div>
+                    <form onSubmit={this.handleSubmit}>
+                        <center><div className="med_pirate"></div><h1>Welcome Back, Matey!</h1></center>
+                        <table className="session_form">
+                            <tbody>
+                                <tr>
+                                    <td width="40%">Username</td>
+                                    <td>
+                                        <input
+                                            className="input_field"
+                                            type="text"
+                                            value={this.state.username}
+                                            onChange={this.updateField('username')}
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Password</td>
+                                    <td>
+                                        <input
+                                            className="input_field"
+                                            type="password"
+                                            value={this.state.password}
+                                            onChange={this.updateField('password')}
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div className="submit_bar">
+                            <button className="session_button" type="submit" >Log In</button>
+                            <i>or</i>
+                            <button className="session_button" >Demo Login</button>
+                        </div>
+                    </form>
+                    <div className="submit_bar">
+                        Don't have an account?
+                        <button className="session_button" onClick={this.toSignup}>Sign Up</button>
+                    </div>
+                </div>
             </div>
         );
     }

@@ -534,6 +534,8 @@ function (_React$Component) {
 
     _this.updateField = _this.updateField.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.backToSplash = _this.backToSplash.bind(_assertThisInitialized(_this));
+    _this.toSignup = _this.toSignup.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -556,26 +558,60 @@ function (_React$Component) {
       });
     }
   }, {
+    key: "backToSplash",
+    value: function backToSplash(e) {
+      this.props.history.push('/');
+    }
+  }, {
+    key: "toSignup",
+    value: function toSignup(e) {
+      this.props.history.push('/signup');
+    }
+  }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.errors.map(function (error, idx) {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "modal_back",
+        onClick: this.backToSplash
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "session_modal"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "errors"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.props.errors.map(function (error, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: idx
         }, error);
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Username", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "med_pirate"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Welcome Back, Matey!")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+        className: "session_form"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+        width: "40%"
+      }, "Username"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "input_field",
         type: "text",
         value: this.state.username,
         onChange: this.updateField('username')
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Password", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Password"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "input_field",
         type: "password",
         value: this.state.password,
         onChange: this.updateField('password')
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "submit",
-        value: "Log In"
-      })));
+      }))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "submit_bar"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "session_button",
+        type: "submit"
+      }, "Log In"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, "or"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "session_button"
+      }, "Demo Login"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "submit_bar"
+      }, "Don't have an account?", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "session_button",
+        onClick: this.toSignup
+      }, "Sign Up"))));
     }
   }]);
 
@@ -684,6 +720,8 @@ function (_React$Component) {
 
     _this.updateField = _this.updateField.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.backToSplash = _this.backToSplash.bind(_assertThisInitialized(_this));
+    _this.toLogin = _this.toLogin.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -706,27 +744,55 @@ function (_React$Component) {
       });
     }
   }, {
+    key: "backToSplash",
+    value: function backToSplash(e) {
+      this.props.history.push('/');
+    }
+  }, {
+    key: "toLogin",
+    value: function toLogin(e) {
+      this.props.history.push('/login');
+    }
+  }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.errors.map(function (error, idx) {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "modal_back",
+        onClick: this.backToSplash
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "session_modal"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "errors"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.props.errors.map(function (error, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: idx
         }, error);
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Username", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Welcome Aboard!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "med_pirate"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+        className: "session_form"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Username"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "input_field",
         type: "text",
         value: this.state.username,
         onChange: this.updateField('username')
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Email", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+        width: "40%"
+      }, "Email"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "input_field",
         type: "email",
         value: this.state.email,
         onChange: this.updateField('email')
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Password", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Password"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "input_field",
         type: "password",
         value: this.state.password,
         onChange: this.updateField('password')
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Skill Level", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Skill Level"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        className: "input_field"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "1"
       }, "New to Chess"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "2"
@@ -736,10 +802,19 @@ function (_React$Component) {
         value: "4"
       }, "Advanced"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "5"
-      }, "Expert"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "submit",
-        value: "Create your FREE Account"
-      })));
+      }, "Expert")))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "submit_bar"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "session_button",
+        type: "submit"
+      }, "Create Account"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, "or"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "session_button"
+      }, "Demo Login"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "submit_bar"
+      }, "Already have an account?", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "session_button",
+        onClick: this.toLogin
+      }, "Login"))));
     }
   }]);
 
@@ -819,31 +894,31 @@ var Splash = function Splash(props) {
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "splash_logo"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Play Chess on the High Seas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Play with over 2.5 members")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Improve over time")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Learn from your mistakes"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    "class": "play_now"
+    className: "play_now"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    "class": "fas fa-chess-knight"
+    className: "fas fa-chess-knight"
   }), " Play Now"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    "class": "splash_bar"
+    className: "splash_bar"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    "class": "splash_option",
+    className: "splash_option",
     to: "/learn"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    "class": "fab fa-leanpub"
+    className: "fab fa-leanpub"
   }), " Learn to Play"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    "class": "splash_option",
+    className: "splash_option",
     to: "/play"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    "class": "fas fa-robot"
+    className: "fas fa-robot"
   }), " Play Computer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    "class": "splash_option",
+    className: "splash_option",
     to: "/signup"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    "class": "fas fa-user-plus"
+    className: "fas fa-user-plus"
   }), " Sign Up"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    "class": "splash_option",
+    className: "splash_option",
     to: "/login"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    "class": "fas fa-sign-in-alt"
+    className: "fas fa-sign-in-alt"
   }), " Log In")));
 };
 
