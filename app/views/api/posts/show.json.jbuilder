@@ -6,5 +6,5 @@ json.extract! @post,
     :start_move, 
     :end_move,
     :created_at
-json.set! :author, @post.author.rating
+json.set! :author, @post.author.username
 json.set! :author_rating, @post.author.rating
