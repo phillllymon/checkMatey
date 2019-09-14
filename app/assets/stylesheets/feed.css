@@ -50,6 +50,13 @@
     height: 40px;
 }
 
+.edit_box {
+    border: none;
+    font-size: 15px;
+    width: 80%;
+    height: 100%;
+}
+
 .post_button {
     float: right;
     height: 40px;
@@ -71,4 +78,18 @@
 
 .active_button:hover {
     background-color: darkorange;
+}
+
+.edit_bar {
+    float: right;
+    margin-left: 10px;
+}
+
+.edit_button {
+    background-color: rgb(245, 245, 245);
+    border: none;
+}
+
+.edit_button:hover {
+    background-color: rgb(200, 200, 200);
 }

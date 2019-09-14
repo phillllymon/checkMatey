@@ -1,5 +1,7 @@
 class Api::PostsController < ApplicationController
 
+    before_action :require_logged_in, only: [:create, :update, :destroy]
+
     def index
         @posts = Post.all
         render :index
@@ -25,6 +27,12 @@ class Api::PostsController < ApplicationController
     end
 
     def update
+        @post = Post.find_by(id: params[:id])
+        if @post.update(post_params)
+            render :show
+        else
+            render json: "post not found", status: 404
+        end
     end
 
     def destroy

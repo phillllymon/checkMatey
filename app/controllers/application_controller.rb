@@ -6,6 +6,12 @@ class ApplicationController < ActionController::Base
         User.find_by(session_token: session[:session_token])
     end
 
+    def require_logged_in
+        if !logged_in?
+            render json: 'what you up to?', status: 401
+        end
+    end
+
     def login(user)
         session[:session_token] = user.reset_session_token
     end

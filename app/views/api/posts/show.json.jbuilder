@@ -5,6 +5,7 @@ json.extract! @post,
     :game_id, 
     :start_move, 
     :end_move,
-    :created_at
+    :created_at,
+    :id
 json.set! :author, @post.author.username
 json.set! :author_rating, @post.author.rating

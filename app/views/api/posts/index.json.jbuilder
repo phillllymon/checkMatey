@@ -3,6 +3,7 @@
         json.set! :author, post.author.username
         json.set! :author_rating, post.author.rating 
         json.extract! post, 
+            :id,
             :author_id,
             :post_type, 
             :content, 
