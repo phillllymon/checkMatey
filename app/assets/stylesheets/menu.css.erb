@@ -1,0 +1,34 @@
+.greeting {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 25%;
+    height: 59px;
+    width: 15%;
+    font-size: 20px;
+    font-family: sans-serif;
+    transform: translate(0, -58px);
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 25%;
+    width: 15%;
+    max-width: 200px;
+    background-color: rgba(75, 59, 53, 0.6);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-family: sans-serif;
+}
+
+.small_pirate {
+    float: right;
+    background: url(<%= asset_path("small_transparent.png") %>);
+    height: 61px;
+    width: 59px;
+}
