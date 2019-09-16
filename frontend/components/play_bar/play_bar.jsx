@@ -6,6 +6,9 @@ class PlayBar extends React.Component {
     }
 
     render() {
+
+        
+
         return (
             <div className="play_bar">
                 Play bar woo!

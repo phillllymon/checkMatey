@@ -86,6 +86,32 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./frontend/actions/game_actions.js":
+/*!******************************************!*\
+  !*** ./frontend/actions/game_actions.js ***!
+  \******************************************/
+/*! exports provided: UPDATE_GAME, archiveGame, updateGame */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UPDATE_GAME", function() { return UPDATE_GAME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "archiveGame", function() { return archiveGame; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateGame", function() { return updateGame; });
+var UPDATE_GAME = 'UPDATE_GAME'; //PLACEHOLDER ONLY
+
+var archiveGame = function archiveGame(game) {
+  console.log('It looks like you want to save your game. Would you like some help with that?');
+};
+var updateGame = function updateGame(game) {
+  return {
+    type: UPDATE_GAME,
+    game: game
+  };
+};
+
+/***/ }),
+
 /***/ "./frontend/actions/post_actions.js":
 /*!******************************************!*\
   !*** ./frontend/actions/post_actions.js ***!
@@ -262,6 +288,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+ //messing around with websockets
+
+var ws = new WebSocket("wss://echo.websocket.org");
+
+ws.onopen = function (evt) {
+  console.log("Connection open ...");
+  ws.send("Hello WebSockets!");
+};
+
+ws.onmessage = function (evt) {
+  console.log("Received Message: " + evt.data);
+  ws.close();
+};
+
+ws.onclose = function (evt) {
+  console.log("Connection closed.");
+}; // websocket testing above^^^^ code from var ws = new WebSocket("wss://echo.websocket.org");
+
+
+ws.onopen = function (evt) {
+  console.log("Connection open ...");
+  ws.send("Hello WebSockets!");
+};
+
+ws.onmessage = function (evt) {
+  console.log("Received Message: " + evt.data);
+  ws.close();
+};
+
+ws.onclose = function (evt) {
+  console.log("Connection closed.");
+};
 
 document.addEventListener("DOMContentLoaded", function () {
   var preloadedState = {};
@@ -319,9 +377,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _session_login_form_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./session/login_form_container */ "./frontend/components/session/login_form_container.js");
 /* harmony import */ var _session_signup_form_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./session/signup_form_container */ "./frontend/components/session/signup_form_container.js");
-/* harmony import */ var _splash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./splash */ "./frontend/components/splash.jsx");
-/* harmony import */ var _home__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./home */ "./frontend/components/home.jsx");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chess_table/chess_table_container */ "./frontend/components/chess_table/chess_table_container.js");
+/* harmony import */ var _splash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./splash */ "./frontend/components/splash.jsx");
+/* harmony import */ var _home__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./home */ "./frontend/components/home.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -347,6 +406,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var App =
 /*#__PURE__*/
 function (_React$Component) {
@@ -362,19 +422,26 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       if (this.props.userId) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], {
           path: "/home",
-          component: _home__WEBPACK_IMPORTED_MODULE_4__["default"]
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Redirect"], {
+          component: _home__WEBPACK_IMPORTED_MODULE_5__["default"]
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Redirect"], {
           to: "/home"
         }));
       } else {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_splash__WEBPACK_IMPORTED_MODULE_3__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_splash__WEBPACK_IMPORTED_MODULE_4__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], {
           path: "/login",
           component: _session_login_form_container__WEBPACK_IMPORTED_MODULE_1__["default"]
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], {
           path: "/signup",
           component: _session_signup_form_container__WEBPACK_IMPORTED_MODULE_2__["default"]
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], {
+          path: "/play",
+          render: function render() {
+            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+              player: 'guest'
+            });
+          }
         }));
       }
     }
@@ -409,6 +476,376 @@ var mapStateToProps = function mapStateToProps(state) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, null)(_app__WEBPACK_IMPORTED_MODULE_1__["default"]));
+
+/***/ }),
+
+/***/ "./frontend/components/chess_table/board.jsx":
+/*!***************************************************!*\
+  !*** ./frontend/components/chess_table/board.jsx ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _piece__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./piece */ "./frontend/components/chess_table/piece.jsx");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+var Board =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Board, _React$Component);
+
+  function Board(props) {
+    var _this;
+
+    _classCallCheck(this, Board);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Board).call(this, props));
+    _this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
+    _this.state = {
+      grid: _this.grid,
+      dragging: false
+    };
+    _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
+    _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
+    _this.endDrag = _this.endDrag.bind(_assertThisInitialized(_this));
+    _this.displayDragPiece = _this.displayDragPiece.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(Board, [{
+    key: "displayDragPiece",
+    value: function displayDragPiece() {
+      var dragStyle = {
+        'position': 'fixed',
+        'transform': 'translate(-50%, -50%)',
+        'height': 'auto',
+        'width': 'auto',
+        'fontSize': '5vmin',
+        'cursor': 'grabbing',
+        'pointerEvents': 'none',
+        top: this.state.dragY,
+        left: this.state.dragX
+      };
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: dragStyle
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        mark: this.markToDrag
+      }));
+    }
+  }, {
+    key: "dragPiece",
+    value: function dragPiece(e) {
+      if (this.state.dragging) {
+        this.setState({
+          dragY: e.clientY,
+          dragX: e.clientX
+        });
+      }
+    }
+  }, {
+    key: "beginDrag",
+    value: function beginDrag(e) {
+      if (e.target.className.includes('fa-chess')) {
+        this.setState({
+          dragging: true
+        });
+        this.origin = e.target.id;
+        this.markToDrag = this.grid[parseInt(this.origin[0])][parseInt(this.origin[2])];
+      }
+    }
+  }, {
+    key: "endDrag",
+    value: function endDrag(e) {
+      if (this.state.dragging) {
+        var destination = e.target.id;
+        this.grid[parseInt(destination[0])][parseInt(destination[2])] = this.markToDrag;
+        this.grid[parseInt(this.origin[0])][parseInt(this.origin[2])] = '-';
+        this.setState({
+          grid: this.grid,
+          dragging: false
+        });
+        this.markToDrag = null;
+        this.origin = null;
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "board",
+        onMouseMove: this.dragPiece
+      }, this.state.dragging ? this.displayDragPiece() : '', this.state.grid.map(function (row, rIdx) {
+        return row.map(function (spot, cIdx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            onMouseDown: _this2.beginDrag,
+            onMouseUp: _this2.endDrag,
+            key: rIdx + cIdx,
+            id: [rIdx, cIdx],
+            className: (rIdx + cIdx) % 2 === 0 ? 'w' : 'b'
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            pos: [rIdx, cIdx],
+            mark: _this2.state.grid[rIdx][cIdx]
+          }));
+        });
+      }));
+    }
+  }]);
+
+  return Board;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Board);
+
+/***/ }),
+
+/***/ "./frontend/components/chess_table/chess_table.jsx":
+/*!*********************************************************!*\
+  !*** ./frontend/components/chess_table/chess_table.jsx ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _board__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./board */ "./frontend/components/chess_table/board.jsx");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+var ChessTable =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(ChessTable, _React$Component);
+
+  function ChessTable(props) {
+    _classCallCheck(this, ChessTable);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(ChessTable).call(this, props));
+  }
+
+  _createClass(ChessTable, [{
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "modal_back"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "chess_table"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        game: this.props.board
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "game_stats"
+      }, "game stats")));
+    }
+  }]);
+
+  return ChessTable;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (ChessTable);
+
+/***/ }),
+
+/***/ "./frontend/components/chess_table/chess_table_container.js":
+/*!******************************************************************!*\
+  !*** ./frontend/components/chess_table/chess_table_container.js ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/game_actions */ "./frontend/actions/game_actions.js");
+/* harmony import */ var _chess_table__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chess_table */ "./frontend/components/chess_table/chess_table.jsx");
+
+
+
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    game: state.entities.currentGame,
+    gameErrors: state.errors.game
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    updateGame: function updateGame(game) {
+      return dispatch(Object(_actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["updateGame"])(game));
+    },
+    archiveGame: _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["archiveGame"]
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_chess_table__WEBPACK_IMPORTED_MODULE_2__["default"]));
+
+/***/ }),
+
+/***/ "./frontend/components/chess_table/piece.jsx":
+/*!***************************************************!*\
+  !*** ./frontend/components/chess_table/piece.jsx ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var Piece = function Piece(props) {
+  switch (props.mark) {
+    case '-':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "black_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos
+      }));
+
+    case 'R':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "black_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-rook"
+      }));
+
+    case 'N':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "black_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-knight"
+      }));
+
+    case 'B':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "black_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-bishop"
+      }));
+
+    case 'Q':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "black_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-queen"
+      }));
+
+    case 'K':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "black_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-king"
+      }));
+
+    case 'P':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "black_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-pawn"
+      }));
+
+    case 'p':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "white_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-pawn"
+      }));
+
+    case 'r':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "white_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-rook"
+      }));
+
+    case 'n':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "white_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-knight"
+      }));
+
+    case 'b':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "white_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-bishop"
+      }));
+
+    case 'q':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "white_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-queen"
+      }));
+
+    case 'k':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "white_piece"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: props.pos,
+        className: "fas fa-chess-king"
+      }));
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Piece);
 
 /***/ }),
 
@@ -1620,12 +2057,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 /* harmony import */ var _users_reducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./users_reducer */ "./frontend/reducers/users_reducer.js");
 /* harmony import */ var _posts_reducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./posts_reducer */ "./frontend/reducers/posts_reducer.js");
+/* harmony import */ var _games_reducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./games_reducer */ "./frontend/reducers/games_reducer.js");
+
 
 
 
 var entitiesReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
   users: _users_reducer__WEBPACK_IMPORTED_MODULE_1__["default"],
-  posts: _posts_reducer__WEBPACK_IMPORTED_MODULE_2__["default"]
+  posts: _posts_reducer__WEBPACK_IMPORTED_MODULE_2__["default"],
+  currentGame: _games_reducer__WEBPACK_IMPORTED_MODULE_3__["default"]
 });
 /* harmony default export */ __webpack_exports__["default"] = (entitiesReducer);
 
@@ -1648,6 +2088,37 @@ var errorsReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"]
   session: _session_errors_reducer__WEBPACK_IMPORTED_MODULE_1__["default"]
 });
 /* harmony default export */ __webpack_exports__["default"] = (errorsReducer);
+
+/***/ }),
+
+/***/ "./frontend/reducers/games_reducer.js":
+/*!********************************************!*\
+  !*** ./frontend/reducers/games_reducer.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_game_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/game_actions */ "./frontend/actions/game_actions.js");
+
+
+var gamesReducer = function gamesReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+  Object.freeze(state);
+  var newState = Object.assign({}, state);
+
+  switch (action.type) {
+    case _actions_game_actions__WEBPACK_IMPORTED_MODULE_0__["UPDATE_GAME"]:
+      return Object.assign(newState, action.game);
+
+    default:
+      return state;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (gamesReducer);
 
 /***/ }),
 

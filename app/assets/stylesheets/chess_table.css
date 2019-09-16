@@ -1,0 +1,85 @@
+.chess_table {
+    display: flex;
+    justify-content: space-around;
+    left: 5%;
+    top: 5%;
+    flex-direction: row;
+    position: fixed;
+    z-index: 2;
+    width: 90%;
+    height: 90%;
+}
+
+.board {
+    display: flex;
+    flex-wrap: wrap;
+    width: 60vw;
+    height: 60vw;
+    max-height: 90vh;
+    max-width: 90vh;
+    border: 10px solid rgba(75, 59, 53, 0.8);
+    border-radius: 5px;
+}
+
+.game_stats {
+    width: 30vw;
+    min-width: 160px;
+    max-width: 220px;
+    height: 100%;
+    background-color: red;
+}
+
+.w {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vmin;
+    width: 12.5%;
+    height: 12.5%;
+    background-color: rgb(225, 209, 203);
+    text-shadow: 1px 1px 5px rgba(100, 100, 100, 0.4);
+}
+
+.b {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vmin;
+    width: 12.5%;
+    height: 12.5%;
+    background-color: rgb(75, 59, 53);
+    text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.5);
+}
+
+.w:hover {
+    text-shadow: 1px 1px 10px rgba(100, 100, 100, 0.4);
+}
+
+.b:hover {
+    text-shadow: 1px 1px 10px rgba(255, 255, 255, 0.5);
+}
+
+.white_piece {
+    color: rgb(160, 160, 160);
+}
+
+.black_piece {
+    color: rgb(50, 50, 50);
+}
+
+.white_piece:hover {
+    cursor: grab;
+}
+
+.black_piece:hover {
+    cursor: grab;
+}
+
+.white_piece:active {
+    cursor: grabbing;
+}
+
+.black_piece:active {
+    cursor: grabbing;
+}
+
