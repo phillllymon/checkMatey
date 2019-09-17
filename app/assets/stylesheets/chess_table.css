@@ -17,16 +17,13 @@
     height: 60vw;
     max-height: 90vh;
     max-width: 90vh;
-    border: 10px solid rgba(75, 59, 53, 0.8);
+    border: 10px solid rgb(75, 59, 53);
     border-radius: 5px;
 }
 
-.game_stats {
-    width: 30vw;
-    min-width: 160px;
-    max-width: 220px;
-    height: 100%;
-    background-color: red;
+.flipped {
+    flex-wrap: wrap-reverse;
+    flex-direction: row-reverse;
 }
 
 .w {
@@ -36,8 +33,8 @@
     font-size: 5vmin;
     width: 12.5%;
     height: 12.5%;
-    background-color: rgb(225, 209, 203);
-    text-shadow: 1px 1px 5px rgba(100, 100, 100, 0.4);
+    background-color: rgb(185, 169, 163);
+    text-shadow: 1px 1px 5px rgba(10, 10, 10, 0.6);
 }
 
 .b {
@@ -47,12 +44,12 @@
     font-size: 5vmin;
     width: 12.5%;
     height: 12.5%;
-    background-color: rgb(75, 59, 53);
+    background-color: rgb(105, 99, 93);
     text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.5);
 }
 
 .w:hover {
-    text-shadow: 1px 1px 10px rgba(100, 100, 100, 0.4);
+    text-shadow: 1px 1px 10px rgba(10, 10, 10, 0.6);
 }
 
 .b:hover {
@@ -60,7 +57,7 @@
 }
 
 .white_piece {
-    color: rgb(160, 160, 160);
+    color: rgb(200, 200, 200);
 }
 
 .black_piece {

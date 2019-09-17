@@ -33,12 +33,18 @@ class Menu extends React.Component {
                         className="splash_option">
                         <i className="fas fa-chess-knight"></i> New Game
                     </Link>
+                    <Link
+                        to={'/sandbox'}
+                        className="splash_option">
+                        <i className="fas fa-chess-board"></i> Sandbox
+                    </Link>
                     <Link 
                         to={'/'}
                         className="splash_option" 
                         onClick={this.props.logout}>
                         <i className="fas fa-sign-out-alt"></i> Sign Out
                     </Link>
+                    
                 </div>
             </div>
         );

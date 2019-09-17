@@ -1,6 +1,12 @@
 import React from 'react';
 
 const Piece = (props) => {
+    const grayedStyleBlack = {
+        'color': 'rgba(0, 0, 0, 0.3)'
+    };
+    const grayedStyleWhite = {
+        'color': 'rgba(0, 0, 0, 0.05)'
+    };
     switch (props.mark) {
         case '-':
             return (
@@ -10,73 +16,73 @@ const Piece = (props) => {
             );
         case 'R':
             return(
-                <div className="black_piece">
+                <div className="black_piece" style={props.grayed ? grayedStyleBlack : {}}>
                     <i id={props.pos} className="fas fa-chess-rook"></i>
                 </div>
             );
         case 'N':
             return (
-                <div className="black_piece">
+                <div className="black_piece" style={props.grayed ? grayedStyleBlack : {}}>
                     <i id={props.pos} className="fas fa-chess-knight"></i>
                 </div>
             );
         case 'B':
             return (
-                <div className="black_piece">
+                <div className="black_piece" style={props.grayed ? grayedStyleBlack : {}}>
                     <i id={props.pos} className="fas fa-chess-bishop"></i>
                 </div>
             );
         case 'Q':
             return (
-                <div className="black_piece">
+                <div className="black_piece" style={props.grayed ? grayedStyleBlack : {}}>
                     <i id={props.pos} className="fas fa-chess-queen"></i>
                 </div>
             );
         case 'K':
             return (
-                <div className="black_piece">
+                <div className="black_piece" style={props.grayed ? grayedStyleBlack : {}}>
                     <i id={props.pos} className="fas fa-chess-king"></i>
                 </div>
             );
         case 'P':
             return (
-                <div className="black_piece">
+                <div className="black_piece" style={props.grayed ? grayedStyleBlack : {}}>
                     <i id={props.pos} className="fas fa-chess-pawn"></i>
                 </div>
             );
         case 'p':
             return (
-                <div className="white_piece">
+                <div className="white_piece" style={props.grayed ? grayedStyleWhite : {}}>
                     <i id={props.pos} className="fas fa-chess-pawn"></i>
                 </div>
             );
         case 'r':
             return (
-                <div className="white_piece">
+                <div className="white_piece" style={props.grayed ? grayedStyleWhite : {}}>
                     <i id={props.pos} className="fas fa-chess-rook"></i>
                 </div>
             );
         case 'n':
             return (
-                <div className="white_piece">
+                <div className="white_piece" style={props.grayed ? grayedStyleWhite : {}}>
                     <i id={props.pos} className="fas fa-chess-knight"></i>
                 </div>
             );
         case 'b':
             return (
-                <div className="white_piece">
+                <div className="white_piece" style={props.grayed ? grayedStyleWhite : {}}>
                     <i id={props.pos} className="fas fa-chess-bishop"></i>
                 </div>
             );
         case 'q':
             return (
-                <div className="white_piece">
+                <div className="white_piece" style={props.grayed ? grayedStyleWhite : {}}>
                     <i id={props.pos} className="fas fa-chess-queen"></i>
                 </div>
             );
         case 'k':
             return (
-                <div className="white_piece">
+                <div className="white_piece" style={props.grayed ? grayedStyleWhite : {}}>
                     <i id={props.pos} className="fas fa-chess-king"></i>
                 </div>
             );

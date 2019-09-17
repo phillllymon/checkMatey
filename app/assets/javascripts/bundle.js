@@ -289,37 +289,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
  //messing around with websockets
-
-var ws = new WebSocket("wss://echo.websocket.org");
-
-ws.onopen = function (evt) {
-  console.log("Connection open ...");
-  ws.send("Hello WebSockets!");
-};
-
-ws.onmessage = function (evt) {
-  console.log("Received Message: " + evt.data);
-  ws.close();
-};
-
-ws.onclose = function (evt) {
-  console.log("Connection closed.");
-}; // websocket testing above^^^^ code from var ws = new WebSocket("wss://echo.websocket.org");
-
-
-ws.onopen = function (evt) {
-  console.log("Connection open ...");
-  ws.send("Hello WebSockets!");
-};
-
-ws.onmessage = function (evt) {
-  console.log("Received Message: " + evt.data);
-  ws.close();
-};
-
-ws.onclose = function (evt) {
-  console.log("Connection closed.");
-};
+// var ws = new WebSocket("wss://echo.websocket.org");
+// ws.onopen = function (evt) {
+//     console.log("Connection open ...");
+//     ws.send("Hello WebSockets!");
+// };
+// ws.onmessage = function (evt) {
+//     console.log("Received Message: " + evt.data);
+//     ws.close();
+// };
+// ws.onclose = function (evt) {
+//     console.log("Connection closed.");
+// }; 
+// websocket testing above^^^^ code from var ws = new WebSocket("wss://echo.websocket.org");
+// ws.onopen = function (evt) {
+//     console.log("Connection open ...");
+//     ws.send("Hello WebSockets!");
+// };
+// ws.onmessage = function (evt) {
+//     console.log("Received Message: " + evt.data);
+//     ws.close();
+// };
+// ws.onclose = function (evt) {
+//     console.log("Connection closed.");
+// }; 
 
 document.addEventListener("DOMContentLoaded", function () {
   var preloadedState = {};
@@ -425,6 +418,13 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], {
           path: "/home",
           component: _home__WEBPACK_IMPORTED_MODULE_5__["default"]
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], {
+          path: "/sandbox",
+          render: function render() {
+            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+              player: 'sandbox'
+            });
+          }
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Redirect"], {
           to: "/home"
         }));
@@ -491,6 +491,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _piece__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./piece */ "./frontend/components/chess_table/piece.jsx");
+/* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../util/chess_util */ "./frontend/util/chess_util.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -512,6 +513,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var Board =
 /*#__PURE__*/
 function (_React$Component) {
@@ -523,19 +525,64 @@ function (_React$Component) {
     _classCallCheck(this, Board);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Board).call(this, props));
-    _this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
+    _this.grid = _this.startPosition();
+    _this.flipped = false;
+    _this.recording = false;
+    _this.seq = [];
+    _this.moves = [];
     _this.state = {
       grid: _this.grid,
-      dragging: false
+      dragging: false,
+      flipped: _this.flipped
     };
     _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
     _this.endDrag = _this.endDrag.bind(_assertThisInitialized(_this));
     _this.displayDragPiece = _this.displayDragPiece.bind(_assertThisInitialized(_this));
+    _this.resetBoard = _this.resetBoard.bind(_assertThisInitialized(_this));
+    _this.flipBoard = _this.flipBoard.bind(_assertThisInitialized(_this));
+    _this.startRecording = _this.startRecording.bind(_assertThisInitialized(_this));
+    _this.stopRecording = _this.stopRecording.bind(_assertThisInitialized(_this));
+    _this.recordButton = _this.recordButton.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(Board, [{
+    key: "startPosition",
+    value: function startPosition() {
+      return [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
+    }
+  }, {
+    key: "startRecording",
+    value: function startRecording(e) {
+      this.recording = true;
+      this.seq = [Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["makeSnapshot"])(this.grid)];
+      this.moves = ['sequence beginning'];
+      this.setState({});
+    }
+  }, {
+    key: "stopRecording",
+    value: function stopRecording(e) {
+      this.recording = false;
+      this.setState({});
+    }
+  }, {
+    key: "flipBoard",
+    value: function flipBoard(e) {
+      this.flipped = this.flipped ? false : true;
+      this.setState({
+        flipped: this.flipped
+      });
+    }
+  }, {
+    key: "resetBoard",
+    value: function resetBoard(e) {
+      this.grid = this.startPosition();
+      this.setState({
+        grid: this.grid
+      });
+    }
+  }, {
     key: "displayDragPiece",
     value: function displayDragPiece() {
       var dragStyle = {
@@ -570,10 +617,12 @@ function (_React$Component) {
     value: function beginDrag(e) {
       if (e.target.className.includes('fa-chess')) {
         this.setState({
-          dragging: true
+          dragging: true,
+          dragY: e.clientY,
+          dragX: e.clientX
         });
         this.origin = e.target.id;
-        this.markToDrag = this.grid[parseInt(this.origin[0])][parseInt(this.origin[2])];
+        this.markToDrag = this.state.grid[parseInt(this.origin[0])][parseInt(this.origin[2])];
       }
     }
   }, {
@@ -581,14 +630,43 @@ function (_React$Component) {
     value: function endDrag(e) {
       if (this.state.dragging) {
         var destination = e.target.id;
-        this.grid[parseInt(destination[0])][parseInt(destination[2])] = this.markToDrag;
-        this.grid[parseInt(this.origin[0])][parseInt(this.origin[2])] = '-';
-        this.setState({
-          grid: this.grid,
-          dragging: false
-        });
-        this.markToDrag = null;
-        this.origin = null;
+
+        if (destination !== this.origin) {
+          this.grid[parseInt(destination[0])][parseInt(destination[2])] = this.markToDrag;
+          this.grid[parseInt(this.origin[0])][parseInt(this.origin[2])] = '-';
+
+          if (this.recording) {
+            this.seq.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["makeSnapshot"])(this.grid));
+            this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["getLastMove"])(this.seq));
+          }
+
+          this.setState({
+            grid: this.grid,
+            dragging: false
+          });
+          this.markToDrag = null;
+          this.origin = null;
+        } else {
+          this.setState({
+            grid: this.grid,
+            dragging: false
+          });
+          this.markToDrag = null;
+          this.origin = null;
+        }
+      }
+    }
+  }, {
+    key: "recordButton",
+    value: function recordButton() {
+      if (this.recording) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: this.stopRecording
+        }, "Stop Recording");
+      } else {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: this.startRecording
+        }, "Record Sequence");
       }
     }
   }, {
@@ -597,9 +675,11 @@ function (_React$Component) {
       var _this2 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "board",
+        className: "chess_table"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.flipped ? "board flipped" : "board",
         onMouseMove: this.dragPiece
-      }, this.state.dragging ? this.displayDragPiece() : '', this.state.grid.map(function (row, rIdx) {
+      }, this.state.dragging ? this.displayDragPiece() : '', this.grid.map(function (row, rIdx) {
         return row.map(function (spot, cIdx) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             onMouseDown: _this2.beginDrag,
@@ -608,11 +688,34 @@ function (_React$Component) {
             id: [rIdx, cIdx],
             className: (rIdx + cIdx) % 2 === 0 ? 'w' : 'b'
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            grayed: _this2.state.dragging && parseInt(_this2.origin[0]) === rIdx && parseInt(_this2.origin[2]) === cIdx ? true : false,
             pos: [rIdx, cIdx],
             mark: _this2.state.grid[rIdx][cIdx]
           }));
         });
-      }));
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "board_controls"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "controls_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-board"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'marginLeft': '10px'
+        }
+      }, "Sandbox")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.resetBoard
+      }, "Reset Board"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.flipBoard
+      }, "Flip Board"), this.recordButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'fontSize': '15px'
+        }
+      }, this.moves.map(function (snapshot, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: idx
+        }, snapshot);
+      }))));
     }
   }]);
 
@@ -672,13 +775,7 @@ function (_React$Component) {
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal_back"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "chess_table"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        game: this.props.board
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "game_stats"
-      }, "game stats")));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board__WEBPACK_IMPORTED_MODULE_1__["default"], null));
     }
   }]);
 
@@ -739,6 +836,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Piece = function Piece(props) {
+  var grayedStyleBlack = {
+    'color': 'rgba(0, 0, 0, 0.3)'
+  };
+  var grayedStyleWhite = {
+    'color': 'rgba(0, 0, 0, 0.05)'
+  };
+
   switch (props.mark) {
     case '-':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -749,7 +853,8 @@ var Piece = function Piece(props) {
 
     case 'R':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "black_piece"
+        className: "black_piece",
+        style: props.grayed ? grayedStyleBlack : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-rook"
@@ -757,7 +862,8 @@ var Piece = function Piece(props) {
 
     case 'N':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "black_piece"
+        className: "black_piece",
+        style: props.grayed ? grayedStyleBlack : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-knight"
@@ -765,7 +871,8 @@ var Piece = function Piece(props) {
 
     case 'B':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "black_piece"
+        className: "black_piece",
+        style: props.grayed ? grayedStyleBlack : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-bishop"
@@ -773,7 +880,8 @@ var Piece = function Piece(props) {
 
     case 'Q':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "black_piece"
+        className: "black_piece",
+        style: props.grayed ? grayedStyleBlack : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-queen"
@@ -781,7 +889,8 @@ var Piece = function Piece(props) {
 
     case 'K':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "black_piece"
+        className: "black_piece",
+        style: props.grayed ? grayedStyleBlack : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-king"
@@ -789,7 +898,8 @@ var Piece = function Piece(props) {
 
     case 'P':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "black_piece"
+        className: "black_piece",
+        style: props.grayed ? grayedStyleBlack : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-pawn"
@@ -797,7 +907,8 @@ var Piece = function Piece(props) {
 
     case 'p':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "white_piece"
+        className: "white_piece",
+        style: props.grayed ? grayedStyleWhite : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-pawn"
@@ -805,7 +916,8 @@ var Piece = function Piece(props) {
 
     case 'r':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "white_piece"
+        className: "white_piece",
+        style: props.grayed ? grayedStyleWhite : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-rook"
@@ -813,7 +925,8 @@ var Piece = function Piece(props) {
 
     case 'n':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "white_piece"
+        className: "white_piece",
+        style: props.grayed ? grayedStyleWhite : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-knight"
@@ -821,7 +934,8 @@ var Piece = function Piece(props) {
 
     case 'b':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "white_piece"
+        className: "white_piece",
+        style: props.grayed ? grayedStyleWhite : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-bishop"
@@ -829,7 +943,8 @@ var Piece = function Piece(props) {
 
     case 'q':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "white_piece"
+        className: "white_piece",
+        style: props.grayed ? grayedStyleWhite : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-queen"
@@ -837,7 +952,8 @@ var Piece = function Piece(props) {
 
     case 'k':
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "white_piece"
+        className: "white_piece",
+        style: props.grayed ? grayedStyleWhite : {}
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         id: props.pos,
         className: "fas fa-chess-king"
@@ -1318,6 +1434,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _menu_menu_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./menu/menu_container */ "./frontend/components/menu/menu_container.js");
 /* harmony import */ var _feed_feed_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./feed/feed_container */ "./frontend/components/feed/feed_container.js");
 /* harmony import */ var _play_bar_play_bar_container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./play_bar/play_bar_container */ "./frontend/components/play_bar/play_bar_container.js");
+/* harmony import */ var _chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./chess_table/chess_table_container */ "./frontend/components/chess_table/chess_table_container.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+
 
 
 
@@ -1402,6 +1522,11 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-chess-knight"
       }), " New Game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: '/sandbox',
+        className: "splash_option"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-board"
+      }), " Sandbox"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/',
         className: "splash_option",
         onClick: this.props.logout
@@ -2320,6 +2445,77 @@ var configureStore = function configureStore() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (configureStore);
+
+/***/ }),
+
+/***/ "./frontend/util/chess_util.js":
+/*!*************************************!*\
+  !*** ./frontend/util/chess_util.js ***!
+  \*************************************/
+/*! exports provided: makeSnapshot, getChessMoves, getLastMove, getCoords */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeSnapshot", function() { return makeSnapshot; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChessMoves", function() { return getChessMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLastMove", function() { return getLastMove; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCoords", function() { return getCoords; });
+var makeSnapshot = function makeSnapshot(grid) {
+  var answer = '';
+  grid.forEach(function (row) {
+    answer += row.join('');
+  });
+  return answer;
+};
+var getChessMoves = function getChessMoves(seq) {
+  var answer = ['some move'];
+  seq.forEach(function (snapshot) {
+    answer.push('different move');
+  });
+  return answer;
+};
+var getLastMove = function getLastMove(seq) {
+  var first = seq[seq.length - 2];
+  var second = seq[seq.length - 1];
+  var arr1 = first.split('');
+  var arr2 = second.split('');
+  var piece = '-';
+  var spot = '0';
+  var capture = '';
+  arr2.forEach(function (mark, idx) {
+    if (mark !== '-' && arr1[idx] !== mark) {
+      piece = mark;
+      spot = idx;
+
+      if (arr1[idx] !== '-') {
+        capture = 'x';
+      }
+
+      if (piece === 'p' || piece === 'P') {
+        piece = '';
+      } else {
+        piece = piece.toUpperCase();
+      }
+    }
+  });
+  var rIdx = Math.floor(spot / 8);
+  var cIdx = spot % 8;
+  return piece + capture + getCoords(rIdx, cIdx);
+};
+var getCoords = function getCoords(rIdx, cIdx) {
+  var fileNames = {
+    0: 'a',
+    1: 'b',
+    2: 'c',
+    3: 'd',
+    4: 'e',
+    5: 'f',
+    6: 'g',
+    7: 'h'
+  };
+  return fileNames[cIdx] + (8 - rIdx).toString();
+};
 
 /***/ }),
 

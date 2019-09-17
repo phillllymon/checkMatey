@@ -16,6 +16,10 @@ class App extends React.Component {
             return (
                 <div>
                     <Route path="/home" component={Home} />
+                    <Route
+                        path="/sandbox"
+                        render={() => <ChessTableContainer player={'sandbox'} />}
+                    />
                     <Redirect to='/home' />
                 </div>
             );

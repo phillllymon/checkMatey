@@ -1,0 +1,20 @@
+.board_controls {
+    font-size: 20px;
+    width: 30vw;
+    min-width: 160px;
+    max-width: 220px;
+    height: 60vw;
+    max-height: 90vh;
+    background-color: rgb(185, 169, 163);
+    border: 10px solid rgb(75, 59, 53);
+    border-radius: 5px;
+    font-family: sans-serif;
+}
+
+.controls_heading {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+}
