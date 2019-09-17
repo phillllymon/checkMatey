@@ -1,0 +1,103 @@
+.play_area {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 300px;
+    height: 600px;
+    background-color: green;
+}
+
+.game_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tetris_box {
+    width: 500px;
+    height: 800px;
+    background-color: red;
+}
+
+.empty {
+    background-color: black;
+    width: 30px;
+    height: 30px;
+}
+
+.i {
+    background-color: red;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+}
+
+.a {
+    background-color: lightblue;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+}
+
+.t {
+    background-color: darkgray;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+}
+
+.l {
+    background-color: yellow;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+}
+
+.j {
+    background-color: purple;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+}
+
+.s {
+    background-color: green;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+}
+
+.z {
+    background-color: blue;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+}

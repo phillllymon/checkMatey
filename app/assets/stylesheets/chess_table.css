@@ -1,6 +1,6 @@
 .chess_table {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     left: 5%;
     top: 5%;
     flex-direction: row;
@@ -19,6 +19,7 @@
     max-width: 90vh;
     border: 10px solid rgb(75, 59, 53);
     border-radius: 5px;
+    margin-right: 5vw;
 }
 
 .flipped {
