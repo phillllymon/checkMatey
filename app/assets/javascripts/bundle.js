@@ -1651,6 +1651,20 @@ function (_React$Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _tetrino__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tetrino */ "./frontend/components/otherGame/tetrino.js");
 /* harmony import */ var _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tetrinos_types */ "./frontend/components/otherGame/tetrinos_types.js");
+function isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _construct(Parent, args, Class) { if (isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1675,6 +1689,8 @@ function () {
     }
 
     this.grid = this.startGrid;
+    this.gameOver = true;
+    this.score = 0;
   }
 
   _createClass(Game, [{
@@ -1697,25 +1713,25 @@ function () {
     value: function generatePiece() {
       switch (Math.floor(7 * Math.random())) {
         case 0:
-          return new _tetrino__WEBPACK_IMPORTED_MODULE_0__["default"](_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["iPiece"].orients, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["iPiece"].advCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["iPiece"].rLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["iPiece"].mLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["iPiece"].mRightCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["iPiece"].mark);
+          return _construct(_tetrino__WEBPACK_IMPORTED_MODULE_0__["default"], _toConsumableArray(_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["iPiece"]));
 
         case 1:
-          return new _tetrino__WEBPACK_IMPORTED_MODULE_0__["default"](_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["aPiece"].orients, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["aPiece"].advCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["aPiece"].rLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["aPiece"].mLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["aPiece"].mRightCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["aPiece"].mark);
+          return _construct(_tetrino__WEBPACK_IMPORTED_MODULE_0__["default"], _toConsumableArray(_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["aPiece"]));
 
         case 2:
-          return new _tetrino__WEBPACK_IMPORTED_MODULE_0__["default"](_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["tPiece"].orients, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["tPiece"].advCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["tPiece"].rLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["tPiece"].mLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["tPiece"].mRightCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["tPiece"].mark);
+          return _construct(_tetrino__WEBPACK_IMPORTED_MODULE_0__["default"], _toConsumableArray(_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["tPiece"]));
 
         case 3:
-          return new _tetrino__WEBPACK_IMPORTED_MODULE_0__["default"](_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["lPiece"].orients, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["lPiece"].advCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["lPiece"].rLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["lPiece"].mLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["lPiece"].mRightCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["lPiece"].mark);
+          return _construct(_tetrino__WEBPACK_IMPORTED_MODULE_0__["default"], _toConsumableArray(_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["lPiece"]));
 
         case 4:
-          return new _tetrino__WEBPACK_IMPORTED_MODULE_0__["default"](_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["jPiece"].orients, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["jPiece"].advCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["jPiece"].rLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["jPiece"].mLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["jPiece"].mRightCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["jPiece"].mark);
+          return _construct(_tetrino__WEBPACK_IMPORTED_MODULE_0__["default"], _toConsumableArray(_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["jPiece"]));
 
         case 5:
-          return new _tetrino__WEBPACK_IMPORTED_MODULE_0__["default"](_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["sPiece"].orients, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["sPiece"].advCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["sPiece"].rLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["sPiece"].mLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["sPiece"].mRightCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["sPiece"].mark);
+          return _construct(_tetrino__WEBPACK_IMPORTED_MODULE_0__["default"], _toConsumableArray(_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["sPiece"]));
 
         case 6:
-          return new _tetrino__WEBPACK_IMPORTED_MODULE_0__["default"](_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["zPiece"].orients, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["zPiece"].advCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["zPiece"].rLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["zPiece"].mLeftCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["zPiece"].mRightCrits, _tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["zPiece"].mark);
+          return _construct(_tetrino__WEBPACK_IMPORTED_MODULE_0__["default"], _toConsumableArray(_tetrinos_types__WEBPACK_IMPORTED_MODULE_1__["zPiece"]));
       }
     }
   }, {
@@ -1744,6 +1760,7 @@ function () {
     value: function clearLines() {
       var _this2 = this;
 
+      var multiplier = 0;
       this.grid.forEach(function (row, rIdx) {
         var line = true;
         row.forEach(function (spot) {
@@ -1761,12 +1778,14 @@ function () {
 
           _this2.grid[0] = ['empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty'];
           _this2.lines++;
+          multiplier += 1;
 
           if (_this2.lines % 10 === 0) {
             _this2.level++;
           }
         }
       });
+      this.score += 100 * (multiplier * multiplier);
     }
   }, {
     key: "advanceGame",
@@ -1788,6 +1807,7 @@ function () {
         this.currentPiece.pos = [pos[0] + 1, pos[1]];
       } else {
         this.clearLines();
+        this.score += 5;
         this.currentPiece = this.generatePiece();
         this.grid = this.currentPiece.placePiece(this.grid, this);
       }
@@ -2168,62 +2188,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "jPiece", function() { return jPiece; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sPiece", function() { return sPiece; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "zPiece", function() { return zPiece; });
-var iPiece = {
-  orients: [[[0, 0], [1, 0], [2, 0], [3, 0]], [[1, -1], [1, 0], [1, 1], [1, 2]]],
-  advCrits: [[[4, 0]], [[2, -1], [2, 0], [2, 1], [2, 2]]],
-  rLeftCrits: [[[1, -1], [1, 1], [1, 2]], [[0, 0], [2, 0], [3, 0]]],
-  mLeftCrits: [[[0, -1], [1, -1], [2, -1], [3, -1]], [[1, -2]]],
-  mRightCrits: [[[0, 1], [1, 1], [2, 1], [3, 1]], [[1, 3]]],
-  mark: 'i'
-};
-var aPiece = {
-  orients: [[[0, 0], [1, 0], [0, 1], [1, 1]]],
-  advCrits: [[[2, 0], [2, 1]]],
-  rLeftCrits: [[]],
-  mLeftCrits: [[[0, -1], [1, -1]]],
-  mRightCrits: [[[0, 2], [1, 2]]],
-  mark: 'a'
-};
-var tPiece = {
-  orients: [[[0, 0], [1, -1], [1, 0], [1, 1]], [[0, 0], [1, -1], [1, 0], [2, 0]], [[1, -1], [1, 0], [1, 1], [2, 0]], [[0, 0], [1, 0], [1, 1], [2, 0]]],
-  advCrits: [[[2, -1], [2, 0], [2, 1]], [[2, -1], [3, 0]], [[2, -1], [3, 0], [2, 1]], [[3, 0], [2, 1]]],
-  rLeftCrits: [[[2, 0]], [[1, 1]], [[0, 0]], [[1, -1]]],
-  mLeftCrits: [[[0, -1], [1, -2]], [[0, -1], [1, -2], [2, -1]], [[1, -2], [2, -1]], [[0, -1], [1, -1], [2, -1]]],
-  mRightCrits: [[[0, 1], [1, 2]], [[0, 1], [1, 1], [2, 1]], [[1, 2], [2, 1]], [[0, 1], [1, 2], [2, 1]]],
-  mark: 't'
-};
-var lPiece = {
-  orients: [[[0, 0], [1, 0], [2, 0], [2, 1]], [[0, 1], [1, -1], [1, 0], [1, 1]], [[0, -1], [0, 0], [1, 0], [2, 0]], [[1, -1], [1, 0], [1, 1], [2, -1]]],
-  advCrits: [[[3, 0], [3, 1]], [[2, -1], [2, 0], [2, 1]], [[1, -1], [3, 0]], [[3, -1], [2, 0], [2, 1]]],
-  rLeftCrits: [[[0, 1], [1, 1], [1, -1]], [[0, -1], [0, 0], [2, 0]], [[1, -1], [2, -1], [1, 1]], [[2, 0], [2, 1], [0, 0]]],
-  mLeftCrits: [[[0, -1], [1, -1], [2, -1]], [[1, -2], [0, 0]], [[0, -2], [1, -1], [2, -1]], [[1, -2], [2, -2]]],
-  mRightCrits: [[[0, 1], [1, 1], [2, 2]], [[0, 2], [1, 2]], [[0, 1], [1, 1], [2, 1]], [[1, 2], [2, 0]]],
-  mark: 'l'
-};
-var jPiece = {
-  orients: [[[0, 1], [1, 1], [2, 0], [2, 1]], [[1, 0], [1, 1], [1, 2], [2, 2]], [[0, 1], [0, 2], [1, 1], [2, 1]], [[0, 0], [1, 0], [1, 1], [1, 2]]],
-  advCrits: [[[3, 0], [3, 1]], [[2, 0], [2, 1], [3, 2]], [[3, 1], [1, 2]], [[2, 0], [2, 1], [2, 2]]],
-  rLeftCrits: [[[1, 2], [2, 2], [1, 0]], [[0, 1], [0, 2], [2, 1]], [[0, 0], [1, 0], [1, 2]], [[2, 0], [2, 1], [0, 1]]],
-  mLeftCrits: [[[0, 0], [1, 0], [2, -1]], [[1, -1], [2, 1]], [[0, 0], [1, 0], [2, 0]], [[0, -1], [1, -1]]],
-  mRightCrits: [[[0, 2], [1, 2], [2, 2]], [[1, 3], [2, 3]], [[1, 2], [2, 2], [0, 3]], [[0, 1], [1, 3]]],
-  mark: 'j'
-};
-var sPiece = {
-  orients: [[[0, 0], [1, 0], [1, 1], [2, 1]], [[0, 0], [0, 1], [1, -1], [1, 0]]],
-  advCrits: [[[2, 0], [3, 1]], [[2, -1], [2, 0], [1, 1]]],
-  rLeftCrits: [[[0, 1], [1, -1]], [[1, 1], [2, 1]]],
-  mLeftCrits: [[[0, -1], [1, -1], [2, 0]], [[1, -2], [0, -1]]],
-  mRightCrits: [[[0, 1], [1, 2], [2, 2]], [[0, 2], [1, 1]]],
-  mark: 's'
-};
-var zPiece = {
-  orients: [[[0, 1], [1, 1], [1, 0], [2, 0]], [[0, 0], [0, 1], [1, 1], [1, 2]]],
-  advCrits: [[[3, 0], [2, 1]], [[1, 0], [2, 1], [2, 2]]],
-  rLeftCrits: [[[0, 0], [1, 2]], [[1, 0], [2, 0]]],
-  mLeftCrits: [[[0, 0], [1, -1], [2, -1]], [[0, -1], [1, 0]]],
-  mRightCrits: [[[0, 2], [1, 2], [2, 1]], [[0, 2], [1, 3]]],
-  mark: 'z'
-};
+var iPiece = [[[[0, 0], [1, 0], [2, 0], [3, 0]], [[1, -1], [1, 0], [1, 1], [1, 2]]], [[[4, 0]], [[2, -1], [2, 0], [2, 1], [2, 2]]], [[[1, -1], [1, 1], [1, 2]], [[0, 0], [2, 0], [3, 0]]], [[[0, -1], [1, -1], [2, -1], [3, -1]], [[1, -2]]], [[[0, 1], [1, 1], [2, 1], [3, 1]], [[1, 3]]], 'i'];
+var aPiece = [[[[0, 0], [1, 0], [0, 1], [1, 1]]], [[[2, 0], [2, 1]]], [[]], [[[0, -1], [1, -1]]], [[[0, 2], [1, 2]]], 'a'];
+var tPiece = [[[[0, 0], [1, -1], [1, 0], [1, 1]], [[0, 0], [1, -1], [1, 0], [2, 0]], [[1, -1], [1, 0], [1, 1], [2, 0]], [[0, 0], [1, 0], [1, 1], [2, 0]]], [[[2, -1], [2, 0], [2, 1]], [[2, -1], [3, 0]], [[2, -1], [3, 0], [2, 1]], [[3, 0], [2, 1]]], [[[2, 0]], [[1, 1]], [[0, 0]], [[1, -1]]], [[[0, -1], [1, -2]], [[0, -1], [1, -2], [2, -1]], [[1, -2], [2, -1]], [[0, -1], [1, -1], [2, -1]]], [[[0, 1], [1, 2]], [[0, 1], [1, 1], [2, 1]], [[1, 2], [2, 1]], [[0, 1], [1, 2], [2, 1]]], 't'];
+var lPiece = [[[[0, 0], [1, 0], [2, 0], [2, 1]], [[0, 1], [1, -1], [1, 0], [1, 1]], [[0, -1], [0, 0], [1, 0], [2, 0]], [[1, -1], [1, 0], [1, 1], [2, -1]]], [[[3, 0], [3, 1]], [[2, -1], [2, 0], [2, 1]], [[1, -1], [3, 0]], [[3, -1], [2, 0], [2, 1]]], [[[0, 1], [1, 1], [1, -1]], [[0, -1], [0, 0], [2, 0]], [[1, -1], [2, -1], [1, 1]], [[2, 0], [2, 1], [0, 0]]], [[[0, -1], [1, -1], [2, -1]], [[1, -2], [0, 0]], [[0, -2], [1, -1], [2, -1]], [[1, -2], [2, -2]]], [[[0, 1], [1, 1], [2, 2]], [[0, 2], [1, 2]], [[0, 1], [1, 1], [2, 1]], [[1, 2], [2, 0]]], 'l'];
+var jPiece = [[[[0, 1], [1, 1], [2, 0], [2, 1]], [[1, 0], [1, 1], [1, 2], [2, 2]], [[0, 1], [0, 2], [1, 1], [2, 1]], [[0, 0], [1, 0], [1, 1], [1, 2]]], [[[3, 0], [3, 1]], [[2, 0], [2, 1], [3, 2]], [[3, 1], [1, 2]], [[2, 0], [2, 1], [2, 2]]], [[[1, 2], [2, 2], [1, 0]], [[0, 1], [0, 2], [2, 1]], [[0, 0], [1, 0], [1, 2]], [[2, 0], [2, 1], [0, 1]]], [[[0, 0], [1, 0], [2, -1]], [[1, -1], [2, 1]], [[0, 0], [1, 0], [2, 0]], [[0, -1], [1, -1]]], [[[0, 2], [1, 2], [2, 2]], [[1, 3], [2, 3]], [[1, 2], [2, 2], [0, 3]], [[0, 1], [1, 3]]], 'j'];
+var sPiece = [[[[0, 0], [1, 0], [1, 1], [2, 1]], [[0, 0], [0, 1], [1, -1], [1, 0]]], [[[2, 0], [3, 1]], [[2, -1], [2, 0], [1, 1]]], [[[0, 1], [1, -1]], [[1, 1], [2, 1]]], [[[0, -1], [1, -1], [2, 0]], [[1, -2], [0, -1]]], [[[0, 1], [1, 2], [2, 2]], [[0, 2], [1, 1]]], 's'];
+var zPiece = [[[[0, 1], [1, 1], [1, 0], [2, 0]], [[0, 0], [0, 1], [1, 1], [1, 2]]], [[[3, 0], [2, 1]], [[1, 0], [2, 1], [2, 2]]], [[[0, 0], [1, 2]], [[1, 0], [2, 0]]], [[[0, 0], [1, -1], [2, -1]], [[0, -1], [1, 0]]], [[[0, 2], [1, 2], [2, 1]], [[0, 2], [1, 3]]], 'z'];
 
 /***/ }),
 
@@ -2280,6 +2251,7 @@ function (_React$Component) {
       grid: _this.game.grid,
       level: 1
     };
+    _this.interval = 1000;
     _this.handleInput = _this.handleInput.bind(_assertThisInitialized(_this));
     _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
     _this.nextLevel = _this.nextLevel.bind(_assertThisInitialized(_this));
@@ -2288,6 +2260,11 @@ function (_React$Component) {
   }
 
   _createClass(Tetris, [{
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      clearInterval(this.pieceInterval);
+    }
+  }, {
     key: "startGame",
     value: function startGame(e) {
       var _this2 = this;
@@ -2295,6 +2272,7 @@ function (_React$Component) {
       this.setState({
         playing: true
       });
+      document.getElementById("the_game").focus();
       this.game = new _game__WEBPACK_IMPORTED_MODULE_1__["default"]();
       this.game.start();
       this.level = this.game.level;
@@ -2324,7 +2302,7 @@ function (_React$Component) {
 
           _this2.nextLevel();
         }
-      }, 1150 - this.game.level * 100);
+      }, 1000);
     }
   }, {
     key: "nextLevel",
@@ -2347,14 +2325,13 @@ function (_React$Component) {
           _this3.setState({
             playing: false
           });
-
-          console.log('end of game');
         }
 
         _this3.setState({
           grid: _this3.grid
         });
-      }, 1150 - this.game.level * 100);
+      }, Math.ceil(1000 / this.game.level));
+      this.interval = Math.ceil(1000 / this.game.level);
     }
   }, {
     key: "handleInput",
@@ -2392,6 +2369,7 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         onKeyDown: this.handleInput,
         tabIndex: "0",
+        id: "the_game",
         className: "game_box"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "play_area"
@@ -2403,7 +2381,9 @@ function (_React$Component) {
             pos: [rIdx, cIdx]
           });
         });
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.playing ? '' : this.startButton()));
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tetris_stats"
+      }, "level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "score: ", this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "lines: ", this.game.lines, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "interval: ", this.interval, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.state.playing ? '' : this.startButton()));
     }
   }]);
 

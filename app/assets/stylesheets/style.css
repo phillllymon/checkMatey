@@ -5,18 +5,38 @@
     width: 300px;
     height: 600px;
     background-color: green;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
 }
 
 .game_box {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
 }
 
+.tetris_stats {
+    float: right;
+    color: white;
+    font-size: 30px;
+    width: 250px;
+    margin-left: 30px;
+    background-color: black;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+}
+
 .tetris_box {
-    width: 500px;
-    height: 800px;
-    background-color: red;
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    
 }
 
 .empty {

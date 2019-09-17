@@ -19,6 +19,8 @@ class Game {
             this.startGrid.push(row);
         }
         this.grid = this.startGrid;
+        this.gameOver = true;
+        this.score = 0;
     }
 
     start() {
@@ -37,33 +39,19 @@ class Game {
     generatePiece() {
         switch (Math.floor(7*Math.random())){
             case 0:
-                return new Tetrino(iPiece.orients, iPiece.advCrits, 
-                    iPiece.rLeftCrits, iPiece.mLeftCrits, 
-                    iPiece.mRightCrits, iPiece.mark);
+                return new Tetrino(...iPiece);
             case 1:
-                return new Tetrino(aPiece.orients, aPiece.advCrits,
-                    aPiece.rLeftCrits, aPiece.mLeftCrits,
-                    aPiece.mRightCrits, aPiece.mark);
+                return new Tetrino(...aPiece);
             case 2:
-                return new Tetrino(tPiece.orients, tPiece.advCrits,
-                    tPiece.rLeftCrits, tPiece.mLeftCrits,
-                    tPiece.mRightCrits, tPiece.mark);
+                return new Tetrino(...tPiece);
             case 3:
-                return new Tetrino(lPiece.orients, lPiece.advCrits,
-                    lPiece.rLeftCrits, lPiece.mLeftCrits,
-                    lPiece.mRightCrits, lPiece.mark);
+                return new Tetrino(...lPiece);
             case 4:
-                return new Tetrino(jPiece.orients, jPiece.advCrits,
-                    jPiece.rLeftCrits, jPiece.mLeftCrits,
-                    jPiece.mRightCrits, jPiece.mark);
+                return new Tetrino(...jPiece);
             case 5:
-                return new Tetrino(sPiece.orients, sPiece.advCrits,
-                    sPiece.rLeftCrits, sPiece.mLeftCrits,
-                    sPiece.mRightCrits, sPiece.mark);
+                return new Tetrino(...sPiece);
             case 6:
-                return new Tetrino(zPiece.orients, zPiece.advCrits,
-                    zPiece.rLeftCrits, zPiece.mLeftCrits,
-                    zPiece.mRightCrits, zPiece.mark);
+                return new Tetrino(...zPiece);
         }
         
     }
@@ -86,6 +74,7 @@ class Game {
     }   
 
     clearLines() {
+        let multiplier = 0;
         this.grid.forEach((row, rIdx) => {
             let line = true;
             row.forEach((spot) => {
@@ -102,11 +91,13 @@ class Game {
                 this.grid[0] = ['empty', 'empty', 'empty', 'empty', 'empty', 'empty',
                     'empty', 'empty', 'empty', 'empty'];
                 this.lines++;
+                multiplier += 1;
                 if (this.lines % 10 === 0) {
                     this.level++;
                 }
             }
         });
+        this.score += (100*(multiplier*multiplier));
     }
 
     advanceGame() {
@@ -126,6 +117,7 @@ class Game {
         }
         else {
             this.clearLines();
+            this.score += 5;
             this.currentPiece = this.generatePiece();
             this.grid = this.currentPiece.placePiece(this.grid, this);
         }

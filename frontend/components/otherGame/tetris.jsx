@@ -12,14 +12,20 @@ class Tetris extends React.Component {
             grid: this.game.grid,
             level: 1
         };
+        this.interval = 1000;
         this.handleInput = this.handleInput.bind(this);
         this.startGame = this.startGame.bind(this);
         this.nextLevel = this.nextLevel.bind(this);
         this.startButton = this.startButton.bind(this);
     }
 
+    componentWillUnmount() {
+        clearInterval(this.pieceInterval);
+    }
+
     startGame(e) {
         this.setState({playing: true});
+        document.getElementById("the_game").focus();
         this.game = new Game;
         this.game.start();
         this.level = this.game.level;
@@ -37,7 +43,7 @@ class Tetris extends React.Component {
                 this.level = this.game.level;
                 this.nextLevel();
             }
-        }, 1150 - (this.game.level)*100);
+        }, 1000);
     }
 
     nextLevel() {
@@ -51,10 +57,10 @@ class Tetris extends React.Component {
             if (this.game.gameOver){
                 clearInterval(this.pieceInterval);
                 this.setState({playing: false});
-                console.log('end of game');
             }
             this.setState({ grid: this.grid });
-        }, 1150 - (this.game.level) * 100);
+        }, Math.ceil(1000 / this.game.level));
+        this.interval = Math.ceil(1000/this.game.level);
     }
 
     handleInput(e) {
@@ -86,25 +92,31 @@ class Tetris extends React.Component {
 
     render() {
         return (
-            <div onKeyDown={this.handleInput} tabIndex="0" className="game_box">
-                
-                    <div className="play_area">
-                        {
-                            this.state.grid.map( (row, rIdx) => {
-                                return (
-                                    row.map( (cell, cIdx) => {
-                                        return (
-                                            <Cell key={[rIdx, cIdx]} status={cell} pos={[rIdx, cIdx]} />
-                                        );
-                                    })
-                                );
-                            })
-                        }
-                    </div>
-                    <div>
-                        {this.state.playing ? '' : this.startButton()}
-                    </div>
-                
+            <div onKeyDown={this.handleInput} tabIndex="0" id="the_game" className="game_box">
+                <div className="play_area">
+                    {
+                        this.state.grid.map( (row, rIdx) => {
+                            return (
+                                row.map( (cell, cIdx) => {
+                                    return (
+                                        <Cell key={[rIdx, cIdx]} status={cell} pos={[rIdx, cIdx]} />
+                                    );
+                                })
+                            );
+                        })
+                    }
+                </div>
+                <div className="tetris_stats">
+                    level: {this.game.level}
+                    <br />
+                    score: {this.game.score}
+                    <br />
+                    lines: {this.game.lines}
+                    <br />
+                    interval: {this.interval}
+                    <br />
+                    {this.state.playing ? '' : this.startButton()}
+                </div>
             </div>
         );
     }
