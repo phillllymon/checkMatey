@@ -40,7 +40,7 @@ class SignupForm extends React.Component {
 
     demoLogin(e) {
         e.preventDefault();
-        this.props.login({ username: 'gMaster42', password: '123456' });
+        this.props.login({ username: 'Chess4eva22', password: '123456' });
         <Redirect to='/home' />
     }
 

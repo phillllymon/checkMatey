@@ -1439,19 +1439,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _menu_menu_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./menu/menu_container */ "./frontend/components/menu/menu_container.js");
 /* harmony import */ var _feed_feed_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./feed/feed_container */ "./frontend/components/feed/feed_container.js");
 /* harmony import */ var _play_bar_play_bar_container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./play_bar/play_bar_container */ "./frontend/components/play_bar/play_bar_container.js");
-/* harmony import */ var _chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./chess_table/chess_table_container */ "./frontend/components/chess_table/chess_table_container.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-
-
 
 
 
 
 
 var Home = function Home(props) {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_menu_menu_container__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "home"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_feed_feed_container__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_play_bar_play_bar_container__WEBPACK_IMPORTED_MODULE_3__["default"], null)));
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_menu_menu_container__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_feed_feed_container__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_play_bar_play_bar_container__WEBPACK_IMPORTED_MODULE_3__["default"], null)));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Home);
@@ -1480,9 +1476,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -1497,47 +1493,114 @@ function (_React$Component) {
   _inherits(Menu, _React$Component);
 
   function Menu(props) {
+    var _this;
+
     _classCallCheck(this, Menu);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Menu).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Menu).call(this, props));
+    _this.state = {
+      viewSize: window.innerWidth
+    };
+    _this.handleResize = _this.handleResize.bind(_assertThisInitialized(_this));
+    _this.smallMenu = false;
+    _this.nothing = _this.nothing.bind(_assertThisInitialized(_this));
+    _this.toggleCollapse = _this.toggleCollapse.bind(_assertThisInitialized(_this));
+    _this.collapseButton = _this.collapseButton.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(Menu, [{
+    key: "collapseButton",
+    value: function collapseButton() {
+      if (this.smallMenu) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-angle-double-right"
+        }));
+      } else {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-angle-double-left"
+        }), " Smaller");
+      }
+    }
+  }, {
+    key: "toggleCollapse",
+    value: function toggleCollapse() {
+      this.smallMenu = this.smallMenu ? false : true;
+      this.setState({});
+    }
+  }, {
+    key: "handleResize",
+    value: function handleResize(e) {
+      this.setState({
+        viewSize: window.innerWidth
+      });
+
+      if (window.innerWidth < 600) {
+        this.smallMenu = true;
+        this.setState({});
+      }
+
+      if (window.innerWidth > 1200) {
+        this.smallMenu = false;
+        this.setState({});
+      }
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      window.addEventListener("resize", this.handleResize);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      window.removeEventListener("resize", this.handleResize);
+    }
+  }, {
+    key: "nothing",
+    value: function nothing() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null);
+    }
+  }, {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "greeting"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Ahoy, ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), " ", this.props.user.username, "!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.smallMenu ? this.nothing() : this.props.user.username + ',', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "ahoy"
+      }, " ", this.smallMenu ? '' : 'Ahoy!', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "small_pirate"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "menu"
+      }))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.smallMenu ? "menu small_menu" : "menu"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/home',
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-home"
-      }), " Home"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      }), " ", this.smallMenu ? '' : 'Home'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/profile',
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-user"
-      }), " Profile"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      }), " ", this.smallMenu ? '' : 'Profile'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/play',
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-chess-knight"
-      }), " New Game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      }), " ", this.smallMenu ? '' : 'New Game'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/sandbox',
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-chess-board"
-      }), " Sandbox"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      }), " ", this.smallMenu ? '' : 'Sandbox'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/',
         className: "splash_option",
         onClick: this.props.logout
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-sign-out-alt"
-      }), " Sign Out")));
+      }), " ", this.smallMenu ? '' : 'Signout'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "splash_option",
+        onClick: this.toggleCollapse
+      }, this.collapseButton())));
     }
   }]);
 
@@ -2601,7 +2664,7 @@ function (_React$Component) {
     value: function demoLogin(e) {
       e.preventDefault();
       this.props.login({
-        username: 'gMaster42',
+        username: 'Chess4eva22',
         password: '123456'
       });
       react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], {
@@ -2801,7 +2864,7 @@ function (_React$Component) {
     value: function demoLogin(e) {
       e.preventDefault();
       this.props.login({
-        username: 'gMaster42',
+        username: 'Chess4eva22',
         password: '123456'
       });
       react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], {
@@ -2962,6 +3025,16 @@ var Splash = function Splash(props) {
     className: "splash_bar"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     className: "splash_option",
+    to: "/signup"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fas fa-user-plus"
+  }), " Sign Up"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    className: "splash_option",
+    to: "/login"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fas fa-sign-in-alt"
+  }), " Log In"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    className: "splash_option",
     to: "/learn"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fab fa-leanpub"
@@ -2972,15 +3045,10 @@ var Splash = function Splash(props) {
     className: "fas fa-robot"
   }), " Play Computer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     className: "splash_option",
-    to: "/signup"
+    to: "/notChess"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-user-plus"
-  }), " Sign Up"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "splash_option",
-    to: "/login"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-sign-in-alt"
-  }), " Log In")));
+    className: "fas fa-cubes"
+  }), " Not Chess")));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Splash);
