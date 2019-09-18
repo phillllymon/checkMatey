@@ -538,7 +538,8 @@ function (_React$Component) {
     _this.state = {
       grid: _this.grid,
       dragging: false,
-      flipped: _this.flipped
+      flipped: _this.flipped,
+      description: ''
     };
     _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
@@ -549,6 +550,8 @@ function (_React$Component) {
     _this.startRecording = _this.startRecording.bind(_assertThisInitialized(_this));
     _this.stopRecording = _this.stopRecording.bind(_assertThisInitialized(_this));
     _this.recordButton = _this.recordButton.bind(_assertThisInitialized(_this));
+    _this.postSequence = _this.postSequence.bind(_assertThisInitialized(_this));
+    _this.handleDescription = _this.handleDescription.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -556,6 +559,25 @@ function (_React$Component) {
     key: "startPosition",
     value: function startPosition() {
       return [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
+    }
+  }, {
+    key: "handleDescription",
+    value: function handleDescription(e) {
+      this.setState({
+        description: e.target.value
+      });
+    }
+  }, {
+    key: "postSequence",
+    value: function postSequence(e) {
+      if (this.seq.length > 0 && this.state.description.length > 0) {
+        var content = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["seqToString"])(this.seq, this.state.description);
+        this.props.postSeq({
+          content: content,
+          post_type: "sequence"
+        });
+        this.props.history.push('/home');
+      }
     }
   }, {
     key: "startRecording",
@@ -720,7 +742,12 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: idx
         }, snapshot);
-      }))));
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.postSequence
+      }, "Post Sequence"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Add Description:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+        value: this.state.description,
+        onChange: this.handleDescription
+      })));
     }
   }]);
 
@@ -728,6 +755,49 @@ function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Board);
+
+/***/ }),
+
+/***/ "./frontend/components/chess_table/board_container.js":
+/*!************************************************************!*\
+  !*** ./frontend/components/chess_table/board_container.js ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/game_actions */ "./frontend/actions/game_actions.js");
+/* harmony import */ var _actions_post_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../actions/post_actions */ "./frontend/actions/post_actions.js");
+/* harmony import */ var _board__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./board */ "./frontend/components/chess_table/board.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+
+
+
+
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    game: state.entities.currentGame,
+    gameErrors: state.errors.game
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    updateGame: function updateGame(game) {
+      return dispatch(Object(_actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["updateGame"])(game));
+    },
+    archiveGame: _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["archiveGame"],
+    postSeq: function postSeq(seq) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_2__["createPost"])(seq));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_router_dom__WEBPACK_IMPORTED_MODULE_4__["withRouter"])(Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_board__WEBPACK_IMPORTED_MODULE_3__["default"])));
 
 /***/ }),
 
@@ -742,7 +812,7 @@ function (_React$Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _board__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./board */ "./frontend/components/chess_table/board.jsx");
+/* harmony import */ var _board_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./board_container */ "./frontend/components/chess_table/board_container.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -780,7 +850,9 @@ function (_React$Component) {
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal_back"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board_container__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        postSeq: this.props.postSeq
+      }));
     }
   }]);
 
@@ -802,13 +874,16 @@ function (_React$Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/game_actions */ "./frontend/actions/game_actions.js");
-/* harmony import */ var _chess_table__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chess_table */ "./frontend/components/chess_table/chess_table.jsx");
+/* harmony import */ var _actions_post_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../actions/post_actions */ "./frontend/actions/post_actions.js");
+/* harmony import */ var _chess_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chess_table */ "./frontend/components/chess_table/chess_table.jsx");
 
 
 
 
-var mapStateToProps = function mapStateToProps(state) {
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
+    banana: ownProps.history,
     game: state.entities.currentGame,
     gameErrors: state.errors.game
   };
@@ -819,11 +894,14 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     updateGame: function updateGame(game) {
       return dispatch(Object(_actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["updateGame"])(game));
     },
-    archiveGame: _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["archiveGame"]
+    archiveGame: _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["archiveGame"],
+    postSeq: function postSeq(seq) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_2__["createPost"])(seq));
+    }
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_chess_table__WEBPACK_IMPORTED_MODULE_2__["default"]));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_chess_table__WEBPACK_IMPORTED_MODULE_3__["default"]));
 
 /***/ }),
 
@@ -1242,6 +1320,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1262,6 +1341,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var FeedItem =
 /*#__PURE__*/
 function (_React$Component) {
@@ -1278,15 +1358,39 @@ function (_React$Component) {
       content: _this.props.post.content,
       mode: 'display'
     };
+
+    if (_this.state.post.type === 'sequence') {
+      _this.setState({
+        content: 'This User Posted a Sequence'
+      });
+    }
+
     _this.editBar = _this.editBar.bind(_assertThisInitialized(_this));
     _this.deletePost = _this.deletePost.bind(_assertThisInitialized(_this));
     _this.editPost = _this.editPost.bind(_assertThisInitialized(_this));
     _this.handleInput = _this.handleInput.bind(_assertThisInitialized(_this));
     _this.updatePost = _this.updatePost.bind(_assertThisInitialized(_this));
+    _this.buttonSpaces = _this.buttonSpaces.bind(_assertThisInitialized(_this));
+    _this.seeSeq = _this.seeSeq.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(FeedItem, [{
+    key: "buttonSpaces",
+    value: function buttonSpaces() {
+      var answer = [];
+
+      for (var i = 0; i < 64; i++) {
+        if (Math.floor(i / 8) % 2 === 0) {
+          answer.push(i % 2 === 0 ? 'w' : 'b');
+        } else {
+          answer.push(i % 2 === 0 ? 'b' : 'w');
+        }
+      }
+
+      return answer;
+    }
+  }, {
     key: "updatePost",
     value: function updatePost(e) {
       var post = Object.assign(this.props.post, {
@@ -1339,25 +1443,52 @@ function (_React$Component) {
       }
     }
   }, {
+    key: "seeSeq",
+    value: function seeSeq() {
+      console.log(this.props.post);
+    }
+  }, {
     key: "render",
     value: function render() {
       var post = this.props.post;
 
-      if (this.state.mode === 'display') {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "post_box"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "post_header"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "post_heading"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "time_stamp"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, post.created_at.slice(0, 10))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fas fa-comment"
-        }), post.author, " (", post.author_rating, "):")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "post_content"
-        }, this.props.currentUserId.toString() === post.author_id.toString() ? this.editBar() : '', post.content));
+      if (post.post_type === 'plain') {
+        if (this.state.mode === 'display') {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_box"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_header"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_heading"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "time_stamp"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, post.created_at.slice(0, 10))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-comment"
+          }), post.author, " (", post.author_rating, "):")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_content"
+          }, this.props.currentUserId.toString() === post.author_id.toString() ? this.editBar() : '', post.content));
+        } else {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_box"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_header"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_heading"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "time_stamp"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, post.created_at.slice(0, 10))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-comment"
+          }), post.author, " (", post.author_rating, "):")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_content"
+          }, this.props.currentUserId.toString() === post.author_id.toString() ? this.editBar() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+            type: "text",
+            className: "edit_box",
+            value: this.state.content,
+            onChange: this.handleInput
+          })));
+        }
       } else {
+        var description = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_1__["stringToDescription"])(this.props.post.content);
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "post_box"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -1368,14 +1499,21 @@ function (_React$Component) {
           className: "time_stamp"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, post.created_at.slice(0, 10))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-comment"
-        }), post.author, " (", post.author_rating, "):")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        }), post.author, " (", post.author_rating, ") shared a sequence:")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "post_content"
-        }, this.props.currentUserId.toString() === post.author_id.toString() ? this.editBar() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
-          type: "text",
-          className: "edit_box",
-          value: this.state.content,
-          onChange: this.handleInput
-        })));
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "seeSeqButton"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "seeSeqTriangle",
+          onClick: this.seeSeq
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-play"
+        })), this.buttonSpaces().map(function (color, idx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            key: idx,
+            className: color + " tiny"
+          });
+        })), description));
       }
     }
   }]);
@@ -1570,6 +1708,8 @@ function (_React$Component) {
       }, " ", this.smallMenu ? '' : 'Ahoy!', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "small_pirate"
       }))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.smallMenu ? "pusher small_menu" : "pusher"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.smallMenu ? "menu small_menu" : "menu"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/home',
@@ -3337,7 +3477,7 @@ var configureStore = function configureStore() {
 /*!*************************************!*\
   !*** ./frontend/util/chess_util.js ***!
   \*************************************/
-/*! exports provided: makeSnapshot, getChessMoves, getLastMove, getCoords */
+/*! exports provided: makeSnapshot, getChessMoves, getLastMove, getCoords, seqToString, stringToSeq, stringToDescription */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3346,6 +3486,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChessMoves", function() { return getChessMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLastMove", function() { return getLastMove; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCoords", function() { return getCoords; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "seqToString", function() { return seqToString; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stringToSeq", function() { return stringToSeq; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stringToDescription", function() { return stringToDescription; });
 var makeSnapshot = function makeSnapshot(grid) {
   var answer = '';
   grid.forEach(function (row) {
@@ -3400,6 +3543,15 @@ var getCoords = function getCoords(rIdx, cIdx) {
     7: 'h'
   };
   return fileNames[cIdx] + (8 - rIdx).toString();
+};
+var seqToString = function seqToString(seq, description) {
+  return seq.join('') + '$)$($' + description;
+};
+var stringToSeq = function stringToSeq(str) {
+  return str.split('$)$($')[0];
+};
+var stringToDescription = function stringToDescription(str) {
+  return str.split('$)$($')[1];
 };
 
 /***/ }),

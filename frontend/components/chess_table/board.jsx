@@ -1,6 +1,6 @@
 import React from 'react';
 import Piece from './piece';
-import { makeSnapshot, getLastMove, getCoords } from '../../util/chess_util';
+import { makeSnapshot, getLastMove, seqToString } from '../../util/chess_util';
 
 class Board extends React.Component {
     constructor(props) {
@@ -13,7 +13,8 @@ class Board extends React.Component {
         this.state = {
             grid: this.grid,
             dragging: false,
-            flipped: this.flipped
+            flipped: this.flipped,
+            description: ''
         }
         this.dragPiece = this.dragPiece.bind(this);
         this.beginDrag = this.beginDrag.bind(this);
@@ -24,6 +25,8 @@ class Board extends React.Component {
         this.startRecording = this.startRecording.bind(this);
         this.stopRecording = this.stopRecording.bind(this);
         this.recordButton = this.recordButton.bind(this);
+        this.postSequence = this.postSequence.bind(this);
+        this.handleDescription = this.handleDescription.bind(this);
     }
 
     startPosition() {
@@ -37,6 +40,18 @@ class Board extends React.Component {
             ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
             ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
         ];
+    }
+
+    handleDescription(e) {
+        this.setState({description: e.target.value});
+    }
+
+    postSequence(e) {
+        if (this.seq.length > 0 && this.state.description.length > 0) {
+            let content = seqToString(this.seq, this.state.description);
+            this.props.postSeq({content: content, post_type: "sequence"});
+            this.props.history.push('/home');
+        }
     }
 
     startRecording(e) {
@@ -193,6 +208,14 @@ class Board extends React.Component {
                             })
                         }
                     </div>
+                    <button onClick={this.postSequence}>Post Sequence</button>
+                    <br/>
+                    Add Description:
+                    <textarea
+                        value={this.state.description}
+                        onChange={this.handleDescription}
+                    ></textarea>
+                    
                 </div>
             </div>
         ); 

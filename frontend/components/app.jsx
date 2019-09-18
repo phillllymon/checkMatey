@@ -33,8 +33,8 @@ class App extends React.Component {
                     <Route path="/signup" component={SignupFormContainer} />
                     <Route path="/notChess" component={OtherGameContainer} />
                     <Route 
-                    path="/play" 
-                    render={() => <ChessTableContainer player={'guest'} />}
+                        path="/play" 
+                        render={() => <ChessTableContainer player={'guest'} />}
                     />
                 </div>
             );

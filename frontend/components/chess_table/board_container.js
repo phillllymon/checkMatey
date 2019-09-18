@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import { archiveGame, updateGame } from '../../actions/game_actions';
 import { createPost } from '../../actions/post_actions';
-import ChessTable from './chess_table';
+import Board from './board';
+import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = (state, ownProps) => ({
-    banana: ownProps.history,
     game: state.entities.currentGame,
     gameErrors: state.errors.game
 });
@@ -15,4 +15,4 @@ const mapDispatchToProps = (dispatch) => ({
     postSeq: (seq) => dispatch(createPost(seq))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChessTable);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Board));

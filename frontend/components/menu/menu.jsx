@@ -78,6 +78,7 @@ class Menu extends React.Component {
                     </div>
                     
                 </div>
+                <div className={this.smallMenu ? "pusher small_menu" : "pusher"}></div>
                 <div className={this.smallMenu ? "menu small_menu" : "menu"}>
                     
                     <Link

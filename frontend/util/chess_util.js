@@ -4,7 +4,7 @@ export const makeSnapshot = (grid) => {
         answer += row.join('');
     });
     return answer;
-}
+};
 
 export const getChessMoves = (seq) => {
     let answer = ['some move'];
@@ -12,7 +12,7 @@ export const getChessMoves = (seq) => {
         answer.push('different move');
     });
     return answer;
-}
+};
 
 export const getLastMove = (seq) => {
     let first = seq[seq.length - 2];
@@ -40,7 +40,7 @@ export const getLastMove = (seq) => {
     let rIdx = Math.floor(spot/8);
     let cIdx = spot % 8;
     return piece + capture + getCoords(rIdx, cIdx);
-}
+};
 
 export const getCoords = (rIdx, cIdx) => {
     const fileNames = {
@@ -54,4 +54,16 @@ export const getCoords = (rIdx, cIdx) => {
         7: 'h'
     }
     return fileNames[cIdx] + (8 - rIdx).toString();
-}
+};
+
+export const seqToString = (seq, description) => {
+    return seq.join('') + '$)$($' + description;
+};
+
+export const stringToSeq = (str) => {
+    return str.split('$)$($')[0];
+};
+
+export const stringToDescription = (str) => {
+    return str.split('$)$($')[1];
+};

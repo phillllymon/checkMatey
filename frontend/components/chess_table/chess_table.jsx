@@ -1,5 +1,5 @@
 import React from 'react';
-import Board from './board';
+import BoardContainer from './board_container';
 
 class ChessTable extends React.Component {
     constructor(props) {
@@ -10,7 +10,7 @@ class ChessTable extends React.Component {
     render() {
         return (
             <div className="modal_back">
-                <Board />   
+                <BoardContainer postSeq={this.props.postSeq} />   
             </div>
         );
     }

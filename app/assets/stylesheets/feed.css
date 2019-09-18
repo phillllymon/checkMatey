@@ -23,7 +23,10 @@
 }
 
 .post_content {
-    padding: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow: hidden;
 }
 
 .fa-comment {
@@ -45,6 +48,7 @@
     font-size: 15px;
     width: 80%;
     height: 40px;
+    
 }
 
 .edit_box {
@@ -89,4 +93,43 @@
 
 .edit_button:hover {
     background-color: rgb(200, 200, 200);
+}
+
+.seeSeqButton {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    float: left;
+    margin-right: 10px;
+    height: 64px;
+    width: 64px;
+    padding: 3px;
+    background-color: rgb(75, 59, 53);
+    border-radius: 3px;
+}
+
+.tiny {
+    width: 8px;
+    height: 8px;
+}
+
+.seeSeqTriangle {
+    position: absolute;
+    margin-left: 50%;
+    margin-top: 50%;
+    font-size: 25px;
+    color: lightgray;
+    transform: translate(-23px, -23px);
+    width: 40px;
+    height: 40px;
+    background-color: rgba(75, 59, 53, 0.6);
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.seeSeqTriangle:hover {
+    color: white;
+    cursor: pointer;
 }
