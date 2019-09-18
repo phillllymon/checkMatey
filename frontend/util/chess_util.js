@@ -56,8 +56,8 @@ export const getCoords = (rIdx, cIdx) => {
     return fileNames[cIdx] + (8 - rIdx).toString();
 };
 
-export const seqToString = (seq, description) => {
-    return seq.join('') + '$)$($' + description;
+export const seqToString = (seq, description, title) => {
+    return seq.join('') + '$)$($' + description + '$)$$($' + title;
 };
 
 export const stringToSeq = (str) => {
@@ -65,5 +65,43 @@ export const stringToSeq = (str) => {
 };
 
 export const stringToDescription = (str) => {
-    return str.split('$)$($')[1];
+    if (str.includes('$)$$($')) {
+        return str.split('$)$($')[1].split('$)$$($')[0];
+    }
+    else {
+        return str.split('$)$($')[1];
+    }
+};
+
+export const stringToTitle = (str) => {
+    if (str.includes('$)$$($')) {
+        return str.split('$)$($')[1].split('$)$$($')[1];
+    }
+    else {
+        return 'Sequence';
+    }
+};
+
+export const seqToSnapshots = (str) => {
+    let numMoves = str.length/64;
+    let snapShots = [];
+    for (let i = 0; i < numMoves; i++) {
+        snapShots.push(str.slice(i*64, (i + 1)*64));
+    }
+    return snapShots;
+};
+
+export const snapshotToGrid = (str) => {
+    let arr = str.split('');
+    let rows = [];
+    let row = [];
+    for (let i = 0; i < 64; i++) {
+        if (i % 8 === 0 && i > 0) {
+            rows.push(row);
+            row = [];
+        }
+        row.push(arr[i]);
+    }
+    rows.push(row);
+    return rows;
 };

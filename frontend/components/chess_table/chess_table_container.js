@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { archiveGame, updateGame } from '../../actions/game_actions';
 import { createPost } from '../../actions/post_actions';
 import ChessTable from './chess_table';
+import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = (state, ownProps) => ({
     banana: ownProps.history,
@@ -15,4 +16,4 @@ const mapDispatchToProps = (dispatch) => ({
     postSeq: (seq) => dispatch(createPost(seq))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChessTable);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChessTable));

@@ -133,3 +133,7 @@
     color: white;
     cursor: pointer;
 }
+
+.seq_title {
+    font-size: 150%;
+}

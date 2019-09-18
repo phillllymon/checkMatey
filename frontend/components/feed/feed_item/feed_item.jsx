@@ -1,5 +1,7 @@
 import React from 'react';
-import { stringToDescription } from '../../../util/chess_util';
+import { stringToDescription, stringToTitle } from '../../../util/chess_util';
+import ChessTableContainer from '../../chess_table/chess_table_container';
+import { Redirect } from 'react-router-dom';
 
 class FeedItem extends React.Component {
     constructor(props) {
@@ -20,7 +22,26 @@ class FeedItem extends React.Component {
         this.handleInput = this.handleInput.bind(this);
         this.updatePost = this.updatePost.bind(this);
         this.buttonSpaces = this.buttonSpaces.bind(this);
-        this.seeSeq = this.seeSeq.bind(this);
+        this.showSeq = this.showSeq.bind(this);
+        this.seeSeq = false;
+        this.toggleShow = this.toggleShow.bind(this);
+    }
+
+    toggleShow(e) {
+        this.seeSeq = this.seeSeq ? false : true;
+        this.setState({});
+    }
+
+    showSeq() {
+        
+        return (
+            <div>
+                <Redirect to={{
+                    pathname: '/show',
+                    state: { post: this.props.post }
+                }} />
+            </div>
+        );
     }
 
     buttonSpaces() {
@@ -70,10 +91,6 @@ class FeedItem extends React.Component {
                 </div>
             );
         }
-    }
-
-    seeSeq() {
-        console.log(this.props.post);
     }
 
     render() {
@@ -126,8 +143,10 @@ class FeedItem extends React.Component {
         }
         else {
             let description = stringToDescription(this.props.post.content);
+            let title = stringToTitle(this.props.post.content);
             return (
                 <div className="post_box">
+                    {this.seeSeq ? this.showSeq() : ''}
                     <div className="post_header">
                         <div className="post_heading">
                             <div className="time_stamp">
@@ -139,7 +158,7 @@ class FeedItem extends React.Component {
                     </div>
                     <div className="post_content">
                         <div className="seeSeqButton">
-                            <div className="seeSeqTriangle" onClick={this.seeSeq}>
+                            <div className="seeSeqTriangle" onClick={this.toggleShow}>
                                 <i className="fas fa-play"></i>
                             </div>
                             {
@@ -149,7 +168,10 @@ class FeedItem extends React.Component {
                                     );
                                 })
                             }
-                        </div>{description}
+                        </div>
+                        <div className="seq_title">{title}</div>
+                        <br/>
+                        {description}
                     </div>
                 </div>
             );

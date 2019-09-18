@@ -19,7 +19,11 @@ class App extends React.Component {
                     <Route path="/home" component={Home} />
                     <Route
                         path="/sandbox"
-                        render={() => <ChessTableContainer player={'sandbox'} />}
+                        render={() => <ChessTableContainer mode={'sandbox'} />}
+                    />
+                    <Route
+                        path="/show"
+                        render={() => <ChessTableContainer />}
                     />
                     <Redirect to='/home' />
                 </div>
@@ -34,7 +38,8 @@ class App extends React.Component {
                     <Route path="/notChess" component={OtherGameContainer} />
                     <Route 
                         path="/play" 
-                        render={() => <ChessTableContainer player={'guest'} />}
+                        render={() => <ChessTableContainer player={'guest'}
+                        mode={'playComputer'} />}
                     />
                 </div>
             );

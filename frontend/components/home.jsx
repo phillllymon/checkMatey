@@ -5,6 +5,7 @@ import PlayBarContainer from './play_bar/play_bar_container';
 
 
 
+
 const Home = (props) => (
     <div>
         <div className="home">

@@ -424,8 +424,13 @@ function (_React$Component) {
           path: "/sandbox",
           render: function render() {
             return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              player: 'sandbox'
+              mode: 'sandbox'
             });
+          }
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
+          path: "/show",
+          render: function render() {
+            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], null);
           }
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Redirect"], {
           to: "/home"
@@ -444,7 +449,8 @@ function (_React$Component) {
           path: "/play",
           render: function render() {
             return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              player: 'guest'
+              player: 'guest',
+              mode: 'playComputer'
             });
           }
         }));
@@ -539,7 +545,8 @@ function (_React$Component) {
       grid: _this.grid,
       dragging: false,
       flipped: _this.flipped,
-      description: ''
+      description: '',
+      title: ''
     };
     _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
@@ -552,6 +559,7 @@ function (_React$Component) {
     _this.recordButton = _this.recordButton.bind(_assertThisInitialized(_this));
     _this.postSequence = _this.postSequence.bind(_assertThisInitialized(_this));
     _this.handleDescription = _this.handleDescription.bind(_assertThisInitialized(_this));
+    _this.handleTitle = _this.handleTitle.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -568,10 +576,17 @@ function (_React$Component) {
       });
     }
   }, {
+    key: "handleTitle",
+    value: function handleTitle(e) {
+      this.setState({
+        title: e.target.value
+      });
+    }
+  }, {
     key: "postSequence",
     value: function postSequence(e) {
-      if (this.seq.length > 0 && this.state.description.length > 0) {
-        var content = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["seqToString"])(this.seq, this.state.description);
+      if (this.seq.length > 0 && this.state.description.length > 0 && this.state.title.length > 0) {
+        var content = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["seqToString"])(this.seq, this.state.description, this.state.title);
         this.props.postSeq({
           content: content,
           post_type: "sequence"
@@ -744,7 +759,11 @@ function (_React$Component) {
         }, snapshot);
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: this.postSequence
-      }, "Post Sequence"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Add Description:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+      }, "Post Sequence"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Add Description:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        placeholder: 'Sequence Title',
+        value: this.state.title,
+        onChange: this.handleTitle
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
         value: this.state.description,
         onChange: this.handleDescription
       })));
@@ -813,6 +832,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _board_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./board_container */ "./frontend/components/chess_table/board_container.js");
+/* harmony import */ var _show_board_show_board_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./show_board/show_board_container */ "./frontend/components/chess_table/show_board/show_board_container.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -823,13 +843,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -840,18 +861,52 @@ function (_React$Component) {
   _inherits(ChessTable, _React$Component);
 
   function ChessTable(props) {
+    var _this;
+
     _classCallCheck(this, ChessTable);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(ChessTable).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ChessTable).call(this, props));
+    _this.backToHome = _this.backToHome.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(ChessTable, [{
+    key: "backToHome",
+    value: function backToHome(e) {
+      this.props.history.push('/home');
+    }
+  }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "modal_back"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board_container__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        postSeq: this.props.postSeq
+      if (this.props.mode === 'playComputer') {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "modal_back",
+          onClick: this.backToHome
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board_container__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          mode: 'playCompuer'
+        }));
+      }
+
+      if (this.props.mode === 'sandbox') {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "modal_back",
+          onClick: this.backToHome
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board_container__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          postSeq: this.props.postSeq,
+          mode: 'sandbox'
+        }));
+      }
+
+      if (this.props.location.state === undefined) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null);
+      }
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "modal_back",
+        onClick: this.backToHome
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_show_board_show_board_container__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        seq: this.props.location.state.post,
+        mode: 'seeSeq'
       }));
     }
   }]);
@@ -876,6 +931,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/game_actions */ "./frontend/actions/game_actions.js");
 /* harmony import */ var _actions_post_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../actions/post_actions */ "./frontend/actions/post_actions.js");
 /* harmony import */ var _chess_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chess_table */ "./frontend/components/chess_table/chess_table.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
 
 
 
@@ -901,7 +958,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_chess_table__WEBPACK_IMPORTED_MODULE_3__["default"]));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_router_dom__WEBPACK_IMPORTED_MODULE_4__["withRouter"])(Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_chess_table__WEBPACK_IMPORTED_MODULE_3__["default"])));
 
 /***/ }),
 
@@ -1045,6 +1102,243 @@ var Piece = function Piece(props) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Piece);
+
+/***/ }),
+
+/***/ "./frontend/components/chess_table/show_board/show_board.jsx":
+/*!*******************************************************************!*\
+  !*** ./frontend/components/chess_table/show_board/show_board.jsx ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _piece__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../piece */ "./frontend/components/chess_table/piece.jsx");
+/* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+var ShowBoard =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(ShowBoard, _React$Component);
+
+  function ShowBoard(props) {
+    var _this;
+
+    _classCallCheck(this, ShowBoard);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ShowBoard).call(this, props));
+    _this.flipped = false;
+    _this.recording = false;
+    _this.snapshots = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["seqToSnapshots"])(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["stringToSeq"])(_this.props.seq.content));
+    _this.posNum = 0;
+    _this.moves = [];
+    _this.grid = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["snapshotToGrid"])(_this.snapshots[_this.posNum]);
+    _this.state = {
+      grid: _this.grid,
+      dragging: false,
+      flipped: _this.flipped,
+      description: ''
+    };
+    _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
+    _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
+    _this.endDrag = _this.endDrag.bind(_assertThisInitialized(_this));
+    _this.displayDragPiece = _this.displayDragPiece.bind(_assertThisInitialized(_this));
+    _this.flipBoard = _this.flipBoard.bind(_assertThisInitialized(_this));
+    console.log(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["snapshotToGrid"])(_this.snapshots[0]));
+    return _this;
+  }
+
+  _createClass(ShowBoard, [{
+    key: "flipBoard",
+    value: function flipBoard(e) {
+      this.flipped = this.flipped ? false : true;
+      this.setState({
+        flipped: this.flipped
+      });
+    }
+  }, {
+    key: "displayDragPiece",
+    value: function displayDragPiece() {
+      var dragStyle = {
+        'position': 'fixed',
+        'transform': 'translate(-50%, -50%)',
+        'height': 'auto',
+        'width': 'auto',
+        'fontSize': '5vmin',
+        'cursor': 'grabbing',
+        'pointerEvents': 'none',
+        top: this.state.dragY,
+        left: this.state.dragX
+      };
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: dragStyle
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        mark: this.markToDrag
+      }));
+    }
+  }, {
+    key: "dragPiece",
+    value: function dragPiece(e) {
+      if (this.state.dragging) {
+        this.setState({
+          dragY: e.clientY,
+          dragX: e.clientX
+        });
+      }
+    }
+  }, {
+    key: "beginDrag",
+    value: function beginDrag(e) {
+      if (e.target.className.includes('fa-chess')) {
+        this.setState({
+          dragging: true,
+          dragY: e.clientY,
+          dragX: e.clientX
+        });
+        this.origin = e.target.id;
+        this.markToDrag = this.state.grid[parseInt(this.origin[0])][parseInt(this.origin[2])];
+      }
+    }
+  }, {
+    key: "endDrag",
+    value: function endDrag(e) {
+      if (this.state.dragging) {
+        var destination = e.target.id;
+
+        if (destination !== this.origin) {
+          this.grid[parseInt(destination[0])][parseInt(destination[2])] = this.markToDrag;
+          this.grid[parseInt(this.origin[0])][parseInt(this.origin[2])] = '-';
+
+          if (this.recording) {
+            this.seq.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["makeSnapshot"])(this.grid));
+            this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["getLastMove"])(this.seq));
+          }
+
+          this.setState({
+            grid: this.grid,
+            dragging: false
+          });
+          this.markToDrag = null;
+          this.origin = null;
+        } else {
+          this.setState({
+            grid: this.grid,
+            dragging: false
+          });
+          this.markToDrag = null;
+          this.origin = null;
+        }
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "chess_table"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.flipped ? "board flipped" : "board",
+        onMouseMove: this.dragPiece
+      }, this.state.dragging ? this.displayDragPiece() : '', this.grid.map(function (row, rIdx) {
+        return row.map(function (spot, cIdx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            onMouseDown: _this2.beginDrag,
+            onMouseUp: _this2.endDrag,
+            key: rIdx + cIdx,
+            id: [rIdx, cIdx],
+            className: (rIdx + cIdx) % 2 === 0 ? 'w' : 'b'
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            grayed: _this2.state.dragging && parseInt(_this2.origin[0]) === rIdx && parseInt(_this2.origin[2]) === cIdx ? true : false,
+            pos: [rIdx, cIdx],
+            mark: _this2.state.grid[rIdx][cIdx]
+          }));
+        });
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "board_controls"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "controls_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-external-link-square-alt"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'marginLeft': '10px'
+        }
+      }, "Moves")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.flipBoard
+      }, "Flip Board"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'fontSize': '15px'
+        }
+      }, this.moves.map(function (snapshot, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: idx
+        }, snapshot);
+      }))));
+    }
+  }]);
+
+  return ShowBoard;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (ShowBoard);
+
+/***/ }),
+
+/***/ "./frontend/components/chess_table/show_board/show_board_container.js":
+/*!****************************************************************************!*\
+  !*** ./frontend/components/chess_table/show_board/show_board_container.js ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../actions/game_actions */ "./frontend/actions/game_actions.js");
+/* harmony import */ var _show_board__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./show_board */ "./frontend/components/chess_table/show_board/show_board.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+
+
+
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    game: state.entities.currentGame,
+    gameErrors: state.errors.game
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {};
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["withRouter"])(Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_show_board__WEBPACK_IMPORTED_MODULE_2__["default"])));
 
 /***/ }),
 
@@ -1321,6 +1615,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
+/* harmony import */ var _chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../chess_table/chess_table_container */ "./frontend/components/chess_table/chess_table_container.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1338,6 +1634,8 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
 
 
 
@@ -1371,11 +1669,31 @@ function (_React$Component) {
     _this.handleInput = _this.handleInput.bind(_assertThisInitialized(_this));
     _this.updatePost = _this.updatePost.bind(_assertThisInitialized(_this));
     _this.buttonSpaces = _this.buttonSpaces.bind(_assertThisInitialized(_this));
-    _this.seeSeq = _this.seeSeq.bind(_assertThisInitialized(_this));
+    _this.showSeq = _this.showSeq.bind(_assertThisInitialized(_this));
+    _this.seeSeq = false;
+    _this.toggleShow = _this.toggleShow.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(FeedItem, [{
+    key: "toggleShow",
+    value: function toggleShow(e) {
+      this.seeSeq = this.seeSeq ? false : true;
+      this.setState({});
+    }
+  }, {
+    key: "showSeq",
+    value: function showSeq() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Redirect"], {
+        to: {
+          pathname: '/show',
+          state: {
+            post: this.props.post
+          }
+        }
+      }));
+    }
+  }, {
     key: "buttonSpaces",
     value: function buttonSpaces() {
       var answer = [];
@@ -1443,11 +1761,6 @@ function (_React$Component) {
       }
     }
   }, {
-    key: "seeSeq",
-    value: function seeSeq() {
-      console.log(this.props.post);
-    }
-  }, {
     key: "render",
     value: function render() {
       var post = this.props.post;
@@ -1489,9 +1802,10 @@ function (_React$Component) {
         }
       } else {
         var description = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_1__["stringToDescription"])(this.props.post.content);
+        var title = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_1__["stringToTitle"])(this.props.post.content);
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "post_box"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        }, this.seeSeq ? this.showSeq() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "post_header"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "post_heading"
@@ -1505,7 +1819,7 @@ function (_React$Component) {
           className: "seeSeqButton"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "seeSeqTriangle",
-          onClick: this.seeSeq
+          onClick: this.toggleShow
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-play"
         })), this.buttonSpaces().map(function (color, idx) {
@@ -1513,7 +1827,9 @@ function (_React$Component) {
             key: idx,
             className: color + " tiny"
           });
-        })), description));
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "seq_title"
+        }, title), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), description));
       }
     }
   }]);
@@ -2644,7 +2960,7 @@ function (_React$Component) {
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "play_bar"
-      }, "Play bar woo!");
+      });
     }
   }]);
 
@@ -3477,7 +3793,7 @@ var configureStore = function configureStore() {
 /*!*************************************!*\
   !*** ./frontend/util/chess_util.js ***!
   \*************************************/
-/*! exports provided: makeSnapshot, getChessMoves, getLastMove, getCoords, seqToString, stringToSeq, stringToDescription */
+/*! exports provided: makeSnapshot, getChessMoves, getLastMove, getCoords, seqToString, stringToSeq, stringToDescription, stringToTitle, seqToSnapshots, snapshotToGrid */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3489,6 +3805,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "seqToString", function() { return seqToString; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stringToSeq", function() { return stringToSeq; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stringToDescription", function() { return stringToDescription; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stringToTitle", function() { return stringToTitle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "seqToSnapshots", function() { return seqToSnapshots; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "snapshotToGrid", function() { return snapshotToGrid; });
 var makeSnapshot = function makeSnapshot(grid) {
   var answer = '';
   grid.forEach(function (row) {
@@ -3544,14 +3863,52 @@ var getCoords = function getCoords(rIdx, cIdx) {
   };
   return fileNames[cIdx] + (8 - rIdx).toString();
 };
-var seqToString = function seqToString(seq, description) {
-  return seq.join('') + '$)$($' + description;
+var seqToString = function seqToString(seq, description, title) {
+  return seq.join('') + '$)$($' + description + '$)$$($' + title;
 };
 var stringToSeq = function stringToSeq(str) {
   return str.split('$)$($')[0];
 };
 var stringToDescription = function stringToDescription(str) {
-  return str.split('$)$($')[1];
+  if (str.includes('$)$$($')) {
+    return str.split('$)$($')[1].split('$)$$($')[0];
+  } else {
+    return str.split('$)$($')[1];
+  }
+};
+var stringToTitle = function stringToTitle(str) {
+  if (str.includes('$)$$($')) {
+    return str.split('$)$($')[1].split('$)$$($')[1];
+  } else {
+    return 'Sequence';
+  }
+};
+var seqToSnapshots = function seqToSnapshots(str) {
+  var numMoves = str.length / 64;
+  var snapShots = [];
+
+  for (var i = 0; i < numMoves; i++) {
+    snapShots.push(str.slice(i * 64, (i + 1) * 64));
+  }
+
+  return snapShots;
+};
+var snapshotToGrid = function snapshotToGrid(str) {
+  var arr = str.split('');
+  var rows = [];
+  var row = [];
+
+  for (var i = 0; i < 64; i++) {
+    if (i % 8 === 0 && i > 0) {
+      rows.push(row);
+      row = [];
+    }
+
+    row.push(arr[i]);
+  }
+
+  rows.push(row);
+  return rows;
 };
 
 /***/ }),

@@ -11,7 +11,7 @@ class PlayBar extends React.Component {
 
         return (
             <div className="play_bar">
-                Play bar woo!
+                
             </div>
         );
     }

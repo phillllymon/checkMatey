@@ -1,16 +1,45 @@
 import React from 'react';
 import BoardContainer from './board_container';
+import ShowBoardContainer from './show_board/show_board_container';
 
 class ChessTable extends React.Component {
     constructor(props) {
         super(props);
-        
+        this.backToHome = this.backToHome.bind(this);
+    }
+
+    backToHome(e) {
+        this.props.history.push('/home');
     }
 
     render() {
+        if (this.props.mode === 'playComputer'){
+            return (
+                <div>
+                    <div className="modal_back" onClick={this.backToHome}></div>
+                    <BoardContainer mode={'playCompuer'} />
+                </div>
+            );
+        }
+        if (this.props.mode === 'sandbox') {
+            return (
+                <div>
+                    <div className="modal_back" onClick={this.backToHome}></div>
+                    <BoardContainer postSeq={this.props.postSeq} mode={'sandbox'} />
+                </div>
+            );
+        }
+        if (this.props.location.state === undefined){
+            return(
+                <div>
+                    
+                </div>
+            );
+        }
         return (
-            <div className="modal_back">
-                <BoardContainer postSeq={this.props.postSeq} />   
+            <div>
+                <div className="modal_back" onClick={this.backToHome}></div>
+                <ShowBoardContainer seq={this.props.location.state.post} mode={'seeSeq'}/>
             </div>
         );
     }
