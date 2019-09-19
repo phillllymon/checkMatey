@@ -6,11 +6,11 @@ export const makeSnapshot = (grid) => {
     return answer;
 };
 
-export const getChessMoves = (seq) => {
-    let answer = ['some move'];
-    seq.forEach( (snapshot) => {
-        answer.push('different move');
-    });
+export const getChessMoves = (snapshots) => {
+    let answer = ['start'];
+    for (let i = 0; i < snapshots.length - 1; i++){
+        answer.push(getLastMove(snapshots.slice(i, i + 2)));
+    }
     return answer;
 };
 

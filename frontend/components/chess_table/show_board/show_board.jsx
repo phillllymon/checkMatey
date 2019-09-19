@@ -5,17 +5,17 @@ import {
     getLastMove, 
     stringToSeq, 
     seqToSnapshots,
-    snapshotToGrid
+    snapshotToGrid,
+    getChessMoves
 } from '../../../util/chess_util';
 
 class ShowBoard extends React.Component {
     constructor(props) {
         super(props);
         this.flipped = false;
-        this.recording = false;
         this.snapshots = seqToSnapshots(stringToSeq(this.props.seq.content));
         this.posNum = 0;
-        this.moves = [];
+        this.moves = getChessMoves(this.snapshots);
         this.grid = snapshotToGrid(this.snapshots[this.posNum]);
         this.state = {
             grid: this.grid,
@@ -28,7 +28,54 @@ class ShowBoard extends React.Component {
         this.endDrag = this.endDrag.bind(this);
         this.displayDragPiece = this.displayDragPiece.bind(this);
         this.flipBoard = this.flipBoard.bind(this);
-        console.log(snapshotToGrid(this.snapshots[0]));
+        this.showNextMove = this.showNextMove.bind(this);
+        this.showPrevMove = this.showPrevMove.bind(this);
+        this.showFirstMove = this.showFirstMove.bind(this);
+        this.showLastMove = this.showLastMove.bind(this);
+        this.showMoveNumber = this.showMoveNumber.bind(this);
+        this.getMoveList = this.getMoveList.bind(this);
+    }
+
+    showMoveNumber(num) {
+        this.posNum = num;
+        this.grid = snapshotToGrid(this.snapshots[this.posNum]);
+        this.setState({ grid: this.grid });
+    }
+
+    getMoveList() {
+        return (
+            <div>
+                hello
+            </div>
+        );
+    }
+
+    showNextMove(e) {
+        if (this.posNum < this.snapshots.length - 1){
+            this.posNum++;
+            this.grid = snapshotToGrid(this.snapshots[this.posNum]);
+            this.setState({grid: this.grid});
+        }
+    }
+
+    showPrevMove(e) {
+        if (this.posNum > 0){
+            this.posNum--;
+            this.grid = snapshotToGrid(this.snapshots[this.posNum]);
+            this.setState({ grid: this.grid });
+        }
+    }
+
+    showFirstMove(e) {
+        this.posNum = 0;
+        this.grid = snapshotToGrid(this.snapshots[this.posNum]);
+        this.setState({ grid: this.grid });
+    }
+
+    showLastMove(e) {
+        this.posNum = this.snapshots.length - 1;
+        this.grid = snapshotToGrid(this.snapshots[this.posNum]);
+        this.setState({ grid: this.grid });
     }
 
     flipBoard(e) {
@@ -135,6 +182,7 @@ class ShowBoard extends React.Component {
                     }
                 </div>
                 <div className="board_controls">
+                    <center>
                     <div className="controls_heading">
                         <i className="fas fa-external-link-square-alt"></i>
                         <div style={{ 'marginLeft': '10px' }}>
@@ -142,20 +190,36 @@ class ShowBoard extends React.Component {
                             </div>
                     </div>
                     
-                    <button onClick={this.flipBoard}>Flip Board</button>
+                    <button className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i> Flip</button>
+                    <br/>
+                    <div className="record_controls">
+                            <div className="record_button" onClick={this.showFirstMove}> <i className="fas fa-step-backward"></i> </div>
+                            <div className="record_button" onClick={this.showPrevMove}><i className="fas fa-chevron-left"></i>Prev </div>
+                            
+                            <div className="record_button" onClick={this.showNextMove}> Next<i className="fas fa-chevron-right"></i></div>
+                            <div className="record_button" onClick={this.showLastMove}> <i className="fas fa-step-forward"></i> </div>
+                    </div>
+                    
                     
                     <div style={{ 'fontSize': '15px' }}>
                         {
-                            this.moves.map((snapshot, idx) => {
+                            this.moves.map((move, idx) => {
+                                if (this.posNum === idx) {
+                                    return (
+                                        <div onClick={() => this.showMoveNumber(idx)} className="active_move" key={idx}>
+                                            {move}
+                                        </div>
+                                    );
+                                }
                                 return (
-                                    <div key={idx}>
-                                        {snapshot}
+                                    <div onClick={() => this.showMoveNumber(idx)} className={idx % 2 === 0 ? "inactive_move_light" : "inactive_move_dark"} key={idx}>
+                                        {move}
                                     </div>
                                 );
                             })
                         }
                     </div>
-                    
+                    </center>
 
                 </div>
             </div>

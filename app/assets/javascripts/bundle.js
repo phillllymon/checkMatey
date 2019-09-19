@@ -599,7 +599,7 @@ function (_React$Component) {
     value: function startRecording(e) {
       this.recording = true;
       this.seq = [Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["makeSnapshot"])(this.grid)];
-      this.moves = ['sequence beginning'];
+      this.moves = ['start'];
       this.setState({});
     }
   }, {
@@ -702,13 +702,26 @@ function (_React$Component) {
     key: "recordButton",
     value: function recordButton() {
       if (this.recording) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "record_controls"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "record_button",
           onClick: this.stopRecording
-        }, "Stop Recording");
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-stop-circle"
+        }), " Stop Recording...."));
       } else {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "record_controls"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "record_button",
           onClick: this.startRecording
-        }, "Record Sequence");
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          style: {
+            'color': 'red'
+          },
+          className: "far fa-dot-circle"
+        }), " Record Sequence"));
       }
     }
   }, {
@@ -737,7 +750,7 @@ function (_React$Component) {
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "board_controls"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "controls_heading"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-chess-board"
@@ -746,10 +759,27 @@ function (_React$Component) {
           'marginLeft': '10px'
         }
       }, "Sandbox")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: this.resetBoard
-      }, "Reset Board"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
         onClick: this.flipBoard
-      }, "Flip Board"), this.recordButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-retweet"
+      }), " Flip"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
+        onClick: this.resetBoard
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess"
+      }), " Reset"), "Sequence Title:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "title_field",
+        value: this.state.title,
+        onChange: this.handleTitle
+      }), "Description:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+        className: "title_field",
+        value: this.state.description,
+        onChange: this.handleDescription
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: this.seq.length > 0 && this.state.description.length > 0 && this.state.title.length ? "seq_active_button" : "seq_post_button",
+        onClick: this.postSequence
+      }, "Post Sequence"), this.recordButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
           'fontSize': '15px'
         }
@@ -757,16 +787,7 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: idx
         }, snapshot);
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: this.postSequence
-      }, "Post Sequence"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Add Description:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        placeholder: 'Sequence Title',
-        value: this.state.title,
-        onChange: this.handleTitle
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
-        value: this.state.description,
-        onChange: this.handleDescription
-      })));
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))));
     }
   }]);
 
@@ -1152,10 +1173,9 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ShowBoard).call(this, props));
     _this.flipped = false;
-    _this.recording = false;
     _this.snapshots = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["seqToSnapshots"])(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["stringToSeq"])(_this.props.seq.content));
     _this.posNum = 0;
-    _this.moves = [];
+    _this.moves = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["getChessMoves"])(_this.snapshots);
     _this.grid = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["snapshotToGrid"])(_this.snapshots[_this.posNum]);
     _this.state = {
       grid: _this.grid,
@@ -1168,11 +1188,70 @@ function (_React$Component) {
     _this.endDrag = _this.endDrag.bind(_assertThisInitialized(_this));
     _this.displayDragPiece = _this.displayDragPiece.bind(_assertThisInitialized(_this));
     _this.flipBoard = _this.flipBoard.bind(_assertThisInitialized(_this));
-    console.log(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["snapshotToGrid"])(_this.snapshots[0]));
+    _this.showNextMove = _this.showNextMove.bind(_assertThisInitialized(_this));
+    _this.showPrevMove = _this.showPrevMove.bind(_assertThisInitialized(_this));
+    _this.showFirstMove = _this.showFirstMove.bind(_assertThisInitialized(_this));
+    _this.showLastMove = _this.showLastMove.bind(_assertThisInitialized(_this));
+    _this.showMoveNumber = _this.showMoveNumber.bind(_assertThisInitialized(_this));
+    _this.getMoveList = _this.getMoveList.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(ShowBoard, [{
+    key: "showMoveNumber",
+    value: function showMoveNumber(num) {
+      this.posNum = num;
+      this.grid = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["snapshotToGrid"])(this.snapshots[this.posNum]);
+      this.setState({
+        grid: this.grid
+      });
+    }
+  }, {
+    key: "getMoveList",
+    value: function getMoveList() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "hello");
+    }
+  }, {
+    key: "showNextMove",
+    value: function showNextMove(e) {
+      if (this.posNum < this.snapshots.length - 1) {
+        this.posNum++;
+        this.grid = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["snapshotToGrid"])(this.snapshots[this.posNum]);
+        this.setState({
+          grid: this.grid
+        });
+      }
+    }
+  }, {
+    key: "showPrevMove",
+    value: function showPrevMove(e) {
+      if (this.posNum > 0) {
+        this.posNum--;
+        this.grid = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["snapshotToGrid"])(this.snapshots[this.posNum]);
+        this.setState({
+          grid: this.grid
+        });
+      }
+    }
+  }, {
+    key: "showFirstMove",
+    value: function showFirstMove(e) {
+      this.posNum = 0;
+      this.grid = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["snapshotToGrid"])(this.snapshots[this.posNum]);
+      this.setState({
+        grid: this.grid
+      });
+    }
+  }, {
+    key: "showLastMove",
+    value: function showLastMove(e) {
+      this.posNum = this.snapshots.length - 1;
+      this.grid = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_2__["snapshotToGrid"])(this.snapshots[this.posNum]);
+      this.setState({
+        grid: this.grid
+      });
+    }
+  }, {
     key: "flipBoard",
     value: function flipBoard(e) {
       this.flipped = this.flipped ? false : true;
@@ -1280,7 +1359,7 @@ function (_React$Component) {
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "board_controls"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "controls_heading"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-external-link-square-alt"
@@ -1289,16 +1368,55 @@ function (_React$Component) {
           'marginLeft': '10px'
         }
       }, "Moves")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
         onClick: this.flipBoard
-      }, "Flip Board"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-retweet"
+      }), " Flip"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "record_controls"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "record_button",
+        onClick: this.showFirstMove
+      }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-step-backward"
+      }), " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "record_button",
+        onClick: this.showPrevMove
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chevron-left"
+      }), "Prev "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "record_button",
+        onClick: this.showNextMove
+      }, " Next", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chevron-right"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "record_button",
+        onClick: this.showLastMove
+      }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-step-forward"
+      }), " ")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
           'fontSize': '15px'
         }
-      }, this.moves.map(function (snapshot, idx) {
+      }, this.moves.map(function (move, idx) {
+        if (_this2.posNum === idx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            onClick: function onClick() {
+              return _this2.showMoveNumber(idx);
+            },
+            className: "active_move",
+            key: idx
+          }, move);
+        }
+
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          onClick: function onClick() {
+            return _this2.showMoveNumber(idx);
+          },
+          className: idx % 2 === 0 ? "inactive_move_light" : "inactive_move_dark",
           key: idx
-        }, snapshot);
-      }))));
+        }, move);
+      })))));
     }
   }]);
 
@@ -1741,23 +1859,32 @@ function (_React$Component) {
   }, {
     key: "editBar",
     value: function editBar() {
-      if (this.state.mode === 'display') {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "edit_bar"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "edit_button",
-          onClick: this.editPost
-        }, "edit"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "edit_button",
-          onClick: this.deletePost
-        }, "delete"));
+      if (this.props.post.post_type === 'plain') {
+        if (this.state.mode === 'display') {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "edit_bar"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "edit_button",
+            onClick: this.editPost
+          }, "edit"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "edit_button",
+            onClick: this.deletePost
+          }, "delete"));
+        } else {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "edit_bar"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "edit_button",
+            onClick: this.updatePost
+          }, "save changes"));
+        }
       } else {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "edit_bar"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           className: "edit_button",
-          onClick: this.updatePost
-        }, "save changes"));
+          onClick: this.deletePost
+        }, "delete"));
       }
     }
   }, {
@@ -1815,7 +1942,7 @@ function (_React$Component) {
           className: "fas fa-comment"
         }), post.author, " (", post.author_rating, ") shared a sequence:")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "post_content"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        }, this.props.currentUserId.toString() === post.author_id.toString() ? this.editBar() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "seeSeqButton"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "seeSeqTriangle",
@@ -3815,11 +3942,13 @@ var makeSnapshot = function makeSnapshot(grid) {
   });
   return answer;
 };
-var getChessMoves = function getChessMoves(seq) {
-  var answer = ['some move'];
-  seq.forEach(function (snapshot) {
-    answer.push('different move');
-  });
+var getChessMoves = function getChessMoves(snapshots) {
+  var answer = ['start'];
+
+  for (var i = 0; i < snapshots.length - 1; i++) {
+    answer.push(getLastMove(snapshots.slice(i, i + 2)));
+  }
+
   return answer;
 };
 var getLastMove = function getLastMove(seq) {

@@ -63,7 +63,7 @@ class Board extends React.Component {
     startRecording(e) {
         this.recording = true;
         this.seq = [makeSnapshot(this.grid)];
-        this.moves = ['sequence beginning'];
+        this.moves = ['start'];
         this.setState({});
     }
 
@@ -148,12 +148,16 @@ class Board extends React.Component {
     recordButton() {
         if (this.recording) {
             return (
-                <button onClick={this.stopRecording}>Stop Recording</button>
+                <div className="record_controls">
+                    <div className="record_button" onClick={this.stopRecording}><i className="fas fa-stop-circle"></i> Stop Recording....</div>
+                </div>
             );
         }
         else {
             return (
-                <button onClick={this.startRecording}>Record Sequence</button>
+                <div className="record_controls">
+                    <div className="record_button" onClick={this.startRecording}><i style={{'color': 'red'}} className="far fa-dot-circle"></i> Record Sequence</div>
+                </div>
             );
         }
     }
@@ -194,14 +198,36 @@ class Board extends React.Component {
                     }
                 </div>
                 <div className="board_controls">
+                    <center>
                     <div className="controls_heading">
                         <i className="fas fa-chess-board"></i>
                         <div style={{ 'marginLeft': '10px' }}>
                             Sandbox
                             </div>
                     </div>
-                    <button onClick={this.resetBoard}>Reset Board</button>
-                    <button onClick={this.flipBoard}>Flip Board</button>
+                        <button className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i> Flip</button>
+                        <button className={"board_control_button"} onClick={this.resetBoard}><i className="fas fa-chess"></i> Reset</button>
+                        Sequence Title:
+                    <input
+                            className="title_field"
+                            value={this.state.title}
+                            onChange={this.handleTitle}
+                        />
+                        Description:
+                    <textarea
+                            className="title_field"
+                            value={this.state.description}
+                            onChange={this.handleDescription}
+                        ></textarea>
+                        <button
+                            className={this.seq.length > 0 &&
+                                this.state.description.length > 0 && this.state.title.length ?
+                                "seq_active_button" : "seq_post_button"}
+                            onClick={this.postSequence}>
+                            Post Sequence
+                    </button>
+                    
+                    
                     {this.recordButton()}
                     <div style={{'fontSize': '15px'}}>
                         {
@@ -214,19 +240,10 @@ class Board extends React.Component {
                             })
                         }
                     </div>
-                    <button onClick={this.postSequence}>Post Sequence</button>
-                    <br/>
-                    Add Description:
-                    <input
-                        placeholder={'Sequence Title'}
-                        value={this.state.title}
-                        onChange={this.handleTitle}
-                    />
-                    <textarea
-                        value={this.state.description}
-                        onChange={this.handleDescription}
-                    ></textarea>
                     
+                    <br/>
+                    
+                    </center>
                 </div>
             </div>
         ); 

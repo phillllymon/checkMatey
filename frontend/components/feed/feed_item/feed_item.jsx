@@ -76,18 +76,27 @@ class FeedItem extends React.Component {
     }
 
     editBar() {
-        if (this.state.mode === 'display'){
-            return (
-                <div className="edit_bar">
-                    <button className="edit_button" onClick={this.editPost}>edit</button>
-                    <button className="edit_button" onClick={this.deletePost}>delete</button>
-                </div>
-            );
+        if (this.props.post.post_type === 'plain'){
+            if (this.state.mode === 'display'){
+                return (
+                    <div className="edit_bar">
+                        <button className="edit_button" onClick={this.editPost}>edit</button>
+                        <button className="edit_button" onClick={this.deletePost}>delete</button>
+                    </div>
+                );
+            }
+            else {
+                return (
+                    <div className="edit_bar">
+                        <button className="edit_button" onClick={this.updatePost}>save changes</button>
+                    </div>
+                );
+            }
         }
         else {
             return (
                 <div className="edit_bar">
-                    <button className="edit_button" onClick={this.updatePost}>save changes</button>
+                    <button className="edit_button" onClick={this.deletePost}>delete</button>
                 </div>
             );
         }
@@ -157,6 +166,7 @@ class FeedItem extends React.Component {
                         </div>
                     </div>
                     <div className="post_content">
+                        {(this.props.currentUserId).toString() === (post.author_id).toString() ? this.editBar() : ''}
                         <div className="seeSeqButton">
                             <div className="seeSeqTriangle" onClick={this.toggleShow}>
                                 <i className="fas fa-play"></i>

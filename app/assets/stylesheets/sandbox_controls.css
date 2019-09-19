@@ -1,8 +1,7 @@
 .board_controls {
-    font-size: 20px;
-    width: 30vw;
-    min-width: 160px;
-    max-width: 220px;
+    font-size: 15px;
+    color: rgb(40, 40, 40);
+    width: 220px;
     height: 60vw;
     max-height: 90vh;
     background-color: rgb(185, 169, 163);
@@ -17,4 +16,87 @@
     justify-content: center;
     background-color: rgb(135, 129, 123);
     color: lightgray;
+}
+
+.seq_post_button {
+    margin: 10px;
+    height: 40px;
+    padding: 10px;
+    font-size: 15px;
+    color: lightgray;
+    border-radius: 4px;
+}
+
+.seq_active_button {
+    margin: 10px;
+    height: 40px;
+    padding: 10px;
+    font-size: 15px;
+    color: white;
+    background-color: orange;
+    border-radius: 4px;
+}
+
+.seq_active_button:hover {
+    background-color: darkorange;
+}
+
+.board_control_button {
+    height: 45px;
+    font-size: 20px;
+    padding: 10px;
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+    margin: 5px;
+}
+
+.board_control_button:hover {
+    cursor: pointer;
+}
+
+.record_controls {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: rgb(135, 129, 123);
+}
+
+.record_button {
+    padding: 10px;
+    font-size: 17px;
+    color: lightgray;
+}
+
+.record_button:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.title_field {
+    width: 90%;
+    background-color: lightgray;
+}
+
+.active_move {
+    background: orange;
+}
+
+.inactive_move_light {
+    background: lightgray
+}
+
+.inactive_move_dark {
+    background: rgb(220, 220, 220);
+}
+
+.active_move:hover {
+    cursor: pointer;
+}
+
+.inactive_move_light:hover {
+    cursor: pointer;
+}
+
+.inactive_move_dark:hover {
+    cursor: pointer;
 }
