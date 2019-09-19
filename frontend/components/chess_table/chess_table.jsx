@@ -1,6 +1,7 @@
 import React from 'react';
 import BoardContainer from './board_container';
 import ShowBoardContainer from './show_board/show_board_container';
+import PlayBoardContainer from './play_board/play_board_container';
 
 class ChessTable extends React.Component {
     constructor(props) {
@@ -17,7 +18,7 @@ class ChessTable extends React.Component {
             return (
                 <div>
                     <div className="modal_back" onClick={this.backToHome}></div>
-                    <BoardContainer mode={'playCompuer'} />
+                    <PlayBoardContainer mode={'playCompuer'} player={this.props.player} />
                 </div>
             );
         }

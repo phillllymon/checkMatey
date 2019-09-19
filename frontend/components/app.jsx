@@ -38,7 +38,7 @@ class App extends React.Component {
                     <Route path="/notChess" component={OtherGameContainer} />
                     <Route 
                         path="/play" 
-                        render={() => <ChessTableContainer player={'guest'}
+                        render={() => <ChessTableContainer player={'Guest'}
                         mode={'playComputer'} />}
                     />
                 </div>

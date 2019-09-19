@@ -449,7 +449,7 @@ function (_React$Component) {
           path: "/play",
           render: function render() {
             return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              player: 'guest',
+              player: 'Guest',
               mode: 'playComputer'
             });
           }
@@ -841,6 +841,473 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 /***/ }),
 
+/***/ "./frontend/components/chess_table/chess/chess_helper.js":
+/*!***************************************************************!*\
+  !*** ./frontend/components/chess_table/chess/chess_helper.js ***!
+  \***************************************************************/
+/*! exports provided: getPieceColor, getPieceType, getAllDumbMoves, getAllMoves, inCheck, purgeCheckMoves, getPieceMoves, getPieceDumbMoves, getPawnMoves, getKingMoves, getKnightMoves, getQueenMoves, getBishopMoves, getRookMoves */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceColor", function() { return getPieceColor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceType", function() { return getPieceType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllDumbMoves", function() { return getAllDumbMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllMoves", function() { return getAllMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "inCheck", function() { return inCheck; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "purgeCheckMoves", function() { return purgeCheckMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceMoves", function() { return getPieceMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceDumbMoves", function() { return getPieceDumbMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPawnMoves", function() { return getPawnMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getKingMoves", function() { return getKingMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getKnightMoves", function() { return getKnightMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getQueenMoves", function() { return getQueenMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBishopMoves", function() { return getBishopMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRookMoves", function() { return getRookMoves; });
+var getPieceColor = function getPieceColor(mark) {
+  if (['P', 'R', 'B', 'K', 'Q', 'N'].includes(mark)) {
+    return 'black';
+  } else if (['p', 'r', 'b', 'k', 'q', 'n'].includes(mark)) {
+    return 'white';
+  }
+
+  return 'empty';
+};
+var getPieceType = function getPieceType(mark) {
+  if (mark === 'p' || mark === 'P') {
+    return 'pawn';
+  } else if (mark === 'k' || mark === 'K') {
+    return 'king';
+  } else if (mark === 'q' || mark === 'Q') {
+    return 'queen';
+  } else if (mark === 'n' || mark === 'N') {
+    return 'knight';
+  } else if (mark === 'b' || mark === 'B') {
+    return 'bishop';
+  } else if (mark === 'r' || mark === 'R') {
+    return 'rook';
+  }
+
+  return 'empty';
+};
+
+var findKing = function findKing(color, grid) {
+  var answer = [];
+  grid.forEach(function (row, rIdx) {
+    row.forEach(function (mark, cIdx) {
+      if (getPieceType(mark) === 'king' && getPieceColor(mark) === color) {
+        answer = [rIdx, cIdx];
+      }
+    });
+  });
+  return answer;
+}; //dumb moves means they include moving yourself into check
+
+
+var getAllDumbMoves = function getAllDumbMoves(color, grid) {
+  var answer = [];
+  grid.forEach(function (row, rIdx) {
+    row.forEach(function (mark, cIdx) {
+      if (getPieceColor(mark) === color) {
+        var origin = [rIdx, cIdx];
+        var pieceType = getPieceType(mark);
+        answer = answer.concat(getPieceDumbMoves(origin, pieceType, color, grid));
+      }
+    });
+  });
+  return answer;
+};
+var getAllMoves = function getAllMoves(color, grid) {
+  var answer = [];
+  grid.forEach(function (row, rIdx) {
+    row.forEach(function (mark, cIdx) {
+      if (getPieceColor(mark) === color) {
+        var origin = [rIdx, cIdx];
+        var pieceType = getPieceType(mark);
+        answer = answer.concat(getPieceMoves(origin, pieceType, color, grid));
+      }
+    });
+  });
+  return answer;
+};
+
+var onBoard = function onBoard(spot) {
+  if (spot[0] > 7 || spot[0] < 0) {
+    return false;
+  }
+
+  if (spot[1] > 7 || spot[1] < 0) {
+    return false;
+  }
+
+  return true;
+};
+
+var inCheck = function inCheck(color, grid) {
+  var kingSpot = findKing(color, grid);
+  var moves = getAllDumbMoves(color === 'white' ? 'black' : 'white', grid);
+  var answer = false;
+  moves.forEach(function (spot) {
+    if (spot[0] === kingSpot[0] && spot[1] === kingSpot[1]) {
+      answer = true;
+    }
+  });
+  return answer;
+};
+var purgeCheckMoves = function purgeCheckMoves(moves, origin, color, grid) {
+  var mark = grid[origin[0]][origin[1]];
+  var answer = [];
+  moves.forEach(function (move) {
+    var newGrid = grid.map(function (row) {
+      return row.map(function (mark) {
+        return mark;
+      });
+    });
+    newGrid[move[0]][move[1]] = mark;
+    newGrid[origin[0]][origin[1]] = '-';
+
+    if (!inCheck(color, newGrid)) {
+      answer.push(move);
+    }
+  });
+  return answer;
+};
+var getPieceMoves = function getPieceMoves(origin, pieceType, pieceColor, grid) {
+  if (pieceType === 'pawn') {
+    var moves = getPawnMoves(origin, pieceColor, grid);
+    var purgeMoves = purgeCheckMoves(moves, origin, pieceColor, grid);
+    return purgeMoves;
+  } else if (pieceType === 'king') {
+    var _moves = getKingMoves(origin, pieceColor, grid);
+
+    var _purgeMoves = purgeCheckMoves(_moves, origin, pieceColor, grid);
+
+    return _purgeMoves;
+  } else if (pieceType === 'queen') {
+    var _moves2 = getQueenMoves(origin, pieceColor, grid);
+
+    var _purgeMoves2 = purgeCheckMoves(_moves2, origin, pieceColor, grid);
+
+    return _purgeMoves2;
+  } else if (pieceType === 'knight') {
+    var _moves3 = getKnightMoves(origin, pieceColor, grid);
+
+    var _purgeMoves3 = purgeCheckMoves(_moves3, origin, pieceColor, grid);
+
+    return _purgeMoves3;
+  } else if (pieceType === 'bishop') {
+    var _moves4 = getBishopMoves(origin, pieceColor, grid);
+
+    var _purgeMoves4 = purgeCheckMoves(_moves4, origin, pieceColor, grid);
+
+    return _purgeMoves4;
+  } else if (pieceType === 'rook') {
+    var _moves5 = getRookMoves(origin, pieceColor, grid);
+
+    var _purgeMoves5 = purgeCheckMoves(_moves5, origin, pieceColor, grid);
+
+    return _purgeMoves5;
+  }
+};
+var getPieceDumbMoves = function getPieceDumbMoves(origin, pieceType, pieceColor, grid) {
+  if (pieceType === 'pawn') {
+    return getPawnMoves(origin, pieceColor, grid);
+  } else if (pieceType === 'king') {
+    return getKingMoves(origin, pieceColor, grid);
+  } else if (pieceType === 'queen') {
+    return getQueenMoves(origin, pieceColor, grid);
+  } else if (pieceType === 'knight') {
+    return getKnightMoves(origin, pieceColor, grid);
+  } else if (pieceType === 'bishop') {
+    return getBishopMoves(origin, pieceColor, grid);
+  } else if (pieceType === 'rook') {
+    return getRookMoves(origin, pieceColor, grid);
+  }
+};
+var getPawnMoves = function getPawnMoves(origin, color, grid) {
+  var thisPieceColor = getPieceColor(grid[origin[0]][origin[1]]);
+
+  if (thisPieceColor !== color) {
+    return false;
+  }
+
+  var answer = [];
+  var advDir = color === 'black' ? 1 : -1;
+  var advSpot = [origin[0] + advDir, origin[1]];
+  var advMark = grid[advSpot[0]][advSpot[1]];
+
+  if (advMark === '-' && onBoard(advSpot)) {
+    answer.push(advSpot);
+
+    if (origin[0] === (color === 'black' ? 1 : 6)) {
+      var advTwoSpot = [advSpot[0] + advDir, advSpot[1]];
+      var advTwoMark = grid[advTwoSpot[0]][advTwoSpot[1]];
+
+      if (advTwoMark === '-' && onBoard(advSpot)) {
+        answer.push(advTwoSpot);
+      }
+    }
+  }
+
+  var capSteps = [[advDir, 1], [advDir, -1]];
+  var capSpots = capSteps.map(function (step) {
+    return [origin[0] + step[0], origin[1] + step[1]];
+  });
+  capSpots.forEach(function (spot) {
+    if (onBoard(spot)) {
+      var capMark = grid[spot[0]][spot[1]];
+      var capColor = color === 'black' ? 'white' : 'black';
+
+      if (getPieceColor(capMark) === capColor) {
+        answer.push(spot);
+      }
+    }
+  });
+  return answer;
+};
+var getKingMoves = function getKingMoves(origin, color, grid) {
+  var answer = [];
+  var steps = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+  var spots = steps.map(function (step) {
+    return [origin[0] + step[0], origin[1] + step[1]];
+  });
+  spots.forEach(function (spot) {
+    if (onBoard(spot)) {
+      var spotMark = grid[spot[0]][spot[1]];
+
+      if (spotMark === '-') {
+        answer.push(spot);
+      } else if (getPieceColor(spotMark) !== color) {
+        answer.push(spot);
+      }
+    }
+  });
+  return answer;
+};
+var getKnightMoves = function getKnightMoves(origin, color, grid) {
+  var answer = [];
+  var steps = [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]];
+  var spots = steps.map(function (step) {
+    return [origin[0] + step[0], origin[1] + step[1]];
+  });
+  spots.forEach(function (spot) {
+    if (onBoard(spot)) {
+      var spotMark = grid[spot[0]][spot[1]];
+
+      if (spotMark === '-') {
+        answer.push(spot);
+      } else if (getPieceColor(spotMark) !== color) {
+        answer.push(spot);
+      }
+    }
+  });
+  return answer;
+};
+var getQueenMoves = function getQueenMoves(origin, color, grid) {
+  var answer = [];
+  var dirs = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+  dirs.forEach(function (dir) {
+    var dist = 1;
+
+    while (dist < 8) {
+      var spot = [origin[0] + dir[0] * dist, origin[1] + dir[1] * dist];
+
+      if (onBoard(spot)) {
+        var spotMark = grid[spot[0]][spot[1]];
+
+        if (spotMark === '-') {
+          answer.push(spot);
+        } else if (getPieceColor(spotMark) !== color) {
+          answer.push(spot);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        break;
+      }
+
+      dist++;
+    }
+  });
+  return answer;
+};
+var getBishopMoves = function getBishopMoves(origin, color, grid) {
+  var answer = [];
+  var dirs = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+  dirs.forEach(function (dir) {
+    var dist = 1;
+
+    while (dist < 8) {
+      var spot = [origin[0] + dir[0] * dist, origin[1] + dir[1] * dist];
+
+      if (onBoard(spot)) {
+        var spotMark = grid[spot[0]][spot[1]];
+
+        if (spotMark === '-') {
+          answer.push(spot);
+        } else if (getPieceColor(spotMark) !== color) {
+          answer.push(spot);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        break;
+      }
+
+      dist++;
+    }
+  });
+  return answer;
+};
+var getRookMoves = function getRookMoves(origin, color, grid) {
+  var answer = [];
+  var dirs = [[-1, 0], [0, -1], [0, 1], [1, 0]];
+  dirs.forEach(function (dir) {
+    var dist = 1;
+
+    while (dist < 8) {
+      var spot = [origin[0] + dir[0] * dist, origin[1] + dir[1] * dist];
+
+      if (onBoard(spot)) {
+        var spotMark = grid[spot[0]][spot[1]];
+
+        if (spotMark === '-') {
+          answer.push(spot);
+        } else if (getPieceColor(spotMark) !== color) {
+          answer.push(spot);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        break;
+      }
+
+      dist++;
+    }
+  });
+  return answer;
+};
+
+/***/ }),
+
+/***/ "./frontend/components/chess_table/chess/game.js":
+/*!*******************************************************!*\
+  !*** ./frontend/components/chess_table/chess/game.js ***!
+  \*******************************************************/
+/*! exports provided: Game */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Game", function() { return Game; });
+/* harmony import */ var _chess_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chess_helper */ "./frontend/components/chess_table/chess/chess_helper.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+var Game =
+/*#__PURE__*/
+function () {
+  function Game() {
+    _classCallCheck(this, Game);
+
+    this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']]; // this.grid = [
+    //     ['-', '-', '-', '-', 'K', '-', '-', 'R'],
+    //     ['-', '-', '-', '-', 'P', '-', '-', '-'],
+    //     ['-', '-', '-', '-', '-', '-', '-', '-'],
+    //     ['-', '-', '-', '-', '-', '-', '-', '-'],
+    //     ['-', '-', '-', '-', '-', '-', '-', '-'],
+    //     ['-', '-', '-', '-', '-', '-', '-', '-'],
+    //     ['-', '-', '-', '-', 'p', '-', '-', '-'],
+    //     ['-', '-', '-', '-', 'k', '-', '-', 'r']
+    // ];
+
+    this.gameSoFar = ['RNBQKBNRPPPPPPPP--------------------------------pppppppprnbqkbnr'];
+    this.getString = this.getString.bind(this);
+    this.makeMove = this.makeMove.bind(this);
+    this.isGameOver = this.isGameOver.bind(this);
+    this.isMoveLegal = this.isMoveLegal.bind(this);
+    this.started = false;
+    this.inCheck = false;
+  }
+
+  _createClass(Game, [{
+    key: "start",
+    value: function start() {
+      this.playing = true;
+      this.currentPlayer = 'white';
+    }
+  }, {
+    key: "isGameOver",
+    value: function isGameOver() {
+      return this.inCheck && Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getAllMoves"])(this.currentPlayer, this.grid).length === 0;
+    }
+  }, {
+    key: "makeMove",
+    value: function makeMove(move) {
+      var origin = move[0];
+      var destination = move[1];
+      this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+      this.grid[origin[0]][origin[1]] = '-';
+      this.gameSoFar.push(this.getString());
+      this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
+      this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["inCheck"])(this.currentPlayer, this.grid);
+      console.log(Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getAllMoves"])(this.currentPlayer, this.grid).length);
+    }
+  }, {
+    key: "isMoveLegal",
+    value: function isMoveLegal(move, color) {
+      if (!this.playing) {
+        return false;
+      }
+
+      var origin = move[0];
+      var destination = move[1];
+      var mark = this.grid[origin[0]][origin[1]];
+      var pieceColor = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceColor"])(mark);
+
+      if (pieceColor !== color) {
+        return false;
+      }
+
+      var pieceType = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceType"])(mark);
+      var legalMoves = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceMoves"])(origin, pieceType, pieceColor, this.grid);
+      var answer = false;
+      legalMoves.forEach(function (spot) {
+        if (destination[0] === spot[0] && destination[1] === spot[1]) {
+          answer = true;
+        }
+      });
+      return answer;
+      return true;
+    }
+  }, {
+    key: "getAIMove",
+    value: function getAIMove(color) {
+      return [[0, 1][(2, 2)]];
+    }
+  }, {
+    key: "getString",
+    value: function getString() {
+      var answer = '';
+      this.grid.forEach(function (row) {
+        answer += row.join('');
+      });
+      return answer;
+    }
+  }]);
+
+  return Game;
+}();
+
+/***/ }),
+
 /***/ "./frontend/components/chess_table/chess_table.jsx":
 /*!*********************************************************!*\
   !*** ./frontend/components/chess_table/chess_table.jsx ***!
@@ -854,6 +1321,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _board_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./board_container */ "./frontend/components/chess_table/board_container.js");
 /* harmony import */ var _show_board_show_board_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./show_board/show_board_container */ "./frontend/components/chess_table/show_board/show_board_container.js");
+/* harmony import */ var _play_board_play_board_container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./play_board/play_board_container */ "./frontend/components/chess_table/play_board/play_board_container.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -871,6 +1339,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -903,8 +1372,9 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "modal_back",
           onClick: this.backToHome
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board_container__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          mode: 'playCompuer'
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_play_board_play_board_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          mode: 'playCompuer',
+          player: this.props.player
         }));
       }
 
@@ -1123,6 +1593,267 @@ var Piece = function Piece(props) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Piece);
+
+/***/ }),
+
+/***/ "./frontend/components/chess_table/play_board/play_board.jsx":
+/*!*******************************************************************!*\
+  !*** ./frontend/components/chess_table/play_board/play_board.jsx ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _piece__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../piece */ "./frontend/components/chess_table/piece.jsx");
+/* harmony import */ var _chess_game__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../chess/game */ "./frontend/components/chess_table/chess/game.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+var PlayBoard =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(PlayBoard, _React$Component);
+
+  function PlayBoard(props) {
+    var _this;
+
+    _classCallCheck(this, PlayBoard);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(PlayBoard).call(this, props));
+    _this.flipped = false;
+    _this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"]();
+    _this.grid = _this.game.grid;
+    _this.state = {
+      grid: _this.grid,
+      dragging: false,
+      flipped: _this.flipped
+    };
+    _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
+    _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
+    _this.endDrag = _this.endDrag.bind(_assertThisInitialized(_this));
+    _this.displayDragPiece = _this.displayDragPiece.bind(_assertThisInitialized(_this));
+    _this.flipBoard = _this.flipBoard.bind(_assertThisInitialized(_this));
+    _this.player = _this.props.player;
+    _this.playerColor = 'white';
+    _this.compColor = 'black';
+    _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
+    _this.testMove = _this.testMove.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(PlayBoard, [{
+    key: "testMove",
+    value: function testMove() {
+      this.game.makeMove([[0, 1], [2, 2]]);
+      this.grid = this.game.grid;
+      this.setState({
+        grid: this.grid
+      });
+    }
+  }, {
+    key: "startGame",
+    value: function startGame(e) {
+      this.game.start();
+      this.currentPlayer = this.game.currentPlayer;
+      this.setState({});
+    }
+  }, {
+    key: "flipBoard",
+    value: function flipBoard(e) {
+      this.flipped = this.flipped ? false : true;
+
+      if (!this.game.started) {
+        this.playerColor = this.playerColor === 'white' ? 'black' : 'white';
+        this.compColor = this.playerColor === 'white' ? 'black' : 'white';
+      }
+
+      this.setState({
+        flipped: this.flipped
+      });
+    }
+  }, {
+    key: "displayDragPiece",
+    value: function displayDragPiece() {
+      var dragStyle = {
+        'position': 'fixed',
+        'transform': 'translate(-50%, -50%)',
+        'height': 'auto',
+        'width': 'auto',
+        'fontSize': '5vmin',
+        'cursor': 'grabbing',
+        'pointerEvents': 'none',
+        top: this.state.dragY,
+        left: this.state.dragX
+      };
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: dragStyle
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        mark: this.markToDrag
+      }));
+    }
+  }, {
+    key: "dragPiece",
+    value: function dragPiece(e) {
+      if (this.state.dragging) {
+        this.setState({
+          dragY: e.clientY,
+          dragX: e.clientX
+        });
+      }
+    }
+  }, {
+    key: "beginDrag",
+    value: function beginDrag(e) {
+      if (e.target.className.includes('fa-chess')) {
+        this.setState({
+          dragging: true,
+          dragY: e.clientY,
+          dragX: e.clientX
+        });
+        this.origin = e.target.id;
+        this.markToDrag = this.state.grid[parseInt(this.origin[0])][parseInt(this.origin[2])];
+      }
+    }
+  }, {
+    key: "endDrag",
+    value: function endDrag(e) {
+      if (this.state.dragging) {
+        var destination = e.target.id;
+        var move = [[parseInt(this.origin[0]), parseInt(this.origin[2])], [parseInt(destination[0]), parseInt(destination[2])]];
+
+        if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer)) {
+          this.game.makeMove(move);
+          this.currentPlayer = this.game.currentPlayer;
+          this.grid = this.game.grid;
+          this.setState({
+            grid: this.grid,
+            dragging: false
+          });
+          this.markToDrag = null;
+          this.origin = null;
+        } else {
+          this.setState({
+            grid: this.grid,
+            dragging: false
+          });
+          this.markToDrag = null;
+          this.origin = null;
+        }
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "chess_table"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.flipped ? "board flipped" : "board",
+        onMouseMove: this.dragPiece
+      }, this.state.dragging ? this.displayDragPiece() : '', this.grid.map(function (row, rIdx) {
+        return row.map(function (spot, cIdx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            onMouseDown: _this2.beginDrag,
+            onMouseUp: _this2.endDrag,
+            key: rIdx + cIdx,
+            id: [rIdx, cIdx],
+            className: (rIdx + cIdx) % 2 === 0 ? 'w' : 'b'
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            grayed: _this2.state.dragging && parseInt(_this2.origin[0]) === rIdx && parseInt(_this2.origin[2]) === cIdx ? true : false,
+            pos: [rIdx, cIdx],
+            mark: _this2.state.grid[rIdx][cIdx]
+          }));
+        });
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "board_controls"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "controls_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-knight"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'marginLeft': '10px'
+        }
+      }, "Game")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
+        onClick: this.flipBoard
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-retweet"
+      }), " Flip"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.player, " plays ", this.playerColor, ".", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Computer plays ", this.compColor, "."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
+        onClick: this.startGame
+      }, " Start Game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
+        onClick: this.testMove
+      }, " Test Move"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.playing ? this.currentPlayer + "'s turn" : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.inCheck ? 'Check!' : 'no check', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.isGameOver() ? 'CheckMate!' : ''));
+    }
+  }]);
+
+  return PlayBoard;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (PlayBoard);
+
+/***/ }),
+
+/***/ "./frontend/components/chess_table/play_board/play_board_container.js":
+/*!****************************************************************************!*\
+  !*** ./frontend/components/chess_table/play_board/play_board_container.js ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../actions/game_actions */ "./frontend/actions/game_actions.js");
+/* harmony import */ var _play_board__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./play_board */ "./frontend/components/chess_table/play_board/play_board.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+
+
+
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    game: state.entities.currentGame,
+    gameErrors: state.errors.game
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    updateGame: function updateGame(game) {
+      return dispatch(Object(_actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["updateGame"])(game));
+    },
+    archiveGame: _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["archiveGame"]
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["withRouter"])(Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_play_board__WEBPACK_IMPORTED_MODULE_2__["default"])));
 
 /***/ }),
 
