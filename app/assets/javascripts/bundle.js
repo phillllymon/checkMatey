@@ -2127,18 +2127,22 @@ function (_React$Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "colors"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: this.game.playing && this.currentPlayer === this.playerColor ? "active_player" : "",
         style: {
           'color': this.playerColor
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-user"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: this.game.playing && this.currentPlayer === this.compColor ? "active_player" : "",
         style: {
           'color': this.compColor
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-robot"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.playing ? this.currentPlayer + "'s turn" : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.inCheck ? this.game.isGameOver() ? 'Checkmate!' : 'Check!' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "game_alert"
+      }, this.game.inCheck ? this.game.isGameOver() ? 'Checkmate!' : 'Check!' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "outer_list"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "moves_list"
@@ -4701,6 +4705,8 @@ var Splash = function Splash(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "splash_set"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "splash_top_words"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "splash_logo"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Play Chess on the High Seas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Play with over 2.5 members")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Improve over time")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Learn from your mistakes"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: "/signup"
@@ -4708,7 +4714,7 @@ var Splash = function Splash(props) {
     className: "play_now"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fas fa-chess-knight"
-  }), " Play Now")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }), " Play Now"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "splash_bar"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     className: "splash_option",

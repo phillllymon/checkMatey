@@ -257,17 +257,16 @@ class PlayBoard extends React.Component {
                             })
                         }
                     <div className="colors">
-                        <span style={{ 'color': this.playerColor }} ><i className="fas fa-user"></i></span> 
-                        <span style={{ 'color': this.compColor }} ><i className="fas fa-robot"></i></span>
+                        <span className={this.game.playing && this.currentPlayer === this.playerColor ? "active_player" : ""} style={{ 'color': this.playerColor }} ><i className="fas fa-user"></i></span> 
+                        <span className={this.game.playing && this.currentPlayer === this.compColor ? "active_player" : ""}  style={{ 'color': this.compColor }} ><i className="fas fa-robot"></i></span>
                     </div>
                     
                     
                     
-                    <br/>
-                    {this.game.playing ? this.currentPlayer + "'s turn" : ''}
-                    <br/>
-                    {this.game.inCheck ? (this.game.isGameOver() ? 'Checkmate!' : 'Check!' ) : ''}
-                    <br/>
+                    
+                    <div className="game_alert">
+                    {this.game.inCheck ? (this.game.isGameOver() ? 'Checkmate!' : 'Check!' ) : ''}<br/>
+                    </div>
                     <div className="outer_list">
                         <div className="moves_list">
                             {
