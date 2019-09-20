@@ -32,6 +32,13 @@ export const fetchAllPosts = () => {
     };
 };
 
+export const fetchPost = (id) => {
+    return (dispatch) => {
+        PostApiUtil.fetchPost(id)
+        .then( (res) => dispatch(receivePost(res)));
+    };
+};
+
 export const createPost = (post) => {
     return (dispatch) => {
         PostApiUtil.createPost(post)

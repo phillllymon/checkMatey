@@ -150,7 +150,7 @@ class FeedItem extends React.Component {
                 );
             }
         }
-        else {
+        else if (post.post_type === 'sequence'){
             let description = stringToDescription(this.props.post.content);
             let title = stringToTitle(this.props.post.content);
             return (
@@ -185,6 +185,9 @@ class FeedItem extends React.Component {
                     </div>
                 </div>
             );
+        }
+        else {
+            return null;
         }
     }
 }

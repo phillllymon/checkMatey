@@ -7,8 +7,9 @@ Rails.application.routes.draw do
     resources :users
     resources :posts
     resource :session, only: [:create, :destroy]
+    
   end
-
+  
   root "static_pages#root" 
 
 end

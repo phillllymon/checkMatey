@@ -17,13 +17,38 @@ class Tetris extends React.Component {
         this.startGame = this.startGame.bind(this);
         this.nextLevel = this.nextLevel.bind(this);
         this.startButton = this.startButton.bind(this);
+        this.highScore = 32355;
+        this.props.fetchAllPosts();
+        this.getHighScore = this.getHighScore.bind(this);
+        this.endTheGame = this.endTheGame.bind(this);
+    }
+
+    componentDidMount() {
+        this.getHighScore();
     }
 
     componentWillUnmount() {
         clearInterval(this.pieceInterval);
     }
 
+    getHighScore() {
+        Object.values(this.props.allPosts).forEach((post) => {
+            if (post.post_type === 'score'){
+                let postScore = post.content;
+                if (postScore > this.highScore) {
+                    this.highScore = post.content;
+                }
+                console.log(this.highScore);
+            }
+        });
+    }
+
+    endTheGame() {
+        //this.props.createPost({content: this.game.score, post_type: 'score'});
+    }
+
     startGame(e) {
+        this.getHighScore();
         this.setState({playing: true});
         document.getElementById("the_game").focus();
         this.game = new Game;
@@ -36,7 +61,7 @@ class Tetris extends React.Component {
             if (this.game.gameOver) {
                 clearInterval(this.pieceInterval);
                 this.setState({ playing: false });
-                console.log('end of game');
+                this.endTheGame();
             }
             this.setState({ grid: this.grid });
             if (this.game.level !== this.level){
@@ -57,6 +82,7 @@ class Tetris extends React.Component {
             if (this.game.gameOver){
                 clearInterval(this.pieceInterval);
                 this.setState({playing: false});
+                this.endTheGame();
             }
             this.setState({ grid: this.grid });
         }, Math.ceil(1000 / this.game.level));
@@ -107,6 +133,8 @@ class Tetris extends React.Component {
                     }
                 </div>
                 <div className="tetris_stats">
+                    highscore: {this.highScore}
+                    <br />
                     level: {this.game.level}
                     <br />
                     score: {this.game.score}

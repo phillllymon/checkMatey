@@ -1,6 +1,6 @@
 class Api::PostsController < ApplicationController
 
-    before_action :require_logged_in, only: [:create, :update, :destroy]
+    #before_action :require_logged_in, only: [:create, :update, :destroy]
 
     def index
         @posts = Post.all
@@ -9,7 +9,11 @@ class Api::PostsController < ApplicationController
 
     def create
         @post = Post.new(post_params)
-        @post.author_id = current_user.id
+        if @post.post_type != 'score'
+            @post.author_id = current_user.id
+        else
+            @post.author_id = 1
+        end
         if @post.save
             redirect_to api_post_url(@post)
         else

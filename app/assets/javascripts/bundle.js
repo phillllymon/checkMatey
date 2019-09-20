@@ -116,7 +116,7 @@ var updateGame = function updateGame(game) {
 /*!******************************************!*\
   !*** ./frontend/actions/post_actions.js ***!
   \******************************************/
-/*! exports provided: RECEIVE_ALL_POSTS, RECEIVE_POST, REMOVE_POST, receiveAllPosts, receivePost, removePost, fetchAllPosts, createPost, updatePost, deletePost */
+/*! exports provided: RECEIVE_ALL_POSTS, RECEIVE_POST, REMOVE_POST, receiveAllPosts, receivePost, removePost, fetchAllPosts, fetchPost, createPost, updatePost, deletePost */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -128,6 +128,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receivePost", function() { return receivePost; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removePost", function() { return removePost; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchAllPosts", function() { return fetchAllPosts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchPost", function() { return fetchPost; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createPost", function() { return createPost; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updatePost", function() { return updatePost; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deletePost", function() { return deletePost; });
@@ -158,6 +159,13 @@ var fetchAllPosts = function fetchAllPosts() {
   return function (dispatch) {
     _util_post_api_util__WEBPACK_IMPORTED_MODULE_0__["fetchPosts"]().then(function (res) {
       return dispatch(receiveAllPosts(res));
+    });
+  };
+};
+var fetchPost = function fetchPost(id) {
+  return function (dispatch) {
+    _util_post_api_util__WEBPACK_IMPORTED_MODULE_0__["fetchPost"](id).then(function (res) {
+      return dispatch(receivePost(res));
     });
   };
 };
@@ -2924,7 +2932,7 @@ function (_React$Component) {
             onChange: this.handleInput
           })));
         }
-      } else {
+      } else if (post.post_type === 'sequence') {
         var description = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_1__["stringToDescription"])(this.props.post.content);
         var title = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_1__["stringToTitle"])(this.props.post.content);
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -2954,6 +2962,8 @@ function (_React$Component) {
         })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "seq_title"
         }, title), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), description));
+      } else {
+        return null;
       }
     }
   }]);
@@ -3601,7 +3611,12 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         onClick: this.notBack,
         className: "tetris_box"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tetris__WEBPACK_IMPORTED_MODULE_1__["default"], null)));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tetris__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        fetchAllPosts: this.props.fetchAllPosts,
+        createPost: this.props.createPost,
+        updatePost: this.props.createPost,
+        allPosts: this.props.allPosts
+      })));
     }
   }]);
 
@@ -3622,44 +3637,33 @@ function (_React$Component) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _score_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./score_util */ "./frontend/components/otherGame/score_util.js");
+/* harmony import */ var _actions_post_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/post_actions */ "./frontend/actions/post_actions.js");
 /* harmony import */ var _other_game_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./other_game.jsx */ "./frontend/components/otherGame/other_game.jsx");
 
 
 
 
 var mapStateToProps = function mapStateToProps(state) {
-  return {};
+  return {
+    allPosts: state.entities.posts
+  };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    fetchScore: _score_util__WEBPACK_IMPORTED_MODULE_1__["fetchScore"],
-    postScore: _score_util__WEBPACK_IMPORTED_MODULE_1__["postScore"]
+    fetchAllPosts: function fetchAllPosts() {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["fetchAllPosts"])());
+    },
+    createPost: function createPost(post) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["createPost"])(post));
+    },
+    updatePost: function updatePost(post) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["updatePost"])(post));
+    }
   };
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_other_game_jsx__WEBPACK_IMPORTED_MODULE_2__["default"]));
-
-/***/ }),
-
-/***/ "./frontend/components/otherGame/score_util.js":
-/*!*****************************************************!*\
-  !*** ./frontend/components/otherGame/score_util.js ***!
-  \*****************************************************/
-/*! exports provided: fetchScore, postScore */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchScore", function() { return fetchScore; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "postScore", function() { return postScore; });
-var fetchScore = function fetchScore() {
-  return 20000;
-};
-var postScore = function postScore() {
-  console.log('high score!');
-};
 
 /***/ }),
 
@@ -3899,19 +3903,52 @@ function (_React$Component) {
     _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
     _this.nextLevel = _this.nextLevel.bind(_assertThisInitialized(_this));
     _this.startButton = _this.startButton.bind(_assertThisInitialized(_this));
+    _this.highScore = 32355;
+
+    _this.props.fetchAllPosts();
+
+    _this.getHighScore = _this.getHighScore.bind(_assertThisInitialized(_this));
+    _this.endTheGame = _this.endTheGame.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(Tetris, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.getHighScore();
+    }
+  }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       clearInterval(this.pieceInterval);
     }
   }, {
-    key: "startGame",
-    value: function startGame(e) {
+    key: "getHighScore",
+    value: function getHighScore() {
       var _this2 = this;
 
+      Object.values(this.props.allPosts).forEach(function (post) {
+        if (post.post_type === 'score') {
+          var postScore = post.content;
+
+          if (postScore > _this2.highScore) {
+            _this2.highScore = post.content;
+          }
+
+          console.log(_this2.highScore);
+        }
+      });
+    }
+  }, {
+    key: "endTheGame",
+    value: function endTheGame() {//this.props.createPost({content: this.game.score, post_type: 'score'});
+    }
+  }, {
+    key: "startGame",
+    value: function startGame(e) {
+      var _this3 = this;
+
+      this.getHighScore();
       this.setState({
         playing: true
       });
@@ -3924,42 +3961,6 @@ function (_React$Component) {
         grid: this.grid
       });
       this.pieceInterval = setInterval(function () {
-        _this2.grid = _this2.game.advanceGame();
-
-        if (_this2.game.gameOver) {
-          clearInterval(_this2.pieceInterval);
-
-          _this2.setState({
-            playing: false
-          });
-
-          console.log('end of game');
-        }
-
-        _this2.setState({
-          grid: _this2.grid
-        });
-
-        if (_this2.game.level !== _this2.level) {
-          _this2.level = _this2.game.level;
-
-          _this2.nextLevel();
-        }
-      }, 1000);
-    }
-  }, {
-    key: "nextLevel",
-    value: function nextLevel() {
-      var _this3 = this;
-
-      clearInterval(this.pieceInterval);
-      this.pieceInterval = setInterval(function () {
-        if (_this3.game.level !== _this3.level) {
-          _this3.level = _this3.game.level;
-
-          _this3.nextLevel();
-        }
-
         _this3.grid = _this3.game.advanceGame();
 
         if (_this3.game.gameOver) {
@@ -3968,10 +3969,48 @@ function (_React$Component) {
           _this3.setState({
             playing: false
           });
+
+          _this3.endTheGame();
         }
 
         _this3.setState({
           grid: _this3.grid
+        });
+
+        if (_this3.game.level !== _this3.level) {
+          _this3.level = _this3.game.level;
+
+          _this3.nextLevel();
+        }
+      }, 1000);
+    }
+  }, {
+    key: "nextLevel",
+    value: function nextLevel() {
+      var _this4 = this;
+
+      clearInterval(this.pieceInterval);
+      this.pieceInterval = setInterval(function () {
+        if (_this4.game.level !== _this4.level) {
+          _this4.level = _this4.game.level;
+
+          _this4.nextLevel();
+        }
+
+        _this4.grid = _this4.game.advanceGame();
+
+        if (_this4.game.gameOver) {
+          clearInterval(_this4.pieceInterval);
+
+          _this4.setState({
+            playing: false
+          });
+
+          _this4.endTheGame();
+        }
+
+        _this4.setState({
+          grid: _this4.grid
         });
       }, Math.ceil(1000 / this.game.level));
       this.interval = Math.ceil(1000 / this.game.level);
@@ -4026,7 +4065,7 @@ function (_React$Component) {
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tetris_stats"
-      }, "level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "score: ", this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "lines: ", this.game.lines, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "interval: ", this.interval, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.state.playing ? '' : this.startButton()));
+      }, "highscore: ", this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "score: ", this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "lines: ", this.game.lines, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "interval: ", this.interval, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.state.playing ? '' : this.startButton()));
     }
   }]);
 
@@ -34975,7 +35014,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
