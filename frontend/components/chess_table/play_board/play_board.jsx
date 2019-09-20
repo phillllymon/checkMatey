@@ -26,6 +26,12 @@ class PlayBoard extends React.Component {
         this.takeComputerTurn = this.takeComputerTurn.bind(this);
         this.resetGame = this.resetGame.bind(this);
         this.gameButton = this.gameButton.bind(this);
+        this.setLevel = this.setLevel.bind(this);
+    }
+
+    setLevel(level){
+        this.game.level = level;
+        this.setState({});
     }
 
     resetGame() {
@@ -213,18 +219,47 @@ class PlayBoard extends React.Component {
                     
                     <button className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
                     {this.gameButton()}
+                        <div className="controls_heading">
+                            <i className="fas fa-robot"></i>
+                            <div style={{ 'marginLeft': '10px' }}>
+                                Level
+                            </div>
+                        </div>
+                        {
+                            this.game.levels.map( (level) => {
+                                return (
+                                    <button className={this.game.level === level ? "current_level_button" : "level_button"}
+                                    onClick={() => this.setLevel(level)} 
+                                    key={level}>{level}</button>
+                                    
+                                );
+                            })
+                        }
                     <br/>
-                    {this.player} plays {this.playerColor}.
+                    You play {this.playerColor}.
                     <br/>
-                    Computer plays {this.compColor}.
-                    </center>
+                    
+                    
                     
                     <br/>
                     {this.game.playing ? this.currentPlayer + "'s turn" : ''}
                     <br/>
-                    {this.game.inCheck ? 'Check!' : 'no check'}
+                    {this.game.inCheck ? (this.game.isGameOver() ? 'Checkmate!' : 'Check!' ) : ''}
                     <br/>
-                    {this.game.isGameOver() ? 'CheckMate!' : ''}
+                    <div className="outer_list">
+                        <div className="moves_list">
+                            {
+                                this.game.moves.map((move, idx) => {
+                                    return (
+                                        <div className={idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not"} key={idx}>
+                                            {move}
+                                        </div>
+                                    );
+                                })
+                            }
+                        </div>
+                    </div>
+                    </center>
                 </div>
             </div>
         );

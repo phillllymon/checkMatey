@@ -200,24 +200,25 @@ class ShowBoard extends React.Component {
                             <div className="record_button" onClick={this.showLastMove}> <i className="fas fa-step-forward"></i> </div>
                     </div>
                     
-                    
-                    <div style={{ 'fontSize': '15px' }}>
-                        {
-                            this.moves.map((move, idx) => {
-                                if (this.posNum === idx) {
+                    <div className="outer_list">
+                        <div className="moves_list" style={{ 'fontSize': '15px' }}>
+                            {
+                                this.moves.map((move, idx) => {
+                                    if (this.posNum === idx) {
+                                        return (
+                                            <div onClick={() => this.showMoveNumber(idx)} className="active_move" key={idx}>
+                                                {move}
+                                            </div>
+                                        );
+                                    }
                                     return (
-                                        <div onClick={() => this.showMoveNumber(idx)} className="active_move" key={idx}>
+                                        <div onClick={() => this.showMoveNumber(idx)} className={idx % 2 === 0 ? "inactive_move_light" : "inactive_move_dark"} key={idx}>
                                             {move}
                                         </div>
                                     );
-                                }
-                                return (
-                                    <div onClick={() => this.showMoveNumber(idx)} className={idx % 2 === 0 ? "inactive_move_light" : "inactive_move_dark"} key={idx}>
-                                        {move}
-                                    </div>
-                                );
-                            })
-                        }
+                                })
+                            }
+                        </div>
                     </div>
                     </center>
 

@@ -432,6 +432,14 @@ function (_React$Component) {
           render: function render() {
             return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], null);
           }
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
+          path: "/play",
+          render: function render() {
+            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+              player: 'User',
+              mode: 'playComputer'
+            });
+          }
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Redirect"], {
           to: "/home"
         }));
@@ -779,15 +787,19 @@ function (_React$Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: this.seq.length > 0 && this.state.description.length > 0 && this.state.title.length ? "seq_active_button" : "seq_post_button",
         onClick: this.postSequence
-      }, "Post Sequence"), this.recordButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Post Sequence"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "outer_list"
+      }, this.recordButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "moves_list",
         style: {
           'fontSize': '15px'
         }
       }, this.moves.map(function (snapshot, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not",
           key: idx
         }, snapshot);
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))));
+      }))))));
     }
   }]);
 
@@ -1292,12 +1304,14 @@ var getRookMoves = function getRookMoves(origin, color, grid) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Game", function() { return Game; });
-/* harmony import */ var _chess_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chess_helper */ "./frontend/components/chess_table/chess/chess_helper.js");
+/* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
+/* harmony import */ var _chess_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chess_helper */ "./frontend/components/chess_table/chess/chess_helper.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 var Game =
@@ -1324,11 +1338,13 @@ function () {
     this.isMoveLegal = this.isMoveLegal.bind(this);
     this.getAIMove = this.getAIMove.bind(this);
     this.makeAIMove = this.makeAIMove.bind(this);
+    this.levels = [0, 1];
     this.level = 1; ///0 is you play both players, 1 is random move, 2 is use API maybe???
 
     this.started = false;
     this.inCheck = false;
     this.handleSpecialMove = this.handleSpecialMove.bind(this);
+    this.moves = [];
   }
 
   _createClass(Game, [{
@@ -1340,7 +1356,7 @@ function () {
   }, {
     key: "isGameOver",
     value: function isGameOver() {
-      return this.inCheck && Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getAllMoves"])(this.currentPlayer, this.grid, this).length === 0;
+      return this.inCheck && Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getAllMoves"])(this.currentPlayer, this.grid, this).length === 0;
     }
   }, {
     key: "makeMove",
@@ -1355,8 +1371,10 @@ function () {
         this.grid[origin[0]][origin[1]] = '-';
         this.gameSoFar.push(this.getString());
         this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
-        this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["inCheck"])(this.currentPlayer, this.grid);
+        this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["inCheck"])(this.currentPlayer, this.grid);
       }
+
+      this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["getLastMove"])(this.gameSoFar));
     }
   }, {
     key: "handleSpecialMove",
@@ -1387,7 +1405,7 @@ function () {
 
       this.gameSoFar.push(this.getString());
       this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
-      this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["inCheck"])(this.currentPlayer, this.grid);
+      this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["inCheck"])(this.currentPlayer, this.grid);
     }
   }, {
     key: "isMoveLegal",
@@ -1399,14 +1417,14 @@ function () {
       var origin = move[0];
       var destination = move[1];
       var mark = this.grid[origin[0]][origin[1]];
-      var pieceColor = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceColor"])(mark);
+      var pieceColor = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceColor"])(mark);
 
       if (pieceColor !== color) {
         return false;
       }
 
-      var pieceType = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceType"])(mark);
-      var legalMoves = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceMoves"])(origin, pieceType, pieceColor, this.grid, this);
+      var pieceType = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceType"])(mark);
+      var legalMoves = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceMoves"])(origin, pieceType, pieceColor, this.grid, this);
       var answer = false;
       legalMoves.forEach(function (spot) {
         if (destination[0] === spot[0] && destination[1] === spot[1]) {
@@ -1433,7 +1451,7 @@ function () {
       var origins = [];
       this.grid.forEach(function (row, rIdx) {
         row.forEach(function (mark, cIdx) {
-          if (Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceColor"])(mark) === _this.currentPlayer) {
+          if (Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceColor"])(mark) === _this.currentPlayer) {
             origins.push([rIdx, cIdx]);
           }
         });
@@ -1441,8 +1459,8 @@ function () {
       var moves = [];
       origins.forEach(function (origin) {
         var mark = _this.grid[origin[0]][origin[1]];
-        var pieceType = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceType"])(mark);
-        Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceMoves"])(origin, pieceType, _this.currentPlayer, _this.grid, _this).forEach(function (destination) {
+        var pieceType = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceType"])(mark);
+        Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceMoves"])(origin, pieceType, _this.currentPlayer, _this.grid, _this).forEach(function (destination) {
           moves.push([origin, destination]);
         });
       });
@@ -1819,10 +1837,17 @@ function (_React$Component) {
     _this.takeComputerTurn = _this.takeComputerTurn.bind(_assertThisInitialized(_this));
     _this.resetGame = _this.resetGame.bind(_assertThisInitialized(_this));
     _this.gameButton = _this.gameButton.bind(_assertThisInitialized(_this));
+    _this.setLevel = _this.setLevel.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(PlayBoard, [{
+    key: "setLevel",
+    value: function setLevel(level) {
+      this.game.level = level;
+      this.setState({});
+    }
+  }, {
     key: "resetGame",
     value: function resetGame() {
       this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"]();
@@ -2021,7 +2046,32 @@ function (_React$Component) {
         onClick: this.flipBoard
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-retweet"
-      })), this.gameButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.player, " plays ", this.playerColor, ".", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Computer plays ", this.compColor, "."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.playing ? this.currentPlayer + "'s turn" : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.inCheck ? 'Check!' : 'no check', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.isGameOver() ? 'CheckMate!' : ''));
+      })), this.gameButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "controls_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-robot"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'marginLeft': '10px'
+        }
+      }, "Level")), this.game.levels.map(function (level) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: _this3.game.level === level ? "current_level_button" : "level_button",
+          onClick: function onClick() {
+            return _this3.setLevel(level);
+          },
+          key: level
+        }, level);
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "You play ", this.playerColor, ".", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.playing ? this.currentPlayer + "'s turn" : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.inCheck ? this.game.isGameOver() ? 'Checkmate!' : 'Check!' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "outer_list"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "moves_list"
+      }, this.game.moves.map(function (move, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not",
+          key: idx
+        }, move);
+      }))))));
     }
   }]);
 
@@ -2339,6 +2389,9 @@ function (_React$Component) {
       }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-step-forward"
       }), " ")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "outer_list"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "moves_list",
         style: {
           'fontSize': '15px'
         }
@@ -2360,7 +2413,7 @@ function (_React$Component) {
           className: idx % 2 === 0 ? "inactive_move_light" : "inactive_move_dark",
           key: idx
         }, move);
-      })))));
+      }))))));
     }
   }]);
 

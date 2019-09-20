@@ -1,4 +1,4 @@
-
+import { getLastMove } from '../../../util/chess_util';
 
 import { 
     getPieceColor,
@@ -38,10 +38,12 @@ export class Game {
         this.isMoveLegal = this.isMoveLegal.bind(this);
         this.getAIMove = this.getAIMove.bind(this);
         this.makeAIMove = this.makeAIMove.bind(this);
+        this.levels = [0, 1];
         this.level = 1; ///0 is you play both players, 1 is random move, 2 is use API maybe???
         this.started = false;
         this.inCheck = false;
         this.handleSpecialMove = this.handleSpecialMove.bind(this);
+        this.moves = [];
     }
 
     start() {
@@ -65,8 +67,8 @@ export class Game {
             this.gameSoFar.push(this.getString());
             this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
             this.inCheck = inCheck(this.currentPlayer, this.grid);
-        }
-        
+        } 
+        this.moves.push(getLastMove(this.gameSoFar));
     }
 
     handleSpecialMove(move) {

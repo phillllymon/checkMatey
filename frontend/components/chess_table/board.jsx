@@ -219,29 +219,33 @@ class Board extends React.Component {
                             value={this.state.description}
                             onChange={this.handleDescription}
                         ></textarea>
+                        
                         <button
                             className={this.seq.length > 0 &&
                                 this.state.description.length > 0 && this.state.title.length ?
                                 "seq_active_button" : "seq_post_button"}
                             onClick={this.postSequence}>
                             Post Sequence
-                    </button>
-                    
-                    
-                    {this.recordButton()}
-                    <div style={{'fontSize': '15px'}}>
-                        {
-                            this.moves.map((snapshot, idx) => {
-                                return (
-                                    <div key={idx}>
-                                        {snapshot}
-                                    </div>
-                                );
-                            })
-                        }
+                        </button>
+
+                    <div className="outer_list">
+                        {this.recordButton()}
+                        
+                        <div className="moves_list" style={{'fontSize': '15px'}}>
+                            {
+                                this.moves.map((snapshot, idx) => {
+                                    return (
+                                        <div className={idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not"} key={idx}>
+                                            {snapshot}
+                                        </div>
+                                    );
+                                })
+                            }
+                        </div>
                     </div>
+                        
                     
-                    <br/>
+                    
                     
                     </center>
                 </div>
