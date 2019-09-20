@@ -6,7 +6,7 @@ class PlayBoard extends React.Component {
     constructor(props) {
         super(props);
         this.flipped = false;
-        this.game = new Game;
+        this.game = new Game('960');
         this.grid = this.game.grid;
         this.state = {
             grid: this.grid,
@@ -27,15 +27,25 @@ class PlayBoard extends React.Component {
         this.resetGame = this.resetGame.bind(this);
         this.gameButton = this.gameButton.bind(this);
         this.setLevel = this.setLevel.bind(this);
+        this.typeSetting = 'Standard';
+        this.setType = this.setType.bind(this);
     }
 
-    setLevel(level){
+    setType(typeSetting) {
+        this.typeSetting = typeSetting;
+        if (!this.game.playing){
+            this.resetGame();
+        }
+        this.setState({});
+    }
+
+    setLevel(level) {
         this.game.level = level;
         this.setState({});
     }
 
     resetGame() {
-        this.game = new Game;
+        this.game = new Game(this.typeSetting);
         this.grid = this.game.grid;
         this.setState({
             grid: this.grid
@@ -53,7 +63,7 @@ class PlayBoard extends React.Component {
 
     flipBoard(e) {
         this.flipped = this.flipped ? false : true;
-        if (!this.game.started){
+        if (!this.game.playing){
             this.playerColor = this.playerColor === 'white' ? 'black' : 'white';
             this.compColor = this.playerColor === 'white' ? 'black' : 'white';
         }
@@ -66,7 +76,7 @@ class PlayBoard extends React.Component {
             'transform': 'translate(-50%, -50%)',
             'height': 'auto',
             'width': 'auto',
-            'fontSize': '5vmin',
+            'fontSize': '6vmin',
             'cursor': 'grabbing',
             'pointerEvents': 'none',
             top: this.state.dragY,
@@ -214,8 +224,19 @@ class PlayBoard extends React.Component {
                             <i className="fas fa-chess-knight"></i>
                         <div style={{ 'marginLeft': '10px' }}>
                             Game
-                            </div>
+                        </div>
                     </div>
+                        {
+                            this.game.gameTypes.map((gameType) => {
+                                return (
+                                    <button className={this.typeSetting === gameType ? "current_type_button" : "type_button"}
+                                        onClick={() => this.setType(gameType)}
+                                        key={gameType}>{gameType}</button>
+
+                                );
+                            })
+                        }
+                    <br/>
                     
                     <button className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
                     {this.gameButton()}
@@ -235,9 +256,10 @@ class PlayBoard extends React.Component {
                                 );
                             })
                         }
-                    <br/>
-                    You play {this.playerColor}.
-                    <br/>
+                    <div className="colors">
+                        <span style={{ 'color': this.playerColor }} ><i className="fas fa-user"></i></span> 
+                        <span style={{ 'color': this.compColor }} ><i className="fas fa-robot"></i></span>
+                    </div>
                     
                     
                     

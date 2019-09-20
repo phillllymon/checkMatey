@@ -1325,10 +1325,10 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Game =
 /*#__PURE__*/
 function () {
-  function Game() {
+  function Game(gameType) {
     _classCallCheck(this, Game);
 
-    this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']]; // this.grid = [
+    // this.grid = [
     //     ['-', 'N', '-', '-', 'K', '-', '-', 'R'],
     //     ['P', 'P', 'P', 'P', 'P', '-', '-', '-'],
     //     ['-', '-', '-', '-', '-', '-', '-', '-'],
@@ -1338,14 +1338,15 @@ function () {
     //     ['-', '-', '-', '-', 'p', 'p', 'p', 'p'],
     //     ['-', 'q', '-', '-', 'k', '-', '-', 'r']
     // ];
-
-    this.gameSoFar = ['RNBQKBNRPPPPPPPP--------------------------------pppppppprnbqkbnr'];
+    this.gameSoFar = [];
     this.getString = this.getString.bind(this);
     this.makeMove = this.makeMove.bind(this);
     this.isGameOver = this.isGameOver.bind(this);
     this.isMoveLegal = this.isMoveLegal.bind(this);
     this.getAIMove = this.getAIMove.bind(this);
     this.makeAIMove = this.makeAIMove.bind(this);
+    this.gameTypes = ['Standard', 'Chess960', 'Pawn Clash'];
+    this.gameType = gameType;
     this.levels = [0, 1];
     this.level = 1; ///0 is you play both players, 1 is random move, 2 is use API maybe???
 
@@ -1353,9 +1354,37 @@ function () {
     this.inCheck = false;
     this.handleSpecialMove = this.handleSpecialMove.bind(this);
     this.moves = [];
+    this.initializeGrid = this.initializeGrid.bind(this);
+    this.initializeGrid();
   }
 
   _createClass(Game, [{
+    key: "initializeGrid",
+    value: function initializeGrid() {
+      if (this.gameType === 'Pawn Clash') {
+        this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
+      } else if (this.gameType === 'Chess960') {
+        this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
+        var row = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'];
+        var newRow = [];
+
+        while (row.length > 0) {
+          var nextIdx = Math.floor(Math.random() * row.length);
+          newRow.push(row[nextIdx]);
+          row = row.slice(0, nextIdx).concat(row.slice(nextIdx + 1));
+        }
+
+        this.grid[0] = newRow;
+        this.grid[7] = newRow.map(function (mark) {
+          return mark.toLowerCase();
+        });
+      } else {
+        this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
+      }
+
+      this.gameSoFar.push(this.getString());
+    }
+  }, {
     key: "start",
     value: function start() {
       this.playing = true;
@@ -1380,9 +1409,8 @@ function () {
         this.gameSoFar.push(this.getString());
         this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
         this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["inCheck"])(this.currentPlayer, this.grid);
+        this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["getLastMove"])(this.gameSoFar));
       }
-
-      this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["getLastMove"])(this.gameSoFar));
     }
   }, {
     key: "handleSpecialMove",
@@ -1397,6 +1425,8 @@ function () {
         var rookDestination = [origin[0], 5];
         this.grid[rookDestination[0]][rookDestination[1]] = this.grid[rookOrigin[0]][rookOrigin[1]];
         this.grid[rookOrigin[0]][rookOrigin[1]] = '-';
+        this.gameSoFar.push(this.getString());
+        this.moves.push('0-0');
       } else if (move[1][3] === 'castleQueen') {
         this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
         this.grid[origin[0]][origin[1]] = '-';
@@ -1404,14 +1434,17 @@ function () {
         var _rookDestination = [origin[0], 3];
         this.grid[_rookDestination[0]][_rookDestination[1]] = this.grid[_rookOrigin[0]][_rookOrigin[1]];
         this.grid[_rookOrigin[0]][_rookOrigin[1]] = '-';
+        this.gameSoFar.push(this.getString());
+        this.moves.push('0-0-0');
       } else if (move[1][3] === 'enPassant') {
         this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
         this.grid[origin[0]][origin[1]] = '-';
         var capSpot = [origin[0], destination[1]];
         this.grid[capSpot[0]][capSpot[1]] = '-';
+        this.gameSoFar.push(this.getString());
+        this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["getLastMove"])(this.gameSoFar));
       }
 
-      this.gameSoFar.push(this.getString());
       this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
       this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["inCheck"])(this.currentPlayer, this.grid);
     }
@@ -1825,7 +1858,7 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(PlayBoard).call(this, props));
     _this.flipped = false;
-    _this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"]();
+    _this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"]('960');
     _this.grid = _this.game.grid;
     _this.state = {
       grid: _this.grid,
@@ -1846,10 +1879,23 @@ function (_React$Component) {
     _this.resetGame = _this.resetGame.bind(_assertThisInitialized(_this));
     _this.gameButton = _this.gameButton.bind(_assertThisInitialized(_this));
     _this.setLevel = _this.setLevel.bind(_assertThisInitialized(_this));
+    _this.typeSetting = 'Standard';
+    _this.setType = _this.setType.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(PlayBoard, [{
+    key: "setType",
+    value: function setType(typeSetting) {
+      this.typeSetting = typeSetting;
+
+      if (!this.game.playing) {
+        this.resetGame();
+      }
+
+      this.setState({});
+    }
+  }, {
     key: "setLevel",
     value: function setLevel(level) {
       this.game.level = level;
@@ -1858,7 +1904,7 @@ function (_React$Component) {
   }, {
     key: "resetGame",
     value: function resetGame() {
-      this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"]();
+      this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"](this.typeSetting);
       this.grid = this.game.grid;
       this.setState({
         grid: this.grid
@@ -1880,7 +1926,7 @@ function (_React$Component) {
     value: function flipBoard(e) {
       this.flipped = this.flipped ? false : true;
 
-      if (!this.game.started) {
+      if (!this.game.playing) {
         this.playerColor = this.playerColor === 'white' ? 'black' : 'white';
         this.compColor = this.playerColor === 'white' ? 'black' : 'white';
       }
@@ -1897,7 +1943,7 @@ function (_React$Component) {
         'transform': 'translate(-50%, -50%)',
         'height': 'auto',
         'width': 'auto',
-        'fontSize': '5vmin',
+        'fontSize': '6vmin',
         'cursor': 'grabbing',
         'pointerEvents': 'none',
         top: this.state.dragY,
@@ -2049,7 +2095,15 @@ function (_React$Component) {
         style: {
           'marginLeft': '10px'
         }
-      }, "Game")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Game")), this.game.gameTypes.map(function (gameType) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: _this3.typeSetting === gameType ? "current_type_button" : "type_button",
+          onClick: function onClick() {
+            return _this3.setType(gameType);
+          },
+          key: gameType
+        }, gameType);
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "board_control_button",
         onClick: this.flipBoard
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -2070,7 +2124,21 @@ function (_React$Component) {
           },
           key: level
         }, level);
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "You play ", this.playerColor, ".", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.playing ? this.currentPlayer + "'s turn" : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.inCheck ? this.game.isGameOver() ? 'Checkmate!' : 'Check!' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "colors"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        style: {
+          'color': this.playerColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        style: {
+          'color': this.compColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-robot"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.playing ? this.currentPlayer + "'s turn" : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.inCheck ? this.game.isGameOver() ? 'Checkmate!' : 'Check!' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "outer_list"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "moves_list"
@@ -35014,7 +35082,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
