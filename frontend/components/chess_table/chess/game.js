@@ -1,9 +1,12 @@
+
+
 import { 
     getPieceColor,
     getPieceType,
     getPieceMoves,
     getAllMoves,
-    inCheck
+    inCheck,
+    canCastle
  } from './chess_helper';
 
 export class Game {
@@ -19,21 +22,23 @@ export class Game {
             ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
         ];
         // this.grid = [
-        //     ['-', '-', '-', '-', 'K', '-', '-', 'R'],
-        //     ['-', '-', '-', '-', 'P', '-', '-', '-'],
+        //     ['-', 'N', '-', '-', 'K', '-', '-', 'R'],
+        //     ['P', 'P', 'P', 'P', 'P', '-', '-', '-'],
         //     ['-', '-', '-', '-', '-', '-', '-', '-'],
         //     ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //     ['-', '-', '-', '-', '-', 'r', '-', '-'],
         //     ['-', '-', '-', '-', '-', '-', '-', '-'],
-        //     ['-', '-', '-', '-', '-', '-', '-', '-'],
-        //     ['-', '-', '-', '-', 'p', '-', '-', '-'],
-        //     ['-', '-', '-', '-', 'k', '-', '-', 'r']
+        //     ['-', '-', '-', '-', 'p', 'p', 'p', 'p'],
+        //     ['-', 'q', '-', '-', 'k', '-', '-', 'r']
         // ];
         this.gameSoFar = ['RNBQKBNRPPPPPPPP--------------------------------pppppppprnbqkbnr'];
         this.getString = this.getString.bind(this);
         this.makeMove = this.makeMove.bind(this);
         this.isGameOver = this.isGameOver.bind(this);
         this.isMoveLegal = this.isMoveLegal.bind(this);
-        
+        this.getAIMove = this.getAIMove.bind(this);
+        this.makeAIMove = this.makeAIMove.bind(this);
+        this.level = 1; ///0 is you play both players, 1 is random move, 2 is use API maybe???
         this.started = false;
         this.inCheck = false;
     }
@@ -55,7 +60,7 @@ export class Game {
         this.gameSoFar.push(this.getString());
         this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
         this.inCheck = inCheck(this.currentPlayer, this.grid);
-        console.log(getAllMoves(this.currentPlayer, this.grid).length);
+        //console.log(canCastle(this, 7));
     }
 
     isMoveLegal(move, color) {
@@ -70,7 +75,7 @@ export class Game {
             return false;
         }
         let pieceType = getPieceType(mark);
-        let legalMoves = getPieceMoves(origin, pieceType, pieceColor, this.grid);
+        let legalMoves = getPieceMoves(origin, pieceType, pieceColor, this.grid, this);
         let answer = false;
         legalMoves.forEach( (spot) => {
             if (destination[0] === spot[0] && destination[1] === spot[1]){
@@ -78,13 +83,31 @@ export class Game {
             }
         });
         return answer;
-        return true;
     }
 
-    
+    makeAIMove() {
+        this.makeMove(this.getAIMove());
+        return this.grid;
+    }
 
-    getAIMove(color) {
-        return [[0, 1][2, 2]];
+    getAIMove() {
+        let origins = [];
+        this.grid.forEach( (row, rIdx) => {
+            row.forEach( (mark, cIdx) => {
+                if (getPieceColor(mark) === this.currentPlayer){
+                    origins.push([rIdx, cIdx]);
+                }
+            });
+        });
+        let moves = [];
+        origins.forEach( (origin) => {
+            let mark = this.grid[origin[0]][origin[1]];
+            let pieceType = getPieceType(mark);
+            getPieceMoves(origin, pieceType, this.currentPlayer, this.grid, this).forEach( (destination) => {
+                moves.push([origin, destination]);
+            });
+        });
+        return moves[Math.floor(Math.random()*moves.length)];
     }
 
     getString() {

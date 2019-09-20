@@ -1,3 +1,5 @@
+import { snapshotToGrid } from '../../../util/chess_util';
+
 export const getPieceColor = (mark) => {
     if (['P', 'R', 'B', 'K', 'Q', 'N'].includes(mark)) {
         return 'black';
@@ -23,6 +25,35 @@ export const getPieceType = (mark) => {
         return 'rook';
     }
     return 'empty';
+};
+
+export const canCastle = (game, side) => { //side is 0 or 7, for queen or kingside, respectively
+    let answer = true;
+    let color = game.currentPlayer;
+    let kingSpace = (color === 'black' ? [0, 4] : [7, 4]);
+    let rookSpace = [(color === 'black' ? 0 : 7), side];
+    let kingMark = (color === 'black' ? 'K' : 'k');
+    let rookMark = (color === 'black' ? 'R' : 'r');
+    game.gameSoFar.forEach( (snapshot) => {
+        let grid = snapshotToGrid(snapshot);
+        if (grid[rookSpace[0]][rookSpace[1]] !== rookMark || grid[kingSpace[0]][kingSpace[1]] !== kingMark){
+            answer = false;
+        }
+    });
+    let checkSpots = getAllDumbMoves((color === 'black' ? 'white' : 'black'), game.grid, game);
+    let castleDir = (side === 0 ? -1 : 1);
+    let spots = [[ kingSpace[0], kingSpace[1] + castleDir ], [ kingSpace[0], kingSpace[1] + 2*castleDir]];
+    checkSpots.forEach( (checkSpot) => {
+        spots.forEach( (spot) => {
+            if (checkSpot[0] === spot[0] && checkSpot[1] === spot[1]) {
+                answer = false;
+            }
+        });
+    });
+    if (inCheck(game.currentPlayer, game.grid, game)){
+        answer = false;
+    }
+    return answer;
 };
 
 const findKing = (color, grid) => {
@@ -52,14 +83,14 @@ export const getAllDumbMoves = (color, grid) => {
     return answer;
 };
 
-export const getAllMoves = (color, grid) => {
+export const getAllMoves = (color, grid, game) => {
     let answer = [];
     grid.forEach((row, rIdx) => {
         row.forEach((mark, cIdx) => {
             if (getPieceColor(mark) === color) {
                 let origin = [rIdx, cIdx];
                 let pieceType = getPieceType(mark);
-                answer = answer.concat(getPieceMoves(origin, pieceType, color, grid));
+                answer = answer.concat(getPieceMoves(origin, pieceType, color, grid, game));
             }
         });
     });
@@ -76,9 +107,9 @@ const onBoard = (spot) => {
     return true;
 };
 
-export const inCheck = (color, grid) => {
+export const inCheck = (color, grid, game) => {
     let kingSpot = findKing(color, grid);
-    let moves = getAllDumbMoves((color === 'white' ? 'black' : 'white'), grid);
+    let moves = getAllDumbMoves((color === 'white' ? 'black' : 'white'), grid, game);
     let answer = false;
     moves.forEach((spot) => {
         if (spot[0] === kingSpot[0] && spot[1] === kingSpot[1]) {
@@ -106,13 +137,13 @@ export const purgeCheckMoves = (moves, origin, color, grid) => {
     return answer;
 }
 
-export const getPieceMoves = (origin, pieceType, pieceColor, grid) => {
+export const getPieceMoves = (origin, pieceType, pieceColor, grid, game) => {
     if (pieceType === 'pawn') {
-        let moves = getPawnMoves(origin, pieceColor, grid);
+        let moves = getPawnMoves(origin, pieceColor, grid, game);
         let purgeMoves = purgeCheckMoves(moves, origin, pieceColor, grid);
         return purgeMoves;
     } else if (pieceType === 'king') {
-        let moves = getKingMoves(origin, pieceColor, grid);
+        let moves = getKingMoves(origin, pieceColor, grid, game);
         let purgeMoves = purgeCheckMoves(moves, origin, pieceColor, grid);
         return purgeMoves;
     } else if (pieceType === 'queen') {
@@ -134,6 +165,7 @@ export const getPieceMoves = (origin, pieceType, pieceColor, grid) => {
     }
 }
 
+//includes moving into check
 export const getPieceDumbMoves = (origin, pieceType, pieceColor, grid) => {
     if (pieceType === 'pawn') {
         return getPawnMoves(origin, pieceColor, grid);
@@ -159,35 +191,40 @@ export const getPawnMoves = (origin, color, grid) => {
     let advDir = color === 'black' ? 1 : -1;
     
     let advSpot = [ origin[0] + advDir, origin[1] ];
-    let advMark = grid[advSpot[0]][advSpot[1]];
-    if (advMark === '-' && onBoard(advSpot)){
-        answer.push(advSpot);
-        if (origin[0] === ( color === 'black' ? 1 : 6 )) {
-            let advTwoSpot = [ advSpot[0] + advDir, advSpot[1] ];
-            let advTwoMark = grid[advTwoSpot[0]][advTwoSpot[1]];
-            if (advTwoMark === '-' && onBoard(advSpot)) {
-                answer.push(advTwoSpot);
+    if (onBoard(advSpot)){
+        let advMark = grid[advSpot[0]][advSpot[1]];
+        if (onBoard(advSpot) && advMark === '-') {
+            answer.push(advSpot);
+            if (origin[0] === (color === 'black' ? 1 : 6)) {
+                let advTwoSpot = [advSpot[0] + advDir, advSpot[1]];
+                let advTwoMark = grid[advTwoSpot[0]][advTwoSpot[1]];
+                if (advTwoMark === '-' && onBoard(advSpot)) {
+                    answer.push(advTwoSpot);
+                }
             }
         }
-    }
 
-    let capSteps = [[advDir, 1],[advDir, -1]]
-    let capSpots = capSteps.map( (step) => {
-        return [ origin[0] + step[0], origin[1] + step[1]];
-    });
-    capSpots.forEach( (spot) => {
-        if (onBoard(spot)){
-            let capMark = grid[spot[0]][spot[1]];
-            let capColor = color === 'black' ? 'white' : 'black';
-            if (getPieceColor(capMark) === capColor){
-                answer.push(spot);
+        let capSteps = [[advDir, 1], [advDir, -1]]
+        let capSpots = capSteps.map((step) => {
+            return [origin[0] + step[0], origin[1] + step[1]];
+        });
+        capSpots.forEach((spot) => {
+            if (onBoard(spot)) {
+                let capMark = grid[spot[0]][spot[1]];
+                let capColor = color === 'black' ? 'white' : 'black';
+                if (getPieceColor(capMark) === capColor) {
+                    answer.push(spot);
+                }
             }
-        }
-    });
+        });
+    }
+    
+    
+    
     return answer;
 };
 
-export const getKingMoves = (origin, color, grid) => {
+export const getKingMoves = (origin, color, grid, game) => {
     let answer = []
     let steps = [
         [-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]

@@ -845,13 +845,14 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 /*!***************************************************************!*\
   !*** ./frontend/components/chess_table/chess/chess_helper.js ***!
   \***************************************************************/
-/*! exports provided: getPieceColor, getPieceType, getAllDumbMoves, getAllMoves, inCheck, purgeCheckMoves, getPieceMoves, getPieceDumbMoves, getPawnMoves, getKingMoves, getKnightMoves, getQueenMoves, getBishopMoves, getRookMoves */
+/*! exports provided: getPieceColor, getPieceType, canCastle, getAllDumbMoves, getAllMoves, inCheck, purgeCheckMoves, getPieceMoves, getPieceDumbMoves, getPawnMoves, getKingMoves, getKnightMoves, getQueenMoves, getBishopMoves, getRookMoves */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceColor", function() { return getPieceColor; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceType", function() { return getPieceType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "canCastle", function() { return canCastle; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllDumbMoves", function() { return getAllDumbMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllMoves", function() { return getAllMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "inCheck", function() { return inCheck; });
@@ -864,6 +865,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getQueenMoves", function() { return getQueenMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBishopMoves", function() { return getBishopMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRookMoves", function() { return getRookMoves; });
+/* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
+
 var getPieceColor = function getPieceColor(mark) {
   if (['P', 'R', 'B', 'K', 'Q', 'N'].includes(mark)) {
     return 'black';
@@ -889,6 +892,38 @@ var getPieceType = function getPieceType(mark) {
   }
 
   return 'empty';
+};
+var canCastle = function canCastle(game, side) {
+  //side is 0 or 7, for queen or kingside, respectively
+  var answer = true;
+  var color = game.currentPlayer;
+  var kingSpace = color === 'black' ? [0, 4] : [7, 4];
+  var rookSpace = [color === 'black' ? 0 : 7, side];
+  var kingMark = color === 'black' ? 'K' : 'k';
+  var rookMark = color === 'black' ? 'R' : 'r';
+  game.gameSoFar.forEach(function (snapshot) {
+    var grid = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["snapshotToGrid"])(snapshot);
+
+    if (grid[rookSpace[0]][rookSpace[1]] !== rookMark || grid[kingSpace[0]][kingSpace[1]] !== kingMark) {
+      answer = false;
+    }
+  });
+  var checkSpots = getAllDumbMoves(color === 'black' ? 'white' : 'black', game.grid, game);
+  var castleDir = side === 0 ? -1 : 1;
+  var spots = [[kingSpace[0], kingSpace[1] + castleDir], [kingSpace[0], kingSpace[1] + 2 * castleDir]];
+  checkSpots.forEach(function (checkSpot) {
+    spots.forEach(function (spot) {
+      if (checkSpot[0] === spot[0] && checkSpot[1] === spot[1]) {
+        answer = false;
+      }
+    });
+  });
+
+  if (inCheck(game.currentPlayer, game.grid, game)) {
+    answer = false;
+  }
+
+  return answer;
 };
 
 var findKing = function findKing(color, grid) {
@@ -917,14 +952,14 @@ var getAllDumbMoves = function getAllDumbMoves(color, grid) {
   });
   return answer;
 };
-var getAllMoves = function getAllMoves(color, grid) {
+var getAllMoves = function getAllMoves(color, grid, game) {
   var answer = [];
   grid.forEach(function (row, rIdx) {
     row.forEach(function (mark, cIdx) {
       if (getPieceColor(mark) === color) {
         var origin = [rIdx, cIdx];
         var pieceType = getPieceType(mark);
-        answer = answer.concat(getPieceMoves(origin, pieceType, color, grid));
+        answer = answer.concat(getPieceMoves(origin, pieceType, color, grid, game));
       }
     });
   });
@@ -943,9 +978,9 @@ var onBoard = function onBoard(spot) {
   return true;
 };
 
-var inCheck = function inCheck(color, grid) {
+var inCheck = function inCheck(color, grid, game) {
   var kingSpot = findKing(color, grid);
-  var moves = getAllDumbMoves(color === 'white' ? 'black' : 'white', grid);
+  var moves = getAllDumbMoves(color === 'white' ? 'black' : 'white', grid, game);
   var answer = false;
   moves.forEach(function (spot) {
     if (spot[0] === kingSpot[0] && spot[1] === kingSpot[1]) {
@@ -972,13 +1007,13 @@ var purgeCheckMoves = function purgeCheckMoves(moves, origin, color, grid) {
   });
   return answer;
 };
-var getPieceMoves = function getPieceMoves(origin, pieceType, pieceColor, grid) {
+var getPieceMoves = function getPieceMoves(origin, pieceType, pieceColor, grid, game) {
   if (pieceType === 'pawn') {
-    var moves = getPawnMoves(origin, pieceColor, grid);
+    var moves = getPawnMoves(origin, pieceColor, grid, game);
     var purgeMoves = purgeCheckMoves(moves, origin, pieceColor, grid);
     return purgeMoves;
   } else if (pieceType === 'king') {
-    var _moves = getKingMoves(origin, pieceColor, grid);
+    var _moves = getKingMoves(origin, pieceColor, grid, game);
 
     var _purgeMoves = purgeCheckMoves(_moves, origin, pieceColor, grid);
 
@@ -1008,7 +1043,8 @@ var getPieceMoves = function getPieceMoves(origin, pieceType, pieceColor, grid) 
 
     return _purgeMoves5;
   }
-};
+}; //includes moving into check
+
 var getPieceDumbMoves = function getPieceDumbMoves(origin, pieceType, pieceColor, grid) {
   if (pieceType === 'pawn') {
     return getPawnMoves(origin, pieceColor, grid);
@@ -1034,38 +1070,42 @@ var getPawnMoves = function getPawnMoves(origin, color, grid) {
   var answer = [];
   var advDir = color === 'black' ? 1 : -1;
   var advSpot = [origin[0] + advDir, origin[1]];
-  var advMark = grid[advSpot[0]][advSpot[1]];
 
-  if (advMark === '-' && onBoard(advSpot)) {
-    answer.push(advSpot);
+  if (onBoard(advSpot)) {
+    var advMark = grid[advSpot[0]][advSpot[1]];
 
-    if (origin[0] === (color === 'black' ? 1 : 6)) {
-      var advTwoSpot = [advSpot[0] + advDir, advSpot[1]];
-      var advTwoMark = grid[advTwoSpot[0]][advTwoSpot[1]];
+    if (onBoard(advSpot) && advMark === '-') {
+      answer.push(advSpot);
 
-      if (advTwoMark === '-' && onBoard(advSpot)) {
-        answer.push(advTwoSpot);
+      if (origin[0] === (color === 'black' ? 1 : 6)) {
+        var advTwoSpot = [advSpot[0] + advDir, advSpot[1]];
+        var advTwoMark = grid[advTwoSpot[0]][advTwoSpot[1]];
+
+        if (advTwoMark === '-' && onBoard(advSpot)) {
+          answer.push(advTwoSpot);
+        }
       }
     }
+
+    var capSteps = [[advDir, 1], [advDir, -1]];
+    var capSpots = capSteps.map(function (step) {
+      return [origin[0] + step[0], origin[1] + step[1]];
+    });
+    capSpots.forEach(function (spot) {
+      if (onBoard(spot)) {
+        var capMark = grid[spot[0]][spot[1]];
+        var capColor = color === 'black' ? 'white' : 'black';
+
+        if (getPieceColor(capMark) === capColor) {
+          answer.push(spot);
+        }
+      }
+    });
   }
 
-  var capSteps = [[advDir, 1], [advDir, -1]];
-  var capSpots = capSteps.map(function (step) {
-    return [origin[0] + step[0], origin[1] + step[1]];
-  });
-  capSpots.forEach(function (spot) {
-    if (onBoard(spot)) {
-      var capMark = grid[spot[0]][spot[1]];
-      var capColor = color === 'black' ? 'white' : 'black';
-
-      if (getPieceColor(capMark) === capColor) {
-        answer.push(spot);
-      }
-    }
-  });
   return answer;
 };
-var getKingMoves = function getKingMoves(origin, color, grid) {
+var getKingMoves = function getKingMoves(origin, color, grid, game) {
   var answer = [];
   var steps = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
   var spots = steps.map(function (step) {
@@ -1218,14 +1258,14 @@ function () {
     _classCallCheck(this, Game);
 
     this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']]; // this.grid = [
-    //     ['-', '-', '-', '-', 'K', '-', '-', 'R'],
-    //     ['-', '-', '-', '-', 'P', '-', '-', '-'],
+    //     ['-', 'N', '-', '-', 'K', '-', '-', 'R'],
+    //     ['P', 'P', 'P', 'P', 'P', '-', '-', '-'],
     //     ['-', '-', '-', '-', '-', '-', '-', '-'],
     //     ['-', '-', '-', '-', '-', '-', '-', '-'],
+    //     ['-', '-', '-', '-', '-', 'r', '-', '-'],
     //     ['-', '-', '-', '-', '-', '-', '-', '-'],
-    //     ['-', '-', '-', '-', '-', '-', '-', '-'],
-    //     ['-', '-', '-', '-', 'p', '-', '-', '-'],
-    //     ['-', '-', '-', '-', 'k', '-', '-', 'r']
+    //     ['-', '-', '-', '-', 'p', 'p', 'p', 'p'],
+    //     ['-', 'q', '-', '-', 'k', '-', '-', 'r']
     // ];
 
     this.gameSoFar = ['RNBQKBNRPPPPPPPP--------------------------------pppppppprnbqkbnr'];
@@ -1233,6 +1273,10 @@ function () {
     this.makeMove = this.makeMove.bind(this);
     this.isGameOver = this.isGameOver.bind(this);
     this.isMoveLegal = this.isMoveLegal.bind(this);
+    this.getAIMove = this.getAIMove.bind(this);
+    this.makeAIMove = this.makeAIMove.bind(this);
+    this.level = 1; ///0 is you play both players, 1 is random move, 2 is use API maybe???
+
     this.started = false;
     this.inCheck = false;
   }
@@ -1257,8 +1301,7 @@ function () {
       this.grid[origin[0]][origin[1]] = '-';
       this.gameSoFar.push(this.getString());
       this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
-      this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["inCheck"])(this.currentPlayer, this.grid);
-      console.log(Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getAllMoves"])(this.currentPlayer, this.grid).length);
+      this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["inCheck"])(this.currentPlayer, this.grid); //console.log(canCastle(this, 7));
     }
   }, {
     key: "isMoveLegal",
@@ -1277,7 +1320,7 @@ function () {
       }
 
       var pieceType = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceType"])(mark);
-      var legalMoves = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceMoves"])(origin, pieceType, pieceColor, this.grid);
+      var legalMoves = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceMoves"])(origin, pieceType, pieceColor, this.grid, this);
       var answer = false;
       legalMoves.forEach(function (spot) {
         if (destination[0] === spot[0] && destination[1] === spot[1]) {
@@ -1285,12 +1328,35 @@ function () {
         }
       });
       return answer;
-      return true;
+    }
+  }, {
+    key: "makeAIMove",
+    value: function makeAIMove() {
+      this.makeMove(this.getAIMove());
+      return this.grid;
     }
   }, {
     key: "getAIMove",
-    value: function getAIMove(color) {
-      return [[0, 1][(2, 2)]];
+    value: function getAIMove() {
+      var _this = this;
+
+      var origins = [];
+      this.grid.forEach(function (row, rIdx) {
+        row.forEach(function (mark, cIdx) {
+          if (Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceColor"])(mark) === _this.currentPlayer) {
+            origins.push([rIdx, cIdx]);
+          }
+        });
+      });
+      var moves = [];
+      origins.forEach(function (origin) {
+        var mark = _this.grid[origin[0]][origin[1]];
+        var pieceType = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceType"])(mark);
+        Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getPieceMoves"])(origin, pieceType, _this.currentPlayer, _this.grid, _this).forEach(function (destination) {
+          moves.push([origin, destination]);
+        });
+      });
+      return moves[Math.floor(Math.random() * moves.length)];
     }
   }, {
     key: "getString",
@@ -1653,20 +1719,23 @@ function (_React$Component) {
     _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
     _this.endDrag = _this.endDrag.bind(_assertThisInitialized(_this));
+    _this.abortDrag = _this.abortDrag.bind(_assertThisInitialized(_this));
     _this.displayDragPiece = _this.displayDragPiece.bind(_assertThisInitialized(_this));
     _this.flipBoard = _this.flipBoard.bind(_assertThisInitialized(_this));
     _this.player = _this.props.player;
     _this.playerColor = 'white';
     _this.compColor = 'black';
     _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
-    _this.testMove = _this.testMove.bind(_assertThisInitialized(_this));
+    _this.takeComputerTurn = _this.takeComputerTurn.bind(_assertThisInitialized(_this));
+    _this.resetGame = _this.resetGame.bind(_assertThisInitialized(_this));
+    _this.gameButton = _this.gameButton.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(PlayBoard, [{
-    key: "testMove",
-    value: function testMove() {
-      this.game.makeMove([[0, 1], [2, 2]]);
+    key: "resetGame",
+    value: function resetGame() {
+      this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"]();
       this.grid = this.game.grid;
       this.setState({
         grid: this.grid
@@ -1678,6 +1747,10 @@ function (_React$Component) {
       this.game.start();
       this.currentPlayer = this.game.currentPlayer;
       this.setState({});
+
+      if (this.currentPlayer === this.compColor) {
+        this.takeComputerTurn();
+      }
     }
   }, {
     key: "flipBoard",
@@ -1737,13 +1810,24 @@ function (_React$Component) {
       }
     }
   }, {
+    key: "takeComputerTurn",
+    value: function takeComputerTurn() {
+      this.grid = this.game.makeAIMove();
+      this.currentPlayer = this.game.currentPlayer;
+      this.setState({
+        grid: this.grid
+      });
+    }
+  }, {
     key: "endDrag",
     value: function endDrag(e) {
+      var _this2 = this;
+
       if (this.state.dragging) {
         var destination = e.target.id;
         var move = [[parseInt(this.origin[0]), parseInt(this.origin[2])], [parseInt(destination[0]), parseInt(destination[2])]];
 
-        if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer)) {
+        if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.game.level === 0) {
           this.game.makeMove(move);
           this.currentPlayer = this.game.currentPlayer;
           this.grid = this.game.grid;
@@ -1753,6 +1837,25 @@ function (_React$Component) {
           });
           this.markToDrag = null;
           this.origin = null;
+        }
+
+        if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.currentPlayer === this.playerColor) {
+          this.game.makeMove(move);
+          this.currentPlayer = this.game.currentPlayer;
+          this.grid = this.game.grid;
+          this.setState({
+            grid: this.grid,
+            dragging: false
+          });
+          this.markToDrag = null;
+          this.origin = null; /////COMPUTER TURN BELOW ///////
+
+          if (!this.game.isGameOver()) {
+            setTimeout(function () {
+              _this2.takeComputerTurn();
+            }, Math.random() * 1500);
+          } /////COMPUTER TURN ABOVE ///////
+
         } else {
           this.setState({
             grid: this.grid,
@@ -1764,27 +1867,53 @@ function (_React$Component) {
       }
     }
   }, {
+    key: "abortDrag",
+    value: function abortDrag(e) {
+      this.setState({
+        grid: this.grid,
+        dragging: false
+      });
+      this.markToDrag = null;
+      this.origin = null;
+    }
+  }, {
+    key: "gameButton",
+    value: function gameButton() {
+      if (this.game.playing) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button",
+          onClick: this.resetGame
+        }, " Reset Game");
+      } else {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button",
+          onClick: this.startGame
+        }, " Start Game");
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "chess_table"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.flipped ? "board flipped" : "board",
-        onMouseMove: this.dragPiece
+        onMouseMove: this.dragPiece,
+        onMouseLeave: this.abortDrag
       }, this.state.dragging ? this.displayDragPiece() : '', this.grid.map(function (row, rIdx) {
         return row.map(function (spot, cIdx) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            onMouseDown: _this2.beginDrag,
-            onMouseUp: _this2.endDrag,
+            onMouseDown: _this3.beginDrag,
+            onMouseUp: _this3.endDrag,
             key: rIdx + cIdx,
             id: [rIdx, cIdx],
             className: (rIdx + cIdx) % 2 === 0 ? 'w' : 'b'
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
-            grayed: _this2.state.dragging && parseInt(_this2.origin[0]) === rIdx && parseInt(_this2.origin[2]) === cIdx ? true : false,
+            grayed: _this3.state.dragging && parseInt(_this3.origin[0]) === rIdx && parseInt(_this3.origin[2]) === cIdx ? true : false,
             pos: [rIdx, cIdx],
-            mark: _this2.state.grid[rIdx][cIdx]
+            mark: _this3.state.grid[rIdx][cIdx]
           }));
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -1802,13 +1931,7 @@ function (_React$Component) {
         onClick: this.flipBoard
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-retweet"
-      }), " Flip"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.player, " plays ", this.playerColor, ".", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Computer plays ", this.compColor, "."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "board_control_button",
-        onClick: this.startGame
-      }, " Start Game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "board_control_button",
-        onClick: this.testMove
-      }, " Test Move"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.playing ? this.currentPlayer + "'s turn" : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.inCheck ? 'Check!' : 'no check', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.isGameOver() ? 'CheckMate!' : ''));
+      })), this.gameButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.player, " plays ", this.playerColor, ".", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Computer plays ", this.compColor, "."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.playing ? this.currentPlayer + "'s turn" : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.inCheck ? 'Check!' : 'no check', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.isGameOver() ? 'CheckMate!' : ''));
     }
   }]);
 

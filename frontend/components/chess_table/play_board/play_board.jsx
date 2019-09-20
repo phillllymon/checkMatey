@@ -16,25 +16,33 @@ class PlayBoard extends React.Component {
         this.dragPiece = this.dragPiece.bind(this);
         this.beginDrag = this.beginDrag.bind(this);
         this.endDrag = this.endDrag.bind(this);
+        this.abortDrag = this.abortDrag.bind(this);
         this.displayDragPiece = this.displayDragPiece.bind(this);
         this.flipBoard = this.flipBoard.bind(this);
         this.player = this.props.player;
         this.playerColor = 'white';
         this.compColor = 'black';
         this.startGame = this.startGame.bind(this);
-        this.testMove = this.testMove.bind(this);
+        this.takeComputerTurn = this.takeComputerTurn.bind(this);
+        this.resetGame = this.resetGame.bind(this);
+        this.gameButton = this.gameButton.bind(this);
     }
 
-    testMove() {
-        this.game.makeMove([[0, 1], [2, 2]]);
+    resetGame() {
+        this.game = new Game;
         this.grid = this.game.grid;
-        this.setState({grid: this.grid});
+        this.setState({
+            grid: this.grid
+        });
     }
 
     startGame(e) {
         this.game.start();
         this.currentPlayer = this.game.currentPlayer;
         this.setState({});
+        if (this.currentPlayer === this.compColor){
+            this.takeComputerTurn();
+        }
     }
 
     flipBoard(e) {
@@ -81,6 +89,14 @@ class PlayBoard extends React.Component {
         }
     }
 
+    takeComputerTurn(){
+        this.grid = this.game.makeAIMove();
+        this.currentPlayer = this.game.currentPlayer;
+        this.setState({
+            grid: this.grid
+        });
+    }
+
     endDrag(e) {
         if (this.state.dragging) {
             let destination = e.target.id;
@@ -88,7 +104,7 @@ class PlayBoard extends React.Component {
                 [ parseInt(this.origin[0]), parseInt(this.origin[2]) ], 
                 [ parseInt(destination[0]), parseInt(destination[2]) ]
             ];
-            if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer)) {
+            if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.game.level === 0) {
                 this.game.makeMove(move);
                 this.currentPlayer = this.game.currentPlayer;
                 this.grid = this.game.grid;
@@ -98,6 +114,24 @@ class PlayBoard extends React.Component {
                 });
                 this.markToDrag = null;
                 this.origin = null;
+            }
+            if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.currentPlayer === this.playerColor) {
+                this.game.makeMove(move);
+                this.currentPlayer = this.game.currentPlayer;
+                this.grid = this.game.grid;
+                this.setState({
+                    grid: this.grid,
+                    dragging: false
+                });
+                this.markToDrag = null;
+                this.origin = null;
+                /////COMPUTER TURN BELOW ///////
+                if (!this.game.isGameOver()){
+                    setTimeout( () => {
+                        this.takeComputerTurn();
+                    }, Math.random()*1500);
+                }
+                /////COMPUTER TURN ABOVE ///////
             }
             else {
                 this.setState({
@@ -110,12 +144,35 @@ class PlayBoard extends React.Component {
         }
     }
 
+    abortDrag(e) {
+        this.setState({
+            grid: this.grid,
+            dragging: false
+        });
+        this.markToDrag = null;
+        this.origin = null;
+    }
+
+    gameButton() {
+        if (this.game.playing) {
+            return (
+                <button className={"board_control_button"} onClick={this.resetGame}> Reset Game</button>
+            );
+        }
+        else {
+            return (
+                <button className={"board_control_button"} onClick={this.startGame}> Start Game</button>
+            );
+        }
+    }
+
     render() {
         return (
             <div className="chess_table">
                 <div
                     className={this.flipped ? "board flipped" : "board"}
                     onMouseMove={this.dragPiece}
+                    onMouseLeave={this.abortDrag}
                 >
                     {this.state.dragging ? this.displayDragPiece() : ''}
                     {
@@ -154,14 +211,14 @@ class PlayBoard extends React.Component {
                             </div>
                     </div>
                     
-                    <button className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i> Flip</button>
+                    <button className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
+                    {this.gameButton()}
                     <br/>
                     {this.player} plays {this.playerColor}.
                     <br/>
                     Computer plays {this.compColor}.
                     </center>
-                    <button className={"board_control_button"} onClick={this.startGame}> Start Game</button>
-                    <button className={"board_control_button"} onClick={this.testMove}> Test Move</button>
+                    
                     <br/>
                     {this.game.playing ? this.currentPlayer + "'s turn" : ''}
                     <br/>
