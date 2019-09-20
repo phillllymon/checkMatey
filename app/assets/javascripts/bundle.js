@@ -1443,6 +1443,12 @@ function () {
         this.grid[capSpot[0]][capSpot[1]] = '-';
         this.gameSoFar.push(this.getString());
         this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["getLastMove"])(this.gameSoFar));
+      } else {
+        console.log('here');
+        this.grid[destination[0]][destination[1]] = move[1][3];
+        this.grid[origin[0]][origin[1]] = '-';
+        this.gameSoFar.push(this.getString());
+        this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["getLastMove"])(this.gameSoFar));
       }
 
       this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
@@ -1881,10 +1887,35 @@ function (_React$Component) {
     _this.setLevel = _this.setLevel.bind(_assertThisInitialized(_this));
     _this.typeSetting = 'Standard';
     _this.setType = _this.setType.bind(_assertThisInitialized(_this));
+    _this.isMovePawnPromotion = _this.isMovePawnPromotion.bind(_assertThisInitialized(_this));
+    _this.handlePawnPromotion = _this.handlePawnPromotion.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(PlayBoard, [{
+    key: "handlePawnPromotion",
+    value: function handlePawnPromotion(move) {
+      move[1].push('special');
+      move[1].push(this.game.currentPlayer === 'white' ? 'q' : 'Q');
+      return move;
+    }
+  }, {
+    key: "isMovePawnPromotion",
+    value: function isMovePawnPromotion(move) {
+      var origin = move[0];
+      var destination = move[1];
+
+      if (this.grid[origin[0]][origin[1]] === 'p' && destination[0] === 0) {
+        return true;
+      }
+
+      if (this.grid[origin[0]][origin[1]] === 'P' && destination[0] === 7) {
+        return true;
+      }
+
+      return false;
+    }
+  }, {
     key: "setType",
     value: function setType(typeSetting) {
       this.typeSetting = typeSetting;
@@ -2009,7 +2040,12 @@ function (_React$Component) {
         }
 
         if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.currentPlayer === this.playerColor) {
-          this.game.makeMove(move);
+          if (this.isMovePawnPromotion(move)) {
+            this.game.makeMove(this.handlePawnPromotion(move));
+          } else {
+            this.game.makeMove(move);
+          }
+
           this.currentPlayer = this.game.currentPlayer;
           this.grid = this.game.grid;
           this.setState({

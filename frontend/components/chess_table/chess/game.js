@@ -147,6 +147,13 @@ export class Game {
             this.gameSoFar.push(this.getString());
             this.moves.push(getLastMove(this.gameSoFar));
         }
+        else {
+            console.log('here');
+            this.grid[destination[0]][destination[1]] = move[1][3];
+            this.grid[origin[0]][origin[1]] = '-';
+            this.gameSoFar.push(this.getString());
+            this.moves.push(getLastMove(this.gameSoFar));
+        }
         this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
         this.inCheck = inCheck(this.currentPlayer, this.grid);
     }

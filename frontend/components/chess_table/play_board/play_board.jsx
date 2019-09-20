@@ -29,6 +29,26 @@ class PlayBoard extends React.Component {
         this.setLevel = this.setLevel.bind(this);
         this.typeSetting = 'Standard';
         this.setType = this.setType.bind(this);
+        this.isMovePawnPromotion = this.isMovePawnPromotion.bind(this);
+        this.handlePawnPromotion = this.handlePawnPromotion.bind(this);
+    }
+
+    handlePawnPromotion(move) {
+        move[1].push('special');
+        move[1].push(this.game.currentPlayer === 'white' ? 'q' : 'Q' );
+        return move;
+    }
+
+    isMovePawnPromotion(move) {
+        let origin = move[0];
+        let destination = move[1];
+        if (this.grid[origin[0]][origin[1]] === 'p' && destination[0] === 0){
+            return true;
+        }
+        if (this.grid[origin[0]][origin[1]] === 'P' && destination[0] === 7) {
+            return true;
+        }
+        return false;
     }
 
     setType(typeSetting) {
@@ -132,7 +152,12 @@ class PlayBoard extends React.Component {
                 this.origin = null;
             }
             if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.currentPlayer === this.playerColor) {
-                this.game.makeMove(move);
+                if (this.isMovePawnPromotion(move)){
+                    this.game.makeMove(this.handlePawnPromotion(move));
+                }
+                else {
+                    this.game.makeMove(move);
+                }
                 this.currentPlayer = this.game.currentPlayer;
                 this.grid = this.game.grid;
                 this.setState({
