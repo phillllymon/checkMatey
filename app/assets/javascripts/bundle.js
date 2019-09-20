@@ -845,7 +845,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 /*!***************************************************************!*\
   !*** ./frontend/components/chess_table/chess/chess_helper.js ***!
   \***************************************************************/
-/*! exports provided: getPieceColor, getPieceType, canCastle, getAllDumbMoves, getAllMoves, inCheck, purgeCheckMoves, getPieceMoves, getPieceDumbMoves, getPawnMoves, getKingMoves, getKnightMoves, getQueenMoves, getBishopMoves, getRookMoves */
+/*! exports provided: getPieceColor, getPieceType, canCastle, getAllDumbMoves, getAllMoves, inCheck, purgeCheckMoves, getPieceMoves, getPieceDumbMoves, getPawnMoves, getPawnSpecialMoves, getKingMoves, getKingSpecialMoves, getKnightMoves, getQueenMoves, getBishopMoves, getRookMoves */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -860,7 +860,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceMoves", function() { return getPieceMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceDumbMoves", function() { return getPieceDumbMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPawnMoves", function() { return getPawnMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPawnSpecialMoves", function() { return getPawnSpecialMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getKingMoves", function() { return getKingMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getKingSpecialMoves", function() { return getKingSpecialMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getKnightMoves", function() { return getKnightMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getQueenMoves", function() { return getQueenMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBishopMoves", function() { return getBishopMoves; });
@@ -911,6 +913,11 @@ var canCastle = function canCastle(game, side) {
   var checkSpots = getAllDumbMoves(color === 'black' ? 'white' : 'black', game.grid, game);
   var castleDir = side === 0 ? -1 : 1;
   var spots = [[kingSpace[0], kingSpace[1] + castleDir], [kingSpace[0], kingSpace[1] + 2 * castleDir]];
+  spots.forEach(function (spot) {
+    if (game.grid[spot[0]][spot[1]] !== '-') {
+      answer = false;
+    }
+  });
   checkSpots.forEach(function (checkSpot) {
     spots.forEach(function (spot) {
       if (checkSpot[0] === spot[0] && checkSpot[1] === spot[1]) {
@@ -1011,13 +1018,16 @@ var getPieceMoves = function getPieceMoves(origin, pieceType, pieceColor, grid, 
   if (pieceType === 'pawn') {
     var moves = getPawnMoves(origin, pieceColor, grid, game);
     var purgeMoves = purgeCheckMoves(moves, origin, pieceColor, grid);
-    return purgeMoves;
+    var specialMoves = getPawnSpecialMoves(origin, pieceColor, grid, game);
+    return purgeMoves.concat(specialMoves);
   } else if (pieceType === 'king') {
     var _moves = getKingMoves(origin, pieceColor, grid, game);
 
     var _purgeMoves = purgeCheckMoves(_moves, origin, pieceColor, grid);
 
-    return _purgeMoves;
+    var _specialMoves = getKingSpecialMoves(origin, pieceColor, grid, game);
+
+    return _purgeMoves.concat(_specialMoves);
   } else if (pieceType === 'queen') {
     var _moves2 = getQueenMoves(origin, pieceColor, grid);
 
@@ -1105,7 +1115,31 @@ var getPawnMoves = function getPawnMoves(origin, color, grid) {
 
   return answer;
 };
-var getKingMoves = function getKingMoves(origin, color, grid, game) {
+var getPawnSpecialMoves = function getPawnSpecialMoves(origin, color, grid, game) {
+  var answer = [];
+
+  if (origin[0] === (color === 'white' ? 3 : 4)) {
+    var advDir = color === 'white' ? -1 : 1;
+    var enemyDirs = [1, -1];
+    enemyDirs.forEach(function (dir) {
+      var enemySpot = [origin[0], origin[1] + dir];
+      var enemy = grid[enemySpot[0]][enemySpot[1]];
+
+      if (enemy === (color === 'white' ? 'P' : 'p')) {
+        var snapshots = game.gameSoFar;
+        var prevGrid = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["snapshotToGrid"])(snapshots[snapshots.length - 2]);
+        var enemyOrigin = [origin[0] + 2 * advDir, enemySpot[1]];
+
+        if (prevGrid[enemyOrigin[0]][enemyOrigin[1]] === enemy && prevGrid[enemySpot[0]][enemySpot[1]] === '-') {
+          answer.push([origin[0] + advDir, origin[1] + dir, 'special', 'enPassant']);
+        }
+      }
+    });
+  }
+
+  return answer;
+};
+var getKingMoves = function getKingMoves(origin, color, grid) {
   var answer = [];
   var steps = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
   var spots = steps.map(function (step) {
@@ -1122,6 +1156,21 @@ var getKingMoves = function getKingMoves(origin, color, grid, game) {
       }
     }
   });
+  return answer;
+};
+var getKingSpecialMoves = function getKingSpecialMoves(origin, color, grid, game) {
+  var answer = [];
+
+  if (canCastle(game, 7)) {
+    var newMove = [origin[0], origin[1] + 2, 'special', 'castleKing'];
+    answer.push(newMove);
+  }
+
+  if (canCastle(game, 0)) {
+    var _newMove = [origin[0], origin[1] - 2, 'special', 'castleQueen'];
+    answer.push(_newMove);
+  }
+
   return answer;
 };
 var getKnightMoves = function getKnightMoves(origin, color, grid) {
@@ -1279,6 +1328,7 @@ function () {
 
     this.started = false;
     this.inCheck = false;
+    this.handleSpecialMove = this.handleSpecialMove.bind(this);
   }
 
   _createClass(Game, [{
@@ -1290,18 +1340,54 @@ function () {
   }, {
     key: "isGameOver",
     value: function isGameOver() {
-      return this.inCheck && Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getAllMoves"])(this.currentPlayer, this.grid).length === 0;
+      return this.inCheck && Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["getAllMoves"])(this.currentPlayer, this.grid, this).length === 0;
     }
   }, {
     key: "makeMove",
     value: function makeMove(move) {
       var origin = move[0];
       var destination = move[1];
-      this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
-      this.grid[origin[0]][origin[1]] = '-';
+
+      if (destination[2] === 'special') {
+        this.handleSpecialMove(move);
+      } else {
+        this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+        this.grid[origin[0]][origin[1]] = '-';
+        this.gameSoFar.push(this.getString());
+        this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
+        this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["inCheck"])(this.currentPlayer, this.grid);
+      }
+    }
+  }, {
+    key: "handleSpecialMove",
+    value: function handleSpecialMove(move) {
+      var origin = move[0];
+      var destination = move[1];
+
+      if (move[1][3] === 'castleKing') {
+        this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+        this.grid[origin[0]][origin[1]] = '-';
+        var rookOrigin = [origin[0], 7];
+        var rookDestination = [origin[0], 5];
+        this.grid[rookDestination[0]][rookDestination[1]] = this.grid[rookOrigin[0]][rookOrigin[1]];
+        this.grid[rookOrigin[0]][rookOrigin[1]] = '-';
+      } else if (move[1][3] === 'castleQueen') {
+        this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+        this.grid[origin[0]][origin[1]] = '-';
+        var _rookOrigin = [origin[0], 0];
+        var _rookDestination = [origin[0], 3];
+        this.grid[_rookDestination[0]][_rookDestination[1]] = this.grid[_rookOrigin[0]][_rookOrigin[1]];
+        this.grid[_rookOrigin[0]][_rookOrigin[1]] = '-';
+      } else if (move[1][3] === 'enPassant') {
+        this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+        this.grid[origin[0]][origin[1]] = '-';
+        var capSpot = [origin[0], destination[1]];
+        this.grid[capSpot[0]][capSpot[1]] = '-';
+      }
+
       this.gameSoFar.push(this.getString());
       this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
-      this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["inCheck"])(this.currentPlayer, this.grid); //console.log(canCastle(this, 7));
+      this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_0__["inCheck"])(this.currentPlayer, this.grid);
     }
   }, {
     key: "isMoveLegal",
@@ -1325,6 +1411,10 @@ function () {
       legalMoves.forEach(function (spot) {
         if (destination[0] === spot[0] && destination[1] === spot[1]) {
           answer = true;
+
+          if (spot[2] === 'special') {
+            move[1] = spot;
+          }
         }
       });
       return answer;

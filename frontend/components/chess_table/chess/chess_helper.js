@@ -43,6 +43,11 @@ export const canCastle = (game, side) => { //side is 0 or 7, for queen or kingsi
     let checkSpots = getAllDumbMoves((color === 'black' ? 'white' : 'black'), game.grid, game);
     let castleDir = (side === 0 ? -1 : 1);
     let spots = [[ kingSpace[0], kingSpace[1] + castleDir ], [ kingSpace[0], kingSpace[1] + 2*castleDir]];
+    spots.forEach( (spot) => {
+        if (game.grid[spot[0]][spot[1]] !== '-'){
+            answer = false;
+        }
+    });
     checkSpots.forEach( (checkSpot) => {
         spots.forEach( (spot) => {
             if (checkSpot[0] === spot[0] && checkSpot[1] === spot[1]) {
@@ -141,11 +146,13 @@ export const getPieceMoves = (origin, pieceType, pieceColor, grid, game) => {
     if (pieceType === 'pawn') {
         let moves = getPawnMoves(origin, pieceColor, grid, game);
         let purgeMoves = purgeCheckMoves(moves, origin, pieceColor, grid);
-        return purgeMoves;
+        let specialMoves = getPawnSpecialMoves(origin, pieceColor, grid, game);
+        return purgeMoves.concat(specialMoves);
     } else if (pieceType === 'king') {
         let moves = getKingMoves(origin, pieceColor, grid, game);
         let purgeMoves = purgeCheckMoves(moves, origin, pieceColor, grid);
-        return purgeMoves;
+        let specialMoves = getKingSpecialMoves(origin, pieceColor, grid, game);
+        return purgeMoves.concat(specialMoves);
     } else if (pieceType === 'queen') {
         let moves = getQueenMoves(origin, pieceColor, grid);
         let purgeMoves = purgeCheckMoves(moves, origin, pieceColor, grid);
@@ -218,13 +225,31 @@ export const getPawnMoves = (origin, color, grid) => {
             }
         });
     }
-    
-    
-    
     return answer;
 };
 
-export const getKingMoves = (origin, color, grid, game) => {
+export const getPawnSpecialMoves = (origin, color, grid, game) => {
+    let answer = [];
+    if (origin[0] === (color === 'white' ? 3 : 4)){
+        let advDir = (color === 'white' ? -1 : 1);
+        let enemyDirs = [1, -1];
+        enemyDirs.forEach((dir) => {
+            let enemySpot = [origin[0], origin[1] + dir];
+            let enemy = grid[enemySpot[0]][enemySpot[1]];
+            if (enemy === (color === 'white' ? 'P' : 'p')){
+                let snapshots = game.gameSoFar;
+                let prevGrid = snapshotToGrid(snapshots[snapshots.length - 2]);
+                let enemyOrigin = [origin[0] + (2*advDir), enemySpot[1]];
+                if (prevGrid[enemyOrigin[0]][enemyOrigin[1]] === enemy && prevGrid[enemySpot[0]][enemySpot[1]] === '-'){
+                    answer.push([ origin[0] + advDir, origin[1] + dir, 'special', 'enPassant' ]);
+                }
+            }
+        });
+    }
+    return answer;
+};
+
+export const getKingMoves = (origin, color, grid) => {
     let answer = []
     let steps = [
         [-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]
@@ -245,6 +270,20 @@ export const getKingMoves = (origin, color, grid, game) => {
     });
     return answer;
 };
+
+export const getKingSpecialMoves = (origin, color, grid, game) => {
+   
+    let answer = [];
+    if (canCastle(game, 7)) {
+        let newMove = [origin[0], origin[1] + 2, 'special', 'castleKing'];
+        answer.push(newMove);
+    }
+    if (canCastle(game, 0)) {
+        let newMove = [origin[0], origin[1] - 2, 'special', 'castleQueen'];
+        answer.push(newMove);
+    }
+    return answer;
+}
 
 export const getKnightMoves = (origin, color, grid) => {
     let answer = []

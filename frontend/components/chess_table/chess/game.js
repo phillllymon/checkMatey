@@ -41,6 +41,7 @@ export class Game {
         this.level = 1; ///0 is you play both players, 1 is random move, 2 is use API maybe???
         this.started = false;
         this.inCheck = false;
+        this.handleSpecialMove = this.handleSpecialMove.bind(this);
     }
 
     start() {
@@ -49,18 +50,52 @@ export class Game {
     }
 
     isGameOver() {
-        return (this.inCheck && getAllMoves(this.currentPlayer, this.grid).length === 0);
+        return (this.inCheck && getAllMoves(this.currentPlayer, this.grid, this).length === 0);
     }
 
     makeMove(move) {
         let origin = move[0];
         let destination = move[1];
-        this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
-        this.grid[origin[0]][origin[1]] = '-';
+        if (destination[2] === 'special'){
+            this.handleSpecialMove(move);
+        }
+        else {
+            this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+            this.grid[origin[0]][origin[1]] = '-';
+            this.gameSoFar.push(this.getString());
+            this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
+            this.inCheck = inCheck(this.currentPlayer, this.grid);
+        }
+        
+    }
+
+    handleSpecialMove(move) {
+        let origin = move[0];
+        let destination = move[1];
+        if (move[1][3] === 'castleKing') {
+            this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+            this.grid[origin[0]][origin[1]] = '-';
+            let rookOrigin = [origin[0], 7];
+            let rookDestination = [origin[0], 5];
+            this.grid[rookDestination[0]][rookDestination[1]] = this.grid[rookOrigin[0]][rookOrigin[1]];
+            this.grid[rookOrigin[0]][rookOrigin[1]] = '-';
+        }
+        else if (move[1][3] === 'castleQueen') {
+            this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+            this.grid[origin[0]][origin[1]] = '-';
+            let rookOrigin = [origin[0], 0];
+            let rookDestination = [origin[0], 3];
+            this.grid[rookDestination[0]][rookDestination[1]] = this.grid[rookOrigin[0]][rookOrigin[1]];
+            this.grid[rookOrigin[0]][rookOrigin[1]] = '-';
+        } else if (move[1][3] === 'enPassant') {
+            this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+            this.grid[origin[0]][origin[1]] = '-';
+            let capSpot = [origin[0], destination[1]];
+            this.grid[capSpot[0]][capSpot[1]] = '-';
+        }
         this.gameSoFar.push(this.getString());
         this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
         this.inCheck = inCheck(this.currentPlayer, this.grid);
-        //console.log(canCastle(this, 7));
     }
 
     isMoveLegal(move, color) {
@@ -80,6 +115,9 @@ export class Game {
         legalMoves.forEach( (spot) => {
             if (destination[0] === spot[0] && destination[1] === spot[1]){
                 answer = true;
+                if (spot[2] === 'special'){
+                    move[1] = spot;
+                }
             }
         });
         return answer;
