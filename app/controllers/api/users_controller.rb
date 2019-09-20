@@ -2,7 +2,7 @@ class Api::UsersController < ApplicationController
 
     def create
         @user = User.new(user_params)
-        @user.rating = 1000
+        @user.rating = rand(900..1800)
         if @user.save
             login(@user)
             redirect_to api_user_url(@user)
