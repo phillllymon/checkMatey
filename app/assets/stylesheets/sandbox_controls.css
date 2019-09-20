@@ -143,10 +143,15 @@
     outline: none; 
 }
 
-
+.outer_list {
+    size: 100%;
+    overflow: hidden;
+}
 
 .moves_list {
-    max-height: 30vmin;
+    display: flex;
+    flex-direction: column;
+    height: 25vmin;
     overflow-y: auto;
 }
 
