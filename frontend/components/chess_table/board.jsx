@@ -29,6 +29,7 @@ class Board extends React.Component {
         this.postSequence = this.postSequence.bind(this);
         this.handleDescription = this.handleDescription.bind(this);
         this.handleTitle = this.handleTitle.bind(this);
+        this.abortDrag = this.abortDrag.bind(this);
     }
 
     startPosition() {
@@ -88,7 +89,7 @@ class Board extends React.Component {
             'transform': 'translate(-50%, -50%)',
             'height': 'auto',
             'width': 'auto',
-            'fontSize': '5vmin',
+            'fontSize': '6vmin',
             'cursor': 'grabbing',
             'pointerEvents': 'none',
             top: this.state.dragY,
@@ -145,6 +146,15 @@ class Board extends React.Component {
         }
     }
 
+    abortDrag(e) {
+        this.setState({
+            grid: this.grid,
+            dragging: false
+        });
+        this.markToDrag = null;
+        this.origin = null;
+    }
+
     recordButton() {
         if (this.recording) {
             return (
@@ -168,6 +178,7 @@ class Board extends React.Component {
                 <div
                     className={this.flipped ? "board flipped" : "board"}
                     onMouseMove={this.dragPiece}
+                    onMouseLeave={this.abortDrag}
                 >
                     {this.state.dragging ? this.displayDragPiece() : ''}
                     {

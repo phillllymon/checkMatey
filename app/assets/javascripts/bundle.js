@@ -576,6 +576,7 @@ function (_React$Component) {
     _this.postSequence = _this.postSequence.bind(_assertThisInitialized(_this));
     _this.handleDescription = _this.handleDescription.bind(_assertThisInitialized(_this));
     _this.handleTitle = _this.handleTitle.bind(_assertThisInitialized(_this));
+    _this.abortDrag = _this.abortDrag.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -648,7 +649,7 @@ function (_React$Component) {
         'transform': 'translate(-50%, -50%)',
         'height': 'auto',
         'width': 'auto',
-        'fontSize': '5vmin',
+        'fontSize': '6vmin',
         'cursor': 'grabbing',
         'pointerEvents': 'none',
         top: this.state.dragY,
@@ -715,6 +716,16 @@ function (_React$Component) {
       }
     }
   }, {
+    key: "abortDrag",
+    value: function abortDrag(e) {
+      this.setState({
+        grid: this.grid,
+        dragging: false
+      });
+      this.markToDrag = null;
+      this.origin = null;
+    }
+  }, {
     key: "recordButton",
     value: function recordButton() {
       if (this.recording) {
@@ -749,7 +760,8 @@ function (_React$Component) {
         className: "chess_table"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.flipped ? "board flipped" : "board",
-        onMouseMove: this.dragPiece
+        onMouseMove: this.dragPiece,
+        onMouseLeave: this.abortDrag
       }, this.state.dragging ? this.displayDragPiece() : '', this.grid.map(function (row, rIdx) {
         return row.map(function (spot, cIdx) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -2304,6 +2316,7 @@ function (_React$Component) {
     _this.showLastMove = _this.showLastMove.bind(_assertThisInitialized(_this));
     _this.showMoveNumber = _this.showMoveNumber.bind(_assertThisInitialized(_this));
     _this.getMoveList = _this.getMoveList.bind(_assertThisInitialized(_this));
+    _this.abortDrag = _this.abortDrag.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -2377,7 +2390,7 @@ function (_React$Component) {
         'transform': 'translate(-50%, -50%)',
         'height': 'auto',
         'width': 'auto',
-        'fontSize': '5vmin',
+        'fontSize': '6vmin',
         'cursor': 'grabbing',
         'pointerEvents': 'none',
         top: this.state.dragY,
@@ -2444,6 +2457,16 @@ function (_React$Component) {
       }
     }
   }, {
+    key: "abortDrag",
+    value: function abortDrag(e) {
+      this.setState({
+        grid: this.grid,
+        dragging: false
+      });
+      this.markToDrag = null;
+      this.origin = null;
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -2452,7 +2475,8 @@ function (_React$Component) {
         className: "chess_table"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.flipped ? "board flipped" : "board",
-        onMouseMove: this.dragPiece
+        onMouseMove: this.dragPiece,
+        onMouseLeave: this.abortDrag
       }, this.state.dragging ? this.displayDragPiece() : '', this.grid.map(function (row, rIdx) {
         return row.map(function (spot, cIdx) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -4004,19 +4028,22 @@ function (_React$Component) {
     _this.piecePos = [2, 4];
     _this.state = {
       grid: _this.game.grid,
-      level: 1
+      level: 1,
+      enteredName: ''
     };
     _this.interval = 1000;
     _this.handleInput = _this.handleInput.bind(_assertThisInitialized(_this));
     _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
     _this.nextLevel = _this.nextLevel.bind(_assertThisInitialized(_this));
     _this.startButton = _this.startButton.bind(_assertThisInitialized(_this));
-    _this.highScore = 32355;
-
-    _this.props.fetchAllPosts();
-
+    _this.highScore = 0;
+    _this.leader = 'no one';
+    _this.highTime = '';
     _this.getHighScore = _this.getHighScore.bind(_assertThisInitialized(_this));
     _this.endTheGame = _this.endTheGame.bind(_assertThisInitialized(_this));
+    _this.askForName = _this.askForName.bind(_assertThisInitialized(_this));
+    _this.saveScore = _this.saveScore.bind(_assertThisInitialized(_this));
+    _this.handleEnterName = _this.handleEnterName.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -4031,32 +4058,79 @@ function (_React$Component) {
       clearInterval(this.pieceInterval);
     }
   }, {
+    key: "handleEnterName",
+    value: function handleEnterName(e) {
+      this.setState({
+        enteredName: e.target.value
+      });
+    }
+  }, {
+    key: "askForName",
+    value: function askForName() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "enter_name tetris_stats"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "New Highscore!", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.saveScore
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        placeholder: "enter your name",
+        value: this.state.enteredName,
+        onChange: this.handleEnterName
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "tetris_button",
+        type: "submit",
+        value: "Save Highscore"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))));
+    }
+  }, {
     key: "getHighScore",
     value: function getHighScore() {
       var _this2 = this;
 
-      Object.values(this.props.allPosts).forEach(function (post) {
-        if (post.post_type === 'score') {
-          var postScore = post.content;
+      $.ajax({
+        url: "/api/scores",
+        method: 'GET'
+      }).then(function (res) {
+        _this2.highScore = res.score;
+        _this2.leader = res.name;
+        _this2.highTime = res.updated_at;
 
-          if (postScore > _this2.highScore) {
-            _this2.highScore = post.content;
+        _this2.setState({});
+      });
+    }
+  }, {
+    key: "saveScore",
+    value: function saveScore(e) {
+      var _this3 = this;
+
+      e.preventDefault();
+      this.promptName = false;
+      $.ajax({
+        url: "/api/scores",
+        method: 'POST',
+        data: {
+          score: {
+            name: this.state.enteredName,
+            score: this.game.score
           }
-
-          console.log(_this2.highScore);
         }
+      }).then(function (res) {
+        _this3.getHighScore();
       });
     }
   }, {
     key: "endTheGame",
-    value: function endTheGame() {//this.props.createPost({content: this.game.score, post_type: 'score'});
+    value: function endTheGame() {
+      if (this.game.score > this.highScore) {
+        this.promptName = true;
+        this.setState({});
+      }
     }
   }, {
     key: "startGame",
     value: function startGame(e) {
-      var _this3 = this;
+      var _this4 = this;
 
-      this.getHighScore();
       this.setState({
         playing: true
       });
@@ -4069,42 +4143,6 @@ function (_React$Component) {
         grid: this.grid
       });
       this.pieceInterval = setInterval(function () {
-        _this3.grid = _this3.game.advanceGame();
-
-        if (_this3.game.gameOver) {
-          clearInterval(_this3.pieceInterval);
-
-          _this3.setState({
-            playing: false
-          });
-
-          _this3.endTheGame();
-        }
-
-        _this3.setState({
-          grid: _this3.grid
-        });
-
-        if (_this3.game.level !== _this3.level) {
-          _this3.level = _this3.game.level;
-
-          _this3.nextLevel();
-        }
-      }, 1000);
-    }
-  }, {
-    key: "nextLevel",
-    value: function nextLevel() {
-      var _this4 = this;
-
-      clearInterval(this.pieceInterval);
-      this.pieceInterval = setInterval(function () {
-        if (_this4.game.level !== _this4.level) {
-          _this4.level = _this4.game.level;
-
-          _this4.nextLevel();
-        }
-
         _this4.grid = _this4.game.advanceGame();
 
         if (_this4.game.gameOver) {
@@ -4119,6 +4157,42 @@ function (_React$Component) {
 
         _this4.setState({
           grid: _this4.grid
+        });
+
+        if (_this4.game.level !== _this4.level) {
+          _this4.level = _this4.game.level;
+
+          _this4.nextLevel();
+        }
+      }, 1000);
+    }
+  }, {
+    key: "nextLevel",
+    value: function nextLevel() {
+      var _this5 = this;
+
+      clearInterval(this.pieceInterval);
+      this.pieceInterval = setInterval(function () {
+        if (_this5.game.level !== _this5.level) {
+          _this5.level = _this5.game.level;
+
+          _this5.nextLevel();
+        }
+
+        _this5.grid = _this5.game.advanceGame();
+
+        if (_this5.game.gameOver) {
+          clearInterval(_this5.pieceInterval);
+
+          _this5.setState({
+            playing: false
+          });
+
+          _this5.endTheGame();
+        }
+
+        _this5.setState({
+          grid: _this5.grid
         });
       }, Math.ceil(1000 / this.game.level));
       this.interval = Math.ceil(1000 / this.game.level);
@@ -4150,6 +4224,7 @@ function (_React$Component) {
     key: "startButton",
     value: function startButton() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "tetris_button",
         onClick: this.startGame
       }, "Start Game");
     }
@@ -4161,7 +4236,7 @@ function (_React$Component) {
         tabIndex: "0",
         id: "the_game",
         className: "game_box"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.promptName ? this.askForName() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "play_area"
       }, this.state.grid.map(function (row, rIdx) {
         return row.map(function (cell, cIdx) {
@@ -4173,7 +4248,13 @@ function (_React$Component) {
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tetris_stats"
-      }, "highscore: ", this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "score: ", this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "lines: ", this.game.lines, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "interval: ", this.interval, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.state.playing ? '' : this.startButton()));
+      }, "Leader: ", this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Highscore: ", this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "smaller_text"
+      }, this.highTime.slice(0, 10))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tetris_stats"
+      }, "Score: ", this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Lines: ", this.game.lines, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "smaller_text"
+      }, "interval: ", this.interval)), this.state.playing ? '' : this.startButton());
     }
   }]);
 

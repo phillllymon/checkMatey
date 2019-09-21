@@ -10,17 +10,22 @@ class Tetris extends React.Component {
         this.piecePos = [2, 4];
         this.state = {
             grid: this.game.grid,
-            level: 1
+            level: 1, 
+            enteredName: ''
         };
         this.interval = 1000;
         this.handleInput = this.handleInput.bind(this);
         this.startGame = this.startGame.bind(this);
         this.nextLevel = this.nextLevel.bind(this);
         this.startButton = this.startButton.bind(this);
-        this.highScore = 32355;
-        this.props.fetchAllPosts();
+        this.highScore = 0;
+        this.leader = 'no one';
+        this.highTime = '';
         this.getHighScore = this.getHighScore.bind(this);
         this.endTheGame = this.endTheGame.bind(this);
+        this.askForName = this.askForName.bind(this);
+        this.saveScore = this.saveScore.bind(this);
+        this.handleEnterName = this.handleEnterName.bind(this);
     }
 
     componentDidMount() {
@@ -31,24 +36,68 @@ class Tetris extends React.Component {
         clearInterval(this.pieceInterval);
     }
 
+    handleEnterName(e) {
+        this.setState({enteredName: e.target.value})
+    }
+
+    askForName() {
+        return (
+            <div className="enter_name tetris_stats">
+                <center>
+                    <br/>
+                New Highscore!
+                <br/>
+                <br/>
+                
+                <form onSubmit={this.saveScore}>
+                    <input
+                        type="text"
+                        placeholder="enter your name"
+                        value={this.state.enteredName}
+                        onChange={this.handleEnterName}
+                    />
+                    <br/>
+                    <input className="tetris_button" type="submit" value="Save Highscore"/>
+                    <br/>
+                    <br/>
+                </form>
+                </center>
+            </div>
+        );
+    }
+
     getHighScore() {
-        Object.values(this.props.allPosts).forEach((post) => {
-            if (post.post_type === 'score'){
-                let postScore = post.content;
-                if (postScore > this.highScore) {
-                    this.highScore = post.content;
-                }
-                console.log(this.highScore);
-            }
+        $.ajax({
+            url: `/api/scores`,
+            method: 'GET'
+        }).then((res) => {
+            this.highScore = res.score;
+            this.leader = res.name;
+            this.highTime = res.updated_at;
+            this.setState({});
+        });
+    }
+
+    saveScore(e) {
+        e.preventDefault();
+        this.promptName = false;
+        $.ajax({
+            url: `/api/scores`,
+            method: 'POST',
+            data: { score: { name: this.state.enteredName, score: this.game.score } }
+        }).then((res) => {
+            this.getHighScore();
         });
     }
 
     endTheGame() {
-        //this.props.createPost({content: this.game.score, post_type: 'score'});
+        if (this.game.score > this.highScore){
+            this.promptName = true;
+            this.setState({});
+        }
     }
 
     startGame(e) {
-        this.getHighScore();
         this.setState({playing: true});
         document.getElementById("the_game").focus();
         this.game = new Game;
@@ -112,13 +161,14 @@ class Tetris extends React.Component {
 
     startButton(){
         return (
-            <button onClick={this.startGame}>Start Game</button>
+            <button className="tetris_button" onClick={this.startGame}>Start Game</button>
         );
     }
 
     render() {
         return (
             <div onKeyDown={this.handleInput} tabIndex="0" id="the_game" className="game_box">
+                {this.promptName ? this.askForName() : ''}
                 <div className="play_area">
                     {
                         this.state.grid.map( (row, rIdx) => {
@@ -133,18 +183,24 @@ class Tetris extends React.Component {
                     }
                 </div>
                 <div className="tetris_stats">
-                    highscore: {this.highScore}
+                    Leader: {this.leader}
                     <br />
-                    level: {this.game.level}
+                    Highscore: {this.highScore}
                     <br />
-                    score: {this.game.score}
-                    <br />
-                    lines: {this.game.lines}
-                    <br />
-                    interval: {this.interval}
-                    <br />
-                    {this.state.playing ? '' : this.startButton()}
+                    <div className="smaller_text">{this.highTime.slice(0, 10)}</div>
                 </div>
+                <div className="tetris_stats">
+                    Score: {this.game.score}
+                    <br />
+                    Level: {this.game.level}
+                    <br />
+                    Lines: {this.game.lines}
+                    <br />
+                    <div className="smaller_text">interval: {this.interval}</div>
+                </div>
+                    
+                    {this.state.playing ? '' : this.startButton()}
+                
             </div>
         );
     }

@@ -34,6 +34,7 @@ class ShowBoard extends React.Component {
         this.showLastMove = this.showLastMove.bind(this);
         this.showMoveNumber = this.showMoveNumber.bind(this);
         this.getMoveList = this.getMoveList.bind(this);
+        this.abortDrag = this.abortDrag.bind(this);
     }
 
     showMoveNumber(num) {
@@ -89,7 +90,7 @@ class ShowBoard extends React.Component {
             'transform': 'translate(-50%, -50%)',
             'height': 'auto',
             'width': 'auto',
-            'fontSize': '5vmin',
+            'fontSize': '6vmin',
             'cursor': 'grabbing',
             'pointerEvents': 'none',
             top: this.state.dragY,
@@ -146,12 +147,22 @@ class ShowBoard extends React.Component {
         }
     }
 
+    abortDrag(e) {
+        this.setState({
+            grid: this.grid,
+            dragging: false
+        });
+        this.markToDrag = null;
+        this.origin = null;
+    }
+
     render() {
         return (
             <div className="chess_table">
                 <div
                     className={this.flipped ? "board flipped" : "board"}
                     onMouseMove={this.dragPiece}
+                    onMouseLeave={this.abortDrag}
                 >
                     {this.state.dragging ? this.displayDragPiece() : ''}
                     {
