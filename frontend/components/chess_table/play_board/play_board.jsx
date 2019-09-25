@@ -34,6 +34,7 @@ class PlayBoard extends React.Component {
     }
 
     handlePawnPromotion(move) {
+        this.displayPromotion = true;
         move[1].push('special');
         move[1].push(this.game.currentPlayer === 'white' ? 'q' : 'Q' );
         return move;
@@ -158,7 +159,7 @@ class PlayBoard extends React.Component {
                 else {
                     this.game.makeMove(move);
                 }
-                this.currentPlayer = this.game.currentPlayer;
+                this.currentPlayer = this.game.currentPlayer;   //pawn promotion has to replicate from here
                 this.grid = this.game.grid;
                 this.setState({
                     grid: this.grid,
@@ -172,7 +173,7 @@ class PlayBoard extends React.Component {
                         this.takeComputerTurn();
                     }, Math.random()*1500);
                 }
-                /////COMPUTER TURN ABOVE ///////
+                /////COMPUTER TURN ABOVE ///////        
             }
             else {
                 this.setState({

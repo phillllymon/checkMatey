@@ -1456,7 +1456,7 @@ function () {
         this.gameSoFar.push(this.getString());
         this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["getLastMove"])(this.gameSoFar));
       } else {
-        console.log('here');
+        console.log('making a special move');
         this.grid[destination[0]][destination[1]] = move[1][3];
         this.grid[origin[0]][origin[1]] = '-';
         this.gameSoFar.push(this.getString());
@@ -1907,6 +1907,7 @@ function (_React$Component) {
   _createClass(PlayBoard, [{
     key: "handlePawnPromotion",
     value: function handlePawnPromotion(move) {
+      this.displayPromotion = true;
       move[1].push('special');
       move[1].push(this.game.currentPlayer === 'white' ? 'q' : 'Q');
       return move;
@@ -2058,7 +2059,8 @@ function (_React$Component) {
             this.game.makeMove(move);
           }
 
-          this.currentPlayer = this.game.currentPlayer;
+          this.currentPlayer = this.game.currentPlayer; //pawn promotion has to replicate from here
+
           this.grid = this.game.grid;
           this.setState({
             grid: this.grid,
@@ -2071,7 +2073,7 @@ function (_React$Component) {
             setTimeout(function () {
               _this2.takeComputerTurn();
             }, Math.random() * 1500);
-          } /////COMPUTER TURN ABOVE ///////
+          } /////COMPUTER TURN ABOVE ///////        
 
         } else {
           this.setState({
