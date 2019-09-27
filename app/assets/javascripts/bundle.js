@@ -4288,7 +4288,7 @@ function (_React$Component) {
         className: this.game.preview ? "toggle_button button_on" : "toggle_button",
         onClick: this.togglePreview
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        "class": "fas fa-circle"
+        className: "fas fa-circle"
       })), this.game.preview ? 'on' : 'off', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text"
       }, this.game.preview ? '(half points)' : '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {

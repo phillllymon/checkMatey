@@ -206,7 +206,7 @@ class Tetris extends React.Component {
                     Next:
                     <br/>
                     <button className={this.game.preview ? "toggle_button button_on" : "toggle_button"}
-                        onClick={this.togglePreview}><i class="fas fa-circle"></i></button>
+                        onClick={this.togglePreview}><i className="fas fa-circle"></i></button>
                         {this.game.preview ? 'on' : 'off'}
                     <br/>
                     <div className="smaller_text">
