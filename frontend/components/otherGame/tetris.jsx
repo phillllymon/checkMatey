@@ -10,6 +10,7 @@ class Tetris extends React.Component {
         this.piecePos = [2, 4];
         this.state = {
             grid: this.game.grid,
+            nextGrid: this.game.nextGrid,
             level: 1, 
             enteredName: ''
         };
@@ -26,6 +27,7 @@ class Tetris extends React.Component {
         this.askForName = this.askForName.bind(this);
         this.saveScore = this.saveScore.bind(this);
         this.handleEnterName = this.handleEnterName.bind(this);
+        this.togglePreview = this.togglePreview.bind(this);
     }
 
     componentDidMount() {
@@ -34,6 +36,12 @@ class Tetris extends React.Component {
 
     componentWillUnmount() {
         clearInterval(this.pieceInterval);
+    }
+
+    togglePreview(e) {
+        e.target.blur();
+        this.game.preview = this.game.preview ? false : true;
+        this.setState({});
     }
 
     handleEnterName(e) {
@@ -104,7 +112,7 @@ class Tetris extends React.Component {
         this.game.start();
         this.level = this.game.level;
         this.grid = this.game.grid;
-        this.setState({grid: this.grid});
+        this.setState({grid: this.grid, nextGrid: this.game.nextGrid});
         this.pieceInterval = setInterval( () => {
             this.grid = this.game.advanceGame();
             if (this.game.gameOver) {
@@ -112,7 +120,7 @@ class Tetris extends React.Component {
                 this.setState({ playing: false });
                 this.endTheGame();
             }
-            this.setState({ grid: this.grid });
+            this.setState({ grid: this.grid, nextGrid: this.game.nextGrid });
             if (this.game.level !== this.level){
                 this.level = this.game.level;
                 this.nextLevel();
@@ -133,7 +141,7 @@ class Tetris extends React.Component {
                 this.setState({playing: false});
                 this.endTheGame();
             }
-            this.setState({ grid: this.grid });
+            this.setState({ grid: this.grid, nextGrid: this.game.nextGrid });
         }, Math.ceil(1000 / this.game.level));
         this.interval = Math.ceil(1000/this.game.level);
     }
@@ -182,6 +190,22 @@ class Tetris extends React.Component {
                         })
                     }
                 </div>
+                <div className="tetris_stats preview_box">
+                    Next:
+                    <div className="display_preview">
+                        {this.game.preview ? this.state.nextGrid.map( (row, rIdx) => {
+                            return (
+                                row.map( (cell, cIdx) => {
+                                    return <Cell key={[rIdx, cIdx]} status={cell} />
+                                })
+                            );
+
+                        }) : ''    
+                        }
+                    </div>
+                    
+                </div>
+                <button className="tetris_button" onClick={this.togglePreview}>Toggle Preview</button>
                 <div className="tetris_stats">
                     Leader: {this.leader}
                     <br />
@@ -195,7 +219,6 @@ class Tetris extends React.Component {
                     Level: {this.game.level}
                     <br />
                     Lines: {this.game.lines}
-                    <br />
                     <div className="smaller_text">interval: {this.interval}</div>
                 </div>
                     

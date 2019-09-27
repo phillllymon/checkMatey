@@ -155,3 +155,20 @@
 .smaller_text {
     font-size: 20px;
 }
+
+.preview_box {
+    margin-top: 0;
+
+
+}
+
+.display_preview {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    float: right;
+    margin: 15px;
+    height: 120px;
+    width: 120px;
+    background: black;
+}

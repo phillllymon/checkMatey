@@ -10,11 +10,11 @@ class Tetrino {
         this.mark = mark;
     }
 
-    placePiece(grid, game) {
-        this.pos = game.home;
+    placePiece(grid, game, origin = game.home) {
+        this.pos = origin;
         this.spots.forEach( (spot) => {
-            let y = game.home[0] + spot[0];
-            let x = game.home[1] + spot[1];
+            let y = origin[0] + spot[0];
+            let x = origin[1] + spot[1];
             if (grid[y][x] === 'empty') {
                 grid[y][x] = this.mark;
             }

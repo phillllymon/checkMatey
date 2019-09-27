@@ -3475,9 +3475,12 @@ function () {
       this.startGrid.push(row);
     }
 
+    this.nextPiece = this.generatePiece();
+    this.nextGrid = [['empty', 'empty', 'empty', 'empty'], ['empty', 'empty', 'empty', 'empty'], ['empty', 'empty', 'empty', 'empty'], ['empty', 'empty', 'empty', 'empty']];
     this.grid = this.startGrid;
     this.gameOver = true;
     this.score = 0;
+    this.preview = false;
   }
 
   _createClass(Game, [{
@@ -3572,7 +3575,8 @@ function () {
           }
         }
       });
-      this.score += 100 * (multiplier * multiplier);
+      var scoreAmt = 100 * (multiplier * multiplier);
+      this.score += this.preview ? scoreAmt / 2 : scoreAmt;
     }
   }, {
     key: "advanceGame",
@@ -3595,8 +3599,11 @@ function () {
       } else {
         this.clearLines();
         this.score += 5;
-        this.currentPiece = this.generatePiece();
+        this.currentPiece = this.nextPiece;
+        this.nextPiece = this.generatePiece();
         this.grid = this.currentPiece.placePiece(this.grid, this);
+        this.nextGrid = [['empty', 'empty', 'empty', 'empty'], ['empty', 'empty', 'empty', 'empty'], ['empty', 'empty', 'empty', 'empty'], ['empty', 'empty', 'empty', 'empty']];
+        this.nextGrid = this.nextPiece.placePiece(this.nextGrid, this, [0, 1]);
       }
 
       return this.grid;
@@ -3837,10 +3844,11 @@ function () {
     value: function placePiece(grid, game) {
       var _this = this;
 
-      this.pos = game.home;
+      var origin = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : game.home;
+      this.pos = origin;
       this.spots.forEach(function (spot) {
-        var y = game.home[0] + spot[0];
-        var x = game.home[1] + spot[1];
+        var y = origin[0] + spot[0];
+        var x = origin[1] + spot[1];
 
         if (grid[y][x] === 'empty') {
           grid[y][x] = _this.mark;
@@ -4030,6 +4038,7 @@ function (_React$Component) {
     _this.piecePos = [2, 4];
     _this.state = {
       grid: _this.game.grid,
+      nextGrid: _this.game.nextGrid,
       level: 1,
       enteredName: ''
     };
@@ -4046,6 +4055,7 @@ function (_React$Component) {
     _this.askForName = _this.askForName.bind(_assertThisInitialized(_this));
     _this.saveScore = _this.saveScore.bind(_assertThisInitialized(_this));
     _this.handleEnterName = _this.handleEnterName.bind(_assertThisInitialized(_this));
+    _this.togglePreview = _this.togglePreview.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -4058,6 +4068,13 @@ function (_React$Component) {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       clearInterval(this.pieceInterval);
+    }
+  }, {
+    key: "togglePreview",
+    value: function togglePreview(e) {
+      e.target.blur();
+      this.game.preview = this.game.preview ? false : true;
+      this.setState({});
     }
   }, {
     key: "handleEnterName",
@@ -4142,7 +4159,8 @@ function (_React$Component) {
       this.level = this.game.level;
       this.grid = this.game.grid;
       this.setState({
-        grid: this.grid
+        grid: this.grid,
+        nextGrid: this.game.nextGrid
       });
       this.pieceInterval = setInterval(function () {
         _this4.grid = _this4.game.advanceGame();
@@ -4158,7 +4176,8 @@ function (_React$Component) {
         }
 
         _this4.setState({
-          grid: _this4.grid
+          grid: _this4.grid,
+          nextGrid: _this4.game.nextGrid
         });
 
         if (_this4.game.level !== _this4.level) {
@@ -4194,7 +4213,8 @@ function (_React$Component) {
         }
 
         _this5.setState({
-          grid: _this5.grid
+          grid: _this5.grid,
+          nextGrid: _this5.game.nextGrid
         });
       }, Math.ceil(1000 / this.game.level));
       this.interval = Math.ceil(1000 / this.game.level);
@@ -4249,12 +4269,26 @@ function (_React$Component) {
           });
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tetris_stats preview_box"
+      }, "Next:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "display_preview"
+      }, this.game.preview ? this.state.nextGrid.map(function (row, rIdx) {
+        return row.map(function (cell, cIdx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_cell__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            key: [rIdx, cIdx],
+            status: cell
+          });
+        });
+      }) : '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "tetris_button",
+        onClick: this.togglePreview
+      }, "Toggle Preview"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tetris_stats"
       }, "Leader: ", this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Highscore: ", this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text"
       }, this.highTime.slice(0, 10))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tetris_stats"
-      }, "Score: ", this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Lines: ", this.game.lines, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Score: ", this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Lines: ", this.game.lines, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text"
       }, "interval: ", this.interval)), this.state.playing ? '' : this.startButton());
     }

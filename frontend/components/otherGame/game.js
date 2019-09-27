@@ -18,9 +18,17 @@ class Game {
                 'empty', 'empty', 'empty', 'empty'];
             this.startGrid.push(row);
         }
+        this.nextPiece = this.generatePiece();
+        this.nextGrid = [
+            ['empty', 'empty', 'empty', 'empty'],
+            ['empty', 'empty', 'empty', 'empty'],
+            ['empty', 'empty', 'empty', 'empty'],
+            ['empty', 'empty', 'empty', 'empty']
+        ];
         this.grid = this.startGrid;
         this.gameOver = true;
         this.score = 0;
+        this.preview = false;
     }
 
     start() {
@@ -97,7 +105,8 @@ class Game {
                 }
             }
         });
-        this.score += (100*(multiplier*multiplier));
+        let scoreAmt = 100 * (multiplier * multiplier);
+        this.score += this.preview ? scoreAmt/2 : scoreAmt;
     }
 
     advanceGame() {
@@ -118,8 +127,16 @@ class Game {
         else {
             this.clearLines();
             this.score += 5;
-            this.currentPiece = this.generatePiece();
+            this.currentPiece = this.nextPiece;
+            this.nextPiece = this.generatePiece();
             this.grid = this.currentPiece.placePiece(this.grid, this);
+            this.nextGrid = [
+                ['empty', 'empty', 'empty', 'empty'],
+                ['empty', 'empty', 'empty', 'empty'],
+                ['empty', 'empty', 'empty', 'empty'],
+                ['empty', 'empty', 'empty', 'empty']
+            ];
+            this.nextGrid = this.nextPiece.placePiece(this.nextGrid, this, [0, 1]);
         }
         return this.grid;
     }
