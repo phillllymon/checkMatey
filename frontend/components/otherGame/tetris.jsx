@@ -40,6 +40,7 @@ class Tetris extends React.Component {
 
     togglePreview(e) {
         e.target.blur();
+        document.getElementById("the_game").focus();
         this.game.preview = this.game.preview ? false : true;
         this.setState({});
     }
@@ -108,7 +109,7 @@ class Tetris extends React.Component {
     startGame(e) {
         this.setState({playing: true});
         document.getElementById("the_game").focus();
-        this.game = new Game;
+        this.game = new Game(this.game.preview, this.game.nextPiece);
         this.game.start();
         this.level = this.game.level;
         this.grid = this.game.grid;
@@ -191,21 +192,27 @@ class Tetris extends React.Component {
                     }
                 </div>
                 <div className="tetris_stats preview_box">
-                    Next:
                     <div className="display_preview">
-                        {this.game.preview ? this.state.nextGrid.map( (row, rIdx) => {
+                        {this.game.preview ? this.state.nextGrid.map((row, rIdx) => {
                             return (
-                                row.map( (cell, cIdx) => {
+                                row.map((cell, cIdx) => {
                                     return <Cell key={[rIdx, cIdx]} status={cell} />
                                 })
                             );
 
-                        }) : ''    
+                        }) : ''
                         }
                     </div>
-                    
+                    Next:
+                    <br/>
+                    <button className={this.game.preview ? "toggle_button button_on" : "toggle_button"}
+                        onClick={this.togglePreview}><i class="fas fa-circle"></i></button>
+                        {this.game.preview ? 'on' : 'off'}
+                    <br/>
+                    <div className="smaller_text">
+                        {this.game.preview ? '(half points)' : ''}
+                    </div>
                 </div>
-                <button className="tetris_button" onClick={this.togglePreview}>Toggle Preview</button>
                 <div className="tetris_stats">
                     Leader: {this.leader}
                     <br />

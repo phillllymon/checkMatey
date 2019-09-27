@@ -23,12 +23,12 @@
 
 .tetris_stats {
     float: right;
-    color: white;
+    color: lightgray;
     font-size: 30px;
     width: 250px;
     margin-top: 30px;
     margin-left: 30px;
-    
+    font-family: "CopperPlate";
     background-color: black;
     border-right: 2px solid gray;
     border-bottom: 2px solid gray;
@@ -39,7 +39,8 @@
 .tetris_button {
     font-size: 20px;
     margin-top: 30px;
-    color: white;
+    font-family: "CopperPlate";
+    color: lightgray;
     background-color: black;
     border-right: 2px solid gray;
     border-bottom: 2px solid gray;
@@ -158,17 +159,38 @@
 
 .preview_box {
     margin-top: 0;
-
-
 }
 
 .display_preview {
+    float: right;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     float: right;
-    margin: 15px;
+    margin: 10px;
     height: 120px;
     width: 120px;
-    background: black;
+}
+
+.toggle_button {
+    height: 30px;
+    width: 30px;
+    background: darkgray;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+    margin: 10px;
+}
+
+.toggle_button:active {
+    border-left: 2px solid gray;
+    border-top: 2px solid gray;
+    border-bottom: 2px solid lightgray;
+    border-right: 2px solid lightgray;
+}
+
+.button_on {
+    color: orange;
+    text-shadow: 0px 0px 10px orange;
 }

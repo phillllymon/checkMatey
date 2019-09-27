@@ -3465,6 +3465,9 @@ var Game =
 /*#__PURE__*/
 function () {
   function Game() {
+    var preview = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+    var nextPiece = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.generatePiece();
+
     _classCallCheck(this, Game);
 
     this.home = [0, 4];
@@ -3475,19 +3478,20 @@ function () {
       this.startGrid.push(row);
     }
 
-    this.nextPiece = this.generatePiece();
+    this.nextPiece = nextPiece;
     this.nextGrid = [['empty', 'empty', 'empty', 'empty'], ['empty', 'empty', 'empty', 'empty'], ['empty', 'empty', 'empty', 'empty'], ['empty', 'empty', 'empty', 'empty']];
+    this.nextGrid = this.nextPiece.placePiece(this.nextGrid, this, [0, 1]);
     this.grid = this.startGrid;
     this.gameOver = true;
     this.score = 0;
-    this.preview = false;
+    this.preview = preview;
   }
 
   _createClass(Game, [{
     key: "start",
     value: function start() {
       this.gameOver = false;
-      this.currentPiece = this.generatePiece();
+      this.currentPiece = this.nextPiece;
       this.grid = this.startGrid;
       this.grid = this.currentPiece.placePiece(this.grid, this);
       this.level = 1;
@@ -4073,6 +4077,7 @@ function (_React$Component) {
     key: "togglePreview",
     value: function togglePreview(e) {
       e.target.blur();
+      document.getElementById("the_game").focus();
       this.game.preview = this.game.preview ? false : true;
       this.setState({});
     }
@@ -4154,7 +4159,7 @@ function (_React$Component) {
         playing: true
       });
       document.getElementById("the_game").focus();
-      this.game = new _game__WEBPACK_IMPORTED_MODULE_1__["default"]();
+      this.game = new _game__WEBPACK_IMPORTED_MODULE_1__["default"](this.game.preview, this.game.nextPiece);
       this.game.start();
       this.level = this.game.level;
       this.grid = this.game.grid;
@@ -4270,7 +4275,7 @@ function (_React$Component) {
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tetris_stats preview_box"
-      }, "Next:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "display_preview"
       }, this.game.preview ? this.state.nextGrid.map(function (row, rIdx) {
         return row.map(function (cell, cIdx) {
@@ -4279,10 +4284,14 @@ function (_React$Component) {
             status: cell
           });
         });
-      }) : '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "tetris_button",
+      }) : ''), "Next:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: this.game.preview ? "toggle_button button_on" : "toggle_button",
         onClick: this.togglePreview
-      }, "Toggle Preview"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        "class": "fas fa-circle"
+      })), this.game.preview ? 'on' : 'off', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "smaller_text"
+      }, this.game.preview ? '(half points)' : '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tetris_stats"
       }, "Leader: ", this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Highscore: ", this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text"

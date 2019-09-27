@@ -10,7 +10,7 @@ import {
 } from './tetrinos_types';
 
 class Game {
-    constructor() {
+    constructor(preview = false, nextPiece = this.generatePiece()) {
         this.home = [0, 4];
         this.startGrid = [];
         for(let i = 0; i < 20; i++) {
@@ -18,22 +18,23 @@ class Game {
                 'empty', 'empty', 'empty', 'empty'];
             this.startGrid.push(row);
         }
-        this.nextPiece = this.generatePiece();
+        this.nextPiece = nextPiece;
         this.nextGrid = [
             ['empty', 'empty', 'empty', 'empty'],
             ['empty', 'empty', 'empty', 'empty'],
             ['empty', 'empty', 'empty', 'empty'],
             ['empty', 'empty', 'empty', 'empty']
         ];
+        this.nextGrid = this.nextPiece.placePiece(this.nextGrid, this, [0, 1]);
         this.grid = this.startGrid;
         this.gameOver = true;
         this.score = 0;
-        this.preview = false;
+        this.preview = preview;
     }
 
     start() {
         this.gameOver = false;
-        this.currentPiece = this.generatePiece();
+        this.currentPiece = this.nextPiece;
         this.grid = this.startGrid;
         this.grid = this.currentPiece.placePiece(this.grid, this);
         this.level = 1;
