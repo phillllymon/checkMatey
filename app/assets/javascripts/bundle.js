@@ -4284,22 +4284,22 @@ function (_React$Component) {
             status: cell
           });
         });
-      }) : ''), "Next:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Next:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: this.game.preview ? "toggle_button button_on" : "toggle_button",
         onClick: this.togglePreview
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-circle"
-      })), this.game.preview ? 'on' : 'off', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      })), this.game.preview ? 'on ' : 'off', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text"
-      }, this.game.preview ? '(half points)' : '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.game.preview ? '(half points)' : ''))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tetris_stats"
-      }, "Leader: ", this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Highscore: ", this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Leader: ", this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Highscore: ", this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text"
-      }, this.highTime.slice(0, 10))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.highTime.slice(0, 10)))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tetris_stats"
-      }, "Score: ", this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Lines: ", this.game.lines, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Score:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Lines: ", this.game.lines, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text"
-      }, "interval: ", this.interval)), this.state.playing ? '' : this.startButton());
+      }, "interval: ", this.interval))), this.state.playing ? '' : this.startButton());
     }
   }]);
 

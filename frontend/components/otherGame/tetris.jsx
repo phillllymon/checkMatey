@@ -203,30 +203,38 @@ class Tetris extends React.Component {
                         }) : ''
                         }
                     </div>
+                    <center>
                     Next:
                     <br/>
                     <button className={this.game.preview ? "toggle_button button_on" : "toggle_button"}
                         onClick={this.togglePreview}><i className="fas fa-circle"></i></button>
-                        {this.game.preview ? 'on' : 'off'}
+                        {this.game.preview ? 'on ' : 'off'}
                     <br/>
                     <div className="smaller_text">
                         {this.game.preview ? '(half points)' : ''}
                     </div>
+                    </center>
                 </div>
                 <div className="tetris_stats">
+                    <center>
                     Leader: {this.leader}
                     <br />
                     Highscore: {this.highScore}
                     <br />
                     <div className="smaller_text">{this.highTime.slice(0, 10)}</div>
+                    </center>
                 </div>
                 <div className="tetris_stats">
-                    Score: {this.game.score}
+                    <center>
+                    Score: 
+                    <br/>
+                    {this.game.score}
                     <br />
                     Level: {this.game.level}
                     <br />
                     Lines: {this.game.lines}
                     <div className="smaller_text">interval: {this.interval}</div>
+                    </center>
                 </div>
                     
                     {this.state.playing ? '' : this.startButton()}
