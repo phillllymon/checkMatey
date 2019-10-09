@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import PlayBar from './play_bar';
 
 const mapStateToProps = (state) => ({
-
+    user: state.entities.users[state.session.currentUserId]
 });
 
 const mapDispatchToProps = (dispatch) => ({

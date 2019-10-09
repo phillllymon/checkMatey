@@ -309,18 +309,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 // ws.onclose = function (evt) {
 //     console.log("Connection closed.");
 // }; 
-// websocket testing above^^^^ code from var ws = new WebSocket("wss://echo.websocket.org");
-// ws.onopen = function (evt) {
-//     console.log("Connection open ...");
-//     ws.send("Hello WebSockets!");
-// };
-// ws.onmessage = function (evt) {
-//     console.log("Received Message: " + evt.data);
-//     ws.close();
-// };
-// ws.onclose = function (evt) {
-//     console.log("Connection closed.");
-// }; 
+//websocket testing above^^^^ code from var ws = new WebSocket("wss://echo.websocket.org");
 
 document.addEventListener("DOMContentLoaded", function () {
   var preloadedState = {};
@@ -4331,15 +4320,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-
+ //import { createConsumer } from '@rails/actioncable';
 
 var PlayBar =
 /*#__PURE__*/
@@ -4347,17 +4336,116 @@ function (_React$Component) {
   _inherits(PlayBar, _React$Component);
 
   function PlayBar(props) {
+    var _this;
+
     _classCallCheck(this, PlayBar);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(PlayBar).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(PlayBar).call(this, props));
+    _this.state = {
+      visible: false,
+      playerList: ['Mr Poopface'],
+      messages: ['one', 'two', 'three'],
+      currentMessage: ''
+    };
+    _this.enterLobby = _this.enterLobby.bind(_assertThisInitialized(_this));
+    _this.receiveBroadcast = _this.receiveBroadcast.bind(_assertThisInitialized(_this));
+    _this.announcePresence = _this.announcePresence.bind(_assertThisInitialized(_this));
+    _this.requestRollCall = _this.requestRollCall.bind(_assertThisInitialized(_this));
+    _this.challengePlayer = _this.challengePlayer.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(PlayBar, [{
+    key: "challengePlayer",
+    value: function challengePlayer(player) {
+      console.log('trying to challenge ' + player);
+      this.waitSub.perform('relayChallenge', {
+        'challenger': this.props.user.username,
+        'challengee': player
+      });
+    }
+  }, {
+    key: "enterLobby",
+    value: function enterLobby() {
+      this.requestRollCall();
+      this.setState({
+        visible: true
+      });
+      this.announcePresence();
+    }
+  }, {
+    key: "announcePresence",
+    value: function announcePresence() {
+      if (this.state.visible) {
+        this.waitSub.perform('relayPresence', {
+          'user': this.props.user.username
+        });
+      }
+    }
+  }, {
+    key: "requestRollCall",
+    value: function requestRollCall() {
+      this.waitSub.perform('requestRollCall', {});
+    }
+  }, {
+    key: "receiveBroadcast",
+    value: function receiveBroadcast(data) {
+      if (data.requestRollCall) {
+        this.announcePresence();
+      } else if (data.user) {
+        if (!this.state.playerList.includes(data.user)) {
+          this.state.playerList.push(data.user);
+        }
+      } else if (data.goner) {
+        if (!this.state.playerList.includes(data.user)) {
+          this.state.playerList.splice(this.state.playerList.indexOf(data.user));
+        }
+      } else if (data.challenger) {
+        console.log(data.challenger + ' challenges ' + data.challengee);
+      } else {
+        console.log('something else');
+        console.log(data);
+      }
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var that = this;
+      this.waitSub = App.cable.subscriptions.create({
+        channel: 'WaitingChannel'
+      }, {
+        received: function received(data) {
+          that.receiveBroadcast(data);
+          that.setState({});
+        }
+      });
+      setTimeout(this.requestRollCall, 1000);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.waitSub.perform('relayExit', {
+        'user': this.props.user.username
+      });
+      App.cable.subscriptions.remove(this.waitSub);
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "play_bar"
-      });
+      }, "Waiting_Players", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.enterLobby
+      }, "Enter Lobby"), this.state.playerList.map(function (player, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: idx,
+          onClick: function onClick() {
+            return _this2.challengePlayer(player);
+          }
+        }, player);
+      }));
     }
   }]);
 
@@ -4383,7 +4471,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var mapStateToProps = function mapStateToProps(state) {
-  return {};
+  return {
+    user: state.entities.users[state.session.currentUserId]
+  };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -4855,7 +4945,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 
-
+ //var stockfish = require('stockfish');
 
 var Splash = function Splash(props) {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {

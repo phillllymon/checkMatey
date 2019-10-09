@@ -10,6 +10,9 @@ module CheckMatey
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
+    config.action_cable.mount_path = '/websocket'
+    config.time_zone = 'Pacific Time (US & Canada)'
+    config.active_record.default_timezone = :utc
 
     # config.assets.initialize_on_precompile = false #trying to push to heroku
 

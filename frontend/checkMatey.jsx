@@ -23,21 +23,7 @@ import * as PostActions from './actions/post_actions';
 // ws.onclose = function (evt) {
 //     console.log("Connection closed.");
 // }; 
-// websocket testing above^^^^ code from var ws = new WebSocket("wss://echo.websocket.org");
-
-// ws.onopen = function (evt) {
-//     console.log("Connection open ...");
-//     ws.send("Hello WebSockets!");
-// };
-
-// ws.onmessage = function (evt) {
-//     console.log("Received Message: " + evt.data);
-//     ws.close();
-// };
-
-// ws.onclose = function (evt) {
-//     console.log("Connection closed.");
-// }; 
+//websocket testing above^^^^ code from var ws = new WebSocket("wss://echo.websocket.org");
 
 document.addEventListener("DOMContentLoaded", () => {
 
