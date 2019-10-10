@@ -8,7 +8,7 @@ class PlayBar extends React.Component {
         this.state = {
             visible: false,
             challenged: false,
-            playerList: ['Mr Poopface'],
+            playerList: ['AlwaysUp4Game'],
             messages: ['one', 'two', 'three'],
             currentMessage: '',
             playing: false
@@ -33,16 +33,18 @@ class PlayBar extends React.Component {
                     player={this.props.user.username}
                     color={this.state.playing.color}
                     opponent={this.state.playing.opponent}
+                    gameId={this.state.playing.gameId}
                 />
             </div>
         );
     }
 
-    startGame(color, opponent) {
+    startGame(color, opponent, id) {
         this.setState({
             playing: {
             color: color,
             opponent: opponent,
+            gameId: id
             }
         });
     }
@@ -105,10 +107,10 @@ class PlayBar extends React.Component {
         }
         else if (data.playerWhite) {
             if (data.playerWhite === this.props.user.username) {
-                this.startGame('white', data.playerBlack);
+                this.startGame('white', data.playerBlack, data.gameId);
             }
             if (data.playerBlack === this.props.user.username) {
-                this.startGame('black', data.playerWhite);
+                this.startGame('black', data.playerWhite, data.gameId);
             }
         }
         else {

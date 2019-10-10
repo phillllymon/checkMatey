@@ -37,7 +37,8 @@ class VsBoard extends React.Component {
 
     receiveBroadcast(data) {
         if (data.move) {
-            if (data.color !== this.playerColor) {
+            if (data.color !== this.playerColor &&
+                data.gameId === this.props.gameId) {
                 this.game.makeMove(data.move);
                 this.currentPlayer = this.game.currentPlayer;
                 this.setState({});
@@ -153,7 +154,7 @@ class VsBoard extends React.Component {
                     move = this.handlePawnPromotion(move);
                 }
                 this.game.makeMove(move);
-                this.playSub.perform('relayMove', { 'move': move, 'color': this.playerColor});
+                this.playSub.perform('relayMove', {'gameId': this.props.gameId, 'move': move, 'color': this.playerColor});
                 this.currentPlayer = this.game.currentPlayer;
                 this.grid = this.game.grid;
                 this.setState({
@@ -238,6 +239,8 @@ class VsBoard extends React.Component {
                     against: {this.opponent}
                     <br/>
                     {this.game.currentPlayer}'s turn
+                    <br/>
+                    {this.props.gameId}
                     
                     <div className="game_alert">
                     {this.game.inCheck ? (this.game.isGameOver() ? 'Checkmate!' : 'Check!' ) : ''}<br/>

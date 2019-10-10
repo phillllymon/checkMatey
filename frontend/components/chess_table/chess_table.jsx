@@ -41,6 +41,7 @@ class ChessTable extends React.Component {
                         opponent={this.props.opponent}
                         color={this.props.color}
                         time={this.props.time}
+                        gameId={this.props.gameId}
                     />
                 </div>
             );

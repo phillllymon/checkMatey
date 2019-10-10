@@ -1620,7 +1620,8 @@ function (_React$Component) {
           player: this.props.player,
           opponent: this.props.opponent,
           color: this.props.color,
-          time: this.props.time
+          time: this.props.time,
+          gameId: this.props.gameId
         }));
       }
 
@@ -2684,7 +2685,7 @@ function (_React$Component) {
     key: "receiveBroadcast",
     value: function receiveBroadcast(data) {
       if (data.move) {
-        if (data.color !== this.playerColor) {
+        if (data.color !== this.playerColor && data.gameId === this.props.gameId) {
           this.game.makeMove(data.move);
           this.currentPlayer = this.game.currentPlayer;
           this.setState({});
@@ -2824,6 +2825,7 @@ function (_React$Component) {
 
           this.game.makeMove(move);
           this.playSub.perform('relayMove', {
+            'gameId': this.props.gameId,
             'move': move,
             'color': this.playerColor
           });
@@ -2897,7 +2899,7 @@ function (_React$Component) {
         className: "fas fa-retweet"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: this.testMove
-      }, "test move"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "you: ", this.player, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "you play: ", this.playerColor, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "against: ", this.opponent, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.currentPlayer, "'s turn", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "test move"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "you: ", this.player, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "you play: ", this.playerColor, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "against: ", this.opponent, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.currentPlayer, "'s turn", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.props.gameId, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game_alert"
       }, this.game.inCheck ? this.game.isGameOver() ? 'Checkmate!' : 'Check!' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "outer_list"
@@ -4715,7 +4717,7 @@ function (_React$Component) {
     _this.state = {
       visible: false,
       challenged: false,
-      playerList: ['Mr Poopface'],
+      playerList: ['AlwaysUp4Game'],
       messages: ['one', 'two', 'three'],
       currentMessage: '',
       playing: false
@@ -4739,16 +4741,18 @@ function (_React$Component) {
         mode: 'vs',
         player: this.props.user.username,
         color: this.state.playing.color,
-        opponent: this.state.playing.opponent
+        opponent: this.state.playing.opponent,
+        gameId: this.state.playing.gameId
       }));
     }
   }, {
     key: "startGame",
-    value: function startGame(color, opponent) {
+    value: function startGame(color, opponent, id) {
       this.setState({
         playing: {
           color: color,
-          opponent: opponent
+          opponent: opponent,
+          gameId: id
         }
       });
     }
@@ -4825,11 +4829,11 @@ function (_React$Component) {
         }
       } else if (data.playerWhite) {
         if (data.playerWhite === this.props.user.username) {
-          this.startGame('white', data.playerBlack);
+          this.startGame('white', data.playerBlack, data.gameId);
         }
 
         if (data.playerBlack === this.props.user.username) {
-          this.startGame('black', data.playerWhite);
+          this.startGame('black', data.playerWhite, data.gameId);
         }
       } else {
         console.log('something else');

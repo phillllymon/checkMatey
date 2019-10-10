@@ -11,7 +11,8 @@ class Playing < ApplicationCable::Channel
   def relayMove(move)
     theMove = move['move']
     theColor = move['color']
-    ActionCable.server.broadcast("Playing", {move: theMove, color: theColor})
+    gameId = move['gameId']
+    ActionCable.server.broadcast("Playing", {gameId: gameId, move: theMove, color: theColor})
   end
 
   def unsubscribed
