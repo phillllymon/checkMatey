@@ -23,6 +23,20 @@ class WaitingChannel < ApplicationCable::Channel
     })
   end
 
+  def relayAcceptance(challenge)
+    playerWhite = challenge['playerWhoChallenged']
+    playerBlack = challenge['playerWhoAccepts']
+    if rand() < 0.5
+      playerBlack = challenge['playerWhoChallenged']
+      playerWhite = challenge['playerWhoAccepts']
+    end
+    ActionCable.server.broadcast("WaitingChannel", {
+      playerWhite: playerWhite, 
+      playerBlack: playerBlack,
+      gameId: rand()
+    })
+  end
+
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
     #stop_all_streams

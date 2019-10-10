@@ -1,14 +1,17 @@
 import React from 'react';
-//import { createConsumer } from '@rails/actioncable';
+import ChessTableContainer from '../chess_table/chess_table_container';
+
 
 class PlayBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             visible: false,
+            challenged: false,
             playerList: ['Mr Poopface'],
             messages: ['one', 'two', 'three'],
-            currentMessage: ''
+            currentMessage: '',
+            playing: false
         }
 
         this.enterLobby = this.enterLobby.bind(this);
@@ -16,10 +19,40 @@ class PlayBar extends React.Component {
         this.announcePresence = this.announcePresence.bind(this);
         this.requestRollCall = this.requestRollCall.bind(this);
         this.challengePlayer = this.challengePlayer.bind(this);
+        this.showChallengedBox = this.showChallengedBox.bind(this);
+        this.acceptChallenge = this.acceptChallenge.bind(this);
+        this.startGame = this.startGame.bind(this);
+        this.showVsBoard = this.showVsBoard.bind(this);
+    }
+
+    showVsBoard() {
+        return (
+            <div>
+                woo you're playing!
+                <ChessTableContainer mode={'vs'}/>
+            </div>
+        );
+    }
+
+    startGame(color) {
+        this.setState({playing: true});
+        console.log('begin game as ' + color);
+    }
+
+    acceptChallenge() {
+        this.waitSub.perform('relayAcceptance', { 'playerWhoChallenged': this.state.challenged, 'playerWhoAccepts': this.props.user.username });
+    }
+
+    showChallengedBox() {
+        return (
+            <div className="challenge_box">
+                You have been challenged by {this.state.challenged}.
+                <button onClick={this.acceptChallenge}>Accept</button>
+            </div>
+        );
     }
 
     challengePlayer(player) {
-        console.log('trying to challenge ' + player);
         this.waitSub.perform('relayChallenge', {'challenger': this.props.user.username, 'challengee': player});
     }
 
@@ -49,12 +82,26 @@ class PlayBar extends React.Component {
             }
         }
         else if (data.goner) {
-            if (!this.state.playerList.includes(data.user)) {
-                this.state.playerList.splice(this.state.playerList.indexOf(data.user));
+            if (this.state.playerList.includes(data.goner)) {
+                this.setState({
+                    playerList: this.state.playerList.filter((player) => {
+                        return (player !== data.goner);
+                    })
+                });
             }
         }
         else if (data.challenger) {
-            console.log(data.challenger + ' challenges ' + data.challengee);
+            if (this.props.user.username === data.challengee) {
+                this.setState({ challenged: data.challenger });
+            }
+        }
+        else if (data.playerWhite) {
+            if (data.playerWhite === this.props.user.username) {
+                this.startGame('white');
+            }
+            if (data.playerBlack === this.props.user.username) {
+                this.startGame('black');
+            }
         }
         else {
             console.log('something else');
@@ -84,9 +131,12 @@ class PlayBar extends React.Component {
     render() {
         return (
             <div className="play_bar">
+                {this.state.challenged ? this.showChallengedBox() : ''}
+                {this.state.playing ? this.showVsBoard() : ''}
                 Waiting_Players
                 <button onClick={this.enterLobby}>Enter Lobby</button>
                 {
+                    
                     this.state.playerList.map((player, idx) => {
                         return (
                             <div key={idx} onClick={() => this.challengePlayer(player)}>

@@ -2,3 +2,13 @@
     max-width: 200px;
     background-color: orange;
 }
+
+.challenge_box {
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 200px;
+    height: 200px;
+    background-color: orange;
+}

@@ -2,6 +2,7 @@ import React from 'react';
 import BoardContainer from './board_container';
 import ShowBoardContainer from './show_board/show_board_container';
 import PlayBoardContainer from './play_board/play_board_container';
+import VsBoardContainer from './vs_board/vs_board_container';
 
 class ChessTable extends React.Component {
     constructor(props) {
@@ -27,6 +28,14 @@ class ChessTable extends React.Component {
                 <div>
                     <div className="modal_back" onClick={this.backToHome}></div>
                     <BoardContainer postSeq={this.props.postSeq} mode={'sandbox'} />
+                </div>
+            );
+        }
+        if (this.props.mode === 'vs') {
+            return (
+                <div>
+                    <div className="modal_back"></div>
+                    <VsBoardContainer postSeq={this.props.postSeq} mode={'vs'} />
                 </div>
             );
         }
