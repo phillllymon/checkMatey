@@ -1616,8 +1616,11 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "modal_back"
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_vs_board_vs_board_container__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          postSeq: this.props.postSeq,
-          mode: 'vs'
+          mode: 'vs',
+          player: this.props.player,
+          opponent: this.props.opponent,
+          color: this.props.color,
+          time: this.props.time
         }));
       }
 
@@ -2645,7 +2648,7 @@ function (_React$Component) {
     _classCallCheck(this, VsBoard);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(VsBoard).call(this, props));
-    _this.flipped = false;
+    _this.flipped = _this.props.color === 'black';
     _this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"]('960');
     _this.grid = _this.game.grid;
     _this.state = {
@@ -2660,21 +2663,55 @@ function (_React$Component) {
     _this.displayDragPiece = _this.displayDragPiece.bind(_assertThisInitialized(_this));
     _this.flipBoard = _this.flipBoard.bind(_assertThisInitialized(_this));
     _this.player = _this.props.player;
-    _this.playerColor = 'white';
-    _this.compColor = 'black';
+    _this.opponent = _this.props.opponent;
+    _this.playerColor = _this.props.color;
+    _this.receiveBroadcast = _this.receiveBroadcast.bind(_assertThisInitialized(_this));
+    _this.testMove = _this.testMove.bind(_assertThisInitialized(_this));
     _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
-    _this.takeComputerTurn = _this.takeComputerTurn.bind(_assertThisInitialized(_this));
-    _this.resetGame = _this.resetGame.bind(_assertThisInitialized(_this));
-    _this.gameButton = _this.gameButton.bind(_assertThisInitialized(_this));
-    _this.setLevel = _this.setLevel.bind(_assertThisInitialized(_this));
-    _this.typeSetting = 'Standard';
-    _this.setType = _this.setType.bind(_assertThisInitialized(_this));
     _this.isMovePawnPromotion = _this.isMovePawnPromotion.bind(_assertThisInitialized(_this));
     _this.handlePawnPromotion = _this.handlePawnPromotion.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(VsBoard, [{
+    key: "testMove",
+    value: function testMove() {
+      this.playSub.perform('testMove', {
+        'test': 'testMove'
+      });
+    }
+  }, {
+    key: "receiveBroadcast",
+    value: function receiveBroadcast(data) {
+      if (data.move) {
+        if (data.color !== this.playerColor) {
+          this.game.makeMove(data.move);
+          this.currentPlayer = this.game.currentPlayer;
+          this.setState({});
+        }
+      }
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.playSub = App.cable.subscriptions.create({
+        channel: 'Playing'
+      }, {
+        received: function received(data) {
+          _this2.receiveBroadcast(data);
+        }
+      });
+      this.startGame();
+      this.setState({});
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      App.cable.subscriptions.remove(this.playSub);
+    }
+  }, {
     key: "handlePawnPromotion",
     value: function handlePawnPromotion(move) {
       this.displayPromotion = true;
@@ -2699,41 +2736,10 @@ function (_React$Component) {
       return false;
     }
   }, {
-    key: "setType",
-    value: function setType(typeSetting) {
-      this.typeSetting = typeSetting;
-
-      if (!this.game.playing) {
-        this.resetGame();
-      }
-
-      this.setState({});
-    }
-  }, {
-    key: "setLevel",
-    value: function setLevel(level) {
-      this.game.level = level;
-      this.setState({});
-    }
-  }, {
-    key: "resetGame",
-    value: function resetGame() {
-      this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"](this.typeSetting);
-      this.grid = this.game.grid;
-      this.setState({
-        grid: this.grid
-      });
-    }
-  }, {
     key: "startGame",
     value: function startGame(e) {
       this.game.start();
       this.currentPlayer = this.game.currentPlayer;
-      this.setState({});
-
-      if (this.currentPlayer === this.compColor) {
-        this.takeComputerTurn();
-      }
     }
   }, {
     key: "flipBoard",
@@ -2793,19 +2799,8 @@ function (_React$Component) {
       }
     }
   }, {
-    key: "takeComputerTurn",
-    value: function takeComputerTurn() {
-      this.grid = this.game.makeAIMove();
-      this.currentPlayer = this.game.currentPlayer;
-      this.setState({
-        grid: this.grid
-      });
-    }
-  }, {
     key: "endDrag",
     value: function endDrag(e) {
-      var _this2 = this;
-
       if (this.state.dragging) {
         var destination = e.target.id;
         var move = [[parseInt(this.origin[0]), parseInt(this.origin[2])], [parseInt(destination[0]), parseInt(destination[2])]];
@@ -2824,27 +2819,22 @@ function (_React$Component) {
 
         if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.currentPlayer === this.playerColor) {
           if (this.isMovePawnPromotion(move)) {
-            this.game.makeMove(this.handlePawnPromotion(move));
-          } else {
-            this.game.makeMove(move);
+            move = this.handlePawnPromotion(move);
           }
 
-          this.currentPlayer = this.game.currentPlayer; //pawn promotion has to replicate from here
-
+          this.game.makeMove(move);
+          this.playSub.perform('relayMove', {
+            'move': move,
+            'color': this.playerColor
+          });
+          this.currentPlayer = this.game.currentPlayer;
           this.grid = this.game.grid;
           this.setState({
             grid: this.grid,
             dragging: false
           });
           this.markToDrag = null;
-          this.origin = null; /////COMPUTER TURN BELOW ///////
-
-          if (!this.game.isGameOver()) {
-            setTimeout(function () {
-              _this2.takeComputerTurn();
-            }, Math.random() * 1500);
-          } /////COMPUTER TURN ABOVE ///////        
-
+          this.origin = null;
         } else {
           this.setState({
             grid: this.grid,
@@ -2864,21 +2854,6 @@ function (_React$Component) {
       });
       this.markToDrag = null;
       this.origin = null;
-    }
-  }, {
-    key: "gameButton",
-    value: function gameButton() {
-      if (this.game.playing) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "board_control_button",
-          onClick: this.resetGame
-        }, " Reset Game");
-      } else {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "board_control_button",
-          onClick: this.startGame
-        }, " Start Game");
-      }
     }
   }, {
     key: "render",
@@ -2915,52 +2890,14 @@ function (_React$Component) {
         style: {
           'marginLeft': '10px'
         }
-      }, "Game")), this.game.gameTypes.map(function (gameType) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this3.typeSetting === gameType ? "current_type_button" : "type_button",
-          onClick: function onClick() {
-            return _this3.setType(gameType);
-          },
-          key: gameType
-        }, gameType);
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Game")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "board_control_button",
         onClick: this.flipBoard
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-retweet"
-      })), this.gameButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "controls_heading"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-robot"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          'marginLeft': '10px'
-        }
-      }, "Level")), this.game.levels.map(function (level) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this3.game.level === level ? "current_level_button" : "level_button",
-          onClick: function onClick() {
-            return _this3.setLevel(level);
-          },
-          key: level
-        }, level);
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "colors"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: this.game.playing && this.currentPlayer === this.playerColor ? "active_player" : "",
-        style: {
-          'color': this.playerColor
-        }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-user"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: this.game.playing && this.currentPlayer === this.compColor ? "active_player" : "",
-        style: {
-          'color': this.compColor
-        }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-robot"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.testMove
+      }, "test move"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "you: ", this.player, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "you play: ", this.playerColor, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "against: ", this.opponent, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.currentPlayer, "'s turn", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game_alert"
       }, this.game.inCheck ? this.game.isGameOver() ? 'Checkmate!' : 'Check!' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "outer_list"
@@ -4798,17 +4735,22 @@ function (_React$Component) {
   _createClass(PlayBar, [{
     key: "showVsBoard",
     value: function showVsBoard() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "woo you're playing!", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        mode: 'vs'
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        mode: 'vs',
+        player: this.props.user.username,
+        color: this.state.playing.color,
+        opponent: this.state.playing.opponent
       }));
     }
   }, {
     key: "startGame",
-    value: function startGame(color) {
+    value: function startGame(color, opponent) {
       this.setState({
-        playing: true
+        playing: {
+          color: color,
+          opponent: opponent
+        }
       });
-      console.log('begin game as ' + color);
     }
   }, {
     key: "acceptChallenge",
@@ -4883,11 +4825,11 @@ function (_React$Component) {
         }
       } else if (data.playerWhite) {
         if (data.playerWhite === this.props.user.username) {
-          this.startGame('white');
+          this.startGame('white', data.playerBlack);
         }
 
         if (data.playerBlack === this.props.user.username) {
-          this.startGame('black');
+          this.startGame('black', data.playerWhite);
         }
       } else {
         console.log('something else');

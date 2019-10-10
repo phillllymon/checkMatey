@@ -28,15 +28,23 @@ class PlayBar extends React.Component {
     showVsBoard() {
         return (
             <div>
-                woo you're playing!
-                <ChessTableContainer mode={'vs'}/>
+                <ChessTableContainer 
+                    mode={'vs'}
+                    player={this.props.user.username}
+                    color={this.state.playing.color}
+                    opponent={this.state.playing.opponent}
+                />
             </div>
         );
     }
 
-    startGame(color) {
-        this.setState({playing: true});
-        console.log('begin game as ' + color);
+    startGame(color, opponent) {
+        this.setState({
+            playing: {
+            color: color,
+            opponent: opponent,
+            }
+        });
     }
 
     acceptChallenge() {
@@ -97,10 +105,10 @@ class PlayBar extends React.Component {
         }
         else if (data.playerWhite) {
             if (data.playerWhite === this.props.user.username) {
-                this.startGame('white');
+                this.startGame('white', data.playerBlack);
             }
             if (data.playerBlack === this.props.user.username) {
-                this.startGame('black');
+                this.startGame('black', data.playerWhite);
             }
         }
         else {

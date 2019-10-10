@@ -5,7 +5,7 @@ import { Game } from '../chess/game';
 class VsBoard extends React.Component {
     constructor(props) {
         super(props);
-        this.flipped = false;
+        this.flipped = (this.props.color === 'black');
         this.game = new Game('960');
         this.grid = this.game.grid;
         this.state = {
@@ -20,17 +20,46 @@ class VsBoard extends React.Component {
         this.displayDragPiece = this.displayDragPiece.bind(this);
         this.flipBoard = this.flipBoard.bind(this);
         this.player = this.props.player;
-        this.playerColor = 'white';
-        this.compColor = 'black';
+        this.opponent = this.props.opponent;
+        this.playerColor = this.props.color;
+
+        this.receiveBroadcast = this.receiveBroadcast.bind(this);
+        this.testMove = this.testMove.bind(this);
+
         this.startGame = this.startGame.bind(this);
-        this.takeComputerTurn = this.takeComputerTurn.bind(this);
-        this.resetGame = this.resetGame.bind(this);
-        this.gameButton = this.gameButton.bind(this);
-        this.setLevel = this.setLevel.bind(this);
-        this.typeSetting = 'Standard';
-        this.setType = this.setType.bind(this);
         this.isMovePawnPromotion = this.isMovePawnPromotion.bind(this);
         this.handlePawnPromotion = this.handlePawnPromotion.bind(this);
+    }
+
+    testMove() {
+        this.playSub.perform('testMove', {'test': 'testMove'});
+    }
+
+    receiveBroadcast(data) {
+        if (data.move) {
+            if (data.color !== this.playerColor) {
+                this.game.makeMove(data.move);
+                this.currentPlayer = this.game.currentPlayer;
+                this.setState({});
+            }
+        }
+    }
+
+    componentDidMount() {
+        this.playSub = App.cable.subscriptions.create(
+            { channel: 'Playing' },
+            {
+                received: (data) => {
+                    this.receiveBroadcast(data);
+                }
+            }
+        );
+        this.startGame();
+        this.setState({});
+    }
+
+    componentWillUnmount() {
+        App.cable.subscriptions.remove(this.playSub);
     }
 
     handlePawnPromotion(move) {
@@ -52,34 +81,9 @@ class VsBoard extends React.Component {
         return false;
     }
 
-    setType(typeSetting) {
-        this.typeSetting = typeSetting;
-        if (!this.game.playing){
-            this.resetGame();
-        }
-        this.setState({});
-    }
-
-    setLevel(level) {
-        this.game.level = level;
-        this.setState({});
-    }
-
-    resetGame() {
-        this.game = new Game(this.typeSetting);
-        this.grid = this.game.grid;
-        this.setState({
-            grid: this.grid
-        });
-    }
-
     startGame(e) {
         this.game.start();
         this.currentPlayer = this.game.currentPlayer;
-        this.setState({});
-        if (this.currentPlayer === this.compColor){
-            this.takeComputerTurn();
-        }
     }
 
     flipBoard(e) {
@@ -126,14 +130,6 @@ class VsBoard extends React.Component {
         }
     }
 
-    takeComputerTurn(){
-        this.grid = this.game.makeAIMove();
-        this.currentPlayer = this.game.currentPlayer;
-        this.setState({
-            grid: this.grid
-        });
-    }
-
     endDrag(e) {
         if (this.state.dragging) {
             let destination = e.target.id;
@@ -154,26 +150,18 @@ class VsBoard extends React.Component {
             }
             if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.currentPlayer === this.playerColor) {
                 if (this.isMovePawnPromotion(move)){
-                    this.game.makeMove(this.handlePawnPromotion(move));
+                    move = this.handlePawnPromotion(move);
                 }
-                else {
-                    this.game.makeMove(move);
-                }
-                this.currentPlayer = this.game.currentPlayer;   //pawn promotion has to replicate from here
+                this.game.makeMove(move);
+                this.playSub.perform('relayMove', { 'move': move, 'color': this.playerColor});
+                this.currentPlayer = this.game.currentPlayer;
                 this.grid = this.game.grid;
                 this.setState({
                     grid: this.grid,
                     dragging: false
                 });
                 this.markToDrag = null;
-                this.origin = null;
-                /////COMPUTER TURN BELOW ///////
-                if (!this.game.isGameOver()){
-                    setTimeout( () => {
-                        this.takeComputerTurn();
-                    }, Math.random()*1500);
-                }
-                /////COMPUTER TURN ABOVE ///////        
+                this.origin = null;   
             }
             else {
                 this.setState({
@@ -193,19 +181,6 @@ class VsBoard extends React.Component {
         });
         this.markToDrag = null;
         this.origin = null;
-    }
-
-    gameButton() {
-        if (this.game.playing) {
-            return (
-                <button className={"board_control_button"} onClick={this.resetGame}> Reset Game</button>
-            );
-        }
-        else {
-            return (
-                <button className={"board_control_button"} onClick={this.startGame}> Start Game</button>
-            );
-        }
     }
 
     render() {
@@ -252,43 +227,17 @@ class VsBoard extends React.Component {
                             Game
                         </div>
                     </div>
-                        {
-                            this.game.gameTypes.map((gameType) => {
-                                return (
-                                    <button className={this.typeSetting === gameType ? "current_type_button" : "type_button"}
-                                        onClick={() => this.setType(gameType)}
-                                        key={gameType}>{gameType}</button>
-
-                                );
-                            })
-                        }
+                        <button className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
+                        <br/>
+                        <button onClick={this.testMove}>test move</button>
                     <br/>
-                    
-                    <button className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
-                    {this.gameButton()}
-                        <div className="controls_heading">
-                            <i className="fas fa-robot"></i>
-                            <div style={{ 'marginLeft': '10px' }}>
-                                Level
-                            </div>
-                        </div>
-                        {
-                            this.game.levels.map( (level) => {
-                                return (
-                                    <button className={this.game.level === level ? "current_level_button" : "level_button"}
-                                    onClick={() => this.setLevel(level)} 
-                                    key={level}>{level}</button>
-                                    
-                                );
-                            })
-                        }
-                    <div className="colors">
-                        <span className={this.game.playing && this.currentPlayer === this.playerColor ? "active_player" : ""} style={{ 'color': this.playerColor }} ><i className="fas fa-user"></i></span> 
-                        <span className={this.game.playing && this.currentPlayer === this.compColor ? "active_player" : ""}  style={{ 'color': this.compColor }} ><i className="fas fa-robot"></i></span>
-                    </div>
-                    
-                    
-                    
+                    you: {this.player}
+                    <br/>
+                    you play: {this.playerColor}
+                    <br/>
+                    against: {this.opponent}
+                    <br/>
+                    {this.game.currentPlayer}'s turn
                     
                     <div className="game_alert">
                     {this.game.inCheck ? (this.game.isGameOver() ? 'Checkmate!' : 'Check!' ) : ''}<br/>

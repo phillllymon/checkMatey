@@ -35,7 +35,13 @@ class ChessTable extends React.Component {
             return (
                 <div>
                     <div className="modal_back"></div>
-                    <VsBoardContainer postSeq={this.props.postSeq} mode={'vs'} />
+                    <VsBoardContainer 
+                        mode={'vs'} 
+                        player={this.props.player}
+                        opponent={this.props.opponent}
+                        color={this.props.color}
+                        time={this.props.time}
+                    />
                 </div>
             );
         }
