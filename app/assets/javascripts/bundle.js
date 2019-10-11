@@ -3680,7 +3680,10 @@ function (_React$Component) {
         className: "splash_option",
         onClick: this.props.logout
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-sign-out-alt"
+        className: "fas fa-sign-in-alt",
+        style: {
+          'transform': 'rotate(180deg)'
+        }
       }), " ", this.smallMenu ? '' : 'Signout'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "splash_option",
         onClick: this.toggleCollapse
@@ -4714,23 +4717,34 @@ function (_React$Component) {
     _classCallCheck(this, PlayBar);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(PlayBar).call(this, props));
+    _this.times = [2, 5, 10, 15];
+    _this.gameTypes = ['Standard', 'Chess960', 'Pawn Clash'];
     _this.state = {
       visible: false,
       challenged: false,
+      gameType: 'Standard',
+      gameTime: 10,
       playerList: ['AlwaysUp4Game'],
-      messages: ['one', 'two', 'three'],
       currentMessage: '',
       playing: false
     };
+    _this.playerRatings = {
+      AlwaysUp4Game: 1250
+    };
+    _this.setTime = _this.setTime.bind(_assertThisInitialized(_this));
+    _this.setType = _this.setType.bind(_assertThisInitialized(_this));
     _this.enterLobby = _this.enterLobby.bind(_assertThisInitialized(_this));
+    _this.leaveLobby = _this.leaveLobby.bind(_assertThisInitialized(_this));
     _this.receiveBroadcast = _this.receiveBroadcast.bind(_assertThisInitialized(_this));
     _this.announcePresence = _this.announcePresence.bind(_assertThisInitialized(_this));
     _this.requestRollCall = _this.requestRollCall.bind(_assertThisInitialized(_this));
     _this.challengePlayer = _this.challengePlayer.bind(_assertThisInitialized(_this));
     _this.showChallengedBox = _this.showChallengedBox.bind(_assertThisInitialized(_this));
     _this.acceptChallenge = _this.acceptChallenge.bind(_assertThisInitialized(_this));
+    _this.declineChallenge = _this.declineChallenge.bind(_assertThisInitialized(_this));
     _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
     _this.showVsBoard = _this.showVsBoard.bind(_assertThisInitialized(_this));
+    _this.lobbyButton = _this.lobbyButton.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -4757,28 +4771,59 @@ function (_React$Component) {
       });
     }
   }, {
+    key: "setType",
+    value: function setType(newType) {
+      this.setState({
+        gameType: newType
+      });
+    }
+  }, {
+    key: "setTime",
+    value: function setTime(newTime) {
+      this.setState({
+        gameTime: newTime
+      });
+    }
+  }, {
     key: "acceptChallenge",
     value: function acceptChallenge() {
       this.waitSub.perform('relayAcceptance', {
-        'playerWhoChallenged': this.state.challenged,
+        'playerWhoChallenged': this.state.challenged.challenger,
         'playerWhoAccepts': this.props.user.username
+      });
+    }
+  }, {
+    key: "declineChallenge",
+    value: function declineChallenge() {
+      this.setState({
+        challenged: false
       });
     }
   }, {
     key: "showChallengedBox",
     value: function showChallengedBox() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "modal_back"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "challenge_box"
-      }, "You have been challenged by ", this.state.challenged, ".", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "challenge_box_header"
+      }, "New Challenge!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.state.challenged.challenger, " challenges you to a ", this.state.challenged.gameType, " game with ", this.state.challenged.gameTime, "minutes on the clock.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
         onClick: this.acceptChallenge
-      }, "Accept"));
+      }, "Accept"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
+        onClick: this.declineChallenge
+      }, "Decline"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))));
     }
   }, {
     key: "challengePlayer",
     value: function challengePlayer(player) {
       this.waitSub.perform('relayChallenge', {
         'challenger': this.props.user.username,
-        'challengee': player
+        'challengee': player,
+        'gameType': this.state.gameType,
+        'gameTime': this.state.gameTime
       });
     }
   }, {
@@ -4791,11 +4836,22 @@ function (_React$Component) {
       this.announcePresence();
     }
   }, {
+    key: "leaveLobby",
+    value: function leaveLobby() {
+      this.waitSub.perform('relayExit', {
+        'user': this.props.user.username
+      });
+      this.setState({
+        visible: false
+      });
+    }
+  }, {
     key: "announcePresence",
     value: function announcePresence() {
       if (this.state.visible) {
         this.waitSub.perform('relayPresence', {
-          'user': this.props.user.username
+          'user': this.props.user.username,
+          'rating': this.props.user.rating
         });
       }
     }
@@ -4812,6 +4868,7 @@ function (_React$Component) {
       } else if (data.user) {
         if (!this.state.playerList.includes(data.user)) {
           this.state.playerList.push(data.user);
+          this.playerRatings[data.user] = data.rating;
         }
       } else if (data.goner) {
         if (this.state.playerList.includes(data.goner)) {
@@ -4824,7 +4881,11 @@ function (_React$Component) {
       } else if (data.challenger) {
         if (this.props.user.username === data.challengee) {
           this.setState({
-            challenged: data.challenger
+            challenged: {
+              challenger: data.challenger,
+              gameType: data.gameType,
+              gameTime: data.gameTime
+            }
           });
         }
       } else if (data.playerWhite) {
@@ -4863,22 +4924,99 @@ function (_React$Component) {
       App.cable.subscriptions.remove(this.waitSub);
     }
   }, {
+    key: "lobbyButton",
+    value: function lobbyButton() {
+      if (!this.state.visible) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button",
+          onClick: this.enterLobby
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-sign-in-alt"
+        }), " Enter Lobby");
+      } else {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button",
+          onClick: this.leaveLobby
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-sign-in-alt",
+          style: {
+            'transform': 'rotate(180deg)'
+          }
+        }), " Leave Lobby");
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "play_bar"
-      }, this.state.challenged ? this.showChallengedBox() : '', this.state.playing ? this.showVsBoard() : '', "Waiting_Players", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: this.enterLobby
-      }, "Enter Lobby"), this.state.playerList.map(function (player, idx) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          key: idx,
+      }, this.state.challenged ? this.showChallengedBox() : '', this.state.playing ? this.showVsBoard() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "controls_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'margin': '10px'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess"
+      }), " Game Room ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-knight"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.gameTypes.map(function (gameType) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: _this2.state.gameType === gameType ? "current_type_button" : "type_button",
           onClick: function onClick() {
-            return _this2.challengePlayer(player);
-          }
-        }, player);
-      }));
+            return _this2.setType(gameType);
+          },
+          key: gameType
+        }, gameType);
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "smaller_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'margin': '5px'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "far fa-clock"
+      }), this.times.map(function (time) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: _this2.state.gameTime === time ? "current_time_button" : "time_button",
+          onClick: function onClick() {
+            return _this2.setTime(time);
+          },
+          key: time
+        }, " ", time, ":00");
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "small_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-users"
+      }), " Players"), this.lobbyButton(), this.state.playerList.map(function (player, idx) {
+        if (player === _this2.props.user.username) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "player_bar",
+            key: idx
+          }, player + ' (' + _this2.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "time_button challenge",
+            style: {
+              'color': 'lightgray'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-user"
+          }), " (This is you)"));
+        } else {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "player_bar",
+            key: idx
+          }, player + ' (' + _this2.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "time_button challenge",
+            onClick: function onClick() {
+              return _this2.challengePlayer(player);
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-user"
+          }), " Challenge"));
+        }
+      })));
     }
   }]);
 

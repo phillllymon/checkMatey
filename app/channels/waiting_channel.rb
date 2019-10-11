@@ -9,7 +9,7 @@ class WaitingChannel < ApplicationCable::Channel
   end
 
   def relayPresence(user)
-    ActionCable.server.broadcast("WaitingChannel", {user: user['user']})
+    ActionCable.server.broadcast("WaitingChannel", {user: user['user'], rating: user['rating']})
   end
 
   def relayExit(user)
@@ -19,7 +19,9 @@ class WaitingChannel < ApplicationCable::Channel
   def relayChallenge(challenge)
     ActionCable.server.broadcast("WaitingChannel", {
       challenger: challenge['challenger'], 
-      challengee: challenge['challengee']
+      challengee: challenge['challengee'],
+      gameType: challenge['gameType'],
+      gameTime: challenge['gameTime']
     })
   end
 

@@ -1,6 +1,18 @@
 .play_bar {
-    max-width: 200px;
+    min-width: 250px;
+    background-color: rgb(230, 230, 230);
+    border-radius: 4px;
+    margin-top: 8px;
+    margin-right: 8px;
+    overflow: hidden;
+    border: 1px solid orange;
+}
+
+.challenge_box_header {
     background-color: orange;
+    font-size: 150%;
+    padding: 20px;
+    border-bottom: 1px solid gray;
 }
 
 .challenge_box {
@@ -8,7 +20,89 @@
     top: 25%;
     left: 50%;
     transform: translate(-50%, 0);
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    font-family: sans-serif;
+    font-size: 20px;
+    background-color: rgb(230, 230, 230);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.time_button {
+    padding: 3px;
+    height: 30px;  
+    font-size: 15px;
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray; 
+    margin-left: 5px;
+}
+
+.challenge {
+    margin-top: 6px;
+}
+
+.time_button:hover {
+    cursor: pointer;
+}
+
+.time_button:active {
+    border-left: 2px solid gray;
+    border-top: 2px solid gray;
+    border-bottom: 2px solid lightgray;
+    border-right: 2px solid lightgray; 
+}
+
+.time_button:focus {
+    outline: none;
+}
+
+.current_time_button {
+    padding: 3px;
+    height: 30px; 
+    font-size: 15px;
+    color: lightgray;
+    background: orange;
+    border-top: 2px solid gray;
+    border-left: 2px solid gray;
+    border-bottom: 2px solid lightgray;
+    border-right: 2px solid lightgray;
+    margin-left: 5px; 
+}
+
+.current_time_button:focus {
+    outline: none; 
+}
+
+.smaller_heading {
+    color: rgb(135, 129, 123);
+    padding: 3px;
+    font-size: 20px;
+    font-family: sans-serif;
+}
+
+.small_heading {
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+    padding: 8px;
+    font-size: 20px;
+    font-family: sans-serif;
+}
+
+.player_bar {
+    font-size: 15px;
+    padding: 5px;
+    color: black;
+    font-family: sans-serif;
+    width: 80%;
     background-color: orange;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-radius: 20px;
+    margin: 5px;
 }

@@ -1,12 +1,12 @@
 .feed {
-    margin: 1%;
+    margin: 8px;
 }
 
 .post_box {
     background-color: rgb(245, 245, 245);
     font-family: sans-serif;
     margin-bottom: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
     border-radius: 4px;
 }
 

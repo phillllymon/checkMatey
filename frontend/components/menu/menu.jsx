@@ -105,7 +105,9 @@ class Menu extends React.Component {
                         to={'/'}
                         className="splash_option" 
                         onClick={this.props.logout}>
-                        <i className="fas fa-sign-out-alt"></i> {this.smallMenu ? '' : 'Signout'}
+                        <i className="fas fa-sign-in-alt" style={{
+                            'transform': 'rotate(180deg)'
+                        }}></i> {this.smallMenu ? '' : 'Signout'}
                     </Link>
                     <div className="splash_option" onClick={this.toggleCollapse}>
                         {this.collapseButton()}
