@@ -32,9 +32,22 @@ class WaitingChannel < ApplicationCable::Channel
       playerBlack = challenge['playerWhoChallenged']
       playerWhite = challenge['playerWhoAccepts']
     end
+    gameType = challenge['gameType']
+    if gameType == 'Chess960'
+      row = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
+      newRow = []
+      while row.length > 0
+        nextIdx = rand(0...row.length)
+        newRow << row[nextIdx]
+        row = row[0...nextIdx].concat(row[nextIdx + 1...row.length])
+      end
+      gameType = newRow
+    end
     ActionCable.server.broadcast("WaitingChannel", {
       playerWhite: playerWhite, 
       playerBlack: playerBlack,
+      gameType: gameType,
+      gameTime: challenge['gameTime'],
       gameId: rand()
     })
   end

@@ -15,6 +15,7 @@ class PlayBar extends React.Component {
             playerList: ['AlwaysUp4Game'],
             currentMessage: '',
             playing: false
+            
         }
         this.playerRatings = {
             AlwaysUp4Game: 1250
@@ -44,17 +45,21 @@ class PlayBar extends React.Component {
                     color={this.state.playing.color}
                     opponent={this.state.playing.opponent}
                     gameId={this.state.playing.gameId}
+                    gameType={this.state.playing.gameType}
+                    gameTime={this.state.playing.gameTime}
                 />
             </div>
         );
     }
 
-    startGame(color, opponent, id) {
+    startGame(color, opponent, id, gameType, gameTime) {
         this.setState({
             playing: {
             color: color,
             opponent: opponent,
-            gameId: id
+            gameId: id,
+            gameType: gameType,
+            gameTime: gameTime
             }
         });
     }
@@ -68,7 +73,12 @@ class PlayBar extends React.Component {
     }
 
     acceptChallenge() {
-        this.waitSub.perform('relayAcceptance', { 'playerWhoChallenged': this.state.challenged.challenger, 'playerWhoAccepts': this.props.user.username });
+        this.waitSub.perform('relayAcceptance', { 
+            'playerWhoChallenged': this.state.challenged.challenger, 
+            'playerWhoAccepts': this.props.user.username,
+            'gameType': this.state.challenged.gameType,
+            'gameTime': this.state.challenged.gameTime
+        });
     }
 
     declineChallenge() {
@@ -86,8 +96,8 @@ class PlayBar extends React.Component {
                     <br/>
                     {this.state.challenged.challenger} challenges you to 
                     a {this.state.challenged.gameType} game 
-                    with {this.state.challenged.gameTime}
-                    minutes on the clock.
+                    with {this.state.challenged.gameTime} minutes 
+                    on the clock.
                     <br/>
                     <br/>
                     <button className="board_control_button"
@@ -166,10 +176,10 @@ class PlayBar extends React.Component {
         }
         else if (data.playerWhite) {
             if (data.playerWhite === this.props.user.username) {
-                this.startGame('white', data.playerBlack, data.gameId);
+                this.startGame('white', data.playerBlack, data.gameId, data.gameType, data.gameTime);
             }
             if (data.playerBlack === this.props.user.username) {
-                this.startGame('black', data.playerWhite, data.gameId);
+                this.startGame('black', data.playerWhite, data.gameId, data.gameType, data.gameTime);
             }
         }
         else {

@@ -76,6 +76,23 @@ export class Game {
                 return mark.toLowerCase();
             });
         }
+        else if (this.gameType instanceof Array) {
+            console.log(this.gameType);
+            this.grid = [
+                ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+                ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+                ['-', '-', '-', '-', '-', '-', '-', '-'],
+                ['-', '-', '-', '-', '-', '-', '-', '-'],
+                ['-', '-', '-', '-', '-', '-', '-', '-'],
+                ['-', '-', '-', '-', '-', '-', '-', '-'],
+                ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+                ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
+            ];
+            this.grid[0] = this.gameType;
+            this.grid[7] = this.gameType.map( (mark) => {
+                return mark.toLowerCase();
+            });
+        }
         else {
             this.grid = [
                 ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],

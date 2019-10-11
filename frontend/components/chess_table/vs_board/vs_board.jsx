@@ -6,7 +6,7 @@ class VsBoard extends React.Component {
     constructor(props) {
         super(props);
         this.flipped = (this.props.color === 'black');
-        this.game = new Game('960');
+        this.game = new Game(this.props.gameType);
         this.grid = this.game.grid;
         this.state = {
             grid: this.grid,
@@ -24,15 +24,21 @@ class VsBoard extends React.Component {
         this.playerColor = this.props.color;
 
         this.receiveBroadcast = this.receiveBroadcast.bind(this);
-        this.testMove = this.testMove.bind(this);
+
+        this.offerDraw = this.offerDraw.bind(this);
+        this.resign = this.resign.bind(this);
 
         this.startGame = this.startGame.bind(this);
         this.isMovePawnPromotion = this.isMovePawnPromotion.bind(this);
         this.handlePawnPromotion = this.handlePawnPromotion.bind(this);
     }
 
-    testMove() {
-        this.playSub.perform('testMove', {'test': 'testMove'});
+    offerDraw() {
+        console.log('offer draw');
+    }
+
+    resign() {
+        console.log('resign');
     }
 
     receiveBroadcast(data) {
@@ -228,9 +234,10 @@ class VsBoard extends React.Component {
                             Game
                         </div>
                     </div>
-                        <button className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
+                        <button className="board_control_button" onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
+                        <button className="board_control_button" onClick={this.offerDraw}><i className="fas fa-handshake"></i></button>
+                        <button className="board_control_button" onClick={this.resign}><i className="fab fa-font-awesome-flag"></i></button>
                         <br/>
-                        <button onClick={this.testMove}>test move</button>
                     <br/>
                     you: {this.player}
                     <br/>
@@ -240,7 +247,11 @@ class VsBoard extends React.Component {
                     <br/>
                     {this.game.currentPlayer}'s turn
                     <br/>
-                    {this.props.gameId}
+                    type: {this.props.gameType instanceof Array ? 'someArray' : this.props.gameType}
+                    <br/>
+                    time: {this.props.gameTime}
+                    <br/>
+                    game id: {this.props.gameId}
                     
                     <div className="game_alert">
                     {this.game.inCheck ? (this.game.isGameOver() ? 'Checkmate!' : 'Check!' ) : ''}<br/>
