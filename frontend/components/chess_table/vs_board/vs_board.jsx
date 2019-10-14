@@ -51,6 +51,10 @@ class VsBoard extends React.Component {
             if (newSeconds < 0) {
                 newSeconds = 59;
                 newMinutes -= 1;
+                if (newMinutes < 0){
+                    window.clearInterval(this.clockInterval);
+                    this.playSub.perform('relayTimeout', { 'gameId': this.props.gameId, 'color': this.playerColor });
+                }
             }
             this.setState({
                 playerTime: [newMinutes, newSeconds]
@@ -87,6 +91,11 @@ class VsBoard extends React.Component {
             case 'resign':
                 headMessage = 'Resignation';
                 endMessage = this.winner + ' won by resignation.'
+                break;
+            case 'timeout':
+                headMessage = 'Timeout';
+                endMessage = this.winner + ' won on time.'
+                window.clearInterval(this.clockInterval);
                 break;
             default:
                 break;
@@ -182,6 +191,12 @@ class VsBoard extends React.Component {
                 this.opponent :
                 this.player);
                 this.endTheGame('resign');
+            }
+            if (data.timeout) {
+                this.winner = (this.playerColor === data.color ?
+                    this.opponent :
+                    this.player);
+                this.endTheGame('timeout');
             }
         }
     }
@@ -399,9 +414,9 @@ class VsBoard extends React.Component {
                             Game
                         </div>
                     </div>
-                        <button className="board_control_button" onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
-                        <button className="board_control_button" onClick={this.offerDraw}><i className="fas fa-handshake"></i></button>
-                        <button className="board_control_button" onClick={this.resign}><i className="fab fa-font-awesome-flag"></i></button>
+                        <button className="board_control_button" style={{ 'width': '50px' }} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
+                        <button className="board_control_button" style={{ 'width': '50px' }}  onClick={this.offerDraw}><i className="fas fa-handshake"></i></button>
+                        <button className="board_control_button" style={{ 'width': '50px' }}  onClick={this.resign}><i className="fab fa-font-awesome-flag"></i></button>
                         <br/>
                     
                     

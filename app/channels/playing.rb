@@ -21,6 +21,12 @@ class Playing < ApplicationCable::Channel
     ActionCable.server.broadcast("Playing", {gameId: gameId, resign: true, color: theColor})
   end
 
+  def relayTimeout(timeout)
+    gameId = timeout['gameId']
+    theColor = timeout['color']
+    ActionCable.server.broadcast("Playing", {gameId: gameId, timeout: true, color: theColor})
+  end
+
   def relayMove(move)
     theMove = move['move']
     theColor = move['color']

@@ -2730,6 +2730,14 @@ function (_React$Component) {
         if (newSeconds < 0) {
           newSeconds = 59;
           newMinutes -= 1;
+
+          if (newMinutes < 0) {
+            window.clearInterval(this.clockInterval);
+            this.playSub.perform('relayTimeout', {
+              'gameId': this.props.gameId,
+              'color': this.playerColor
+            });
+          }
         }
 
         this.setState({
@@ -2774,6 +2782,12 @@ function (_React$Component) {
         case 'resign':
           headMessage = 'Resignation';
           endMessage = this.winner + ' won by resignation.';
+          break;
+
+        case 'timeout':
+          headMessage = 'Timeout';
+          endMessage = this.winner + ' won on time.';
+          window.clearInterval(this.clockInterval);
           break;
 
         default:
@@ -2891,6 +2905,11 @@ function (_React$Component) {
         if (data.resign) {
           this.winner = this.playerColor === data.color ? this.opponent : this.player;
           this.endTheGame('resign');
+        }
+
+        if (data.timeout) {
+          this.winner = this.playerColor === data.color ? this.opponent : this.player;
+          this.endTheGame('timeout');
         }
       }
     }
@@ -3119,16 +3138,25 @@ function (_React$Component) {
         }
       }, "Game")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "board_control_button",
+        style: {
+          'width': '50px'
+        },
         onClick: this.flipBoard
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-retweet"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "board_control_button",
+        style: {
+          'width': '50px'
+        },
         onClick: this.offerDraw
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-handshake"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "board_control_button",
+        style: {
+          'width': '50px'
+        },
         onClick: this.resign
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fab fa-font-awesome-flag"
