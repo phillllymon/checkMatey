@@ -34,6 +34,11 @@ class PlayBar extends React.Component {
         this.startGame = this.startGame.bind(this);
         this.showVsBoard = this.showVsBoard.bind(this);
         this.lobbyButton = this.lobbyButton.bind(this);
+        this.leaveGame = this.leaveGame.bind(this);
+    }
+
+    leaveGame() {
+        this.setState({playing: false});
     }
 
     showVsBoard() {
@@ -47,6 +52,7 @@ class PlayBar extends React.Component {
                     gameId={this.state.playing.gameId}
                     gameType={this.state.playing.gameType}
                     gameTime={this.state.playing.gameTime}
+                    leaveGame={this.leaveGame}
                 />
             </div>
         );
@@ -79,6 +85,7 @@ class PlayBar extends React.Component {
             'gameType': this.state.challenged.gameType,
             'gameTime': this.state.challenged.gameTime
         });
+        this.setState({challenged: false});
     }
 
     declineChallenge() {

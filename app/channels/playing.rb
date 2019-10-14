@@ -8,6 +8,19 @@ class Playing < ApplicationCable::Channel
     ActionCable.server.broadcast("Playing", {move: 'move'})
   end
 
+  def relayDraw(offer)
+    gameId = offer['gameId']
+    theMessage = offer['message']
+    theColor = offer['color']
+    ActionCable.server.broadcast("Playing", {gameId: gameId, message: theMessage, color: theColor})
+  end
+
+  def relayResign(resignation)
+    gameId = resignation['gameId']
+    theColor = resignation['color']
+    ActionCable.server.broadcast("Playing", {gameId: gameId, resign: true, color: theColor})
+  end
+
   def relayMove(move)
     theMove = move['move']
     theColor = move['color']

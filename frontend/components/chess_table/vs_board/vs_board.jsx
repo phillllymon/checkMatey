@@ -11,7 +11,11 @@ class VsBoard extends React.Component {
         this.state = {
             grid: this.grid,
             dragging: false,
-            flipped: this.flipped
+            flipped: this.flipped,
+            drawOffered: false,
+            gameIsDone: false,
+            playerTime: [this.props.gameTime, 0],
+            opponentTime: [this.props.gameTime, 0]
         }
         this.dragPiece = this.dragPiece.bind(this);
         this.beginDrag = this.beginDrag.bind(this);
@@ -22,32 +26,162 @@ class VsBoard extends React.Component {
         this.player = this.props.player;
         this.opponent = this.props.opponent;
         this.playerColor = this.props.color;
+        this.highlightSquare = null;
 
         this.receiveBroadcast = this.receiveBroadcast.bind(this);
 
         this.offerDraw = this.offerDraw.bind(this);
         this.resign = this.resign.bind(this);
+        this.respondToDrawOffer = this.respondToDrawOffer.bind(this);
+        this.endTheGame = this.endTheGame.bind(this);
 
         this.startGame = this.startGame.bind(this);
         this.isMovePawnPromotion = this.isMovePawnPromotion.bind(this);
         this.handlePawnPromotion = this.handlePawnPromotion.bind(this);
+        this.drawButtons = this.drawButtons.bind(this);
+        this.showEnding = this.showEnding.bind(this);
+        this.tickClock = this.tickClock.bind(this);
+        this.startClock = this.startClock.bind(this);
+    }
+
+    tickClock() {
+        if (this.game.currentPlayer === this.playerColor){
+            let newMinutes = this.state.playerTime[0];
+            let newSeconds = this.state.playerTime[1] - 1;
+            if (newSeconds < 0) {
+                newSeconds = 59;
+                newMinutes -= 1;
+            }
+            this.setState({
+                playerTime: [newMinutes, newSeconds]
+            });
+        }
+        else {
+            let newMinutes = this.state.opponentTime[0];
+            let newSeconds = this.state.opponentTime[1] - 1;
+            if (newSeconds < 0) {
+                newSeconds = 59;
+                newMinutes -= 1;
+            }
+            this.setState({
+                opponentTime: [newMinutes, newSeconds]
+            });
+        }
+    }
+
+    showEnding(ending) {
+        let headMessage = 'Checkmate!';
+        let endMessage = '';
+        switch(ending) {
+            case 'Checkmate!':
+                endMessage = this.winner + ' won by checkmate.'
+                break;
+            case 'accept':
+                headMessage = 'Draw';
+                endMessage = 'Game is a draw by agreement.';
+                break;
+            case 'Stalemate':
+                headMessage = 'Stalemate';
+                endMessage = 'The game is a stalemate.';
+                break;
+            case 'resign':
+                headMessage = 'Resignation';
+                endMessage = this.winner + ' won by resignation.'
+                break;
+            default:
+                break;
+        }
+
+        return (
+            <div className="modal_back">
+                <div style={{'position' : 'relative'}}>
+                    <div className="challenge_box">
+                        <div className="challenge_box_header">
+                            {headMessage}
+                        </div>
+                        <center>
+                            
+                            <br/>
+                        {endMessage}
+                            <br/>
+                            <br/>
+                            <button className="time_button" onClick={this.props.leaveGame}>Leave Game</button>   
+                            <br/>
+                            <br/>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    endTheGame(ending) {
+        switch (ending) {
+            case 'Checkmate!':
+                this.winner = (this.game.currentPlayer === this.playerColor ?
+                this.opponent :
+                this.player );
+        }
+        this.setState({
+            drawOffered: false,
+            gameIsDone: ending
+        });
+    }
+
+    drawButtons() {
+        return (
+            <div className="offerDraw">
+                <center>
+                {this.opponent} offers a draw:
+                <br/>
+                <button className="time_button" onClick={() => this.respondToDrawOffer('accept')}>Accept</button>
+                <button className="time_button" onClick={() => this.respondToDrawOffer('decline')}>Decline</button>
+                </center>
+            </div>
+        );
     }
 
     offerDraw() {
-        console.log('offer draw');
+        this.playSub.perform('relayDraw', { 'gameId': this.props.gameId, 'message': 'offer', 'color': this.playerColor});
+    }
+
+    respondToDrawOffer(response) {
+        this.playSub.perform('relayDraw', { 'gameId': this.props.gameId, 'message': response, 'color': this.playerColor });
     }
 
     resign() {
-        console.log('resign');
+        this.playSub.perform('relayResign', { 'gameId': this.props.gameId, 'color': this.playerColor });
     }
 
     receiveBroadcast(data) {
-        if (data.move) {
-            if (data.color !== this.playerColor &&
-                data.gameId === this.props.gameId) {
-                this.game.makeMove(data.move);
-                this.currentPlayer = this.game.currentPlayer;
-                this.setState({});
+        if (data.gameId === this.props.gameId){
+            if (data.move) {
+                if (data.color !== this.playerColor) {
+                    this.game.makeMove(data.move);
+                    this.highlightSquare = data.move[1];
+                    this.currentPlayer = this.game.currentPlayer;
+                    this.setState({});
+                }
+                if (this.game.isGameOver()) {
+                    this.endTheGame(this.game.gameOverMessage);
+                }
+            }
+            if (data.message) {
+                if (data.color !== this.playerColor) {
+                    this.setState({ drawOffered: true });
+                }
+                if (data.message === 'accept') {
+                    this.endTheGame('accept');
+                }
+                if (data.message === 'decline') {
+                    this.setState({drawOffered: false});
+                }
+            }
+            if (data.resign) {
+                this.winner = (this.playerColor === data.color ?
+                this.opponent :
+                this.player);
+                this.endTheGame('resign');
             }
         }
     }
@@ -63,10 +197,16 @@ class VsBoard extends React.Component {
         );
         this.startGame();
         this.setState({});
+        this.startClock();
+    }
+
+    startClock() {
+        this.clockInterval = window.setInterval(this.tickClock, 1000);
     }
 
     componentWillUnmount() {
         App.cable.subscriptions.remove(this.playSub);
+        window.clearInterval(this.clockInterval);
     }
 
     handlePawnPromotion(move) {
@@ -160,6 +300,7 @@ class VsBoard extends React.Component {
                     move = this.handlePawnPromotion(move);
                 }
                 this.game.makeMove(move);
+                this.highlightSquare = move[1];
                 this.playSub.perform('relayMove', {'gameId': this.props.gameId, 'move': move, 'color': this.playerColor});
                 this.currentPlayer = this.game.currentPlayer;
                 this.grid = this.game.grid;
@@ -191,6 +332,7 @@ class VsBoard extends React.Component {
     }
 
     render() {
+        let highlightSquare = this.highlightSquare;
         return (
             <div className="chess_table">
                 <div
@@ -199,10 +341,33 @@ class VsBoard extends React.Component {
                     onMouseLeave={this.abortDrag}
                 >
                     {this.state.dragging ? this.displayDragPiece() : ''}
+                    {this.state.gameIsDone ? this.showEnding(this.state.gameIsDone) : ''}
                     {
                         this.grid.map((row, rIdx) => {
                             return (
                                 row.map((spot, cIdx) => {
+                                    if (highlightSquare && 
+                                        highlightSquare[0] === rIdx &&
+                                        highlightSquare[1] === cIdx) {
+                                        return (
+                                            <div
+                                                onMouseDown={this.beginDrag}
+                                                onMouseUp={this.endDrag}
+                                                key={rIdx + cIdx}
+                                                id={[rIdx, cIdx]}
+                                                className={(rIdx + cIdx) % 2 === 0 ? 'w highlight' : 'b highlight'}
+                                            >
+                                                <Piece
+                                                    grayed={this.state.dragging &&
+                                                        parseInt(this.origin[0]) === rIdx
+                                                        && parseInt(this.origin[2]) === cIdx ?
+                                                        true : false}
+                                                    pos={[rIdx, cIdx]}
+                                                    mark={this.state.grid[rIdx][cIdx]}
+                                                />
+                                            </div>
+                                        );
+                                    }
                                     return (
                                         <div
                                             onMouseDown={this.beginDrag}
@@ -238,24 +403,23 @@ class VsBoard extends React.Component {
                         <button className="board_control_button" onClick={this.offerDraw}><i className="fas fa-handshake"></i></button>
                         <button className="board_control_button" onClick={this.resign}><i className="fab fa-font-awesome-flag"></i></button>
                         <br/>
-                    <br/>
-                    you: {this.player}
-                    <br/>
-                    you play: {this.playerColor}
-                    <br/>
-                    against: {this.opponent}
-                    <br/>
-                    {this.game.currentPlayer}'s turn
-                    <br/>
-                    type: {this.props.gameType instanceof Array ? 'someArray' : this.props.gameType}
-                    <br/>
-                    time: {this.props.gameTime}
-                    <br/>
-                    game id: {this.props.gameId}
+                    
                     
                     <div className="game_alert">
-                    {this.game.inCheck ? (this.game.isGameOver() ? 'Checkmate!' : 'Check!' ) : ''}<br/>
+                    {this.state.drawOffered ? this.drawButtons() : ''}
+                    {this.game.isGameOver() ? this.game.gameOverMessage : (this.game.inCheck ? 'Check!' : '')}
                     </div>
+
+                    <br />
+                    you: {this.player}
+                    <br />
+                    {this.state.playerTime[0]}:{this.state.playerTime[1]}
+                    <br />
+                    against: {this.opponent}
+                    <br />
+                    {this.state.opponentTime[0]}:{this.state.opponentTime[1]}
+                    <br />
+
                     <div className="outer_list">
                         <div className="moves_list">
                             {

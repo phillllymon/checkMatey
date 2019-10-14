@@ -59,6 +59,11 @@
     text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.5);
 }
 
+.highlight {
+    background-color: orange;
+    text-shadow: 1px 1px 5px rgba(10, 10, 10, 0.6);
+}
+
 .w:hover {
     text-shadow: 1px 1px 10px rgba(10, 10, 10, 0.6);
 }

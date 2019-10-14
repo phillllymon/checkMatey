@@ -214,9 +214,20 @@
 }
 
 .game_alert {
-    padding: 10px;
+    position: relative;
     font-size: 30px;
     color: red;
+    height: 50px;
+}
+
+.offerDraw {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    position: absolute;
+    width: 100%;
+    color: black;
+    font-size: 15px;
+    background-color: orange;
 }
 
 

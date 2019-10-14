@@ -34,6 +34,7 @@ export class Game {
         this.level = 1; ///0 is you play both players, 1 is random move, 2 is use API maybe???
         this.started = false;
         this.inCheck = false;
+        this.gameOverMessage = '';
         this.handleSpecialMove = this.handleSpecialMove.bind(this);
         this.moves = [];
         this.initializeGrid = this.initializeGrid.bind(this);
@@ -105,16 +106,38 @@ export class Game {
                 ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
             ];
         }
+        // else {
+        //     this.grid = [
+        //         ['-', '-', '-', '-', '-', '-', '-', 'K'],
+        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+        //         ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
+        //     ];
+        // }
         this.gameSoFar.push(this.getString());
     }
 
     start() {
         this.playing = true;
         this.currentPlayer = 'white';
+        this.gameOverMessage = '';
     }
 
     isGameOver() {
-        return (this.inCheck && getAllMoves(this.currentPlayer, this.grid, this).length === 0);
+        if (getAllMoves(this.currentPlayer, this.grid, this).length === 0) {
+            if (this.inCheck) {
+                this.gameOverMessage = 'Checkmate!';
+            }
+            else {
+                this.gameOverMessage = 'Stalemate';
+            }
+            return true;
+        }
+        return false;
     }
 
     makeMove(move) {

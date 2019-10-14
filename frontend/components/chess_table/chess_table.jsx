@@ -44,6 +44,7 @@ class ChessTable extends React.Component {
                         gameId={this.props.gameId}
                         gameType={this.props.gameType}
                         gameTime={this.props.gameTime}
+                        leaveGame={this.props.leaveGame}
                     />
                 </div>
             );

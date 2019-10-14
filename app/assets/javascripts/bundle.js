@@ -1353,6 +1353,7 @@ function () {
 
     this.started = false;
     this.inCheck = false;
+    this.gameOverMessage = '';
     this.handleSpecialMove = this.handleSpecialMove.bind(this);
     this.moves = [];
     this.initializeGrid = this.initializeGrid.bind(this);
@@ -1388,7 +1389,19 @@ function () {
         });
       } else {
         this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
-      }
+      } // else {
+      //     this.grid = [
+      //         ['-', '-', '-', '-', '-', '-', '-', 'K'],
+      //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+      //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+      //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+      //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+      //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+      //         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+      //         ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
+      //     ];
+      // }
+
 
       this.gameSoFar.push(this.getString());
     }
@@ -1397,11 +1410,22 @@ function () {
     value: function start() {
       this.playing = true;
       this.currentPlayer = 'white';
+      this.gameOverMessage = '';
     }
   }, {
     key: "isGameOver",
     value: function isGameOver() {
-      return this.inCheck && Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getAllMoves"])(this.currentPlayer, this.grid, this).length === 0;
+      if (Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getAllMoves"])(this.currentPlayer, this.grid, this).length === 0) {
+        if (this.inCheck) {
+          this.gameOverMessage = 'Checkmate!';
+        } else {
+          this.gameOverMessage = 'Stalemate';
+        }
+
+        return true;
+      }
+
+      return false;
     }
   }, {
     key: "makeMove",
@@ -1630,7 +1654,8 @@ function (_React$Component) {
           time: this.props.time,
           gameId: this.props.gameId,
           gameType: this.props.gameType,
-          gameTime: this.props.gameTime
+          gameTime: this.props.gameTime,
+          leaveGame: this.props.leaveGame
         }));
       }
 
@@ -2664,7 +2689,11 @@ function (_React$Component) {
     _this.state = {
       grid: _this.grid,
       dragging: false,
-      flipped: _this.flipped
+      flipped: _this.flipped,
+      drawOffered: false,
+      gameIsDone: false,
+      playerTime: [_this.props.gameTime, 0],
+      opponentTime: [_this.props.gameTime, 0]
     };
     _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
@@ -2675,55 +2704,222 @@ function (_React$Component) {
     _this.player = _this.props.player;
     _this.opponent = _this.props.opponent;
     _this.playerColor = _this.props.color;
+    _this.highlightSquare = null;
     _this.receiveBroadcast = _this.receiveBroadcast.bind(_assertThisInitialized(_this));
     _this.offerDraw = _this.offerDraw.bind(_assertThisInitialized(_this));
     _this.resign = _this.resign.bind(_assertThisInitialized(_this));
+    _this.respondToDrawOffer = _this.respondToDrawOffer.bind(_assertThisInitialized(_this));
+    _this.endTheGame = _this.endTheGame.bind(_assertThisInitialized(_this));
     _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
     _this.isMovePawnPromotion = _this.isMovePawnPromotion.bind(_assertThisInitialized(_this));
     _this.handlePawnPromotion = _this.handlePawnPromotion.bind(_assertThisInitialized(_this));
+    _this.drawButtons = _this.drawButtons.bind(_assertThisInitialized(_this));
+    _this.showEnding = _this.showEnding.bind(_assertThisInitialized(_this));
+    _this.tickClock = _this.tickClock.bind(_assertThisInitialized(_this));
+    _this.startClock = _this.startClock.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(VsBoard, [{
+    key: "tickClock",
+    value: function tickClock() {
+      if (this.game.currentPlayer === this.playerColor) {
+        var newMinutes = this.state.playerTime[0];
+        var newSeconds = this.state.playerTime[1] - 1;
+
+        if (newSeconds < 0) {
+          newSeconds = 59;
+          newMinutes -= 1;
+        }
+
+        this.setState({
+          playerTime: [newMinutes, newSeconds]
+        });
+      } else {
+        var _newMinutes = this.state.opponentTime[0];
+
+        var _newSeconds = this.state.opponentTime[1] - 1;
+
+        if (_newSeconds < 0) {
+          _newSeconds = 59;
+          _newMinutes -= 1;
+        }
+
+        this.setState({
+          opponentTime: [_newMinutes, _newSeconds]
+        });
+      }
+    }
+  }, {
+    key: "showEnding",
+    value: function showEnding(ending) {
+      var headMessage = 'Checkmate!';
+      var endMessage = '';
+
+      switch (ending) {
+        case 'Checkmate!':
+          endMessage = this.winner + ' won by checkmate.';
+          break;
+
+        case 'accept':
+          headMessage = 'Draw';
+          endMessage = 'Game is a draw by agreement.';
+          break;
+
+        case 'Stalemate':
+          headMessage = 'Stalemate';
+          endMessage = 'The game is a stalemate.';
+          break;
+
+        case 'resign':
+          headMessage = 'Resignation';
+          endMessage = this.winner + ' won by resignation.';
+          break;
+
+        default:
+          break;
+      }
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "modal_back"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'position': 'relative'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "challenge_box"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "challenge_box_header"
+      }, headMessage), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), endMessage, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "time_button",
+        onClick: this.props.leaveGame
+      }, "Leave Game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)))));
+    }
+  }, {
+    key: "endTheGame",
+    value: function endTheGame(ending) {
+      switch (ending) {
+        case 'Checkmate!':
+          this.winner = this.game.currentPlayer === this.playerColor ? this.opponent : this.player;
+      }
+
+      this.setState({
+        drawOffered: false,
+        gameIsDone: ending
+      });
+    }
+  }, {
+    key: "drawButtons",
+    value: function drawButtons() {
+      var _this2 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "offerDraw"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.opponent, " offers a draw:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "time_button",
+        onClick: function onClick() {
+          return _this2.respondToDrawOffer('accept');
+        }
+      }, "Accept"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "time_button",
+        onClick: function onClick() {
+          return _this2.respondToDrawOffer('decline');
+        }
+      }, "Decline")));
+    }
+  }, {
     key: "offerDraw",
     value: function offerDraw() {
-      console.log('offer draw');
+      this.playSub.perform('relayDraw', {
+        'gameId': this.props.gameId,
+        'message': 'offer',
+        'color': this.playerColor
+      });
+    }
+  }, {
+    key: "respondToDrawOffer",
+    value: function respondToDrawOffer(response) {
+      this.playSub.perform('relayDraw', {
+        'gameId': this.props.gameId,
+        'message': response,
+        'color': this.playerColor
+      });
     }
   }, {
     key: "resign",
     value: function resign() {
-      console.log('resign');
+      this.playSub.perform('relayResign', {
+        'gameId': this.props.gameId,
+        'color': this.playerColor
+      });
     }
   }, {
     key: "receiveBroadcast",
     value: function receiveBroadcast(data) {
-      if (data.move) {
-        if (data.color !== this.playerColor && data.gameId === this.props.gameId) {
-          this.game.makeMove(data.move);
-          this.currentPlayer = this.game.currentPlayer;
-          this.setState({});
+      if (data.gameId === this.props.gameId) {
+        if (data.move) {
+          if (data.color !== this.playerColor) {
+            this.game.makeMove(data.move);
+            this.highlightSquare = data.move[1];
+            this.currentPlayer = this.game.currentPlayer;
+            this.setState({});
+          }
+
+          if (this.game.isGameOver()) {
+            this.endTheGame(this.game.gameOverMessage);
+          }
+        }
+
+        if (data.message) {
+          if (data.color !== this.playerColor) {
+            this.setState({
+              drawOffered: true
+            });
+          }
+
+          if (data.message === 'accept') {
+            this.endTheGame('accept');
+          }
+
+          if (data.message === 'decline') {
+            this.setState({
+              drawOffered: false
+            });
+          }
+        }
+
+        if (data.resign) {
+          this.winner = this.playerColor === data.color ? this.opponent : this.player;
+          this.endTheGame('resign');
         }
       }
     }
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.playSub = App.cable.subscriptions.create({
         channel: 'Playing'
       }, {
         received: function received(data) {
-          _this2.receiveBroadcast(data);
+          _this3.receiveBroadcast(data);
         }
       });
       this.startGame();
       this.setState({});
+      this.startClock();
+    }
+  }, {
+    key: "startClock",
+    value: function startClock() {
+      this.clockInterval = window.setInterval(this.tickClock, 1000);
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       App.cable.subscriptions.remove(this.playSub);
+      window.clearInterval(this.clockInterval);
     }
   }, {
     key: "handlePawnPromotion",
@@ -2837,6 +3033,7 @@ function (_React$Component) {
           }
 
           this.game.makeMove(move);
+          this.highlightSquare = move[1];
           this.playSub.perform('relayMove', {
             'gameId': this.props.gameId,
             'move': move,
@@ -2873,26 +3070,41 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
+      var highlightSquare = this.highlightSquare;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "chess_table"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.flipped ? "board flipped" : "board",
         onMouseMove: this.dragPiece,
         onMouseLeave: this.abortDrag
-      }, this.state.dragging ? this.displayDragPiece() : '', this.grid.map(function (row, rIdx) {
+      }, this.state.dragging ? this.displayDragPiece() : '', this.state.gameIsDone ? this.showEnding(this.state.gameIsDone) : '', this.grid.map(function (row, rIdx) {
         return row.map(function (spot, cIdx) {
+          if (highlightSquare && highlightSquare[0] === rIdx && highlightSquare[1] === cIdx) {
+            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+              onMouseDown: _this4.beginDrag,
+              onMouseUp: _this4.endDrag,
+              key: rIdx + cIdx,
+              id: [rIdx, cIdx],
+              className: (rIdx + cIdx) % 2 === 0 ? 'w highlight' : 'b highlight'
+            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              grayed: _this4.state.dragging && parseInt(_this4.origin[0]) === rIdx && parseInt(_this4.origin[2]) === cIdx ? true : false,
+              pos: [rIdx, cIdx],
+              mark: _this4.state.grid[rIdx][cIdx]
+            }));
+          }
+
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            onMouseDown: _this3.beginDrag,
-            onMouseUp: _this3.endDrag,
+            onMouseDown: _this4.beginDrag,
+            onMouseUp: _this4.endDrag,
             key: rIdx + cIdx,
             id: [rIdx, cIdx],
             className: (rIdx + cIdx) % 2 === 0 ? 'w' : 'b'
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
-            grayed: _this3.state.dragging && parseInt(_this3.origin[0]) === rIdx && parseInt(_this3.origin[2]) === cIdx ? true : false,
+            grayed: _this4.state.dragging && parseInt(_this4.origin[0]) === rIdx && parseInt(_this4.origin[2]) === cIdx ? true : false,
             pos: [rIdx, cIdx],
-            mark: _this3.state.grid[rIdx][cIdx]
+            mark: _this4.state.grid[rIdx][cIdx]
           }));
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -2920,9 +3132,9 @@ function (_React$Component) {
         onClick: this.resign
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fab fa-font-awesome-flag"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "you: ", this.player, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "you play: ", this.playerColor, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "against: ", this.opponent, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.currentPlayer, "'s turn", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "type: ", this.props.gameType instanceof Array ? 'someArray' : this.props.gameType, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "time: ", this.props.gameTime, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "game id: ", this.props.gameId, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game_alert"
-      }, this.game.inCheck ? this.game.isGameOver() ? 'Checkmate!' : 'Check!' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.state.drawOffered ? this.drawButtons() : '', this.game.isGameOver() ? this.game.gameOverMessage : this.game.inCheck ? 'Check!' : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "you: ", this.player, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.state.playerTime[0], ":", this.state.playerTime[1], react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "against: ", this.opponent, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.state.opponentTime[0], ":", this.state.opponentTime[1], react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "outer_list"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "moves_list"
@@ -4766,10 +4978,18 @@ function (_React$Component) {
     _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
     _this.showVsBoard = _this.showVsBoard.bind(_assertThisInitialized(_this));
     _this.lobbyButton = _this.lobbyButton.bind(_assertThisInitialized(_this));
+    _this.leaveGame = _this.leaveGame.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(PlayBar, [{
+    key: "leaveGame",
+    value: function leaveGame() {
+      this.setState({
+        playing: false
+      });
+    }
+  }, {
     key: "showVsBoard",
     value: function showVsBoard() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -4779,7 +4999,8 @@ function (_React$Component) {
         opponent: this.state.playing.opponent,
         gameId: this.state.playing.gameId,
         gameType: this.state.playing.gameType,
-        gameTime: this.state.playing.gameTime
+        gameTime: this.state.playing.gameTime,
+        leaveGame: this.leaveGame
       }));
     }
   }, {
@@ -4817,6 +5038,9 @@ function (_React$Component) {
         'playerWhoAccepts': this.props.user.username,
         'gameType': this.state.challenged.gameType,
         'gameTime': this.state.challenged.gameTime
+      });
+      this.setState({
+        challenged: false
       });
     }
   }, {
