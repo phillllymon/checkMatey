@@ -3952,7 +3952,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.viewSize, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "greeting"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.smallMenu ? this.nothing() : this.props.user.username + ',', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ahoy"
@@ -5523,7 +5523,7 @@ function (_React$Component) {
     value: function demoLogin(e) {
       e.preventDefault();
       this.props.login({
-        username: 'Chess4eva22',
+        username: 'DemoUser',
         password: '123456'
       });
       react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], {
@@ -5723,7 +5723,7 @@ function (_React$Component) {
     value: function demoLogin(e) {
       e.preventDefault();
       this.props.login({
-        username: 'Chess4eva22',
+        username: 'DemoUser',
         password: '123456'
       });
       react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], {

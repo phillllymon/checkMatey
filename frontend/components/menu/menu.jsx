@@ -66,6 +66,7 @@ class Menu extends React.Component {
     render() {
         return (
             <div>
+                {this.state.viewSize}
                 <div className="greeting">
                     
                     <div>
