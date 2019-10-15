@@ -66,7 +66,7 @@ class Menu extends React.Component {
     render() {
         return (
             <div>
-                {this.state.viewSize}
+                {typeof window.orientation === 'undefined' ? 'desktop' : 'mobile'}
                 <div className="greeting">
                     
                     <div>

@@ -3952,7 +3952,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.viewSize, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, typeof window.orientation === 'undefined' ? 'desktop' : 'mobile', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "greeting"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.smallMenu ? this.nothing() : this.props.user.username + ',', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ahoy"
