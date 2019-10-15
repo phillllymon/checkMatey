@@ -3895,6 +3895,7 @@ function (_React$Component) {
     _this.nothing = _this.nothing.bind(_assertThisInitialized(_this));
     _this.toggleCollapse = _this.toggleCollapse.bind(_assertThisInitialized(_this));
     _this.collapseButton = _this.collapseButton.bind(_assertThisInitialized(_this));
+    _this.mobile = typeof window.orientation !== 'undefined';
     return _this;
   }
 
@@ -3952,7 +3953,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, typeof window.orientation === 'undefined' ? 'desktop' : 'mobile', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "greeting"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.smallMenu ? this.nothing() : this.props.user.username + ',', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ahoy"

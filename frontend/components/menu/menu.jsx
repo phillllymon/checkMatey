@@ -13,6 +13,7 @@ class Menu extends React.Component {
         this.nothing = this.nothing.bind(this);
         this.toggleCollapse = this.toggleCollapse.bind(this);
         this.collapseButton = this.collapseButton.bind(this);
+        this.mobile = typeof window.orientation !== 'undefined'
     }
 
     collapseButton() {
@@ -66,7 +67,7 @@ class Menu extends React.Component {
     render() {
         return (
             <div>
-                {typeof window.orientation === 'undefined' ? 'desktop' : 'mobile'}
+                
                 <div className="greeting">
                     
                     <div>
