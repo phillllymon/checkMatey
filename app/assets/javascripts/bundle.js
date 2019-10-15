@@ -2704,6 +2704,7 @@ function (_React$Component) {
     _this.player = _this.props.player;
     _this.opponent = _this.props.opponent;
     _this.playerColor = _this.props.color;
+    _this.opponentColor = _this.playerColor === 'black' ? 'white' : 'black';
     _this.highlightSquare = null;
     _this.receiveBroadcast = _this.receiveBroadcast.bind(_assertThisInitialized(_this));
     _this.offerDraw = _this.offerDraw.bind(_assertThisInitialized(_this));
@@ -2732,6 +2733,11 @@ function (_React$Component) {
           newMinutes -= 1;
 
           if (newMinutes < 0) {
+            newMinutes = 0;
+            newSeconds = 0;
+            this.setState({
+              playerTime: [newMinutes, newSeconds]
+            });
             window.clearInterval(this.clockInterval);
             this.playSub.perform('relayTimeout', {
               'gameId': this.props.gameId,
@@ -3161,8 +3167,48 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fab fa-font-awesome-flag"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.game.playing && this.currentPlayer === this.opponentColor ? "current_player" : "player",
+        style: {
+          'color': this.opponentColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user",
+        style: {
+          'marginRight': '10px'
+        }
+      }), " ", this.opponent), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.game.playing && this.currentPlayer === this.opponentColor ? "current_player" : "player",
+        style: {
+          'color': this.opponentColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "far fa-clock",
+        style: {
+          'marginRight': '10px'
+        }
+      }), " ", this.state.opponentTime[0], ":", this.state.opponentTime[1] < 10 ? '0' : '', this.state.opponentTime[1]), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game_alert"
-      }, this.state.drawOffered ? this.drawButtons() : '', this.game.isGameOver() ? this.game.gameOverMessage : this.game.inCheck ? 'Check!' : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "you: ", this.player, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.state.playerTime[0], ":", this.state.playerTime[1], react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "against: ", this.opponent, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.state.opponentTime[0], ":", this.state.opponentTime[1], react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.state.drawOffered ? this.drawButtons() : '', this.game.isGameOver() ? this.game.gameOverMessage : this.game.inCheck ? 'Check!' : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.game.playing && this.currentPlayer === this.playerColor ? "current_player" : "player",
+        style: {
+          'color': this.playerColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "far fa-clock",
+        style: {
+          'marginRight': '10px'
+        }
+      }), " ", this.state.playerTime[0], ":", this.state.playerTime[1] < 10 ? '0' : '', this.state.playerTime[1]), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.game.playing && this.currentPlayer === this.playerColor ? "current_player" : "player",
+        style: {
+          'color': this.playerColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user",
+        style: {
+          'marginRight': '10px'
+        }
+      }), " ", this.player), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "outer_list"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "moves_list"
@@ -4946,6 +4992,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../chess_table/chess_table_container */ "./frontend/components/chess_table/chess_table_container.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -4963,6 +5010,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -4985,12 +5033,12 @@ function (_React$Component) {
       challenged: false,
       gameType: 'Standard',
       gameTime: 10,
-      playerList: ['AlwaysUp4Game'],
+      playerList: ['T1000robot'],
       currentMessage: '',
       playing: false
     };
     _this.playerRatings = {
-      AlwaysUp4Game: 1250
+      T1000robot: 850
     };
     _this.setTime = _this.setTime.bind(_assertThisInitialized(_this));
     _this.setType = _this.setType.bind(_assertThisInitialized(_this));
@@ -5282,6 +5330,24 @@ function (_React$Component) {
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-user"
           }), " (This is you)"));
+        } else if (player === 'T1000robot') {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "player_bar",
+            key: idx
+          }, player + ' (' + _this2.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "time_button challenge",
+            onClick: function onClick() {
+              return _this2.challengePlayer(player);
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+            to: '/play',
+            style: {
+              'textDecoration': 'none',
+              'color': 'lightgray'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-robot"
+          }), " Challenge")));
         } else {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_bar",
@@ -5320,7 +5386,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var mapStateToProps = function mapStateToProps(state) {
+var mapStateToProps = function mapStateToProps(state, ownprops) {
   return {
     user: state.entities.users[state.session.currentUserId]
   };

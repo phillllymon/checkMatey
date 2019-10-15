@@ -1,5 +1,6 @@
 import React from 'react';
 import ChessTableContainer from '../chess_table/chess_table_container';
+import { Link } from 'react-router-dom';
 
 
 class PlayBar extends React.Component {
@@ -12,13 +13,13 @@ class PlayBar extends React.Component {
             challenged: false,
             gameType: 'Standard',
             gameTime: 10,
-            playerList: ['AlwaysUp4Game'],
+            playerList: ['T1000robot'],
             currentMessage: '',
             playing: false
             
         }
         this.playerRatings = {
-            AlwaysUp4Game: 1250
+            T1000robot: 850
         }
         this.setTime = this.setTime.bind(this);
         this.setType = this.setType.bind(this);
@@ -123,7 +124,7 @@ class PlayBar extends React.Component {
 
     challengePlayer(player) {
         this.waitSub.perform('relayChallenge', {
-            'challenger': this.props.user.username, 
+            'challenger': this.props.user.username,
             'challengee': player,
             'gameType': this.state.gameType,
             'gameTime': this.state.gameTime
@@ -288,6 +289,28 @@ class PlayBar extends React.Component {
                                         style={{'color' : 'lightgray'}}
                                     ><i className="fas fa-user"></i> (This is you)</button>
                                 </div>
+                            );
+                        }
+                        else if (player === 'T1000robot') {
+                            return (
+                                <div className="player_bar" key={idx} >
+                                    {player + ' (' + this.playerRatings[player] + ')'}
+                                    <br/>
+                                    <button
+                                        className="time_button challenge"
+                                        onClick={() => this.challengePlayer(player)}
+                                    >
+                                        <Link
+                                            to={'/play'}
+                                            style={{
+                                                'textDecoration': 'none',
+                                                'color': 'lightgray'
+                                            }}>
+                                            <i className="fas fa-robot"></i> Challenge
+                                        </Link>
+                                    </button>
+                                </div>
+                                
                             );
                         }
                         else {

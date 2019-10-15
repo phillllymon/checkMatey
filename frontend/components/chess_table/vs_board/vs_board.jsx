@@ -26,6 +26,7 @@ class VsBoard extends React.Component {
         this.player = this.props.player;
         this.opponent = this.props.opponent;
         this.playerColor = this.props.color;
+        this.opponentColor = this.playerColor === 'black' ? 'white' : 'black';
         this.highlightSquare = null;
 
         this.receiveBroadcast = this.receiveBroadcast.bind(this);
@@ -52,6 +53,9 @@ class VsBoard extends React.Component {
                 newSeconds = 59;
                 newMinutes -= 1;
                 if (newMinutes < 0){
+                    newMinutes = 0;
+                    newSeconds = 0;
+                    this.setState({playerTime: [newMinutes, newSeconds]});
                     window.clearInterval(this.clockInterval);
                     this.playSub.perform('relayTimeout', { 'gameId': this.props.gameId, 'color': this.playerColor });
                 }
@@ -420,20 +424,32 @@ class VsBoard extends React.Component {
                         <br/>
                     
                     
+                    <div className={this.game.playing && this.currentPlayer === this.opponentColor ? "current_player" : "player"} 
+                        style={{ 'color': this.opponentColor }} >
+                            <i className="fas fa-user" style={{ 'marginRight': '10px' }}></i> {this.opponent} 
+                    </div>
+                    <div className={this.game.playing && this.currentPlayer === this.opponentColor ? "current_player" : "player"}
+                        style={{ 'color': this.opponentColor }} >        
+                            <i className="far fa-clock" style={{ 'marginRight': '10px' }}></i> {this.state.opponentTime[0]}:{this.state.opponentTime[1] < 10 ? '0' : ''}{this.state.opponentTime[1]}
+
+                    </div>
+                    
+                    
                     <div className="game_alert">
                     {this.state.drawOffered ? this.drawButtons() : ''}
                     {this.game.isGameOver() ? this.game.gameOverMessage : (this.game.inCheck ? 'Check!' : '')}
                     </div>
 
-                    <br />
-                    you: {this.player}
-                    <br />
-                    {this.state.playerTime[0]}:{this.state.playerTime[1]}
-                    <br />
-                    against: {this.opponent}
-                    <br />
-                    {this.state.opponentTime[0]}:{this.state.opponentTime[1]}
-                    <br />
+                    
+                    <div className={this.game.playing && this.currentPlayer === this.playerColor ? "current_player" : "player"}
+                        style={{ 'color': this.playerColor }} >
+                            <i className="far fa-clock" style={{ 'marginRight': '10px' }}></i> {this.state.playerTime[0]}:{this.state.playerTime[1] < 10 ? '0' : ''}{this.state.playerTime[1]}
+                    </div>
+                    <div className={this.game.playing && this.currentPlayer === this.playerColor ? "current_player" : "player"}
+                        style={{ 'color': this.playerColor }} >        
+                            <i className="fas fa-user" style={{'marginRight': '10px'}}></i> {this.player} 
+
+                    </div>
 
                     <div className="outer_list">
                         <div className="moves_list">

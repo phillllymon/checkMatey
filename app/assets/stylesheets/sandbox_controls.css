@@ -214,6 +214,9 @@
 }
 
 .game_alert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     font-size: 30px;
     color: red;
