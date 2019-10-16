@@ -111,3 +111,9 @@
     font-size: 26px;
 }
 
+.captured_pieces {
+    display: flex;
+    height: 17px;
+    padding-left: 10px;
+}
+

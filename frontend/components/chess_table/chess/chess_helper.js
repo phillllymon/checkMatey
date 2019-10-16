@@ -1,5 +1,55 @@
 import { snapshotToGrid } from '../../../util/chess_util';
 
+export const getBlackPoints = (grid) => {
+    const pointValues = {
+        'p': 0,
+        'r': 0,
+        'n': 0,
+        'b': 0,
+        'q': 0,
+        'k': 0,
+        '-': 0,
+        'P': 1,
+        'R': 5,
+        'N': 3,
+        'B': 3,
+        'Q': 9,
+        'K': 0,
+    }
+    let answer = 0;
+    grid.forEach( (row) => {
+        row.forEach( (mark) => {
+            answer += pointValues[mark];
+        });
+    });
+    return answer;
+};
+
+export const getWhitePoints = (grid) => {
+    const pointValues = {
+        'p': 1,
+        'r': 5,
+        'n': 3,
+        'b': 3,
+        'q': 9,
+        'k': 0,
+        '-': 0,
+        'P': 0,
+        'R': 0,
+        'N': 0,
+        'B': 0,
+        'Q': 0,
+        'K': 0,
+    }
+    let answer = 0;
+    grid.forEach((row) => {
+        row.forEach((mark) => {
+            answer += pointValues[mark];
+        });
+    });
+    return answer;
+};
+
 export const getPieceColor = (mark) => {
     if (['P', 'R', 'B', 'K', 'Q', 'N'].includes(mark)) {
         return 'black';

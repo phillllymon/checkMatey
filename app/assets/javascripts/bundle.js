@@ -369,9 +369,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _session_signup_form_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./session/signup_form_container */ "./frontend/components/session/signup_form_container.js");
 /* harmony import */ var _chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chess_table/chess_table_container */ "./frontend/components/chess_table/chess_table_container.js");
 /* harmony import */ var _splash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./splash */ "./frontend/components/splash.jsx");
-/* harmony import */ var _otherGame_other_game_container__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./otherGame/other_game_container */ "./frontend/components/otherGame/other_game_container.js");
-/* harmony import */ var _home__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./home */ "./frontend/components/home.jsx");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _mobile_splash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./mobile_splash */ "./frontend/components/mobile_splash.jsx");
+/* harmony import */ var _otherGame_other_game_container__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./otherGame/other_game_container */ "./frontend/components/otherGame/other_game_container.js");
+/* harmony import */ var _otherGame_other_game_container_mobile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./otherGame/other_game_container_mobile */ "./frontend/components/otherGame/other_game_container_mobile.js");
+/* harmony import */ var _home__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./home */ "./frontend/components/home.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -399,66 +401,122 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
 var App =
 /*#__PURE__*/
 function (_React$Component) {
   _inherits(App, _React$Component);
 
   function App(props) {
+    var _this;
+
     _classCallCheck(this, App);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
+    _this.mobile = typeof window.orientation !== 'undefined';
+    return _this;
   }
 
   _createClass(App, [{
     key: "render",
     value: function render() {
-      if (this.props.userId) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
-          path: "/home",
-          component: _home__WEBPACK_IMPORTED_MODULE_6__["default"]
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
-          path: "/sandbox",
-          render: function render() {
-            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              mode: 'sandbox'
-            });
-          }
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
-          path: "/show",
-          render: function render() {
-            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], null);
-          }
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
-          path: "/play",
-          render: function render() {
-            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              player: 'User',
-              mode: 'playComputer'
-            });
-          }
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Redirect"], {
-          to: "/home"
-        }));
+      if (this.mobile) {
+        if (this.props.userId) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/home",
+            component: _home__WEBPACK_IMPORTED_MODULE_8__["default"]
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/sandbox",
+            render: function render() {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                mode: 'sandbox'
+              });
+            }
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/show",
+            render: function render() {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], null);
+            }
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/play",
+            render: function render() {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                player: 'User',
+                mode: 'playComputer'
+              });
+            }
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Redirect"], {
+            to: "/home"
+          }));
+        } else {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mobile_splash__WEBPACK_IMPORTED_MODULE_5__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/login",
+            component: _session_login_form_container__WEBPACK_IMPORTED_MODULE_1__["default"]
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/signup",
+            component: _session_signup_form_container__WEBPACK_IMPORTED_MODULE_2__["default"]
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/notChess",
+            component: _otherGame_other_game_container_mobile__WEBPACK_IMPORTED_MODULE_7__["default"]
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/play",
+            render: function render() {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                player: 'Guest',
+                mode: 'playComputer'
+              });
+            }
+          }));
+        }
       } else {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_splash__WEBPACK_IMPORTED_MODULE_4__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
-          path: "/login",
-          component: _session_login_form_container__WEBPACK_IMPORTED_MODULE_1__["default"]
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
-          path: "/signup",
-          component: _session_signup_form_container__WEBPACK_IMPORTED_MODULE_2__["default"]
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
-          path: "/notChess",
-          component: _otherGame_other_game_container__WEBPACK_IMPORTED_MODULE_5__["default"]
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
-          path: "/play",
-          render: function render() {
-            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              player: 'Guest',
-              mode: 'playComputer'
-            });
-          }
-        }));
+        if (this.props.userId) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/home",
+            component: _home__WEBPACK_IMPORTED_MODULE_8__["default"]
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/sandbox",
+            render: function render() {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                mode: 'sandbox'
+              });
+            }
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/show",
+            render: function render() {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], null);
+            }
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/play",
+            render: function render() {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                player: 'User',
+                mode: 'playComputer'
+              });
+            }
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Redirect"], {
+            to: "/home"
+          }));
+        } else {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_splash__WEBPACK_IMPORTED_MODULE_4__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/login",
+            component: _session_login_form_container__WEBPACK_IMPORTED_MODULE_1__["default"]
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/signup",
+            component: _session_signup_form_container__WEBPACK_IMPORTED_MODULE_2__["default"]
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/notChess",
+            component: _otherGame_other_game_container__WEBPACK_IMPORTED_MODULE_6__["default"]
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/play",
+            render: function render() {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                player: 'Guest',
+                mode: 'playComputer'
+              });
+            }
+          }));
+        }
       }
     }
   }]);
@@ -866,11 +924,13 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 /*!***************************************************************!*\
   !*** ./frontend/components/chess_table/chess/chess_helper.js ***!
   \***************************************************************/
-/*! exports provided: getPieceColor, getPieceType, canCastle, getAllDumbMoves, getAllMoves, inCheck, purgeCheckMoves, getPieceMoves, getPieceDumbMoves, getPawnMoves, getPawnSpecialMoves, getKingMoves, getKingSpecialMoves, getKnightMoves, getQueenMoves, getBishopMoves, getRookMoves */
+/*! exports provided: getBlackPoints, getWhitePoints, getPieceColor, getPieceType, canCastle, getAllDumbMoves, getAllMoves, inCheck, purgeCheckMoves, getPieceMoves, getPieceDumbMoves, getPawnMoves, getPawnSpecialMoves, getKingMoves, getKingSpecialMoves, getKnightMoves, getQueenMoves, getBishopMoves, getRookMoves */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBlackPoints", function() { return getBlackPoints; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getWhitePoints", function() { return getWhitePoints; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceColor", function() { return getPieceColor; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceType", function() { return getPieceType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "canCastle", function() { return canCastle; });
@@ -890,6 +950,54 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRookMoves", function() { return getRookMoves; });
 /* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
 
+var getBlackPoints = function getBlackPoints(grid) {
+  var pointValues = {
+    'p': 0,
+    'r': 0,
+    'n': 0,
+    'b': 0,
+    'q': 0,
+    'k': 0,
+    '-': 0,
+    'P': 1,
+    'R': 5,
+    'N': 3,
+    'B': 3,
+    'Q': 9,
+    'K': 0
+  };
+  var answer = 0;
+  grid.forEach(function (row) {
+    row.forEach(function (mark) {
+      answer += pointValues[mark];
+    });
+  });
+  return answer;
+};
+var getWhitePoints = function getWhitePoints(grid) {
+  var pointValues = {
+    'p': 1,
+    'r': 5,
+    'n': 3,
+    'b': 3,
+    'q': 9,
+    'k': 0,
+    '-': 0,
+    'P': 0,
+    'R': 0,
+    'N': 0,
+    'B': 0,
+    'Q': 0,
+    'K': 0
+  };
+  var answer = 0;
+  grid.forEach(function (row) {
+    row.forEach(function (mark) {
+      answer += pointValues[mark];
+    });
+  });
+  return answer;
+};
 var getPieceColor = function getPieceColor(mark) {
   if (['P', 'R', 'B', 'K', 'Q', 'N'].includes(mark)) {
     return 'black';
@@ -1340,6 +1448,8 @@ function () {
     //     ['-', 'q', '-', '-', 'k', '-', '-', 'r']
     // ];
     this.gameSoFar = [];
+    this.capturedPieces = [[], []]; //black pieces, white pieces
+
     this.getString = this.getString.bind(this);
     this.makeMove = this.makeMove.bind(this);
     this.isGameOver = this.isGameOver.bind(this);
@@ -1358,6 +1468,7 @@ function () {
     this.moves = [];
     this.initializeGrid = this.initializeGrid.bind(this);
     this.initializeGrid();
+    this.points = [Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(this.grid), Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(this.grid)];
   }
 
   _createClass(Game, [{
@@ -1433,6 +1544,14 @@ function () {
       var origin = move[0];
       var destination = move[1];
 
+      if (this.grid[destination[0]][destination[1]] !== '-') {
+        if (this.currentPlayer === 'white') {
+          this.capturedPieces[0].push(this.grid[destination[0]][destination[1]]);
+        } else {
+          this.capturedPieces[1].push(this.grid[destination[0]][destination[1]]);
+        }
+      }
+
       if (destination[2] === 'special') {
         this.handleSpecialMove(move);
       } else {
@@ -1443,6 +1562,8 @@ function () {
         this.inCheck = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["inCheck"])(this.currentPlayer, this.grid);
         this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["getLastMove"])(this.gameSoFar));
       }
+
+      this.points = [Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(this.grid), Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(this.grid)];
     }
   }, {
     key: "handleSpecialMove",
@@ -1728,11 +1849,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 /*!***************************************************!*\
   !*** ./frontend/components/chess_table/piece.jsx ***!
   \***************************************************/
-/*! exports provided: default */
+/*! exports provided: default, getPieceIcon */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceIcon", function() { return getPieceIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -1864,6 +1986,108 @@ var Piece = function Piece(props) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Piece);
+var getPieceIcon = function getPieceIcon(mark) {
+  switch (mark) {
+    case 'p':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-pawn",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    case 'r':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-rook",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    case 'n':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-knight",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    case 'b':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-bishop",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    case 'k':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-king",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    case 'q':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-queen",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    case 'P':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-pawn",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    case 'R':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-rook",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    case 'N':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-knight",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    case 'B':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-bishop",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    case 'Q':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-queen",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    case 'K':
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-king",
+        style: {
+          'marginLeft': '3px'
+        }
+      });
+
+    default:
+      return null;
+  }
+};
 
 /***/ }),
 
@@ -2672,6 +2896,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var VsBoard =
 /*#__PURE__*/
 function (_React$Component) {
@@ -2718,10 +2943,30 @@ function (_React$Component) {
     _this.showEnding = _this.showEnding.bind(_assertThisInitialized(_this));
     _this.tickClock = _this.tickClock.bind(_assertThisInitialized(_this));
     _this.startClock = _this.startClock.bind(_assertThisInitialized(_this));
+    _this.getBlackPoints = _this.getBlackPoints.bind(_assertThisInitialized(_this));
+    _this.getWhitePoints = _this.getWhitePoints.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(VsBoard, [{
+    key: "getBlackPoints",
+    value: function getBlackPoints() {
+      if (this.game.points[0] > this.game.points[1]) {
+        return ' +' + (this.game.points[0] - this.game.points[1]).toString();
+      } else {
+        return '';
+      }
+    }
+  }, {
+    key: "getWhitePoints",
+    value: function getWhitePoints() {
+      if (this.game.points[1] > this.game.points[0]) {
+        return ' +' + (this.game.points[1] - this.game.points[0]).toString();
+      } else {
+        return '';
+      }
+    }
+  }, {
     key: "tickClock",
     value: function tickClock() {
       if (this.game.currentPlayer === this.playerColor) {
@@ -3167,6 +3412,15 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fab fa-font-awesome-flag"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "captured_pieces",
+        style: {
+          'color': this.opponentColor
+        }
+      }, this.game.capturedPieces[this.opponentColor === 'black' ? 0 : 1].map(function (mark, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          key: idx
+        }, Object(_piece__WEBPACK_IMPORTED_MODULE_1__["getPieceIcon"])(mark));
+      }), this.opponentColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.game.playing && this.currentPlayer === this.opponentColor ? "current_player" : "player",
         style: {
           'color': this.opponentColor
@@ -3209,6 +3463,15 @@ function (_React$Component) {
           'marginRight': '10px'
         }
       }), " ", this.player), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "captured_pieces",
+        style: {
+          'color': this.playerColor
+        }
+      }, this.game.capturedPieces[this.opponentColor === 'black' ? 1 : 0].map(function (mark, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          key: idx
+        }, Object(_piece__WEBPACK_IMPORTED_MODULE_1__["getPieceIcon"])(mark));
+      }), this.playerColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "outer_list"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "moves_list"
@@ -4040,6 +4303,57 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 /***/ }),
 
+/***/ "./frontend/components/mobile_splash.jsx":
+/*!***********************************************!*\
+  !*** ./frontend/components/mobile_splash.jsx ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+
+
+var MobileSplash = function MobileSplash(props) {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "mobile_container"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "splash_logo_mobile"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    className: "mobile_button",
+    to: "/signup"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fas fa-user-plus",
+    style: {
+      'marginRight': '20px'
+    }
+  }), "Sign Up"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    className: "mobile_button",
+    to: "/login"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fas fa-sign-in-alt",
+    style: {
+      'marginRight': '20px'
+    }
+  }), "Log In"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    className: "mobile_button",
+    to: "/notChess"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fas fa-cubes",
+    style: {
+      'marginRight': '20px'
+    }
+  }), "Not Chess"));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (MobileSplash);
+
+/***/ }),
+
 /***/ "./frontend/components/otherGame/cell.jsx":
 /*!************************************************!*\
   !*** ./frontend/components/otherGame/cell.jsx ***!
@@ -4480,6 +4794,129 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_other_game_jsx__WEBPACK_IMPORTED_MODULE_2__["default"]));
+
+/***/ }),
+
+/***/ "./frontend/components/otherGame/other_game_container_mobile.js":
+/*!**********************************************************************!*\
+  !*** ./frontend/components/otherGame/other_game_container_mobile.js ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_post_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/post_actions */ "./frontend/actions/post_actions.js");
+/* harmony import */ var _other_game_mobile_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./other_game_mobile.jsx */ "./frontend/components/otherGame/other_game_mobile.jsx");
+
+
+
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    allPosts: state.entities.posts
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    fetchAllPosts: function fetchAllPosts() {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["fetchAllPosts"])());
+    },
+    createPost: function createPost(post) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["createPost"])(post));
+    },
+    updatePost: function updatePost(post) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["updatePost"])(post));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_other_game_mobile_jsx__WEBPACK_IMPORTED_MODULE_2__["default"]));
+
+/***/ }),
+
+/***/ "./frontend/components/otherGame/other_game_mobile.jsx":
+/*!*************************************************************!*\
+  !*** ./frontend/components/otherGame/other_game_mobile.jsx ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tetris_mobile__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tetris_mobile */ "./frontend/components/otherGame/tetris_mobile.jsx");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+var OtherGameMobile =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(OtherGameMobile, _React$Component);
+
+  function OtherGameMobile(props) {
+    var _this;
+
+    _classCallCheck(this, OtherGameMobile);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(OtherGameMobile).call(this, props));
+    _this.backToSplash = _this.backToSplash.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(OtherGameMobile, [{
+    key: "backToSplash",
+    value: function backToSplash() {
+      this.props.history.push('/');
+    }
+  }, {
+    key: "notBack",
+    value: function notBack(e) {
+      e.stopPropagation();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        onClick: this.backToSplash,
+        className: "modal_back"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        onClick: this.notBack,
+        className: "tetris_box"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tetris_mobile__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        fetchAllPosts: this.props.fetchAllPosts,
+        createPost: this.props.createPost,
+        updatePost: this.props.createPost,
+        allPosts: this.props.allPosts
+      })));
+    }
+  }]);
+
+  return OtherGameMobile;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (OtherGameMobile);
 
 /***/ }),
 
@@ -4978,6 +5415,325 @@ function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Tetris);
+
+/***/ }),
+
+/***/ "./frontend/components/otherGame/tetris_mobile.jsx":
+/*!*********************************************************!*\
+  !*** ./frontend/components/otherGame/tetris_mobile.jsx ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game */ "./frontend/components/otherGame/game.js");
+/* harmony import */ var _cell__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./cell */ "./frontend/components/otherGame/cell.jsx");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+var TetrisMobile =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(TetrisMobile, _React$Component);
+
+  function TetrisMobile(props) {
+    var _this;
+
+    _classCallCheck(this, TetrisMobile);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(TetrisMobile).call(this, props));
+    _this.game = new _game__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    _this.grid = _this.game.grid;
+    _this.piecePos = [2, 4];
+    _this.state = {
+      grid: _this.game.grid,
+      nextGrid: _this.game.nextGrid,
+      level: 1,
+      enteredName: ''
+    };
+    _this.interval = 1000;
+    _this.handleInput = _this.handleInput.bind(_assertThisInitialized(_this));
+    _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
+    _this.nextLevel = _this.nextLevel.bind(_assertThisInitialized(_this));
+    _this.startButton = _this.startButton.bind(_assertThisInitialized(_this));
+    _this.highScore = 0;
+    _this.leader = 'no one';
+    _this.highTime = '';
+    _this.getHighScore = _this.getHighScore.bind(_assertThisInitialized(_this));
+    _this.endTheGame = _this.endTheGame.bind(_assertThisInitialized(_this));
+    _this.askForName = _this.askForName.bind(_assertThisInitialized(_this));
+    _this.saveScore = _this.saveScore.bind(_assertThisInitialized(_this));
+    _this.handleEnterName = _this.handleEnterName.bind(_assertThisInitialized(_this));
+    _this.togglePreview = _this.togglePreview.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(TetrisMobile, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.getHighScore();
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      clearInterval(this.pieceInterval);
+    }
+  }, {
+    key: "togglePreview",
+    value: function togglePreview(e) {
+      e.target.blur();
+      document.getElementById("the_game").focus();
+      this.game.preview = this.game.preview ? false : true;
+      this.setState({});
+    }
+  }, {
+    key: "handleEnterName",
+    value: function handleEnterName(e) {
+      this.setState({
+        enteredName: e.target.value
+      });
+    }
+  }, {
+    key: "askForName",
+    value: function askForName() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "enter_name tetris_stats"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "New Highscore!", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.saveScore
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        placeholder: "enter your name",
+        value: this.state.enteredName,
+        onChange: this.handleEnterName
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "tetris_button",
+        type: "submit",
+        value: "Save Highscore"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))));
+    }
+  }, {
+    key: "getHighScore",
+    value: function getHighScore() {
+      var _this2 = this;
+
+      $.ajax({
+        url: "/api/scores",
+        method: 'GET'
+      }).then(function (res) {
+        _this2.highScore = res.score;
+        _this2.leader = res.name;
+        _this2.highTime = res.updated_at;
+
+        _this2.setState({});
+      });
+    }
+  }, {
+    key: "saveScore",
+    value: function saveScore(e) {
+      var _this3 = this;
+
+      e.preventDefault();
+      this.promptName = false;
+      $.ajax({
+        url: "/api/scores",
+        method: 'POST',
+        data: {
+          score: {
+            name: this.state.enteredName,
+            score: this.game.score
+          }
+        }
+      }).then(function (res) {
+        _this3.getHighScore();
+      });
+    }
+  }, {
+    key: "endTheGame",
+    value: function endTheGame() {
+      if (this.game.score > this.highScore) {
+        this.promptName = true;
+        this.setState({});
+      }
+    }
+  }, {
+    key: "startGame",
+    value: function startGame(e) {
+      var _this4 = this;
+
+      this.setState({
+        playing: true
+      });
+      document.getElementById("the_game").focus();
+      this.game = new _game__WEBPACK_IMPORTED_MODULE_1__["default"](this.game.preview, this.game.nextPiece);
+      this.game.start();
+      this.level = this.game.level;
+      this.grid = this.game.grid;
+      this.setState({
+        grid: this.grid,
+        nextGrid: this.game.nextGrid
+      });
+      this.pieceInterval = setInterval(function () {
+        _this4.grid = _this4.game.advanceGame();
+
+        if (_this4.game.gameOver) {
+          clearInterval(_this4.pieceInterval);
+
+          _this4.setState({
+            playing: false
+          });
+
+          _this4.endTheGame();
+        }
+
+        _this4.setState({
+          grid: _this4.grid,
+          nextGrid: _this4.game.nextGrid
+        });
+
+        if (_this4.game.level !== _this4.level) {
+          _this4.level = _this4.game.level;
+
+          _this4.nextLevel();
+        }
+      }, 1000);
+    }
+  }, {
+    key: "nextLevel",
+    value: function nextLevel() {
+      var _this5 = this;
+
+      clearInterval(this.pieceInterval);
+      this.pieceInterval = setInterval(function () {
+        if (_this5.game.level !== _this5.level) {
+          _this5.level = _this5.game.level;
+
+          _this5.nextLevel();
+        }
+
+        _this5.grid = _this5.game.advanceGame();
+
+        if (_this5.game.gameOver) {
+          clearInterval(_this5.pieceInterval);
+
+          _this5.setState({
+            playing: false
+          });
+
+          _this5.endTheGame();
+        }
+
+        _this5.setState({
+          grid: _this5.grid,
+          nextGrid: _this5.game.nextGrid
+        });
+      }, Math.ceil(1000 / this.game.level));
+      this.interval = Math.ceil(1000 / this.game.level);
+    }
+  }, {
+    key: "handleInput",
+    value: function handleInput(e) {
+      if (!this.game.gameOver) {
+        if (e.keyCode === 32) {
+          this.grid = this.game.dropPiece();
+        }
+
+        if (e.keyCode === 87 || e.keyCode === 38) {
+          this.grid = this.game.rotateLeft();
+        } else if (e.keyCode === 65 || e.keyCode === 37) {
+          this.grid = this.game.moveLeft();
+        } else if (e.keyCode === 83 || e.keyCode === 40) {
+          this.grid = this.game.moveDown();
+        } else if (e.keyCode === 68 || e.keyCode === 39) {
+          this.grid = this.game.moveRight();
+        }
+
+        this.setState({
+          grid: this.grid
+        });
+      }
+    }
+  }, {
+    key: "startButton",
+    value: function startButton() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "tetris_button",
+        onClick: this.startGame
+      }, "Start Game");
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        onKeyDown: this.handleInput,
+        tabIndex: "0",
+        id: "the_game",
+        className: "game_box"
+      }, this.promptName ? this.askForName() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "play_area"
+      }, this.state.grid.map(function (row, rIdx) {
+        return row.map(function (cell, cIdx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_cell__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            key: [rIdx, cIdx],
+            status: cell,
+            pos: [rIdx, cIdx]
+          });
+        });
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tetris_stats preview_box"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "display_preview"
+      }, this.game.preview ? this.state.nextGrid.map(function (row, rIdx) {
+        return row.map(function (cell, cIdx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_cell__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            key: [rIdx, cIdx],
+            status: cell
+          });
+        });
+      }) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Next:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: this.game.preview ? "toggle_button button_on" : "toggle_button",
+        onClick: this.togglePreview
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-circle"
+      })), this.game.preview ? 'on ' : 'off', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "smaller_text"
+      }, this.game.preview ? '(half points)' : ''))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tetris_stats"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Leader: ", this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Highscore: ", this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "smaller_text"
+      }, this.highTime.slice(0, 10)))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tetris_stats"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Woo we're mobile!", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Score:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Lines: ", this.game.lines, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "smaller_text"
+      }, "interval: ", this.interval))), this.state.playing ? '' : this.startButton());
+    }
+  }]);
+
+  return TetrisMobile;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (TetrisMobile);
 
 /***/ }),
 

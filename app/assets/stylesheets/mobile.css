@@ -1,0 +1,20 @@
+.mobile_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.mobile_button {
+    display: flex;
+    justify-content: center;
+    color: white;
+    padding: 20px;
+    font-size: 40px;
+    font-family: sans-serif;
+    background-color: orange;
+    margin-top: 25px;
+    border-radius: 5px;
+    width: 90vw;
+    text-decoration: none;
+}

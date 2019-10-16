@@ -90,3 +90,34 @@ const Piece = (props) => {
 }
 
 export default Piece;
+
+export const getPieceIcon = (mark) => {
+    switch (mark) {
+        case 'p':
+            return (<i className="fas fa-chess-pawn" style={{'marginLeft': '3px'}}></i>);
+        case 'r':
+            return (<i className="fas fa-chess-rook" style={{ 'marginLeft': '3px' }}></i>);
+        case 'n':
+            return (<i className="fas fa-chess-knight" style={{ 'marginLeft': '3px' }}></i>);
+        case 'b':
+            return (<i className="fas fa-chess-bishop" style={{ 'marginLeft': '3px' }}></i>);
+        case 'k':
+            return (<i className="fas fa-chess-king" style={{ 'marginLeft': '3px' }}></i>);
+        case 'q':
+            return (<i className="fas fa-chess-queen" style={{ 'marginLeft': '3px' }}></i>);
+        case 'P':
+            return (<i className="fas fa-chess-pawn" style={{ 'marginLeft': '3px' }}></i>);
+        case 'R':
+            return (<i className="fas fa-chess-rook" style={{ 'marginLeft': '3px' }}></i>);
+        case 'N':
+            return (<i className="fas fa-chess-knight" style={{ 'marginLeft': '3px' }}></i>);
+        case 'B':
+            return (<i className="fas fa-chess-bishop" style={{ 'marginLeft': '3px' }}></i>);
+        case 'Q':
+            return (<i className="fas fa-chess-queen" style={{ 'marginLeft': '3px' }}></i>);
+        case 'K':
+            return (<i className="fas fa-chess-king" style={{ 'marginLeft': '3px' }}></i>);
+        default:
+            return null;
+    }
+}

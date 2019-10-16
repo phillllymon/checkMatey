@@ -1,6 +1,7 @@
 import React from 'react';
 import Piece from '../piece';
 import { Game } from '../chess/game';
+import { getPieceIcon } from '../piece';
 
 class VsBoard extends React.Component {
     constructor(props) {
@@ -43,6 +44,26 @@ class VsBoard extends React.Component {
         this.showEnding = this.showEnding.bind(this);
         this.tickClock = this.tickClock.bind(this);
         this.startClock = this.startClock.bind(this);
+        this.getBlackPoints = this.getBlackPoints.bind(this);
+        this.getWhitePoints = this.getWhitePoints.bind(this);
+    }
+
+    getBlackPoints() {
+        if (this.game.points[0] > this.game.points[1]){
+            return ' +' + (this.game.points[0] - this.game.points[1]).toString();
+        }
+        else {
+            return '';
+        }
+    }
+
+    getWhitePoints() {
+        if (this.game.points[1] > this.game.points[0]) {
+            return ' +' + (this.game.points[1] - this.game.points[0]).toString();
+        }
+        else {
+            return '';
+        }
     }
 
     tickClock() {
@@ -423,7 +444,16 @@ class VsBoard extends React.Component {
                         <button className="board_control_button" style={{ 'width': '50px' }}  onClick={this.resign}><i className="fab fa-font-awesome-flag"></i></button>
                         <br/>
                     
-                    
+                    <div className="captured_pieces" style={{'color': this.opponentColor}}>
+                        {
+                            this.game.capturedPieces[(this.opponentColor === 'black' ? 0 : 1)].map((mark, idx) => {
+                                return (
+                                    <span key={idx}>{getPieceIcon(mark)}</span>
+                                )
+                            })
+                        }
+                        {this.opponentColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()}
+                    </div>
                     <div className={this.game.playing && this.currentPlayer === this.opponentColor ? "current_player" : "player"} 
                         style={{ 'color': this.opponentColor }} >
                             <i className="fas fa-user" style={{ 'marginRight': '10px' }}></i> {this.opponent} 
@@ -449,6 +479,16 @@ class VsBoard extends React.Component {
                         style={{ 'color': this.playerColor }} >        
                             <i className="fas fa-user" style={{'marginRight': '10px'}}></i> {this.player} 
 
+                    </div>
+                    <div className="captured_pieces" style={{ 'color': this.playerColor }}>
+                        {
+                            this.game.capturedPieces[(this.opponentColor === 'black' ? 1 : 0)].map((mark, idx) => {
+                                return (
+                                    <span key={idx}>{getPieceIcon(mark)}</span>
+                                )
+                            })
+                        }
+                        {this.playerColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()}
                     </div>
 
                     <div className="outer_list">

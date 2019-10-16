@@ -6,7 +6,8 @@ import {
     getPieceMoves,
     getAllMoves,
     inCheck,
-    canCastle
+    getBlackPoints,
+    getWhitePoints
  } from './chess_helper';
 
 export class Game {
@@ -22,6 +23,7 @@ export class Game {
         //     ['-', 'q', '-', '-', 'k', '-', '-', 'r']
         // ];
         this.gameSoFar = [];
+        this.capturedPieces = [[], []]; //black pieces, white pieces
         this.getString = this.getString.bind(this);
         this.makeMove = this.makeMove.bind(this);
         this.isGameOver = this.isGameOver.bind(this);
@@ -39,6 +41,7 @@ export class Game {
         this.moves = [];
         this.initializeGrid = this.initializeGrid.bind(this);
         this.initializeGrid();
+        this.points = [getBlackPoints(this.grid), getWhitePoints(this.grid)];
     }
 
     initializeGrid() {
@@ -143,6 +146,14 @@ export class Game {
     makeMove(move) {
         let origin = move[0];
         let destination = move[1];
+        if (this.grid[destination[0]][destination[1]] !== '-'){
+            if (this.currentPlayer === 'white'){
+                this.capturedPieces[0].push(this.grid[destination[0]][destination[1]]);
+            }
+            else {
+                this.capturedPieces[1].push(this.grid[destination[0]][destination[1]]);
+            }
+        }
         if (destination[2] === 'special'){
             this.handleSpecialMove(move);
         }
@@ -154,7 +165,7 @@ export class Game {
             this.inCheck = inCheck(this.currentPlayer, this.grid);
             this.moves.push(getLastMove(this.gameSoFar));
         } 
-        
+        this.points = [getBlackPoints(this.grid), getWhitePoints(this.grid)];
     }
 
     handleSpecialMove(move) {

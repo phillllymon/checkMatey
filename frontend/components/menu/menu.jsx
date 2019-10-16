@@ -13,7 +13,7 @@ class Menu extends React.Component {
         this.nothing = this.nothing.bind(this);
         this.toggleCollapse = this.toggleCollapse.bind(this);
         this.collapseButton = this.collapseButton.bind(this);
-        this.mobile = typeof window.orientation !== 'undefined'
+        this.mobile = typeof window.orientation !== 'undefined';
     }
 
     collapseButton() {
