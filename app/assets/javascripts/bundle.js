@@ -413,8 +413,9 @@ function (_React$Component) {
 
     _classCallCheck(this, App);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
-    _this.mobile = typeof window.orientation !== 'undefined';
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props)); //this.mobile = typeof window.orientation !== 'undefined';
+
+    _this.mobile = true;
     return _this;
   }
 
@@ -4323,6 +4324,8 @@ var MobileSplash = function MobileSplash(props) {
     className: "mobile_container"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "splash_logo_mobile"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "splash_set_mobile"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     className: "mobile_button",
     to: "/signup"

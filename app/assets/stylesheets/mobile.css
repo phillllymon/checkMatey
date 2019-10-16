@@ -3,17 +3,18 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
+    height: 100vh;
 }
 
 .mobile_button {
     display: flex;
     justify-content: center;
     color: white;
-    padding: 20px;
-    font-size: 40px;
+    padding: 30px;
+    font-size: 45px;
     font-family: sans-serif;
     background-color: orange;
-    margin-top: 25px;
+    margin-top: 40px;
     border-radius: 5px;
     width: 90vw;
     text-decoration: none;
