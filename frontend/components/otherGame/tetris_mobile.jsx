@@ -28,6 +28,7 @@ class TetrisMobile extends React.Component {
         this.saveScore = this.saveScore.bind(this);
         this.handleEnterName = this.handleEnterName.bind(this);
         this.togglePreview = this.togglePreview.bind(this);
+        this.fullScreen = this.fullScreen.bind(this);
     }
 
     componentDidMount() {
@@ -174,9 +175,16 @@ class TetrisMobile extends React.Component {
         );
     }
 
+    fullScreen(e) {
+        e.target.webkitRequestFullscreen();
+    }
+
     render() {
         return (
             <div onKeyDown={this.handleInput} tabIndex="0" id="the_game" className="game_box">
+                <div id="full" onClick={this.fullScreen} className="full_screen">
+                    I hope this is full screen
+                </div>
                 {this.promptName ? this.askForName() : ''}
                 <div className="play_area">
                     {

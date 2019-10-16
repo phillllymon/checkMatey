@@ -4901,18 +4901,12 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        onClick: this.backToSplash,
-        className: "modal_back"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        onClick: this.notBack,
-        className: "tetris_box"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tetris_mobile__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tetris_mobile__WEBPACK_IMPORTED_MODULE_1__["default"], {
         fetchAllPosts: this.props.fetchAllPosts,
         createPost: this.props.createPost,
         updatePost: this.props.createPost,
         allPosts: this.props.allPosts
-      })));
+      });
     }
   }]);
 
@@ -5490,6 +5484,7 @@ function (_React$Component) {
     _this.saveScore = _this.saveScore.bind(_assertThisInitialized(_this));
     _this.handleEnterName = _this.handleEnterName.bind(_assertThisInitialized(_this));
     _this.togglePreview = _this.togglePreview.bind(_assertThisInitialized(_this));
+    _this.fullScreen = _this.fullScreen.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -5686,6 +5681,11 @@ function (_React$Component) {
       }, "Start Game");
     }
   }, {
+    key: "fullScreen",
+    value: function fullScreen(e) {
+      e.target.webkitRequestFullscreen();
+    }
+  }, {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -5693,7 +5693,11 @@ function (_React$Component) {
         tabIndex: "0",
         id: "the_game",
         className: "game_box"
-      }, this.promptName ? this.askForName() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "full",
+        onClick: this.fullScreen,
+        className: "full_screen"
+      }, "I hope this is full screen"), this.promptName ? this.askForName() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "play_area"
       }, this.state.grid.map(function (row, rIdx) {
         return row.map(function (cell, cIdx) {
