@@ -12,8 +12,8 @@ import { Route, Redirect, Link } from 'react-router-dom';
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.mobile = typeof window.orientation !== 'undefined';
-        //this.mobile = true;
+        //this.mobile = typeof window.orientation !== 'undefined';
+        this.mobile = true;
     }
 
     render() {

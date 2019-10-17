@@ -7,6 +7,7 @@
 .side_mobile {
     width: 29vw;
     overflow: hidden;
+    display: inline-block;
 }
 
 .mobile_button {
@@ -26,7 +27,6 @@
 .full_screen {
     position: absolute;
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
     top: 0;
     left: 0;
@@ -44,7 +44,6 @@
     flex-wrap: wrap;
     width: 70vw;
     height: 140vw;
-    background-color: green;
     border-right: 0.5vw solid gray;
     border-bottom: 0.5vw solid gray;
     border-top: 0.5vw solid lightgray;

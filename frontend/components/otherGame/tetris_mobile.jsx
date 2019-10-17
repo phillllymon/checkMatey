@@ -145,6 +145,27 @@ class TetrisMobile extends React.Component {
         this.interval = Math.ceil(1000/this.game.level);
     }
 
+    handleControls(input) {
+        if (!this.game.gameOver) {
+            if (input === 'drop') {
+                this.grid = this.game.dropPiece();
+            }
+            if (input === 'rotate') {
+                this.grid = this.game.rotateLeft();
+            }
+            else if (input === 'left') {
+                this.grid = this.game.moveLeft();
+            }
+            else if (input === 'down') {
+                this.grid = this.game.moveDown();
+            }
+            else if (input === 'right') {
+                this.grid = this.game.moveRight();
+            }
+            this.setState({ grid: this.grid });
+        }
+    }
+
     handleInput(e) {
         if (!this.game.gameOver){
             if (e.keyCode === 32) {
@@ -192,14 +213,17 @@ class TetrisMobile extends React.Component {
     componentDidMount() {
         this.getHighScore();
         const theGame = document.getElementById("full");
-        this.controlsHeight = theGame.offsetHeight - (1.4 * theGame.offsetWidth);
+        const playArea = document.getElementById("play");
+        this.playHeight = playArea.offsetHeight;
+        this.totalHeight = window.innerHeight;
+        this.controlsHeight = this.totalHeight - this.playHeight;
         //this.fullScreen();
     }
 
     render() {
-        console.log(document.getElementById("full") ? 
-            document.getElementById("full").offsetHeight :
-            '');
+        console.log(document.getElementById("controls") ?
+        document.getElementById("controls").offsetHeight :
+        "");
         return (
             
                 <div 
@@ -212,7 +236,7 @@ class TetrisMobile extends React.Component {
                     {this.promptName ? this.askForName() : ''}
                 
                 
-                    <div className="play_area_mobile">
+                    <div className="play_area_mobile" id="play">
                         {
                             this.state.grid.map( (row, rIdx) => {
                                 return (
@@ -265,37 +289,39 @@ class TetrisMobile extends React.Component {
                             </center>
                         </div>
                     </div>
-                    <div style={{
-                            'height': `${this.controlsHeight}px`, 
+                    <div id="controls" style={{
+                            'height': `${this.controlsHeight}px`,
                             'width': '100%',
-                            'backgroundColor': 'green'
+                            'backgroundColor': 'green',
+                            'display': 'flex'
                         }}>
                         <button
-                            style={{
-                                'width': '100%',
-                                'height': '50%'
-                            }}
-                            className="tetris_control_button">
+                        onClick={() => this.handleControls('left')}
+                        style={{
+                            'width': '100%',
+                            
+                        }}
+                        className="tetris_control_button">
+                            left
+                        </button>
+                        <button
+                        onClick={() => this.handleControls('rotate')}
+                        style={{
+                            'width': '100%',
+                            
+                        }}
+                        className="tetris_control_button">
                             rotate
                         </button>
-                        <div style={{'height': '50%', 'display': 'flex'}}>
-                            <button
-                            style={{
-                                'width': '50%',
-                                'height': '100%'
-                            }}
-                            className="tetris_control_button">
-                            left
-                            </button>
-                            <button
-                            style={{
-                                'width': '50%',
-                                'height': '100%'
-                            }}
-                            className="tetris_control_button">
+                        <button
+                        onClick={() => this.handleControls('right')}
+                        style={{
+                            'width': '100%',
+                            
+                        }}
+                        className="tetris_control_button">
                             right
-                            </button>
-                        </div>
+                        </button>
                     </div>
                     
                     
