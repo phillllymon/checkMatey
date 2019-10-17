@@ -136,7 +136,6 @@
 
 .tetris_control_button {
     display: flex;
-    align-items: flex-start;
     justify-content: center;
     background-color: black;
     font-size: 8vw;
