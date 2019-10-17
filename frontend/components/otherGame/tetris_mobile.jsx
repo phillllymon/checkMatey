@@ -30,6 +30,8 @@ class TetrisMobile extends React.Component {
         this.handleEnterName = this.handleEnterName.bind(this);
         this.togglePreview = this.togglePreview.bind(this);
         this.fullScreen = this.fullScreen.bind(this);
+
+        
     }
 
     componentWillUnmount() {
@@ -189,10 +191,15 @@ class TetrisMobile extends React.Component {
 
     componentDidMount() {
         this.getHighScore();
+        const theGame = document.getElementById("full");
+        this.controlsHeight = theGame.offsetHeight - (1.4 * theGame.offsetWidth);
         //this.fullScreen();
     }
 
     render() {
+        console.log(document.getElementById("full") ? 
+            document.getElementById("full").offsetHeight :
+            '');
         return (
             
                 <div 
@@ -258,9 +265,37 @@ class TetrisMobile extends React.Component {
                             </center>
                         </div>
                     </div>
-                    <div>
-                        <button className="tetris_control_button">
+                    <div style={{
+                            'height': `${this.controlsHeight}px`, 
+                            'width': '100%',
+                            'backgroundColor': 'green'
+                        }}>
+                        <button
+                            style={{
+                                'width': '100%',
+                                'height': '50%'
+                            }}
+                            className="tetris_control_button">
+                            rotate
                         </button>
+                        <div style={{'height': '50%', 'display': 'flex'}}>
+                            <button
+                            style={{
+                                'width': '50%',
+                                'height': '100%'
+                            }}
+                            className="tetris_control_button">
+                            left
+                            </button>
+                            <button
+                            style={{
+                                'width': '50%',
+                                'height': '100%'
+                            }}
+                            className="tetris_control_button">
+                            right
+                            </button>
+                        </div>
                     </div>
                     
                     

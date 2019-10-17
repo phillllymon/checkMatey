@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const MobileSplash = (props) => (
     <div className="mobile_container">
+        <center>
         <div id="splash_logo_mobile"></div>
         <div id="splash_set_mobile"></div>         
         <Link className="mobile_button" to="/signup">
@@ -26,6 +27,7 @@ const MobileSplash = (props) => (
             </i> 
             Not Chess
         </Link>
+        </center>
     </div>
 
 );

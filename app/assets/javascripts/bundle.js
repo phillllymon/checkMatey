@@ -4322,7 +4322,7 @@ __webpack_require__.r(__webpack_exports__);
 var MobileSplash = function MobileSplash(props) {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "mobile_container"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "splash_logo_mobile"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "splash_set_mobile"
@@ -4350,7 +4350,7 @@ var MobileSplash = function MobileSplash(props) {
     style: {
       'marginRight': '20px'
     }
-  }), "Not Chess"));
+  }), "Not Chess")));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (MobileSplash);
@@ -5763,11 +5763,14 @@ function (_React$Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.getHighScore(); //this.fullScreen();
+      this.getHighScore();
+      var theGame = document.getElementById("full");
+      this.controlsHeight = theGame.offsetHeight - 1.4 * theGame.offsetWidth; //this.fullScreen();
     }
   }, {
     key: "render",
     value: function render() {
+      console.log(document.getElementById("full") ? document.getElementById("full").offsetHeight : '');
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         onClick: this.fullScreen,
         id: "full",
@@ -5808,9 +5811,36 @@ function (_React$Component) {
         className: "tetris_stats_mobile"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Record:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text_mobile"
-      }, this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highTime.slice(0, 10))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highTime.slice(0, 10))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'height': "".concat(this.controlsHeight, "px"),
+          'width': '100%',
+          'backgroundColor': 'green'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        style: {
+          'width': '100%',
+          'height': '50%'
+        },
         className: "tetris_control_button"
-      })), this.state.playing ? '' : this.startButton());
+      }, "rotate"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'height': '50%',
+          'display': 'flex'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        style: {
+          'width': '50%',
+          'height': '100%'
+        },
+        className: "tetris_control_button"
+      }, "left"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        style: {
+          'width': '50%',
+          'height': '100%'
+        },
+        className: "tetris_control_button"
+      }, "right"))), this.state.playing ? '' : this.startButton());
     }
   }]);
 
