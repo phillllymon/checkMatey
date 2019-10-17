@@ -288,9 +288,27 @@ class TetrisMobile extends React.Component {
                             <div className="smaller_text_mobile">{this.leader}<br/>{this.highTime.slice(0, 10)}</div>
                             </center>
                         </div>
+                        <button
+                        onClick={() => this.handleControls('down')}
+                        style={{
+                            'width': '100%',
+                            'height': '28vw'
+                        }}
+                        className="tetris_control_button">
+                        <i className="fas fa-arrow-down"></i>
+                        </button>
+                        <button
+                        onClick={() => this.handleControls('drop')}
+                        style={{
+                            'width': '100%',
+                            'height': '28vw'
+                        }}
+                        className="tetris_control_button">
+                        <i className="fas fa-download"></i>
+                        </button>
                     </div>
                     <div id="controls" style={{
-                            'height': `${this.controlsHeight}px`,
+                            'height': '25vh',
                             'width': '100%',
                             'backgroundColor': 'green',
                             'display': 'flex'
@@ -302,7 +320,7 @@ class TetrisMobile extends React.Component {
                             
                         }}
                         className="tetris_control_button">
-                            left
+                        <i className="fas fa-arrow-left"></i>
                         </button>
                         <button
                         onClick={() => this.handleControls('rotate')}
@@ -311,7 +329,7 @@ class TetrisMobile extends React.Component {
                             
                         }}
                         className="tetris_control_button">
-                            rotate
+                        <i className="fas fa-undo"></i>
                         </button>
                         <button
                         onClick={() => this.handleControls('right')}
@@ -320,7 +338,7 @@ class TetrisMobile extends React.Component {
                             
                         }}
                         className="tetris_control_button">
-                            right
+                        <i className="fas fa-arrow-right"></i>
                         </button>
                     </div>
                     

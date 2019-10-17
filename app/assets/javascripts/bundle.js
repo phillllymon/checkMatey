@@ -413,9 +413,9 @@ function (_React$Component) {
 
     _classCallCheck(this, App);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props)); //this.mobile = typeof window.orientation !== 'undefined';
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
+    _this.mobile = typeof window.orientation !== 'undefined'; //this.mobile = true;
 
-    _this.mobile = true;
     return _this;
   }
 
@@ -5840,10 +5840,32 @@ function (_React$Component) {
         className: "tetris_stats_mobile"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Record:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text_mobile"
-      }, this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highTime.slice(0, 10))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highTime.slice(0, 10)))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: function onClick() {
+          return _this6.handleControls('down');
+        },
+        style: {
+          'width': '100%',
+          'height': '28vw'
+        },
+        className: "tetris_control_button"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-down"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: function onClick() {
+          return _this6.handleControls('drop');
+        },
+        style: {
+          'width': '100%',
+          'height': '28vw'
+        },
+        className: "tetris_control_button"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-download"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "controls",
         style: {
-          'height': "".concat(this.controlsHeight, "px"),
+          'height': '25vh',
           'width': '100%',
           'backgroundColor': 'green',
           'display': 'flex'
@@ -5856,7 +5878,9 @@ function (_React$Component) {
           'width': '100%'
         },
         className: "tetris_control_button"
-      }, "left"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-left"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: function onClick() {
           return _this6.handleControls('rotate');
         },
@@ -5864,7 +5888,9 @@ function (_React$Component) {
           'width': '100%'
         },
         className: "tetris_control_button"
-      }, "rotate"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-undo"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: function onClick() {
           return _this6.handleControls('right');
         },
@@ -5872,7 +5898,9 @@ function (_React$Component) {
           'width': '100%'
         },
         className: "tetris_control_button"
-      }, "right")), this.state.playing ? '' : this.startButton());
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }))), this.state.playing ? '' : this.startButton());
     }
   }]);
 

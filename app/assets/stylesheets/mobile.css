@@ -32,7 +32,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: blue;
+    background-color: black;
 }
 
 .smaller_text_mobile {
@@ -106,7 +106,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 3vw;
+    padding: 7vw;
     font-size: 8vw;
     background-color: black;
     color: lightgray;
@@ -136,17 +136,21 @@
 
 .tetris_control_button {
     display: flex;
-    align-items: center;
+    align-items: top;
     justify-content: center;
     background-color: black;
-    font-size: 6vw;
+    font-size: 8vw;
     color: lightgray;
-    border: 0.25vw solid darkgray;
-    border-radius: 4vw;
+    border: none;
 }
 
 .tetris_control_button:active {
     background-color: lightgray;
+}
+
+.tetris_control_button:focus {
+    border: none;
+    outline: none;
 }
 
 .i_mobile {
