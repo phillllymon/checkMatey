@@ -1,6 +1,6 @@
 import React from 'react';
 import Game from './game';
-import Cell from './cell';
+import CellMobile from './cell_mobile';
 
 class TetrisMobile extends React.Component {
     constructor(props) {
@@ -12,7 +12,8 @@ class TetrisMobile extends React.Component {
             grid: this.game.grid,
             nextGrid: this.game.nextGrid,
             level: 1, 
-            enteredName: ''
+            enteredName: '',
+            fullScreen: false
         };
         this.interval = 1000;
         this.handleInput = this.handleInput.bind(this);
@@ -31,17 +32,12 @@ class TetrisMobile extends React.Component {
         this.fullScreen = this.fullScreen.bind(this);
     }
 
-    componentDidMount() {
-        this.getHighScore();
-    }
-
     componentWillUnmount() {
         clearInterval(this.pieceInterval);
     }
 
     togglePreview(e) {
         e.target.blur();
-        document.getElementById("the_game").focus();
         this.game.preview = this.game.preview ? false : true;
         this.setState({});
     }
@@ -109,7 +105,6 @@ class TetrisMobile extends React.Component {
 
     startGame(e) {
         this.setState({playing: true});
-        document.getElementById("the_game").focus();
         this.game = new Game(this.game.preview, this.game.nextPiece);
         this.game.start();
         this.level = this.game.level;
@@ -171,85 +166,110 @@ class TetrisMobile extends React.Component {
 
     startButton(){
         return (
-            <button className="tetris_button" onClick={this.startGame}>Start Game</button>
+            <button className="start_button_mobile" onClick={this.startGame}>Start Game</button>
         );
     }
 
     fullScreen(e) {
-        e.target.webkitRequestFullscreen();
+        const theGame = document.getElementById("full");
+        if (theGame.requestFullscreen){
+            theGame.requestFullscreen();
+        }
+        else if (theGame.mozRequestFullScreen) {
+            theGame.mozRequestFullScreen();
+        }
+        else if (theGame.webkitRequestFullscreen) {
+            theGame.webkitRequestFullscreen();
+        }
+        else if (theGame.msRequestFullscreen) {
+            theGame.msRequestFullscreen();
+        }
+        this.setState({fullScreen: true});
+    }
+
+    componentDidMount() {
+        this.getHighScore();
+        //this.fullScreen();
     }
 
     render() {
         return (
-            <div onKeyDown={this.handleInput} tabIndex="0" id="the_game" className="game_box">
-                <div id="full" onClick={this.fullScreen} className="full_screen">
-                    I hope this is full screen
-                </div>
-                {this.promptName ? this.askForName() : ''}
-                <div className="play_area">
-                    {
-                        this.state.grid.map( (row, rIdx) => {
-                            return (
-                                row.map( (cell, cIdx) => {
-                                    return (
-                                        <Cell key={[rIdx, cIdx]} status={cell} pos={[rIdx, cIdx]} />
-                                    );
-                                })
-                            );
-                        })
-                    }
-                </div>
-                <div className="tetris_stats preview_box">
-                    <div className="display_preview">
-                        {this.game.preview ? this.state.nextGrid.map((row, rIdx) => {
-                            return (
-                                row.map((cell, cIdx) => {
-                                    return <Cell key={[rIdx, cIdx]} status={cell} />
-                                })
-                            );
-
-                        }) : ''
+            
+                <div 
+                    onClick={this.fullScreen} 
+                    id="full" 
+                    className="full_screen"
+                    onKeyDown={this.handleInput} tabIndex="0"
+                > 
+                
+                    {this.promptName ? this.askForName() : ''}
+                
+                
+                    <div className="play_area_mobile">
+                        {
+                            this.state.grid.map( (row, rIdx) => {
+                                return (
+                                    row.map( (cell, cIdx) => {
+                                        return (
+                                            <CellMobile key={[rIdx, cIdx]} status={cell} pos={[rIdx, cIdx]} />
+                                        );
+                                    })
+                                );
+                            })
                         }
                     </div>
-                    <center>
-                    Next:
-                    <br/>
-                    <button className={this.game.preview ? "toggle_button button_on" : "toggle_button"}
-                        onClick={this.togglePreview}><i className="fas fa-circle"></i></button>
-                        {this.game.preview ? 'on ' : 'off'}
-                    <br/>
-                    <div className="smaller_text">
-                        {this.game.preview ? '(half points)' : ''}
+                    <div className="side_mobile">
+                        <div className="tetris_stats_mobile preview_box">
+                            <center>
+                                Next:
+                            <div className="display_preview_mobile">
+                                {this.game.preview ? this.state.nextGrid.map((row, rIdx) => {
+                                    return (
+                                        row.map((cell, cIdx) => {
+                                            return <CellMobile key={[rIdx, cIdx]} status={cell} />
+                                        })
+                                    );
+
+                                }) : ''
+                                }
+                            </div>
+                            </center>
+                                <button className={this.game.preview ? "toggle_button_mobile button_on_mobile" : "toggle_button_mobile"}
+                                    onClick={this.togglePreview}><i className="fas fa-circle"></i></button>
+                                {this.game.preview ? 'on' : 'off'}
+                        </div>
+                        <div className="tetris_stats_mobile">
+                            <center>
+                                Score:
+                            <br />
+                                {this.game.score}
+                                <br />
+                                Level: {this.game.level}
+                                <br />
+                                Lines: {this.game.lines}
+                            </center>
+                        </div>
+                        <div className="tetris_stats_mobile">
+                            <center>
+                                Record: 
+                                <br />
+                                {this.highScore}
+                            <div className="smaller_text_mobile">{this.leader}<br/>{this.highTime.slice(0, 10)}</div>
+                            </center>
+                        </div>
                     </div>
-                    </center>
-                </div>
-                <div className="tetris_stats">
-                    <center>
-                    Leader: {this.leader}
-                    <br />
-                    Highscore: {this.highScore}
-                    <br />
-                    <div className="smaller_text">{this.highTime.slice(0, 10)}</div>
-                    </center>
-                </div>
-                <div className="tetris_stats">
-                    <center>
-                    Woo we're mobile!
-                    <br/>
-                    Score: 
-                    <br/>
-                    {this.game.score}
-                    <br />
-                    Level: {this.game.level}
-                    <br />
-                    Lines: {this.game.lines}
-                    <div className="smaller_text">interval: {this.interval}</div>
-                    </center>
-                </div>
+                    <div>
+                        <button className="tetris_control_button">
+                        </button>
+                    </div>
+                    
+                    
+                    
                     
                     {this.state.playing ? '' : this.startButton()}
-                
-            </div>
+                </div>
+           
+            
         );
     }
 }
