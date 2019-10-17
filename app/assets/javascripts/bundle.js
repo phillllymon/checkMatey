@@ -5798,7 +5798,6 @@ function (_React$Component) {
     value: function render() {
       var _this6 = this;
 
-      console.log(document.getElementById("controls") ? document.getElementById("controls").offsetHeight : "");
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         onClick: this.fullScreen,
         id: "full",
@@ -5880,9 +5879,11 @@ function (_React$Component) {
         className: "tetris_control_button"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-arrow-left"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: function onClick() {
-          return _this6.handleControls('rotate');
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: function onClick(e) {
+          e.preventDefault();
+
+          _this6.handleControls('rotate');
         },
         style: {
           'width': '100%'
@@ -5890,7 +5891,7 @@ function (_React$Component) {
         className: "tetris_control_button"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-undo"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: function onClick() {
           return _this6.handleControls('right');
         },
@@ -5900,7 +5901,7 @@ function (_React$Component) {
         className: "tetris_control_button"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-arrow-right"
-      }))), this.state.playing ? '' : this.startButton());
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))), this.state.playing ? '' : this.startButton());
     }
   }]);
 

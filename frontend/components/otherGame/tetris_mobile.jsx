@@ -221,9 +221,6 @@ class TetrisMobile extends React.Component {
     }
 
     render() {
-        console.log(document.getElementById("controls") ?
-        document.getElementById("controls").offsetHeight :
-        "");
         return (
             
                 <div 
@@ -320,16 +317,19 @@ class TetrisMobile extends React.Component {
                             
                         }}
                         className="tetris_control_button">
-                        <i className="fas fa-arrow-left"></i>
+                        <i className="fas fa-arrow-left"></i><br /><br /><br />
                         </button>
                         <button
-                        onClick={() => this.handleControls('rotate')}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            this.handleControls('rotate')
+                        }}
                         style={{
                             'width': '100%',
                             
                         }}
                         className="tetris_control_button">
-                        <i className="fas fa-undo"></i>
+                        <i className="fas fa-undo"></i><br /><br /><br />
                         </button>
                         <button
                         onClick={() => this.handleControls('right')}
@@ -338,7 +338,7 @@ class TetrisMobile extends React.Component {
                             
                         }}
                         className="tetris_control_button">
-                        <i className="fas fa-arrow-right"></i>
+                        <i className="fas fa-arrow-right"></i><br/><br/><br/>
                         </button>
                     </div>
                     
