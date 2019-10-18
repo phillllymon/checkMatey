@@ -194,7 +194,7 @@ class VsBoard extends React.Component {
                     this.game.makeMove(data.move);
                     this.highlightSquare = data.move[1];
                     this.currentPlayer = this.game.currentPlayer;
-                    this.setState({});
+                    this.setState({opponentTime: data.time});
                 }
                 if (this.game.isGameOver()) {
                     this.endTheGame(this.game.gameOverMessage);
@@ -341,7 +341,12 @@ class VsBoard extends React.Component {
                 }
                 this.game.makeMove(move);
                 this.highlightSquare = move[1];
-                this.playSub.perform('relayMove', {'gameId': this.props.gameId, 'move': move, 'color': this.playerColor});
+                this.playSub.perform('relayMove', {
+                    'gameId': this.props.gameId, 
+                    'move': move, 
+                    'color': this.playerColor, 
+                    'time': this.state.playerTime
+                });
                 this.currentPlayer = this.game.currentPlayer;
                 this.grid = this.game.grid;
                 this.setState({

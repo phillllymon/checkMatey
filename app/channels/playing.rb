@@ -31,7 +31,8 @@ class Playing < ApplicationCable::Channel
     theMove = move['move']
     theColor = move['color']
     gameId = move['gameId']
-    ActionCable.server.broadcast("Playing", {gameId: gameId, move: theMove, color: theColor})
+    theTime = move['time']
+    ActionCable.server.broadcast("Playing", {gameId: gameId, move: theMove, color: theColor, time: theTime})
   end
 
   def unsubscribed

@@ -16,6 +16,8 @@ class SignupForm extends React.Component {
         this.backToSplash = this.backToSplash.bind(this);
         this.toLogin = this.toLogin.bind(this);
         this.demoLogin = this.demoLogin.bind(this);
+
+        this.mobile = typeof window.orientation !== 'undefined';
     }
     
     updateField(field) {
@@ -31,10 +33,14 @@ class SignupForm extends React.Component {
     }
 
     backToSplash(e) {
+        console.log('hello');
+        console.log(this.props);
         this.props.history.push('/');
     }
 
     toLogin(e) {
+        console.log('hello');
+        console.log(this.props);
         this.props.history.push('/login');
     }
 
@@ -45,6 +51,13 @@ class SignupForm extends React.Component {
     }
 
     render() {
+        if (this.mobile) {
+            return (
+                <div>
+                    poopyface
+                </div>
+            );
+        }
         return (
             <div>
                 <div className="modal_back" onClick={this.backToSplash}></div>

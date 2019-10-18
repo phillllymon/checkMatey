@@ -24,15 +24,15 @@ class App extends React.Component {
                         <Route path="/home" component={Home} />
                         <Route
                             path="/sandbox"
-                            render={() => <ChessTableContainer mode={'sandbox'} />}
+                            render={() => <ChessTableContainer mobile={true} mode={'sandbox'} />}
                         />
                         <Route
                             path="/show"
-                            render={() => <ChessTableContainer />}
+                            render={() => <ChessTableContainer mobile={true} />}
                         />
                         <Route
                             path="/play"
-                            render={() => <ChessTableContainer player={'User'}
+                            render={() => <ChessTableContainer mobile={true} player={'User'}
                                 mode={'playComputer'} />}
                         />
                         <Redirect to='/home' />
@@ -43,12 +43,23 @@ class App extends React.Component {
                 return (
                     <div>
                         <MobileSplash />
-                        <Route path="/login" component={LoginFormContainer} />
+                        {/* <Route
+                            path="/login"
+                            render={() => <LoginFormContainer  mobile={true} />}
+                        /> */}
                         <Route path="/signup" component={SignupFormContainer} />
-                        <Route path="/notChess" component={OtherGameContainerMobile} />
+                        <Route path="/login" component={LoginFormContainer} />
+                        {/* <Route
+                            path="/signup"
+                            render={() => <SignupFormContainer mobile={true} />}
+                        /> */}
+                        <Route
+                            path="/notChess"
+                            render={() => <OtherGameContainerMobile mobile={true} />}
+                        />
                         <Route
                             path="/play"
-                            render={() => <ChessTableContainer player={'Guest'}
+                            render={() => <ChessTableContainer mobile={true} player={'Guest'}
                                 mode={'playComputer'} />}
                         />
                     </div>

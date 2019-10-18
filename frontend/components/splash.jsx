@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-//var stockfish = require('stockfish');
 
 const Splash = (props) => (
     

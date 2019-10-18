@@ -431,18 +431,22 @@ function (_React$Component) {
             path: "/sandbox",
             render: function render() {
               return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                mobile: true,
                 mode: 'sandbox'
               });
             }
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
             path: "/show",
             render: function render() {
-              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], null);
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                mobile: true
+              });
             }
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
             path: "/play",
             render: function render() {
               return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                mobile: true,
                 player: 'User',
                 mode: 'playComputer'
               });
@@ -452,18 +456,23 @@ function (_React$Component) {
           }));
         } else {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mobile_splash__WEBPACK_IMPORTED_MODULE_5__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-            path: "/login",
-            component: _session_login_form_container__WEBPACK_IMPORTED_MODULE_1__["default"]
-          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
             path: "/signup",
             component: _session_signup_form_container__WEBPACK_IMPORTED_MODULE_2__["default"]
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+            path: "/login",
+            component: _session_login_form_container__WEBPACK_IMPORTED_MODULE_1__["default"]
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
             path: "/notChess",
-            component: _otherGame_other_game_container_mobile__WEBPACK_IMPORTED_MODULE_7__["default"]
+            render: function render() {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_otherGame_other_game_container_mobile__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                mobile: true
+              });
+            }
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
             path: "/play",
             render: function render() {
               return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                mobile: true,
                 player: 'Guest',
                 mode: 'playComputer'
               });
@@ -3128,7 +3137,9 @@ function (_React$Component) {
             this.game.makeMove(data.move);
             this.highlightSquare = data.move[1];
             this.currentPlayer = this.game.currentPlayer;
-            this.setState({});
+            this.setState({
+              opponentTime: data.time
+            });
           }
 
           if (this.game.isGameOver()) {
@@ -3308,7 +3319,8 @@ function (_React$Component) {
           this.playSub.perform('relayMove', {
             'gameId': this.props.gameId,
             'move': move,
-            'color': this.playerColor
+            'color': this.playerColor,
+            'time': this.state.playerTime
           });
           this.currentPlayer = this.game.currentPlayer;
           this.grid = this.game.grid;
@@ -6620,6 +6632,7 @@ function (_React$Component) {
     _this.backToSplash = _this.backToSplash.bind(_assertThisInitialized(_this));
     _this.toLogin = _this.toLogin.bind(_assertThisInitialized(_this));
     _this.demoLogin = _this.demoLogin.bind(_assertThisInitialized(_this));
+    _this.mobile = typeof window.orientation !== 'undefined';
     return _this;
   }
 
@@ -6644,11 +6657,15 @@ function (_React$Component) {
   }, {
     key: "backToSplash",
     value: function backToSplash(e) {
+      console.log('hello');
+      console.log(this.props);
       this.props.history.push('/');
     }
   }, {
     key: "toLogin",
     value: function toLogin(e) {
+      console.log('hello');
+      console.log(this.props);
       this.props.history.push('/login');
     }
   }, {
@@ -6666,6 +6683,10 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      if (this.mobile) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "poopyface");
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal_back",
         onClick: this.backToSplash
@@ -6794,7 +6815,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 
- //var stockfish = require('stockfish');
+
 
 var Splash = function Splash(props) {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
