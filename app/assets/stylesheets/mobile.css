@@ -157,10 +157,10 @@
     width: 7vw;
     height: 7vw;
     box-sizing: border-box;
-    border-right: 0.5vw solid gray;
-    border-bottom: 0.5vw solid gray;
-    border-top: 0.5vw solid lightgray;
-    border-left: 0.5vw solid lightgray;
+    border-right: 2px solid darkred;
+    border-bottom: 2px solid darkred;
+    border-top: 2px solid rgb(255, 126, 126);
+    border-left: 2px solid rgb(255, 126, 126);
 }
 
 .a_mobile {
@@ -168,10 +168,10 @@
     width: 7vw;
     height: 7vw;
     box-sizing: border-box;
-    border-right: 0.5vw solid gray;
-    border-bottom: 0.5vw solid gray;
-    border-top: 0.5vw solid lightgray;
-    border-left: 0.5vw solid lightgray;
+    border-right: 2px solid rgb(132, 167, 179);
+    border-bottom: 2px solid rgb(132, 167, 179);
+    border-top: 2px solid rgb(201, 240, 253);
+    border-left: 2px solid rgb(201, 240, 253);
 }
 
 .t_mobile {
@@ -190,10 +190,10 @@
     width: 7vw;
     height: 7vw;
     box-sizing: border-box;
-    border-right: 0.5vw solid gray;
-    border-bottom: 0.5vw solid gray;
-    border-top: 0.5vw solid lightgray;
-    border-left: 0.5vw solid lightgray;
+    border-right: 2px solid rgb(206, 206, 0);
+    border-bottom: 2px solid rgb(206, 206, 0);
+    border-top: 2px solid lightyellow;
+    border-left: 2px solid lightyellow;
 }
 
 .j_mobile {
@@ -201,10 +201,10 @@
     width: 7vw;
     height: 7vw;
     box-sizing: border-box;
-    border-right: 0.5vw solid gray;
-    border-bottom: 0.5vw solid gray;
-    border-top: 0.5vw solid lightgray;
-    border-left: 0.5vw solid lightgray;
+    border-right: 2px solid rgb(88, 43, 88);
+    border-bottom: 2px solid rgb(88, 43, 88);
+    border-top: 2px solid rgb(187, 0, 187);
+    border-left: 2px solid rgb(187, 0, 187);
 }
 
 .s_mobile {
@@ -212,10 +212,10 @@
     width: 7vw;
     height: 7vw;
     box-sizing: border-box;
-    border-right: 0.5vw solid gray;
-    border-bottom: 0.5vw solid gray;
-    border-top: 0.5vw solid lightgray;
-    border-left: 0.5vw solid lightgray;
+    border-right: 2px solid darkgreen;
+    border-bottom: 2px solid darkgreen;
+    border-top: 2px solid rgb(0, 153, 0);
+    border-left: 2px solid rgb(0, 153, 0);
 }
 
 .z_mobile {
@@ -223,8 +223,8 @@
     width: 7vw;
     height: 7vw;
     box-sizing: border-box;
-    border-right: 0.5vw solid gray;
-    border-bottom: 0.5vw solid gray;
-    border-top: 0.5vw solid lightgray;
-    border-left: 0.5vw solid lightgray;
+    border-right: 2px solid darkblue;
+    border-bottom: 2px solid darkblue;
+    border-top: 2px solid rgb(95, 95, 255);
+    border-left: 2px solid rgb(95, 95, 255);
 }

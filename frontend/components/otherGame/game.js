@@ -107,6 +107,7 @@ class Game {
             }
         });
         let scoreAmt = 100 * (multiplier * multiplier);
+        scoreAmt *= this.level;
         this.score += this.preview ? scoreAmt/2 : scoreAmt;
     }
 
