@@ -33,14 +33,10 @@ class SignupForm extends React.Component {
     }
 
     backToSplash(e) {
-        console.log('hello');
-        console.log(this.props);
         this.props.history.push('/');
     }
 
     toLogin(e) {
-        console.log('hello');
-        console.log(this.props);
         this.props.history.push('/login');
     }
 
@@ -52,10 +48,69 @@ class SignupForm extends React.Component {
 
     render() {
         if (this.mobile) {
-            return (
-                <div>
-                    poopyface
+            return(
+            <div>
+                <div className="modal_back" onClick={this.backToSplash}></div>
+                <div className="session_modal_mobile">
+                    <br />
+                    <div className="errors">
+                        <center>
+                            {
+                                this.props.errors.map((error, idx) => {
+                                    return (
+                                        <div key={idx}>
+                                            {error}
+                                        </div>
+                                    );
+                                })
+                            }
+                        </center>
+                    </div>
+                    <form onSubmit={this.handleSubmit}>
+                        <br/>
+                        <center><h1>Welcome Aboard!</h1>
+                        
+                            <br/>
+                            Username:
+                            <br/>
+                                <input
+                                    className="input_field_mobile"
+                                    type="text"
+                                    value={this.state.username}
+                                    onChange={this.updateField('username')}
+                                />
+                            <br/>
+                            Email:
+                            <br />
+                                <input
+                                    className="input_field_mobile"
+                                    type="email"
+                                    value={this.state.email}
+                                    onChange={this.updateField('email')}
+                                />
+                            <br/>
+                            Password:
+                            <br />
+                                <input
+                                    className="input_field_mobile"
+                                    type="password"
+                                    value={this.state.password}
+                                    onChange={this.updateField('password')}
+                                />
+                            <br/>
+                            <div className="submit_bar">
+                                <button className="session_button_mobile" type="submit" >Create Account</button>
+                                <i>or</i>
+                                    <button onClick={this.demoLogin} className="session_button_mobile" >Demo Login</button>
+                            </div>
+                        </center>
+                    </form>
+                    <div className="submit_bar">
+                        Already have an account?
+                        <button className="session_button_mobile" onClick={this.toLogin}>Login</button>
+                    </div>
                 </div>
+            </div>
             );
         }
         return (

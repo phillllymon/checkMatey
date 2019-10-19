@@ -6432,6 +6432,7 @@ function (_React$Component) {
     _this.backToSplash = _this.backToSplash.bind(_assertThisInitialized(_this));
     _this.toSignup = _this.toSignup.bind(_assertThisInitialized(_this));
     _this.demoLogin = _this.demoLogin.bind(_assertThisInitialized(_this));
+    _this.mobile = typeof window.orientation !== 'undefined';
     return _this;
   }
 
@@ -6478,6 +6479,46 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      if (this.mobile) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "modal_back",
+          onClick: this.backToSplash
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "session_modal_mobile"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "errors"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.props.errors.map(function (error, idx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            key: idx
+          }, error);
+        }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+          onSubmit: this.handleSubmit
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Ahoy, Matey!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Username:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          className: "input_field_mobile",
+          type: "text",
+          value: this.state.username,
+          onChange: this.updateField('username')
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Password:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          className: "input_field_mobile",
+          type: "password",
+          value: this.state.password,
+          onChange: this.updateField('password')
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "submit_bar"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "session_button_mobile",
+          type: "submit"
+        }, "Log In"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, "or"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: this.demoLogin,
+          className: "session_button_mobile"
+        }, "Demo Login")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "submit_bar"
+        }, "Don't have an account?", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "session_button_mobile",
+          onClick: this.toSignup
+        }, "Sign Up"))));
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal_back",
         onClick: this.backToSplash
@@ -6657,15 +6698,11 @@ function (_React$Component) {
   }, {
     key: "backToSplash",
     value: function backToSplash(e) {
-      console.log('hello');
-      console.log(this.props);
       this.props.history.push('/');
     }
   }, {
     key: "toLogin",
     value: function toLogin(e) {
-      console.log('hello');
-      console.log(this.props);
       this.props.history.push('/login');
     }
   }, {
@@ -6684,7 +6721,48 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       if (this.mobile) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "poopyface");
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "modal_back",
+          onClick: this.backToSplash
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "session_modal_mobile"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "errors"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.props.errors.map(function (error, idx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            key: idx
+          }, error);
+        }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+          onSubmit: this.handleSubmit
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Welcome Aboard!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Username:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          className: "input_field_mobile",
+          type: "text",
+          value: this.state.username,
+          onChange: this.updateField('username')
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Email:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          className: "input_field_mobile",
+          type: "email",
+          value: this.state.email,
+          onChange: this.updateField('email')
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Password:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          className: "input_field_mobile",
+          type: "password",
+          value: this.state.password,
+          onChange: this.updateField('password')
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "submit_bar"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "session_button_mobile",
+          type: "submit"
+        }, "Create Account"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, "or"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: this.demoLogin,
+          className: "session_button_mobile"
+        }, "Demo Login")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "submit_bar"
+        }, "Already have an account?", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "session_button_mobile",
+          onClick: this.toLogin
+        }, "Login"))));
       }
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {

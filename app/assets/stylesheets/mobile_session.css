@@ -1,0 +1,41 @@
+.session_modal_mobile {
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 15%;
+    width: 100vw;
+    background-color: rgb(230, 230, 230);
+    border-radius: 5px;
+    font-family: sans-serif;
+    font-size: 5vw;
+    color: rgb(60, 60, 60);
+    
+}
+
+.input_field_mobile {
+    margin-bottom: 1vw;
+    margin-top: 1vw;
+    width: 90%;
+    height: 8vw;
+    font-size: 7vw;
+}
+
+.session_button_mobile {
+    font-size: 6vw;
+    height: 9vw;
+    margin: 1vw;
+    border-radius: 1vw;
+    background-color: lightgray;
+    margin: 3vw;
+    border-top: 0.5vw solid lightgray;
+    border-left: 0.5vw solid lightgray;
+    border-right: 0.5vw solid darkgray;
+    border-bottom: 0.5vw solid darkgray;
+}
+
+.session_button_mobile:active {
+    border-bottom: 0.5vw solid lightgray;
+    border-right: 0.5vw solid lightgray;
+    border-left: 0.5vw solid darkgray;
+    border-top: 0.5vw solid darkgray;
+}
