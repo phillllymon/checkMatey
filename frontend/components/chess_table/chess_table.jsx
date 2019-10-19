@@ -3,6 +3,7 @@ import BoardContainer from './board_container';
 import ShowBoardContainer from './show_board/show_board_container';
 import PlayBoardContainer from './play_board/play_board_container';
 import VsBoardContainer from './vs_board/vs_board_container';
+import VsBoardMobileContainer from './vs_board/vs_board_mobile_container';
 
 class ChessTable extends React.Component {
     constructor(props) {
@@ -37,6 +38,24 @@ class ChessTable extends React.Component {
                     <div className="modal_back"></div>
                     <VsBoardContainer 
                         mode={'vs'} 
+                        player={this.props.player}
+                        opponent={this.props.opponent}
+                        color={this.props.color}
+                        time={this.props.time}
+                        gameId={this.props.gameId}
+                        gameType={this.props.gameType}
+                        gameTime={this.props.gameTime}
+                        leaveGame={this.props.leaveGame}
+                    />
+                </div>
+            );
+        }
+        if (this.props.mode === 'vsMobile') {
+            return (
+                <div>
+                    <div className="modal_back"></div>
+                    <VsBoardMobileContainer
+                        mode={'vs'}
                         player={this.props.player}
                         opponent={this.props.opponent}
                         color={this.props.color}

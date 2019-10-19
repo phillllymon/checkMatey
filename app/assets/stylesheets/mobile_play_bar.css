@@ -1,0 +1,167 @@
+.play_bar_mobile {
+    width: 100vw;  
+    overflow: hidden;
+}
+
+.controls_heading_mobile {
+    font-family: sans-serif;
+    padding: 2vw;
+    display: flex;
+    font-size: 8vw;
+    justify-content: center;
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+}
+
+.challenge_box_header_mobile {
+    background-color: orange;
+    font-size: 150%;
+    padding: 4vw;
+    border-bottom: 1px solid gray;
+}
+
+.challenge_box_mobile {
+    position: fixed;
+    z-index: 2;
+    top: 15%;
+    left: 5%;
+    width: 90vw;
+    font-family: sans-serif;
+    font-size: 5vw;
+    background-color: rgb(230, 230, 230);
+    border-radius: 2vw;
+    overflow: hidden;
+}
+
+.time_button_mobile {
+    padding: 1vw;
+    height: 9vw;  
+    font-size: 5vw;
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+    border-right: 0.5vw solid gray;
+    border-bottom: 0.5vw solid gray;
+    border-top: 0.5vw solid lightgray;
+    border-left: 0.5vw solid lightgray; 
+    margin-left: 3vw;
+}
+
+.challenge_mobile {
+    margin-top: 6px;
+}
+
+.time_button_mobile:hover {
+    cursor: pointer;
+}
+
+.time_button_mobile:active {
+    border-left: 0.5vw solid gray;
+    border-top: 0.5vw solid gray;
+    border-bottom: 0.5vw solid lightgray;
+    border-right: 0.5vw solid lightgray; 
+}
+
+.time_button_mobile:focus {
+    outline: none;
+}
+
+.current_time_button_mobile {
+    padding: 1vw;
+    height: 9vw;  
+    font-size: 5vw;
+    background-color: orange;
+    color: lightgray;
+    border-left: 0.5vw solid gray;
+    border-top: 0.5vw solid gray;
+    border-bottom: 0.5vw solid lightgray;
+    border-right: 0.5vw solid lightgray; 
+    margin-left: 3vw;
+}
+
+.current_time_button_mobile:focus {
+    outline: none; 
+}
+
+.smaller_heading_mobile {
+    color: rgb(135, 129, 123);
+    padding: 1vw;
+    font-size: 8vw;
+    font-family: sans-serif;
+}
+
+.small_heading_mobile {
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+    padding: 2vw;
+    font-size: 6vw;
+    font-family: sans-serif;
+}
+
+.player_bar_mobile {
+    font-size: 6vw;
+    padding: 2vw;
+    color: black;
+    font-family: sans-serif;
+    width: 90vw;
+    background-color: orange;
+    border-top: 0.5vw solid lightgray;
+    border-left: 0.5vw solid lightgray;
+    border-right: 0.5vw solid gray;
+    border-bottom: 0.5vw solid gray;
+    border-radius: 6vw;
+    margin: 0.5vw;
+}
+
+.type_button_mobile {
+    padding: 0.5vw;
+    width: 90vw;
+    height: 8vw;  
+    font-size: 5vw;
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+    border-right: 0.5vw solid gray;
+    border-bottom: 0.5vw solid gray;
+    border-top: 0.5vw solid lightgray;
+    border-left: 0.5vw solid lightgray; 
+    margin-top: 2vw;
+}
+
+.type_button_mobile:hover {
+    cursor: pointer;
+}
+
+.type_button_mobile:focus {
+    outline: none;
+}
+
+.current_type_button_mobile {
+    padding: 0.5vw;
+    width: 90vw;
+    height: 8vw;  
+    font-size: 5vw;
+    background-color: orange;
+    color: lightgray;
+    border-left: 0.5vw solid gray;
+    border-top: 0.5vw solid gray;
+    border-bottom: 0.5vw solid lightgray;
+    border-right: 0.5vw solid lightgray; 
+    margin-top: 2vw;
+}
+
+.current_type_button_mobile:focus {
+    outline: none; 
+}
+
+.board_control_button_mobile {
+    font-size: 7vw;
+    padding: 1vw;
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+    margin: 2vw;
+}
+
+.player_icon_mobile {
+    float: left;
+    font-size: 12vw;
+    padding: 2vw
+}

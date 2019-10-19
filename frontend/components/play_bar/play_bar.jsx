@@ -36,6 +36,8 @@ class PlayBar extends React.Component {
         this.showVsBoard = this.showVsBoard.bind(this);
         this.lobbyButton = this.lobbyButton.bind(this);
         this.leaveGame = this.leaveGame.bind(this);
+
+        this.mobile = typeof window.orientation !== 'undefined';
     }
 
     leaveGame() {
@@ -43,6 +45,22 @@ class PlayBar extends React.Component {
     }
 
     showVsBoard() {
+        if (this.mobile) {
+            return (
+                <div>
+                    <ChessTableContainer
+                        mode={'vsMobile'}
+                        player={this.props.user.username}
+                        color={this.state.playing.color}
+                        opponent={this.state.playing.opponent}
+                        gameId={this.state.playing.gameId}
+                        gameType={this.state.playing.gameType}
+                        gameTime={this.state.playing.gameTime}
+                        leaveGame={this.leaveGame}
+                    />
+                </div>
+            );
+        }
         return (
             <div>
                 <ChessTableContainer 
@@ -95,10 +113,10 @@ class PlayBar extends React.Component {
 
     showChallengedBox() {
         return (
-            <div className="modal_back">
-                <div className="challenge_box">
+            <div className="vs_modal_back">
+                <div className={this.mobile ? "challenge_box_mobile" : "challenge_box"}>
                     <center>
-                    <div className="challenge_box_header">
+                        <div className={this.mobile ? "challenge_box_header_mobile" : "challenge_box_header"}>
                         New Challenge!
                     </div>
                     <br/>
@@ -108,10 +126,10 @@ class PlayBar extends React.Component {
                     on the clock.
                     <br/>
                     <br/>
-                    <button className="board_control_button"
+                    <button className={this.mobile ? "board_control_button_mobile" : "board_control_button"}
                         onClick={this.acceptChallenge}
                     >Accept</button>
-                    <button className="board_control_button"
+                        <button className={this.mobile ? "board_control_button_mobile" : "board_control_button"}
                         onClick={this.declineChallenge}
                     >Decline</button>
                     <br/>
@@ -208,6 +226,11 @@ class PlayBar extends React.Component {
             }
         );
         setTimeout(this.requestRollCall, 1000);
+        if (this.mobile) {
+            this.setState({
+                playerList: []
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -219,7 +242,7 @@ class PlayBar extends React.Component {
         if (!this.state.visible){
             return (
                 <button
-                    className="board_control_button"
+                    className={this.mobile ? "board_control_button_mobile" : "board_control_button"}
                     onClick={this.enterLobby}
                 ><i className="fas fa-sign-in-alt"></i> Enter Lobby</button>
             );
@@ -227,7 +250,7 @@ class PlayBar extends React.Component {
         else {
             return (
                 <button
-                    className="board_control_button"
+                    className={this.mobile ? "board_control_button_mobile" : "board_control_button"}
                     onClick={this.leaveLobby}
                 ><i className="fas fa-sign-in-alt" style={{
                     'transform' : 'rotate(180deg)'
@@ -237,6 +260,85 @@ class PlayBar extends React.Component {
     }
 
     render() {
+        if (this.mobile) {
+            return (
+                <div className="play_bar_mobile">
+                    {this.state.challenged ? this.showChallengedBox() : ''}
+                    {this.state.playing ? this.showVsBoard() : ''}
+                    <div className="controls_heading_mobile">
+                        <div style={{ 'margin': '10px' }}>
+                            <i className="fas fa-chess"></i> Game Room <i className="fas fa-chess-knight"></i>
+                        </div>
+                    </div>
+                    <center>
+                        {
+                            this.gameTypes.map((gameType) => {
+                                return (
+                                    <button className={this.state.gameType === gameType ? "current_type_button_mobile" : "type_button_mobile"}
+                                        onClick={() => this.setType(gameType)}
+                                        key={gameType}>{gameType}</button>
+
+                                );
+                            })
+                        }
+
+                        <div className="smaller_heading_mobile">
+                            <div style={{ 'margin': '5px' }}>
+                                <i style={{'transform': 'translate(0, 1vw)'}} className="far fa-clock"></i>
+                                {
+                                    this.times.map((time) => {
+                                        return (
+                                            <button className={this.state.gameTime === time ? "current_time_button_mobile" : "time_button_mobile"}
+                                                onClick={() => this.setTime(time)}
+                                                key={time}> {time}:00</button>
+                                        );
+                                    })
+                                }
+                            </div>
+                        </div>
+                        <div className="small_heading_mobile">
+                            <i className="fas fa-users"></i> Players
+                </div>
+                        {this.lobbyButton()}
+                        {
+
+                            this.state.playerList.map((player, idx) => {
+                                if (player === this.props.user.username) {
+                                    return (
+                                        <div className="player_bar_mobile" key={idx} >
+                                            <div className="player_icon_mobile">
+                                                <i className="fas fa-user"></i>
+                                            </div>
+                                            {player + ' (' + this.playerRatings[player] + ')'}
+                                            <br />
+                                            <button
+                                                className="time_button_mobile challenge_mobile"
+                                                style={{ 'color': 'lightgray' }}
+                                            > (This is you)</button>
+                                        </div>
+                                    );
+                                }
+                                else {
+                                    return (
+                                        <div className="player_bar_mobile" key={idx} >
+                                            <div className="player_icon_mobile">
+                                                <i className="fas fa-user"></i>
+                                            </div>
+                                            {player + ' (' + this.playerRatings[player] + ')'}
+                                            <br />
+                                            <button
+                                                className="time_button_mobile challenge_mobile"
+                                                onClick={() => this.challengePlayer(player)}
+                                            > Challenge</button>
+                                        </div>
+                                    );
+                                }
+                            })
+                        }
+                    </center>
+                </div>
+            );
+        }
         return (
             <div className="play_bar">
                 {this.state.challenged ? this.showChallengedBox() : ''}

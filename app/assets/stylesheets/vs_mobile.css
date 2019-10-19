@@ -1,0 +1,109 @@
+.chess_table_mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(185, 169, 163);
+}
+
+.board_mobile {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
+    height: 100vw;
+    max-height: 90vh;
+    max-width: 90vh;
+    border-top: 1vw solid rgb(75, 59, 53);
+    border-bottom: 1vw solid rgb(75, 59, 53);
+}
+
+.promote_mobile {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+}
+
+.flipped_mobile {
+    flex-wrap: wrap-reverse;
+    flex-direction: row-reverse;
+}
+
+.w_mobile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 8vw;
+    width: 12.5vw;
+    height: 12.5vw;
+    background-color: rgb(185, 169, 163);
+    text-shadow: 0vw 0vw 1vw rgba(10, 10, 10, 0.6);
+}
+
+.b_mobile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 8vw;
+    width: 12.5vw;
+    height: 12.5vw;
+    background-color: rgb(105, 99, 93);
+    text-shadow: 0vw 0vw 1vw rgba(255, 255, 255, 0.5);
+}
+
+.highlight_mobile {
+    background-color: orange;
+    text-shadow: 0vw 0vw 1vw rgba(10, 10, 10, 0.6);
+}
+
+.white_piece_mobile {
+    color: rgb(200, 200, 200);
+}
+
+.black_piece_mobile {
+    color: rgb(50, 50, 50);
+}
+
+.white_piece_mobile:hover {
+    cursor: grab;
+}
+
+.black_piece_mobile:hover {
+    cursor: grab;
+}
+
+.white_piece_mobile:active {
+    cursor: grabbing;
+}
+
+.black_piece_mobile:active {
+    cursor: grabbing;
+}
+
+.player_mobile {
+    display: flex;
+    justify-content: left;
+    padding: 10px;
+    font-size: 26px;
+}
+
+.current_player_mobile {
+    display: flex;
+    justify-content: left;
+    padding: 10px;
+    text-shadow: 0px 0px 10px orange;
+    font-size: 26px;
+}
+
+.captured_pieces_mobile {
+    display: flex;
+    height: 17px;
+    padding-left: 10px;
+}
+
+

@@ -6,15 +6,26 @@ import PlayBarContainer from './play_bar/play_bar_container';
 
 
 
-const Home = (props) => (
-    <div>
-        <div className="home">
-            <MenuContainer />
-            <FeedContainer />
-            <PlayBarContainer />
-        </div>
-        
-    </div>
-);
+const Home = (props) => {
+    if (typeof window.orientation !== 'undefined') {
+        return (
+            <div>
+                <PlayBarContainer />
+            </div>
+        );
+    }
+    else {
+        return (
+            <div>
+                <div className="home">
+                    <MenuContainer />
+                    <FeedContainer />
+                    <PlayBarContainer />
+                </div>
+
+            </div>
+        );
+    }
+};
 
 export default Home;
