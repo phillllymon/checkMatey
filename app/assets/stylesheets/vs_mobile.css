@@ -123,4 +123,9 @@
     font-family: sans-serif;
 }
 
+.game_alert_mobile {
+    font-size: 6vw;
+    font-family: sans-serif;
+    color: red;
+}
 
