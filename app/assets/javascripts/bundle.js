@@ -3765,11 +3765,11 @@ function (_React$Component) {
           'position': 'relative'
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "challenge_box"
+        className: "challenge_box_mobile"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "challenge_box_header"
+        className: "challenge_box_header_mobile"
       }, headMessage), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), endMessage, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "time_button",
+        className: "time_button_mobile",
         onClick: this.props.leaveGame
       }, "Leave Game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)))));
     }

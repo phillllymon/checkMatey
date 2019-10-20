@@ -140,8 +140,8 @@ class VsBoardMobile extends React.Component {
         return (
             <div className="modal_back">
                 <div style={{'position' : 'relative'}}>
-                    <div className="challenge_box">
-                        <div className="challenge_box_header">
+                    <div className="challenge_box_mobile">
+                        <div className="challenge_box_header_mobile">
                             {headMessage}
                         </div>
                         <center>
@@ -150,7 +150,7 @@ class VsBoardMobile extends React.Component {
                         {endMessage}
                             <br/>
                             <br/>
-                            <button className="time_button" onClick={this.props.leaveGame}>Leave Game</button>   
+                            <button className="time_button_mobile" onClick={this.props.leaveGame}>Leave Game</button>   
                             <br/>
                             <br/>
                         </center>
