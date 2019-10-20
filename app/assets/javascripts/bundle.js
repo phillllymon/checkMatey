@@ -3344,7 +3344,8 @@ function (_React$Component) {
           this.grid = this.game.grid;
           this.setState({
             grid: this.grid,
-            dragging: false
+            dragging: false,
+            drawOffered: false
           });
           this.markToDrag = null;
           this.origin = null;
@@ -3658,9 +3659,6 @@ function (_React$Component) {
         });
       } else {
         this.beginDrag(e.target);
-        this.setState({
-          dragging: true
-        });
       }
     }
   }, {
@@ -3794,14 +3792,14 @@ function (_React$Component) {
       var _this2 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "offerDraw"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.opponent, " offers a draw:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "time_button",
+        className: "offerDraw_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Draw offered:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "time_button_mobile",
         onClick: function onClick() {
           return _this2.respondToDrawOffer('accept');
         }
       }, "Accept"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "time_button",
+        className: "time_button_mobile",
         onClick: function onClick() {
           return _this2.respondToDrawOffer('decline');
         }
@@ -4029,7 +4027,8 @@ function (_React$Component) {
           this.grid = this.game.grid;
           this.setState({
             grid: this.grid,
-            dragging: false
+            dragging: false,
+            drawOffered: false
           });
           this.markToDrag = null;
           this.origin = null;
@@ -4088,7 +4087,7 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fab fa-font-awesome-flag"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "captured_pieces",
+        className: "captured_pieces_mobile",
         style: {
           'color': this.opponentColor
         }
@@ -4097,6 +4096,8 @@ function (_React$Component) {
           key: idx
         }, Object(_piece__WEBPACK_IMPORTED_MODULE_1__["getPieceIcon"])(mark));
       }), this.opponentColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "player_info_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.game.playing && this.currentPlayer === this.opponentColor ? "current_player_mobile" : "player_mobile",
         style: {
           'color': this.opponentColor
@@ -4116,7 +4117,7 @@ function (_React$Component) {
         style: {
           'marginRight': '10px'
         }
-      }), " ", this.state.opponentTime[0], ":", this.state.opponentTime[1] < 10 ? '0' : '', this.state.opponentTime[1]), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), " ", this.state.opponentTime[0], ":", this.state.opponentTime[1] < 10 ? '0' : '', this.state.opponentTime[1])), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.flipped ? "board_mobile flipped_mobile" : "board_mobile"
       }, this.state.gameIsDone ? this.showEnding(this.state.gameIsDone) : '', this.grid.map(function (row, rIdx) {
         return row.map(function (spot, cIdx) {
@@ -4145,18 +4146,8 @@ function (_React$Component) {
           }));
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "game_alert_mobile"
-      }, this.state.drawOffered ? this.drawButtons() : '', this.game.isGameOver() ? this.game.gameOverMessage : this.game.inCheck ? 'Check!' : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: this.game.playing && this.currentPlayer === this.playerColor ? "current_player_mobile" : "player_mobile",
-        style: {
-          'color': this.playerColor
-        }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "far fa-clock",
-        style: {
-          'marginRight': '10px'
-        }
-      }), " ", this.state.playerTime[0], ":", this.state.playerTime[1] < 10 ? '0' : '', this.state.playerTime[1]), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "player_info_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.game.playing && this.currentPlayer === this.playerColor ? "current_player_mobile" : "player_mobile",
         style: {
           'color': this.playerColor
@@ -4167,6 +4158,16 @@ function (_React$Component) {
           'marginRight': '10px'
         }
       }), " ", this.player), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.game.playing && this.currentPlayer === this.playerColor ? "current_player_mobile" : "player_mobile",
+        style: {
+          'color': this.playerColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "far fa-clock",
+        style: {
+          'marginRight': '10px'
+        }
+      }), " ", this.state.playerTime[0], ":", this.state.playerTime[1] < 10 ? '0' : '', this.state.playerTime[1])), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "captured_pieces_mobile",
         style: {
           'color': this.playerColor
@@ -4176,15 +4177,8 @@ function (_React$Component) {
           key: idx
         }, Object(_piece__WEBPACK_IMPORTED_MODULE_1__["getPieceIcon"])(mark));
       }), this.playerColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "outer_list_mobile"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "moves_list_mobile"
-      }, this.game.moves.map(function (move, idx) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: idx % 2 === 0 ? "inactive_move_light_mobile not_mobile" : "inactive_move_dark_mobile not_mobile",
-          key: idx
-        }, move);
-      }))))));
+        className: "game_alert_mobile"
+      }, this.state.drawOffered ? this.drawButtons() : '', this.game.isGameOver() ? this.game.gameOverMessage : this.game.inCheck ? 'Check!' : ''))));
     }
   }]);
 

@@ -351,7 +351,8 @@ class VsBoard extends React.Component {
                 this.grid = this.game.grid;
                 this.setState({
                     grid: this.grid,
-                    dragging: false
+                    dragging: false,
+                    drawOffered: false
                 });
                 this.markToDrag = null;
                 this.origin = null;   

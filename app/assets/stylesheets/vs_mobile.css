@@ -88,22 +88,39 @@
 .player_mobile {
     display: flex;
     justify-content: left;
-    padding: 10px;
-    font-size: 26px;
+    padding: 1vw;
+    font-size: 6vw;
+    font-family: sans-serif;
+    margin: 1vw;
 }
 
 .current_player_mobile {
     display: flex;
     justify-content: left;
-    padding: 10px;
+    padding: 1vw;
     text-shadow: 0px 0px 10px orange;
-    font-size: 26px;
+    font-size: 6vw;
+    font-family: sans-serif;
+    margin: 1vw;
 }
 
 .captured_pieces_mobile {
     display: flex;
-    height: 17px;
-    padding-left: 10px;
+    height: 5vw;
+    margin-left: 2vw;
+    font-size: 4.5vw;
+}
+
+.player_info_mobile {
+    display: flex;
+    justify-content: space-between;
+}
+
+.offerDraw_mobile {
+    padding: 1vw;
+    background-color: orange;
+    font-size: 5vw;
+    font-family: sans-serif;
 }
 
 

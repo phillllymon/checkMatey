@@ -52,11 +52,10 @@ class VsBoardMobile extends React.Component {
     handleClick(e) {
         if (this.state.dragging) {
             this.endDrag(e.target);
-            this.setState({dragging: false});
+            this.setState({dragging: false});       
         }
         else {
             this.beginDrag(e.target);
-            this.setState({dragging: true})
         }
     }
 
@@ -176,12 +175,11 @@ class VsBoardMobile extends React.Component {
 
     drawButtons() {
         return (
-            <div className="offerDraw">
+            <div className="offerDraw_mobile">
                 <center>
-                {this.opponent} offers a draw:
-                <br/>
-                <button className="time_button" onClick={() => this.respondToDrawOffer('accept')}>Accept</button>
-                <button className="time_button" onClick={() => this.respondToDrawOffer('decline')}>Decline</button>
+                Draw offered:
+                <button className="time_button_mobile" onClick={() => this.respondToDrawOffer('accept')}>Accept</button>
+                <button className="time_button_mobile" onClick={() => this.respondToDrawOffer('decline')}>Decline</button>
                 </center>
             </div>
         );
@@ -363,7 +361,8 @@ class VsBoardMobile extends React.Component {
                 this.grid = this.game.grid;
                 this.setState({
                     grid: this.grid,
-                    dragging: false
+                    dragging: false,
+                    drawOffered: false
                 });
                 this.markToDrag = null;
                 this.origin = null;   
@@ -400,7 +399,7 @@ class VsBoardMobile extends React.Component {
                         <button className="board_control_button_mobile" style={{ 'width': '20vw' }} onClick={this.resign}><i className="fab fa-font-awesome-flag"></i></button>
                         <br />
 
-                        <div className="captured_pieces" style={{ 'color': this.opponentColor }}>
+                        <div className="captured_pieces_mobile" style={{ 'color': this.opponentColor }}>
                             {
                                 this.game.capturedPieces[(this.opponentColor === 'black' ? 0 : 1)].map((mark, idx) => {
                                     return (
@@ -410,16 +409,18 @@ class VsBoardMobile extends React.Component {
                             }
                             {this.opponentColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()}
                         </div>
-                        <div className={this.game.playing && this.currentPlayer === this.opponentColor ? "current_player_mobile" : "player_mobile"}
-                            style={{ 'color': this.opponentColor }} >
-                            <i className="fas fa-user" style={{ 'marginRight': '10px' }}></i> {this.opponent}
-                        </div>
-                        <div className={this.game.playing && this.currentPlayer === this.opponentColor ? "current_player_mobile" : "player_mobile"}
-                            style={{ 'color': this.opponentColor }} >
-                            <i className="far fa-clock" style={{ 'marginRight': '10px' }}></i> {this.state.opponentTime[0]}:{this.state.opponentTime[1] < 10 ? '0' : ''}{this.state.opponentTime[1]}
+                        <div className="player_info_mobile">
+                            <div className={this.game.playing && this.currentPlayer === this.opponentColor ? "current_player_mobile" : "player_mobile"}
+                                style={{ 'color': this.opponentColor }} >
+                                <i className="fas fa-user" style={{ 'marginRight': '10px' }}></i> {this.opponent}
+                            </div>
+                            <div className={this.game.playing && this.currentPlayer === this.opponentColor ? "current_player_mobile" : "player_mobile"}
+                                style={{ 'color': this.opponentColor }} >
+                                <i className="far fa-clock" style={{ 'marginRight': '10px' }}></i> {this.state.opponentTime[0]}:{this.state.opponentTime[1] < 10 ? '0' : ''}{this.state.opponentTime[1]}
 
+                            </div>
                         </div>
-
+                        
                 <div
                     className={this.flipped ? "board_mobile flipped_mobile" : "board_mobile"}
                 >
@@ -472,6 +473,26 @@ class VsBoardMobile extends React.Component {
                     }
                 </div>
                 
+                <div className="player_info_mobile">
+                    <div className={this.game.playing && this.currentPlayer === this.playerColor ? "current_player_mobile" : "player_mobile"}
+                        style={{ 'color': this.playerColor }} >
+                        <i className="fas fa-user" style={{ 'marginRight': '10px' }}></i> {this.player}
+                    </div>
+                    <div className={this.game.playing && this.currentPlayer === this.playerColor ? "current_player_mobile" : "player_mobile"}
+                        style={{ 'color': this.playerColor }} >
+                        <i className="far fa-clock" style={{ 'marginRight': '10px' }}></i> {this.state.playerTime[0]}:{this.state.playerTime[1] < 10 ? '0' : ''}{this.state.playerTime[1]}
+                    </div>
+                </div>
+                        <div className="captured_pieces_mobile" style={{ 'color': this.playerColor }}>
+                            {
+                                this.game.capturedPieces[(this.opponentColor === 'black' ? 1 : 0)].map((mark, idx) => {
+                                    return (
+                                        <span key={idx}>{getPieceIcon(mark)}</span>
+                                    )
+                                })
+                            }
+                            {this.playerColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()}
+                        </div>
                     
                     
                         <div className="game_alert_mobile">
@@ -479,40 +500,6 @@ class VsBoardMobile extends React.Component {
                     {this.game.isGameOver() ? this.game.gameOverMessage : (this.game.inCheck ? 'Check!' : '')}
                     </div>
 
-                    
-                        <div className={this.game.playing && this.currentPlayer === this.playerColor ? "current_player_mobile" : "player_mobile"}
-                        style={{ 'color': this.playerColor }} >
-                            <i className="far fa-clock" style={{ 'marginRight': '10px' }}></i> {this.state.playerTime[0]}:{this.state.playerTime[1] < 10 ? '0' : ''}{this.state.playerTime[1]}
-                    </div>
-                        <div className={this.game.playing && this.currentPlayer === this.playerColor ? "current_player_mobile" : "player_mobile"}
-                        style={{ 'color': this.playerColor }} >        
-                            <i className="fas fa-user" style={{'marginRight': '10px'}}></i> {this.player} 
-
-                    </div>
-                        <div className="captured_pieces_mobile" style={{ 'color': this.playerColor }}>
-                        {
-                            this.game.capturedPieces[(this.opponentColor === 'black' ? 1 : 0)].map((mark, idx) => {
-                                return (
-                                    <span key={idx}>{getPieceIcon(mark)}</span>
-                                )
-                            })
-                        }
-                        {this.playerColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()}
-                    </div>
-
-                        <div className="outer_list_mobile">
-                            <div className="moves_list_mobile">
-                            {
-                                this.game.moves.map((move, idx) => {
-                                    return (
-                                        <div className={idx % 2 === 0 ? "inactive_move_light_mobile not_mobile" : "inactive_move_dark_mobile not_mobile"} key={idx}>
-                                            {move}
-                                        </div>
-                                    );
-                                })
-                            }
-                        </div>
-                    </div>
                     </center>
                 </div>
             </div>
