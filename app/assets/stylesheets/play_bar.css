@@ -26,6 +26,7 @@
     background-color: rgb(230, 230, 230);
     border-radius: 4px;
     overflow: hidden;
+    box-shadow: 0 2px 12px -5px rgba(0, 0, 0, 1);
 }
 
 .time_button {

@@ -2954,7 +2954,8 @@ function (_React$Component) {
       gameIsDone: false,
       playerTime: [_this.props.gameTime, 0],
       opponentTime: [_this.props.gameTime, 0],
-      chatInput: ''
+      chatInput: '',
+      showChat: false
     };
     _this.chat = [], _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
@@ -3268,7 +3269,7 @@ function (_React$Component) {
         }
 
         if (data.chat) {
-          this.chat.push([data.player, data.chat]);
+          this.chat.unshift([data.player, data.chat]);
           this.setState({});
         }
       }
@@ -3454,8 +3455,6 @@ function (_React$Component) {
       var _this4 = this;
 
       var highlightSquare = this.highlightSquare;
-      console.log(window.innerHeight);
-      console.log(window.innerWidth);
       var controlsHeight = 0.6 * window.innerWidth < 0.9 * window.innerHeight ? 0.6 * window.innerWidth : 0.9 * window.innerHeight;
       var movesHeight = controlsHeight - 486;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -3736,7 +3735,8 @@ function (_React$Component) {
       gameIsDone: false,
       playerTime: [_this.props.gameTime, 0],
       opponentTime: [_this.props.gameTime, 0],
-      chatInput: ''
+      chatInput: '',
+      showChat: false
     };
     _this.chat = [], _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
@@ -3766,10 +3766,18 @@ function (_React$Component) {
     _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
     _this.handleChatInput = _this.handleChatInput.bind(_assertThisInitialized(_this));
     _this.sendChat = _this.sendChat.bind(_assertThisInitialized(_this));
+    _this.toggleChat = _this.toggleChat.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(VsBoardMobile, [{
+    key: "toggleChat",
+    value: function toggleChat() {
+      this.setState({
+        showChat: this.state.showChat ? false : true
+      });
+    }
+  }, {
     key: "sendChat",
     value: function sendChat() {
       this.playSub.perform('relayMessage', {
@@ -4245,6 +4253,75 @@ function (_React$Component) {
       var _this4 = this;
 
       var highlightSquare = this.highlightSquare;
+
+      if (this.state.showChat) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "chess_table_mobile"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "board_controls_mobile"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button_mobile",
+          style: {
+            'width': '20vw'
+          },
+          onClick: this.flipBoard
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-retweet"
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button_mobile",
+          style: {
+            'width': '20vw'
+          },
+          onClick: this.offerDraw
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-handshake"
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button_mobile",
+          style: {
+            'width': '20vw'
+          },
+          onClick: this.resign
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fab fa-font-awesome-flag"
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button_mobile",
+          style: {
+            'width': '20vw'
+          },
+          onClick: this.toggleChat
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-chess"
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "controls_heading_mobile"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-comments"
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          style: {
+            'marginRight': '2vw',
+            'marginLeft': '2vw',
+            'width': '100%'
+          },
+          className: "bigger",
+          type: "text",
+          value: this.state.chatInput,
+          onChange: this.handleChatInput
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "send_button_mobile",
+          onClick: this.sendChat
+        }, "Send")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "chat_mobile"
+        }, this.chat.map(function (message, idx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: idx % 2 === 0 ? "inactive_move_light bigger" : "inactive_move_dark bigger",
+            key: idx
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            style: {
+              'fontSize': '60%'
+            }
+          }, message[0], ":"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), message[1]);
+        }))));
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "chess_table_mobile"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -4273,6 +4350,14 @@ function (_React$Component) {
         onClick: this.resign
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fab fa-font-awesome-flag"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button_mobile",
+        style: {
+          'width': '20vw'
+        },
+        onClick: this.toggleChat
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-comments"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "captured_pieces_mobile",
         style: {
@@ -4365,20 +4450,7 @@ function (_React$Component) {
         }, Object(_piece__WEBPACK_IMPORTED_MODULE_1__["getPieceIcon"])(mark));
       }), this.playerColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game_alert_mobile"
-      }, this.state.drawOffered ? this.drawButtons() : '', this.game.isGameOver() ? this.game.gameOverMessage : this.game.inCheck ? 'Check!' : '')), this.chat.map(function (message, idx) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          key: idx
-        }, message[0], react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), message[1]);
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        value: this.state.chatInput,
-        onChange: this.handleChatInput
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "board_control_button_mobile",
-        onClick: this.sendChat
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-comments"
-      }))));
+      }, this.state.drawOffered ? this.drawButtons() : '', this.game.isGameOver() ? this.game.gameOverMessage : this.game.inCheck ? 'Check!' : ''))));
     }
   }]);
 
@@ -7212,7 +7284,10 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "play_bar"
       }, this.state.challenged ? this.showChallengedBox() : '', this.state.playing ? this.showVsBoard() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "controls_heading"
+        className: "controls_heading",
+        style: {
+          'height': '42px'
+        }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
           'margin': '10px'

@@ -132,3 +132,15 @@
     width: 50px;
 }
 
+.send_button_mobile {
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+    height: 90%;
+    font-size: 6vw;
+    padding: 1vw;
+}
+
+.bigger {
+    font-size: 5vw;
+}
+

@@ -343,7 +343,7 @@ class PlayBar extends React.Component {
             <div className="play_bar">
                 {this.state.challenged ? this.showChallengedBox() : ''}
                 {this.state.playing ? this.showVsBoard() : ''}
-                <div className="controls_heading">
+                <div className="controls_heading" style={{'height': '42px'}}>
                     <div style={{'margin' : '10px'}}>
                     <i className="fas fa-chess"></i> Game Room <i className="fas fa-chess-knight"></i>
                     </div>

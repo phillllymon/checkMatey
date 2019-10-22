@@ -20,7 +20,8 @@ class VsBoard extends React.Component {
             gameIsDone: false,
             playerTime: [this.props.gameTime, 0],
             opponentTime: [this.props.gameTime, 0],
-            chatInput: ''
+            chatInput: '',
+            showChat: false
         }
         this.chat = [],
         this.dragPiece = this.dragPiece.bind(this);
@@ -53,6 +54,7 @@ class VsBoard extends React.Component {
         this.getWhitePoints = this.getWhitePoints.bind(this);
         this.handleChatInput = this.handleChatInput.bind(this);
         this.sendChat = this.sendChat.bind(this);
+        
     }
 
     sendChat() {
@@ -284,7 +286,7 @@ class VsBoard extends React.Component {
                 this.endTheGame('timeout');
             }
             if (data.chat) {
-                this.chat.push([data.player, data.chat]);
+                this.chat.unshift([data.player, data.chat]);
                 this.setState({});
             }
         }
@@ -443,9 +445,6 @@ class VsBoard extends React.Component {
 
     render() {
         let highlightSquare = this.highlightSquare;
-
-        console.log(window.innerHeight);
-        console.log(window.innerWidth);
         let controlsHeight = (0.6 * window.innerWidth < 0.9 * window.innerHeight ?
             0.6 * window.innerWidth :
             0.9 * window.innerHeight);
@@ -519,6 +518,7 @@ class VsBoard extends React.Component {
                         <button className="board_control_button" style={{ 'width': '50px' }} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
                         <button className="board_control_button" style={{ 'width': '50px' }}  onClick={this.offerDraw}><i className="fas fa-handshake"></i></button>
                         <button className="board_control_button" style={{ 'width': '50px' }}  onClick={this.resign}><i className="fab fa-font-awesome-flag"></i></button>
+                        
                         <br/>
                     
                     <div className="captured_pieces" style={{'color': this.opponentColor}}>

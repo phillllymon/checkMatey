@@ -20,7 +20,8 @@ class VsBoardMobile extends React.Component {
             gameIsDone: false,
             playerTime: [this.props.gameTime, 0],
             opponentTime: [this.props.gameTime, 0],
-            chatInput: ''
+            chatInput: '',
+            showChat: false
         }
         this.chat = [],
         this.dragPiece = this.dragPiece.bind(this);
@@ -54,7 +55,14 @@ class VsBoardMobile extends React.Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleChatInput = this.handleChatInput.bind(this);
         this.sendChat = this.sendChat.bind(this);
+        this.toggleChat = this.toggleChat.bind(this);
     }
+
+
+    toggleChat() {
+        this.setState({ showChat: (this.state.showChat ? false : true) })
+    }
+
 
     sendChat() {
         this.playSub.perform('relayMessage', { 'gameId': this.props.gameId, 'chat': this.state.chatInput, 'player': this.player });
@@ -451,6 +459,50 @@ class VsBoardMobile extends React.Component {
 
     render() {
         let highlightSquare = this.highlightSquare;
+        if (this.state.showChat) {
+            return (
+                <div className="chess_table_mobile">
+                    <div className="board_controls_mobile">
+                        <center>
+
+                            <button className="board_control_button_mobile" style={{ 'width': '20vw' }} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
+                            <button className="board_control_button_mobile" style={{ 'width': '20vw' }} onClick={this.offerDraw}><i className="fas fa-handshake"></i></button>
+                            <button className="board_control_button_mobile" style={{ 'width': '20vw' }} onClick={this.resign}><i className="fab fa-font-awesome-flag"></i></button>
+                            <button className="board_control_button_mobile" style={{ 'width': '20vw' }} onClick={this.toggleChat}><i className="fas fa-chess"></i></button>
+                            <br />
+                        </center>
+                        <div className="controls_heading_mobile">
+                            <i className="fas fa-comments"></i>
+                            <input
+                                style={{
+                                    'marginRight': '2vw',
+                                    'marginLeft': '2vw',
+                                    'width': '100%'
+                                }}
+                                className="bigger"
+                                type="text"
+                                value={this.state.chatInput}
+                                onChange={this.handleChatInput}
+                            />
+                            <button className="send_button_mobile" onClick={this.sendChat}>Send</button>
+                        </div>
+                        <div className="chat_mobile">
+                            {
+                                this.chat.map((message, idx) => {
+                                    return (
+                                        <div className={idx % 2 === 0 ? "inactive_move_light bigger" : "inactive_move_dark bigger"} key={idx}>
+                                            <i style={{ 'fontSize': '60%' }}>{message[0]}:</i>
+                                            <br />
+                                            {message[1]}
+                                        </div>
+                                    );
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+            );
+        }
         return (
             <div className="chess_table_mobile">
                 <div className="board_controls_mobile">
@@ -459,6 +511,7 @@ class VsBoardMobile extends React.Component {
                         <button className="board_control_button_mobile" style={{ 'width': '20vw' }} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
                         <button className="board_control_button_mobile" style={{ 'width': '20vw' }} onClick={this.offerDraw}><i className="fas fa-handshake"></i></button>
                         <button className="board_control_button_mobile" style={{ 'width': '20vw' }} onClick={this.resign}><i className="fab fa-font-awesome-flag"></i></button>
+                        <button className="board_control_button_mobile" style={{ 'width': '20vw' }} onClick={this.toggleChat}><i className="fas fa-comments"></i></button>
                         <br />
 
                         <div className="captured_pieces_mobile" style={{ 'color': this.opponentColor }}>
@@ -563,23 +616,7 @@ class VsBoardMobile extends React.Component {
                     </div>
 
                     </center>
-                    {
-                        this.chat.map((message, idx) => {
-                            return (
-                                <div key={idx}>
-                                    {message[0]}
-                                    <br />
-                                    {message[1]}
-                                </div>
-                            );
-                        })
-                    }
-                    <input
-                        type="text"
-                        value={this.state.chatInput}
-                        onChange={this.handleChatInput}
-                    />
-                    <button className="board_control_button_mobile" onClick={this.sendChat}><i className="fas fa-comments"></i></button>
+                    
                 </div>
             </div>
         );
