@@ -56,8 +56,13 @@ export const getCoords = (rIdx, cIdx) => {
     return fileNames[cIdx] + (8 - rIdx).toString();
 };
 
-export const seqToString = (seq, description, title) => {
-    return seq.join('') + '$)$($' + description + '$)$$($' + title;
+export const seqToString = (seq, description = null, title = null) => {
+    if (description && title) {
+        return seq.join('') + '$)$($' + description + '$)$$($' + title;
+    }
+    else {
+        return seq.join('');
+    }
 };
 
 export const stringToSeq = (str) => {

@@ -118,8 +118,7 @@ class FeedItem extends React.Component {
                             </div>
                         </div>
                         <div className="post_content">
-                            {((this.props.currentUserId).toString() === (post.author_id).toString()) || 
-                            ((this.props.currentUsername).toString() === 'admin') ? this.editBar() : ''}
+                            {((this.props.currentUserId).toString() === (post.author_id).toString()) || ((this.props.currentUserId).toString() === 'admin') ? this.editBar() : ''}
                             {post.content}
                         </div>
                     </div>
@@ -138,8 +137,7 @@ class FeedItem extends React.Component {
                             </div>
                         </div>
                         <div className="post_content">
-                            {(this.props.currentUserId).toString() === (post.author_id).toString() ||
-                                ((this.props.currentUsername).toString() === 'admin') ? this.editBar() : ''}
+                            {(this.props.currentUserId).toString() === (post.author_id).toString() ? this.editBar() : ''}
                             <textarea
                                 type="text"
                                 className="edit_box"
@@ -168,8 +166,7 @@ class FeedItem extends React.Component {
                         </div>
                     </div>
                     <div className="post_content">
-                        {(this.props.currentUserId).toString() === (post.author_id).toString() ||
-                            ((this.props.currentUsername).toString() === 'admin') ? this.editBar() : ''}
+                        {(this.props.currentUserId).toString() === (post.author_id).toString() ? this.editBar() : ''}
                         <div className="seeSeqButton">
                             <div className="seeSeqTriangle" onClick={this.toggleShow}>
                                 <i className="fas fa-play"></i>

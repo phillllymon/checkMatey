@@ -2,6 +2,9 @@ import React from 'react';
 import Piece from '../piece';
 import { Game } from '../chess/game';
 import { getPieceIcon } from '../piece';
+import {
+    seqToString
+} from '../../../util/chess_util';
 
 class VsBoard extends React.Component {
     constructor(props) {
@@ -67,6 +70,7 @@ class VsBoard extends React.Component {
     }
 
     tickClock() {
+        if (this.state.gameIsDone) return;
         if (this.game.currentPlayer === this.playerColor){
             let newMinutes = this.state.playerTime[0];
             let newSeconds = this.state.playerTime[1] - 1;
@@ -160,6 +164,22 @@ class VsBoard extends React.Component {
             drawOffered: false,
             gameIsDone: ending
         });
+        if (this.playerColor === 'white'){
+            $.ajax({
+                url: `/api/games`,
+                method: 'POST',
+                data: {
+                    game: {
+                        player_white: this.player,
+                        player_black: this.opponent,
+                        moves: seqToString(this.game.gameSoFar),
+                        winner: this.winner,
+                        ending: ending
+                    }
+                }
+            });
+        }
+        
     }
 
     drawButtons() {

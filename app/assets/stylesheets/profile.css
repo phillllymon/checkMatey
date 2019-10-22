@@ -1,0 +1,28 @@
+.profile {
+    background-color: rgb(230, 230, 230);
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 8px;
+    color: rgb(100, 100, 100);
+    font-size: 18px;
+    font-family: sans-serif;
+}
+
+.profile_heading {
+    font-family: sans-serif;
+    padding: 15px;
+    display: flex;
+    font-size: 180%;
+    justify-content: center;
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+}
+
+.profile_content {
+    padding: 15px;
+}
+
+.game_list_item {
+    border-top: 1px solid black;
+}

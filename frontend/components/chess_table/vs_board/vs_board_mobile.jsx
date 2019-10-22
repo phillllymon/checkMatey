@@ -2,6 +2,9 @@ import React from 'react';
 import Piece from '../piece';
 import { Game } from '../chess/game';
 import { getPieceIcon } from '../piece';
+import {
+    seqToString
+} from '../../../util/chess_util';
 
 class VsBoardMobile extends React.Component {
     constructor(props) {
@@ -171,6 +174,21 @@ class VsBoardMobile extends React.Component {
             drawOffered: false,
             gameIsDone: ending
         });
+        if (this.playerColor === 'white') {
+            $.ajax({
+                url: `/api/games`,
+                method: 'POST',
+                data: {
+                    game: {
+                        player_white: this.player,
+                        player_black: this.opponent,
+                        moves: seqToString(this.game.gameSoFar),
+                        winner: this.winner,
+                        ending: ending
+                    }
+                }
+            });
+        }
     }
 
     drawButtons() {

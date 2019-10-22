@@ -4,8 +4,7 @@ import FeedItem from './feed_item';
 
 const mapStateToProps = (state, ownProps) => ({
     post: ownProps.post,
-    currentUserId: state.session.currentUserId,
-    currentUsername: state.entities.users[state.session.currentUserId].username
+    currentUserId: state.session.currentUserId
 });
 
 const mapDispatchToProps = (dispatch) => ({

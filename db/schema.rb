@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_21_204146) do
+ActiveRecord::Schema.define(version: 2019_10_21_164933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "games", force: :cascade do |t|
+    t.integer "player_white_id", null: false
+    t.integer "player_black_id", null: false
+    t.text "moves", null: false
+    t.string "winner"
+    t.string "ending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["player_black_id"], name: "index_games_on_player_black_id"
+    t.index ["player_white_id"], name: "index_games_on_player_white_id"
+  end
 
   create_table "posts", force: :cascade do |t|
     t.integer "author_id", null: false
