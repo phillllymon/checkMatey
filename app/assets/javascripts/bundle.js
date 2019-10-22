@@ -3454,6 +3454,10 @@ function (_React$Component) {
       var _this4 = this;
 
       var highlightSquare = this.highlightSquare;
+      console.log(window.innerHeight);
+      console.log(window.innerWidth);
+      var controlsHeight = 0.6 * window.innerWidth < 0.9 * window.innerHeight ? 0.6 * window.innerWidth : 0.9 * window.innerHeight;
+      var movesHeight = controlsHeight - 486;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "chess_table"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -3585,25 +3589,42 @@ function (_React$Component) {
       }), this.playerColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "outer_list"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'height': "".concat(movesHeight, "px")
+        },
         className: "moves_list"
       }, this.game.moves.map(function (move, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not",
           key: idx
         }, move);
-      })))), this.chat.map(function (message, idx) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          key: idx
-        }, message[0], react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), message[1]);
+      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "controls_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-comments"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        style: {
+          'marginRight': '5px',
+          'marginLeft': '5px',
+          'width': '100%'
+        },
         type: "text",
         value: this.state.chatInput,
         onChange: this.handleChatInput
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "board_control_button",
+        className: "send_button",
         onClick: this.sendChat
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-comments"
+      }, "send")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "chat"
+      }, this.chat.map(function (message, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not",
+          key: idx
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          style: {
+            'fontSize': '60%'
+          }
+        }, message[0], ":"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), message[1]);
       }))));
     }
   }]);

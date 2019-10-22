@@ -101,6 +101,7 @@
     justify-content: left;
     padding: 10px;
     font-size: 26px;
+    height: 26px;
 }
 
 .current_player {
@@ -109,11 +110,25 @@
     padding: 10px;
     text-shadow: 0px 0px 10px orange;
     font-size: 26px;
+    height: 26px;
 }
 
 .captured_pieces {
     display: flex;
     height: 17px;
     padding-left: 10px;
+}
+
+.chat {
+    height: 80px;
+    overflow: auto;
+    
+}
+
+.send_button {
+    background-color: rgb(135, 129, 123);
+    color: lightgray;
+    height: 20px;
+    width: 50px;
 }
 

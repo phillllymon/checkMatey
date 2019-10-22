@@ -16,6 +16,7 @@
     padding: 10px;
     display: flex;
     font-size: 150%;
+    height: 22px;
     justify-content: center;
     background-color: rgb(135, 129, 123);
     color: lightgray;
@@ -152,8 +153,9 @@
 .moves_list {
     display: flex;
     flex-direction: column;
-    height: 25vmin;
+    
     overflow-y: auto;
+    
 }
 
 .not:hover {

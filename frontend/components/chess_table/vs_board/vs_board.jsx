@@ -443,6 +443,13 @@ class VsBoard extends React.Component {
 
     render() {
         let highlightSquare = this.highlightSquare;
+
+        console.log(window.innerHeight);
+        console.log(window.innerWidth);
+        let controlsHeight = (0.6 * window.innerWidth < 0.9 * window.innerHeight ?
+            0.6 * window.innerWidth :
+            0.9 * window.innerHeight);
+        let movesHeight = controlsHeight - 486;
         return (
             <div className="chess_table">
                 <div
@@ -562,7 +569,7 @@ class VsBoard extends React.Component {
                     </div>
 
                     <div className="outer_list">
-                        <div className="moves_list">
+                        <div style={{'height': `${movesHeight}px`}} className="moves_list">
                             {
                                 this.game.moves.map((move, idx) => {
                                     return (
@@ -575,23 +582,33 @@ class VsBoard extends React.Component {
                         </div>
                     </div>
                     </center>
+                    <div className="controls_heading">
+                        <i className="fas fa-comments"></i>
+                        <input
+                            style={{
+                                'marginRight': '5px',
+                                'marginLeft': '5px',
+                                'width': '100%'
+                            }}
+                            type="text"
+                            value={this.state.chatInput}
+                            onChange={this.handleChatInput}
+                        />
+                        <button className="send_button" onClick={this.sendChat}>send</button>
+                    </div>
+                    <div className="chat">
                     {
                         this.chat.map( (message, idx) => {
                             return (
-                                <div key={idx}>
-                                    {message[0]}
+                                <div className={idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not"} key={idx}>
+                                    <i style= {{'fontSize': '60%'}}>{message[0]}:</i>
                                     <br/>
                                     {message[1]}
                                 </div>
                             );
                         })
                     }
-                    <input
-                        type="text"
-                        value={this.state.chatInput}
-                        onChange={this.handleChatInput}
-                    />
-                    <button className="board_control_button" onClick={this.sendChat}><i className="fas fa-comments"></i></button>
+                    </div>
                 </div>
             </div>
         );
