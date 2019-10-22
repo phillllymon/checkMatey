@@ -19,8 +19,10 @@ class VsBoardMobile extends React.Component {
             drawOffered: false,
             gameIsDone: false,
             playerTime: [this.props.gameTime, 0],
-            opponentTime: [this.props.gameTime, 0]
+            opponentTime: [this.props.gameTime, 0],
+            chatInput: ''
         }
+        this.chat = [],
         this.dragPiece = this.dragPiece.bind(this);
         this.beginDrag = this.beginDrag.bind(this);
         this.endDrag = this.endDrag.bind(this);
@@ -50,6 +52,17 @@ class VsBoardMobile extends React.Component {
         this.getBlackPoints = this.getBlackPoints.bind(this);
         this.getWhitePoints = this.getWhitePoints.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleChatInput = this.handleChatInput.bind(this);
+        this.sendChat = this.sendChat.bind(this);
+    }
+
+    sendChat() {
+        this.playSub.perform('relayMessage', { 'gameId': this.props.gameId, 'chat': this.state.chatInput, 'player': this.player });
+        this.setState({ chatInput: '' });
+    }
+
+    handleChatInput(e) {
+        this.setState({ chatInput: e.target.value });
     }
 
     handleClick(e) {
@@ -139,6 +152,17 @@ class VsBoardMobile extends React.Component {
             default:
                 break;
         }
+        if (this.winner) {
+            if (this.winner === this.player) {
+                endMessage = endMessage + ' Your rating went up by four points.';
+            }
+            else {
+                endMessage = endMessage + ' Your rating went down by four points.';
+            }
+        }
+        else {
+            endMessage = endMessage + ' Your rating remains the same.'
+        }
 
         return (
             <div className="modal_back">
@@ -189,6 +213,22 @@ class VsBoardMobile extends React.Component {
                 }
             });
         }
+        let oldRating = this.props.userRating;
+        let newRating = parseInt(oldRating);
+        if (this.winner) {
+            newRating = this.winner === this.player ?
+                newRating + 4 :
+                newRating - 4
+        }
+        $.ajax({
+            url: `/api/users/${this.props.userId}`,
+            method: 'PATCH',
+            data: {
+                'user': {
+                    rating: newRating
+                }
+            }
+        });
     }
 
     drawButtons() {
@@ -250,6 +290,10 @@ class VsBoardMobile extends React.Component {
                     this.opponent :
                     this.player);
                 this.endTheGame('timeout');
+            }
+            if (data.chat) {
+                this.chat.push([data.player, data.chat]);
+                this.setState({});
             }
         }
     }
@@ -519,6 +563,23 @@ class VsBoardMobile extends React.Component {
                     </div>
 
                     </center>
+                    {
+                        this.chat.map((message, idx) => {
+                            return (
+                                <div key={idx}>
+                                    {message[0]}
+                                    <br />
+                                    {message[1]}
+                                </div>
+                            );
+                        })
+                    }
+                    <input
+                        type="text"
+                        value={this.state.chatInput}
+                        onChange={this.handleChatInput}
+                    />
+                    <button className="board_control_button_mobile" onClick={this.sendChat}><i className="fas fa-comments"></i></button>
                 </div>
             </div>
         );

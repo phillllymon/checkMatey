@@ -35,6 +35,13 @@ class Playing < ApplicationCable::Channel
     ActionCable.server.broadcast("Playing", {gameId: gameId, move: theMove, color: theColor, time: theTime})
   end
 
+  def relayMessage(chat)
+    theMessage = chat['chat']
+    thePlayer = chat['player']
+    gameId = chat['gameId']
+    ActionCable.server.broadcast("Playing", {gameId: gameId, chat: theMessage, player: thePlayer})
+  end
+
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
     #stop_all_streams

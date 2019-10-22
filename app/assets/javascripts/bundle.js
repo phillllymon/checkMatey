@@ -2953,9 +2953,10 @@ function (_React$Component) {
       drawOffered: false,
       gameIsDone: false,
       playerTime: [_this.props.gameTime, 0],
-      opponentTime: [_this.props.gameTime, 0]
+      opponentTime: [_this.props.gameTime, 0],
+      chatInput: ''
     };
-    _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
+    _this.chat = [], _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
     _this.endDrag = _this.endDrag.bind(_assertThisInitialized(_this));
     _this.abortDrag = _this.abortDrag.bind(_assertThisInitialized(_this));
@@ -2980,10 +2981,31 @@ function (_React$Component) {
     _this.startClock = _this.startClock.bind(_assertThisInitialized(_this));
     _this.getBlackPoints = _this.getBlackPoints.bind(_assertThisInitialized(_this));
     _this.getWhitePoints = _this.getWhitePoints.bind(_assertThisInitialized(_this));
+    _this.handleChatInput = _this.handleChatInput.bind(_assertThisInitialized(_this));
+    _this.sendChat = _this.sendChat.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(VsBoard, [{
+    key: "sendChat",
+    value: function sendChat() {
+      this.playSub.perform('relayMessage', {
+        'gameId': this.props.gameId,
+        'chat': this.state.chatInput,
+        'player': this.player
+      });
+      this.setState({
+        chatInput: ''
+      });
+    }
+  }, {
+    key: "handleChatInput",
+    value: function handleChatInput(e) {
+      this.setState({
+        chatInput: e.target.value
+      });
+    }
+  }, {
     key: "getBlackPoints",
     value: function getBlackPoints() {
       if (this.game.points[0] > this.game.points[1]) {
@@ -3082,6 +3104,16 @@ function (_React$Component) {
           break;
       }
 
+      if (this.winner) {
+        if (this.winner === this.player) {
+          endMessage = endMessage + ' Your rating went up by four points.';
+        } else {
+          endMessage = endMessage + ' Your rating went down by four points.';
+        }
+      } else {
+        endMessage = endMessage + ' Your rating remains the same.';
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal_back"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -3125,6 +3157,23 @@ function (_React$Component) {
           }
         });
       }
+
+      var oldRating = this.props.userRating;
+      var newRating = parseInt(oldRating);
+
+      if (this.winner) {
+        newRating = this.winner === this.player ? newRating + 4 : newRating - 4;
+      }
+
+      $.ajax({
+        url: "/api/users/".concat(this.props.userId),
+        method: 'PATCH',
+        data: {
+          'user': {
+            rating: newRating
+          }
+        }
+      });
     }
   }, {
     key: "drawButtons",
@@ -3216,6 +3265,11 @@ function (_React$Component) {
         if (data.timeout) {
           this.winner = this.playerColor === data.color ? this.opponent : this.player;
           this.endTheGame('timeout');
+        }
+
+        if (data.chat) {
+          this.chat.push([data.player, data.chat]);
+          this.setState({});
         }
       }
     }
@@ -3537,7 +3591,20 @@ function (_React$Component) {
           className: idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not",
           key: idx
         }, move);
-      }))))));
+      })))), this.chat.map(function (message, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: idx
+        }, message[0], react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), message[1]);
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        value: this.state.chatInput,
+        onChange: this.handleChatInput
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
+        onClick: this.sendChat
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-comments"
+      }))));
     }
   }]);
 
@@ -3568,6 +3635,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
+    userId: state.session.currentUserId,
+    userRating: state.entities.users[state.session.currentUserId].rating,
     game: state.entities.currentGame,
     gameErrors: state.errors.game
   };
@@ -3645,9 +3714,10 @@ function (_React$Component) {
       drawOffered: false,
       gameIsDone: false,
       playerTime: [_this.props.gameTime, 0],
-      opponentTime: [_this.props.gameTime, 0]
+      opponentTime: [_this.props.gameTime, 0],
+      chatInput: ''
     };
-    _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
+    _this.chat = [], _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
     _this.endDrag = _this.endDrag.bind(_assertThisInitialized(_this));
     _this.abortDrag = _this.abortDrag.bind(_assertThisInitialized(_this));
@@ -3673,10 +3743,31 @@ function (_React$Component) {
     _this.getBlackPoints = _this.getBlackPoints.bind(_assertThisInitialized(_this));
     _this.getWhitePoints = _this.getWhitePoints.bind(_assertThisInitialized(_this));
     _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
+    _this.handleChatInput = _this.handleChatInput.bind(_assertThisInitialized(_this));
+    _this.sendChat = _this.sendChat.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(VsBoardMobile, [{
+    key: "sendChat",
+    value: function sendChat() {
+      this.playSub.perform('relayMessage', {
+        'gameId': this.props.gameId,
+        'chat': this.state.chatInput,
+        'player': this.player
+      });
+      this.setState({
+        chatInput: ''
+      });
+    }
+  }, {
+    key: "handleChatInput",
+    value: function handleChatInput(e) {
+      this.setState({
+        chatInput: e.target.value
+      });
+    }
+  }, {
     key: "handleClick",
     value: function handleClick(e) {
       if (this.state.dragging) {
@@ -3785,6 +3876,16 @@ function (_React$Component) {
           break;
       }
 
+      if (this.winner) {
+        if (this.winner === this.player) {
+          endMessage = endMessage + ' Your rating went up by four points.';
+        } else {
+          endMessage = endMessage + ' Your rating went down by four points.';
+        }
+      } else {
+        endMessage = endMessage + ' Your rating remains the same.';
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal_back"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -3828,6 +3929,23 @@ function (_React$Component) {
           }
         });
       }
+
+      var oldRating = this.props.userRating;
+      var newRating = parseInt(oldRating);
+
+      if (this.winner) {
+        newRating = this.winner === this.player ? newRating + 4 : newRating - 4;
+      }
+
+      $.ajax({
+        url: "/api/users/".concat(this.props.userId),
+        method: 'PATCH',
+        data: {
+          'user': {
+            rating: newRating
+          }
+        }
+      });
     }
   }, {
     key: "drawButtons",
@@ -3919,6 +4037,11 @@ function (_React$Component) {
         if (data.timeout) {
           this.winner = this.playerColor === data.color ? this.opponent : this.player;
           this.endTheGame('timeout');
+        }
+
+        if (data.chat) {
+          this.chat.push([data.player, data.chat]);
+          this.setState({});
         }
       }
     }
@@ -4221,7 +4344,20 @@ function (_React$Component) {
         }, Object(_piece__WEBPACK_IMPORTED_MODULE_1__["getPieceIcon"])(mark));
       }), this.playerColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game_alert_mobile"
-      }, this.state.drawOffered ? this.drawButtons() : '', this.game.isGameOver() ? this.game.gameOverMessage : this.game.inCheck ? 'Check!' : ''))));
+      }, this.state.drawOffered ? this.drawButtons() : '', this.game.isGameOver() ? this.game.gameOverMessage : this.game.inCheck ? 'Check!' : '')), this.chat.map(function (message, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: idx
+        }, message[0], react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), message[1]);
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        value: this.state.chatInput,
+        onChange: this.handleChatInput
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button_mobile",
+        onClick: this.sendChat
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-comments"
+      }))));
     }
   }]);
 
