@@ -13,7 +13,8 @@ class Feed extends React.Component {
         };
     }
 
-    componentDidMount() {   
+    componentDidMount() {  
+        this.mounted = true; 
         this.props.fetchAllPosts();
         $.ajax({
             url: `/api/games/${this.props.userId}`,
@@ -21,8 +22,12 @@ class Feed extends React.Component {
         }).then((res) => {
             //this.setState({games: Object.values(res)});
             this.games = Object.values(res);
-            this.render();
+            if (this.mounted) this.setState({});
         });
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     render() {

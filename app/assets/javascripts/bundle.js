@@ -8314,6 +8314,7 @@ function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
+      this.mounted = true;
       this.props.fetchAllPosts();
       $.ajax({
         url: "/api/games/".concat(this.props.userId),
@@ -8321,9 +8322,13 @@ function (_React$Component) {
       }).then(function (res) {
         //this.setState({games: Object.values(res)});
         _this2.games = Object.values(res);
-
-        _this2.render();
+        if (_this2.mounted) _this2.setState({});
       });
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.mounted = false;
     }
   }, {
     key: "render",
