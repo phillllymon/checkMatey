@@ -396,7 +396,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _otherGame_other_game_container__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./otherGame/other_game_container */ "./frontend/components/otherGame/other_game_container.js");
 /* harmony import */ var _otherGame_other_game_container_mobile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./otherGame/other_game_container_mobile */ "./frontend/components/otherGame/other_game_container_mobile.js");
 /* harmony import */ var _home__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./home */ "./frontend/components/home.jsx");
-/* harmony import */ var _tutorial__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./tutorial */ "./frontend/components/tutorial.jsx");
+/* harmony import */ var _tutorial__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./tutorial */ "./frontend/components/tutorial.jsx");
 /* harmony import */ var _profile_home__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./profile_home */ "./frontend/components/profile_home.jsx");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -510,7 +510,7 @@ function (_React$Component) {
         if (this.props.userId) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
             path: "/tutorial",
-            component: _tutorial__WEBPACK_IMPORTED_MODULE_12__["default"]
+            component: _tutorial__WEBPACK_IMPORTED_MODULE_9__["default"]
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
             path: "/home",
             component: _home__WEBPACK_IMPORTED_MODULE_8__["default"]
@@ -39522,7 +39522,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
