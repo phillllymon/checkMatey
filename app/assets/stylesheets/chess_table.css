@@ -144,3 +144,12 @@
     font-size: 5vw;
 }
 
+.video {
+    position: fixed;
+    width: 90vw;
+    height: 90vh;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+

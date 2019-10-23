@@ -7,6 +7,7 @@ import MobileSplash from './mobile_splash';
 import OtherGameContainer from './otherGame/other_game_container';
 import OtherGameContainerMobile from './otherGame/other_game_container_mobile';
 import Home from './home';
+import Tutorial from './tutorial';
 import ProfileHome from './profile_home';
 import { Route, Redirect, Link } from 'react-router-dom';
 
@@ -71,6 +72,7 @@ class App extends React.Component {
             if (this.props.userId) {
                 return (
                     <div>
+                        <Route path="/tutorial" component={Tutorial} />
                         <Route path="/home" component={Home} />
                         <Route path="/profile" component={ProfileHome} />
                         <Route

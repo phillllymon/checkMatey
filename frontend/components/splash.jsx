@@ -27,7 +27,6 @@ const Splash = (props) => (
             <div className="splash_bar">
                 <Link className="splash_option" to="/signup"><i className="fas fa-user-plus"></i> Sign Up</Link>
                 <Link className="splash_option" to="/login"><i className="fas fa-sign-in-alt"></i> Log In</Link> 
-                <Link className="splash_option" to="/learn"><i className="fab fa-leanpub"></i> Learn to Play</Link> 
                 <Link className="splash_option" to="/play"><i className="fas fa-robot"></i> Play Computer</Link> 
                 <Link className="splash_option" to="/notChess"><i className="fas fa-cubes"></i> Not Chess</Link>
             </div>
