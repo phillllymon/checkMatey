@@ -11,7 +11,8 @@ class PlayBoard extends React.Component {
         this.state = {
             grid: this.grid,
             dragging: false,
-            flipped: this.flipped
+            flipped: this.flipped,
+            hint: false
         }
         this.dragPiece = this.dragPiece.bind(this);
         this.beginDrag = this.beginDrag.bind(this);
@@ -31,6 +32,23 @@ class PlayBoard extends React.Component {
         this.setType = this.setType.bind(this);
         this.isMovePawnPromotion = this.isMovePawnPromotion.bind(this);
         this.handlePawnPromotion = this.handlePawnPromotion.bind(this);
+        this.showHint = this.showHint.bind(this);
+        this.setHint = this.setHint.bind(this);
+    }
+
+    showHint() {
+        if (this.props.hints) {
+            return (
+                <div className="hint">
+                    <i className="fas fa-question-circle"></i> {this.state.hint}
+                </div>
+            );
+        }
+        return '';
+    }
+
+    setHint(newHint) {
+        this.setState({ hint: newHint });
     }
 
     handlePawnPromotion(move) {
@@ -136,6 +154,12 @@ class PlayBoard extends React.Component {
 
     endDrag(e) {
         if (this.state.dragging) {
+            if (!this.game.playing){
+                this.setHint("Click 'Start Game' to being playing")
+                setTimeout( () => {
+                    this.setState({hint: false});
+                }, 1000);
+            }
             let destination = e.target.id;
             let move = [
                 [ parseInt(this.origin[0]), parseInt(this.origin[2]) ], 
@@ -203,7 +227,12 @@ class PlayBoard extends React.Component {
         }
         else {
             return (
-                <button className={"board_control_button"} onClick={this.startGame}> Start Game</button>
+                <button 
+                    className={"board_control_button"} 
+                    onClick={this.startGame}
+                    onMouseEnter={() => { this.setHint('Begin Playing') }}
+                    onMouseLeave={() => { this.setHint(false) }}
+                > Start Game</button>
             );
         }
     }
@@ -211,6 +240,7 @@ class PlayBoard extends React.Component {
     render() {
         return (
             <div className="chess_table">
+                {this.state.hint ? this.showHint() : ''}
                 <div
                     className={this.flipped ? "board flipped" : "board"}
                     onMouseMove={this.dragPiece}
@@ -257,6 +287,8 @@ class PlayBoard extends React.Component {
                                 return (
                                     <button className={this.typeSetting === gameType ? "current_type_button" : "type_button"}
                                         onClick={() => this.setType(gameType)}
+                                        onMouseEnter={() => { this.setHint("Set the type of game you'd like to play") }}
+                                        onMouseLeave={() => { this.setHint(false) }}
                                         key={gameType}>{gameType}</button>
 
                                 );
@@ -264,7 +296,12 @@ class PlayBoard extends React.Component {
                         }
                     <br/>
                     
-                    <button className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
+                    <button 
+                        className={"board_control_button"} 
+                        onClick={this.flipBoard}
+                            onMouseEnter={() => { this.setHint(this.game.playing ? 'Flip Board' : 'Change which color you play') }}
+                            onMouseLeave={() => { this.setHint(false) }}
+                    ><i className="fas fa-retweet"></i></button>
                     {this.gameButton()}
                         <div className="controls_heading">
                             <i className="fas fa-robot"></i>
@@ -277,11 +314,16 @@ class PlayBoard extends React.Component {
                                 return (
                                     <button className={this.game.level === level ? "current_level_button" : "level_button"}
                                     onClick={() => this.setLevel(level)} 
+                                        onMouseEnter={() => { this.setHint("Set computer level (level 0 means you play both sides)") }}
+                                        onMouseLeave={() => { this.setHint(false) }}
                                     key={level}>{level}</button>
                                     
                                 );
                             })
                         }
+                        <div>
+                            {this.game.level > 0 ? 'Play against AI' : '(You play both sides)'}
+                        </div>
                     <div className="colors">
                         <span className={this.game.playing && this.currentPlayer === this.playerColor ? "active_player" : ""} style={{ 'color': this.playerColor }} ><i className="fas fa-user"></i></span> 
                         <span className={this.game.playing && this.currentPlayer === this.compColor ? "active_player" : ""}  style={{ 'color': this.compColor }} ><i className="fas fa-robot"></i></span>

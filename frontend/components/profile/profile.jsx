@@ -21,12 +21,13 @@ class Feed extends React.Component {
         }).then((res) => {
             //this.setState({games: Object.values(res)});
             this.games = Object.values(res);
+            this.render();
         });
     }
 
     render() {
         let posts = this.props.posts.reverse();
-        
+        let games = Array.from(this.games).reverse();
         return (
             <div className="feed">
                 <div className="profile">
@@ -42,7 +43,7 @@ class Feed extends React.Component {
                         Game History:
                         <br/>
                         {
-                            this.games.length === 0 ? '(no games to show)' : this.games.map( (game, idx) => {
+                            this.games.length === 0 ? '(no games to show)' : games.map( (game, idx) => {
                                 return (
                                     <div key={idx}>
                                         

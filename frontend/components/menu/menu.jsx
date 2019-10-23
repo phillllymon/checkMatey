@@ -6,7 +6,8 @@ class Menu extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            viewSize: window.innerWidth
+            viewSize: window.innerWidth,
+            hint: false
         };
         this.handleResize = this.handleResize.bind(this);
         this.smallMenu = false;
@@ -14,6 +15,26 @@ class Menu extends React.Component {
         this.toggleCollapse = this.toggleCollapse.bind(this);
         this.collapseButton = this.collapseButton.bind(this);
         this.mobile = typeof window.orientation !== 'undefined';
+        this.showHint = this.showHint.bind(this);
+        this.setHint = this.setHint.bind(this);
+    }
+
+    showHint() {
+        if (this.props.hints) {
+            setTimeout(() => {
+                this.setState({hint: false});
+            }, 1000);
+            return (
+                <div className="hint">
+                    <i className="fas fa-question-circle"></i> {this.state.hint}
+                </div>
+            );
+        }
+        return '';
+    }
+
+    setHint(newHint) {
+        this.setState({ hint: newHint });
     }
 
     collapseButton() {
@@ -67,13 +88,13 @@ class Menu extends React.Component {
     render() {
         return (
             <div>
-                
+                {this.state.hint ? this.showHint() : ''}
                 <div className="greeting">
                     
                     <div>
                         <center>
                         {this.smallMenu ? this.nothing() : this.props.user.username + ','}
-                        <div className="ahoy"> {this.smallMenu ? '' : 'Ahoy!'}
+                        <div className="ahoy" style={this.smallMenu ? {'marginLeft': '8px'} : {}}> {this.smallMenu ? '' : 'Ahoy!'}
                             <div className="small_pirate"></div>
                         </div> 
                         </center>
@@ -82,11 +103,17 @@ class Menu extends React.Component {
                 </div>
                 <div className={this.smallMenu ? "pusher small_menu" : "pusher"}></div>
                 <div className={this.smallMenu ? "menu small_menu" : "menu"}>
-                    
+                    <div className="splash_option" 
+                        onClick={this.props.toggleHints}
+                        onMouseEnter={() => { this.setHint('Hints pop up here') }}
+                        onMouseLeave={() => { this.setHint(false) }}
+                    >
+                        <i className="fas fa-question-circle"></i> {this.smallMenu ? '' : (this.props.hints ? 'Turn Hints Off' : 'Turn Hints On')}
+                    </div>
                     <Link
                         to={'/home'}
                         className="splash_option">
-                        <i className="fas fa-home"></i> {this.smallMenu ? '' : 'Home'}
+                        <i className="fas fa-comments"></i> {this.smallMenu ? '' : 'Community'}
                     </Link>
                     <Link
                         to={'/profile'}
@@ -96,12 +123,17 @@ class Menu extends React.Component {
                     <Link
                         to={'/play'}
                         className="splash_option">
-                        <i className="fas fa-chess-knight"></i> {this.smallMenu ? '' : 'New Game'}
+                        <i className="fas fa-robot"></i> {this.smallMenu ? '' : 'Play Computer'}
                     </Link>
                     <Link
                         to={'/sandbox'}
                         className="splash_option">
                         <i className="fas fa-chess-board"></i> {this.smallMenu ? '' : 'Sandbox'}
+                    </Link>
+                    <Link
+                        to={'/tutorial'}
+                        className="splash_option">
+                        <i className="fas fa-video"></i> {this.smallMenu ? '' : 'Video Tour'}
                     </Link>
                     <Link 
                         to={'/'}

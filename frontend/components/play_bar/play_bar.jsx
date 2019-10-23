@@ -13,9 +13,10 @@ class PlayBar extends React.Component {
             challenged: false,
             gameType: 'Standard',
             gameTime: 10,
-            playerList: ['T1000robot'],
+            playerList: [],
             currentMessage: '',
-            playing: false
+            playing: false,
+            hint: false
             
         }
         this.playerRatings = {
@@ -36,8 +37,25 @@ class PlayBar extends React.Component {
         this.showVsBoard = this.showVsBoard.bind(this);
         this.lobbyButton = this.lobbyButton.bind(this);
         this.leaveGame = this.leaveGame.bind(this);
+        this.showHint = this.showHint.bind(this);
+        this.setHint = this.setHint.bind(this);
 
         this.mobile = typeof window.orientation !== 'undefined';
+    }
+
+    showHint() {
+        if (this.props.hints && !this.state.playing){
+            return (
+                <div className="hint">
+                    <i className="fas fa-question-circle"></i> {this.state.hint}
+                </div>
+            );
+        }
+        return '';
+    }
+
+    setHint(newHint) {
+        this.setState({hint: newHint});
     }
 
     leaveGame() {
@@ -244,6 +262,8 @@ class PlayBar extends React.Component {
                 <button
                     className={this.mobile ? "board_control_button_mobile" : "board_control_button"}
                     onClick={this.enterLobby}
+                    onMouseEnter={() => { this.setHint('Become visible for other players to challenge you') }}
+                    onMouseLeave={() => { this.setHint(false) }}
                 ><i className="fas fa-sign-in-alt"></i> Enter Lobby</button>
             );
         }
@@ -252,6 +272,7 @@ class PlayBar extends React.Component {
                 <button
                     className={this.mobile ? "board_control_button_mobile" : "board_control_button"}
                     onClick={this.leaveLobby}
+                    onMouseLeave={() => { this.setHint(false) }}
                 ><i className="fas fa-sign-in-alt" style={{
                     'transform' : 'rotate(180deg)'
                 }}></i> Leave Lobby</button>
@@ -260,6 +281,7 @@ class PlayBar extends React.Component {
     }
 
     render() {
+        
         if (this.mobile) {
             return (
                 <div className="play_bar_mobile">
@@ -340,7 +362,11 @@ class PlayBar extends React.Component {
             );
         }
         return (
-            <div className="play_bar">
+            <div className="play_bar"
+                onMouseEnter={() => { this.setHint('Play live matches with other users') }}
+                onMouseLeave={() => { this.setHint(false) }}
+            >
+                {this.state.hint ? this.showHint() : ''}
                 {this.state.challenged ? this.showChallengedBox() : ''}
                 {this.state.playing ? this.showVsBoard() : ''}
                 <div className="controls_heading" style={{'height': '42px'}}>
@@ -353,6 +379,8 @@ class PlayBar extends React.Component {
                     this.gameTypes.map((gameType) => {
                         return (
                             <button className={this.state.gameType === gameType ? "current_type_button" : "type_button"}
+                                onMouseEnter={() => {this.setHint('To challenge another player, first select the game type')}}
+                                onMouseLeave={() => {this.setHint(false)}}
                                 onClick={() => this.setType(gameType)}
                                 key={gameType}>{gameType}</button>
 
@@ -367,29 +395,35 @@ class PlayBar extends React.Component {
                                 this.times.map((time) => {
                                     return (
                                         <button className={this.state.gameTime === time ? "current_time_button" : "time_button"}
-                                            onClick={() => this.setTime(time)}
+                                        onMouseEnter={() => { this.setHint('Choose the amount of time on the clock for your challenge') }}
+                                        onMouseLeave={() => { this.setHint(false) }}    
+                                        onClick={() => this.setTime(time)}
                                             key={time}> {time}:00</button>
                                     );
                                 })
                             }
                     </div>
                 </div>
-                <div className="small_heading">
+                <div className="small_heading"
+                        onMouseEnter={() => { this.setHint('Here you see other users waiting to play') }}
+                        onMouseLeave={() => { this.setHint(false) }}    
+                >
                         <i className="fas fa-users"></i> Players
                 </div>
                 {this.lobbyButton()}
+                <div className="players_waiting">
                 {
-                    
+                    this.state.playerList.length === 0 ? '(There are no players waiting)' :
                     this.state.playerList.map((player, idx) => {
                         if (player === this.props.user.username){
                             return (
-                                <div className="player_bar" key={idx} >
+                                <div className="player_bar" key={idx} 
+                                    onMouseEnter={() => { this.setHint('You cannot challenge yourself') }}
+                                    onMouseLeave={() => { this.setHint(false) }}
+                                >
                                     {player + ' (' + this.playerRatings[player] + ')'}
                                     <br />
-                                    <button
-                                        className="time_button challenge"
-                                        style={{'color' : 'lightgray'}}
-                                    ><i className="fas fa-user"></i> (This is you)</button>
+                                    <i className="fas fa-user"></i> (This is you)
                                 </div>
                             );
                         }
@@ -417,7 +451,10 @@ class PlayBar extends React.Component {
                         }
                         else {
                             return (
-                                <div className="player_bar" key={idx} >
+                                <div className="player_bar" key={idx} 
+                                    onMouseEnter={() => { this.setHint('Challenge this player to a game') }}
+                                    onMouseLeave={() => { this.setHint(false) }}
+                                >
                                     {player + ' (' + this.playerRatings[player] + ')'}
                                     <br />
                                     <button
@@ -429,6 +466,7 @@ class PlayBar extends React.Component {
                         }
                     })
                 }
+                </div>
                 </center>
             </div>
         );

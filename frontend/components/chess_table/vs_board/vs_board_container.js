@@ -7,7 +7,8 @@ const mapStateToProps = (state, ownProps) => ({
     userId: state.session.currentUserId,
     userRating: state.entities.users[state.session.currentUserId].rating,
     game: state.entities.currentGame,
-    gameErrors: state.errors.game
+    gameErrors: state.errors.game,
+    hints: state.ui.hints
 });
 
 const mapDispatchToProps = (dispatch) => ({

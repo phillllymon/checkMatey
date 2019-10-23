@@ -15,7 +15,8 @@ class Board extends React.Component {
             dragging: false,
             flipped: this.flipped,
             description: '',
-            title: ''
+            title: '',
+            hint: false
         }
         this.dragPiece = this.dragPiece.bind(this);
         this.beginDrag = this.beginDrag.bind(this);
@@ -30,6 +31,30 @@ class Board extends React.Component {
         this.handleDescription = this.handleDescription.bind(this);
         this.handleTitle = this.handleTitle.bind(this);
         this.abortDrag = this.abortDrag.bind(this);
+        this.showHint = this.showHint.bind(this);
+        this.setHint = this.setHint.bind(this);
+    }
+
+    showHint() {
+        if (this.props.hints) {
+            return (
+                <div className="hint">
+                    <i className="fas fa-question-circle"></i> {this.state.hint}
+                </div>
+            );
+        }
+        return '';
+    }
+
+    setHint(newHint) {
+        this.setState({ hint: newHint });
+    }
+
+    componentDidMount() {
+        this.setHint("This board is for experimenting. No chess rules apply.");
+        setTimeout( () => {
+            this.setState({hint: false});
+        }, 2500);
     }
 
     startPosition() {
@@ -159,14 +184,18 @@ class Board extends React.Component {
         if (this.recording) {
             return (
                 <div className="record_controls">
-                    <div className="record_button" onClick={this.stopRecording}><i className="fas fa-stop-circle"></i> Stop Recording....</div>
+                    <div className="record_button" 
+                    onClick={this.stopRecording}><i className="fas fa-stop-circle"></i> Stop Recording....</div>
                 </div>
             );
         }
         else {
             return (
                 <div className="record_controls">
-                    <div className="record_button" onClick={this.startRecording}><i style={{'color': 'red'}} className="far fa-dot-circle"></i> Record Sequence</div>
+                    <div className="record_button" 
+                        onMouseEnter={() => { this.setHint("When you're ready, start recording your moves") }}
+                        onMouseLeave={() => { this.setHint(false) }}
+                    onClick={this.startRecording}><i style={{'color': 'red'}} className="far fa-dot-circle"></i> Record Sequence</div>
                 </div>
             );
         }
@@ -175,6 +204,7 @@ class Board extends React.Component {
     render() {
         return (
             <div className="chess_table">
+                {this.state.hint ? this.showHint() : ''}
                 <div
                     className={this.flipped ? "board flipped" : "board"}
                     onMouseMove={this.dragPiece}
@@ -216,25 +246,37 @@ class Board extends React.Component {
                             Sandbox
                             </div>
                     </div>
-                        <button className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i> Flip</button>
-                        <button className={"board_control_button"} onClick={this.resetBoard}><i className="fas fa-chess"></i> Reset</button>
+                        <button 
+                            onMouseEnter={() => { this.setHint("Flip Board") }}
+                            onMouseLeave={() => { this.setHint(false) }}
+                        className={"board_control_button"} onClick={this.flipBoard}><i className="fas fa-retweet"></i> Flip</button>
+                        <button 
+                            onMouseEnter={() => { this.setHint("Reset Pieces") }}
+                            onMouseLeave={() => { this.setHint(false) }}
+                        className={"board_control_button"} onClick={this.resetBoard}><i className="fas fa-chess"></i> Reset</button>
                         Sequence Title:
                     <input
                             className="title_field"
                             value={this.state.title}
                             onChange={this.handleTitle}
+                            onMouseEnter={() => { this.setHint("Give your sequence a name") }}
+                            onMouseLeave={() => { this.setHint(false) }}
                         />
                         Description:
                     <textarea
                             className="title_field"
                             value={this.state.description}
                             onChange={this.handleDescription}
+                            onMouseEnter={() => { this.setHint("Describe your sequence") }}
+                            onMouseLeave={() => { this.setHint(false) }}
                         ></textarea>
                         
                         <button
                             className={this.seq.length > 0 &&
                                 this.state.description.length > 0 && this.state.title.length ?
                                 "seq_active_button" : "seq_post_button"}
+                            onMouseEnter={() => { this.setHint("Give your recorded sequence a name and description to post it") }}
+                            onMouseLeave={() => { this.setHint(false) }}
                             onClick={this.postSequence}>
                             Post Sequence
                         </button>

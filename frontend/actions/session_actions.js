@@ -54,3 +54,4 @@ export const signup = (user) => {
         .fail( (res) => dispatch(receiveSessionErrors(res.responseJSON)));
     };
 };
+

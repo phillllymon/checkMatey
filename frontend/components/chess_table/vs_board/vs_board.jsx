@@ -21,7 +21,7 @@ class VsBoard extends React.Component {
             playerTime: [this.props.gameTime, 0],
             opponentTime: [this.props.gameTime, 0],
             chatInput: '',
-            showChat: false
+            hint: false
         }
         this.chat = [],
         this.dragPiece = this.dragPiece.bind(this);
@@ -54,7 +54,24 @@ class VsBoard extends React.Component {
         this.getWhitePoints = this.getWhitePoints.bind(this);
         this.handleChatInput = this.handleChatInput.bind(this);
         this.sendChat = this.sendChat.bind(this);
+        this.showHint = this.showHint.bind(this);
+        this.setHint = this.setHint.bind(this);
         
+    }
+
+    showHint() {
+        if (this.props.hints) {
+            return (
+                <div className="hint">
+                    <i className="fas fa-question-circle"></i> {this.state.hint}
+                </div>
+            );
+        }
+        return '';
+    }
+
+    setHint(newHint) {
+        this.setState({ hint: newHint });
     }
 
     sendChat() {
@@ -451,6 +468,7 @@ class VsBoard extends React.Component {
         let movesHeight = controlsHeight - 486;
         return (
             <div className="chess_table">
+                {this.state.hint ? this.showHint() : ''}
                 <div
                     className={this.flipped ? "board flipped" : "board"}
                     onMouseMove={this.dragPiece}
@@ -515,9 +533,18 @@ class VsBoard extends React.Component {
                             Game
                         </div>
                     </div>
-                        <button className="board_control_button" style={{ 'width': '50px' }} onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
-                        <button className="board_control_button" style={{ 'width': '50px' }}  onClick={this.offerDraw}><i className="fas fa-handshake"></i></button>
-                        <button className="board_control_button" style={{ 'width': '50px' }}  onClick={this.resign}><i className="fab fa-font-awesome-flag"></i></button>
+                        <button className="board_control_button" style={{ 'width': '50px' }} 
+                            onMouseEnter={() => { this.setHint("Flip Board") }}
+                            onMouseLeave={() => { this.setHint(false) }}
+                            onClick={this.flipBoard}><i className="fas fa-retweet"></i></button>
+                        <button className="board_control_button" style={{ 'width': '50px' }}
+                            onMouseEnter={() => { this.setHint("Offer Draw") }}
+                            onMouseLeave={() => { this.setHint(false) }}
+                            onClick={this.offerDraw}><i className="fas fa-handshake"></i></button>
+                        <button className="board_control_button" style={{ 'width': '50px' }}
+                            onMouseEnter={() => { this.setHint("Resign Game") }}
+                            onMouseLeave={() => { this.setHint(false) }}
+                            onClick={this.resign}><i className="fab fa-font-awesome-flag"></i></button>
                         
                         <br/>
                     

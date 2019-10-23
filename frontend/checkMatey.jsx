@@ -45,6 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             session: {
                 currentUserId: window.currentUser.id
+            },
+            ui: {
+                hints: true
             }
         };
     }

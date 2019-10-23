@@ -107,3 +107,24 @@
     border-radius: 20px;
     margin: 5px;
 }
+
+.players_waiting {
+    font-size: 15px;
+    font-family: sans-serif;
+    color: rgb(135, 129, 123);
+}
+
+.hint {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 3;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: gray;
+    font-family: sans-serif;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 12px -5px rgba(0, 0, 0, 1);
+}

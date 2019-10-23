@@ -270,6 +270,26 @@ var signup = function signup(user) {
 
 /***/ }),
 
+/***/ "./frontend/actions/ui_actions.js":
+/*!****************************************!*\
+  !*** ./frontend/actions/ui_actions.js ***!
+  \****************************************/
+/*! exports provided: TOGGLE_HINTS, toggleHints */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_HINTS", function() { return TOGGLE_HINTS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleHints", function() { return toggleHints; });
+var TOGGLE_HINTS = 'TOGGLE_HINTS';
+var toggleHints = function toggleHints() {
+  return {
+    type: TOGGLE_HINTS
+  };
+};
+
+/***/ }),
+
 /***/ "./frontend/checkMatey.jsx":
 /*!*********************************!*\
   !*** ./frontend/checkMatey.jsx ***!
@@ -329,6 +349,9 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       session: {
         currentUserId: window.currentUser.id
+      },
+      ui: {
+        hints: true
       }
     };
   }
@@ -624,7 +647,8 @@ function (_React$Component) {
       dragging: false,
       flipped: _this.flipped,
       description: '',
-      title: ''
+      title: '',
+      hint: false
     };
     _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
@@ -639,10 +663,44 @@ function (_React$Component) {
     _this.handleDescription = _this.handleDescription.bind(_assertThisInitialized(_this));
     _this.handleTitle = _this.handleTitle.bind(_assertThisInitialized(_this));
     _this.abortDrag = _this.abortDrag.bind(_assertThisInitialized(_this));
+    _this.showHint = _this.showHint.bind(_assertThisInitialized(_this));
+    _this.setHint = _this.setHint.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(Board, [{
+    key: "showHint",
+    value: function showHint() {
+      if (this.props.hints) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "hint"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-question-circle"
+        }), " ", this.state.hint);
+      }
+
+      return '';
+    }
+  }, {
+    key: "setHint",
+    value: function setHint(newHint) {
+      this.setState({
+        hint: newHint
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.setHint("This board is for experimenting. No chess rules apply.");
+      setTimeout(function () {
+        _this2.setState({
+          hint: false
+        });
+      }, 2500);
+    }
+  }, {
     key: "startPosition",
     value: function startPosition() {
       return [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
@@ -790,6 +848,8 @@ function (_React$Component) {
   }, {
     key: "recordButton",
     value: function recordButton() {
+      var _this3 = this;
+
       if (this.recording) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "record_controls"
@@ -804,6 +864,12 @@ function (_React$Component) {
           className: "record_controls"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "record_button",
+          onMouseEnter: function onMouseEnter() {
+            _this3.setHint("When you're ready, start recording your moves");
+          },
+          onMouseLeave: function onMouseLeave() {
+            _this3.setHint(false);
+          },
           onClick: this.startRecording
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           style: {
@@ -816,26 +882,26 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this4 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "chess_table"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.state.hint ? this.showHint() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.flipped ? "board flipped" : "board",
         onMouseMove: this.dragPiece,
         onMouseLeave: this.abortDrag
       }, this.state.dragging ? this.displayDragPiece() : '', this.grid.map(function (row, rIdx) {
         return row.map(function (spot, cIdx) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            onMouseDown: _this2.beginDrag,
-            onMouseUp: _this2.endDrag,
+            onMouseDown: _this4.beginDrag,
+            onMouseUp: _this4.endDrag,
             key: rIdx + cIdx,
             id: [rIdx, cIdx],
             className: (rIdx + cIdx) % 2 === 0 ? 'w' : 'b'
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
-            grayed: _this2.state.dragging && parseInt(_this2.origin[0]) === rIdx && parseInt(_this2.origin[2]) === cIdx ? true : false,
+            grayed: _this4.state.dragging && parseInt(_this4.origin[0]) === rIdx && parseInt(_this4.origin[2]) === cIdx ? true : false,
             pos: [rIdx, cIdx],
-            mark: _this2.state.grid[rIdx][cIdx]
+            mark: _this4.state.grid[rIdx][cIdx]
           }));
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -849,11 +915,23 @@ function (_React$Component) {
           'marginLeft': '10px'
         }
       }, "Sandbox")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint("Flip Board");
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        },
         className: "board_control_button",
         onClick: this.flipBoard
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-retweet"
       }), " Flip"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint("Reset Pieces");
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        },
         className: "board_control_button",
         onClick: this.resetBoard
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -861,13 +939,31 @@ function (_React$Component) {
       }), " Reset"), "Sequence Title:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         className: "title_field",
         value: this.state.title,
-        onChange: this.handleTitle
+        onChange: this.handleTitle,
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint("Give your sequence a name");
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        }
       }), "Description:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
         className: "title_field",
         value: this.state.description,
-        onChange: this.handleDescription
+        onChange: this.handleDescription,
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint("Describe your sequence");
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        }
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: this.seq.length > 0 && this.state.description.length > 0 && this.state.title.length ? "seq_active_button" : "seq_post_button",
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint("Give your recorded sequence a name and description to post it");
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        },
         onClick: this.postSequence
       }, "Post Sequence"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "outer_list"
@@ -915,7 +1011,8 @@ __webpack_require__.r(__webpack_exports__);
 var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
     game: state.entities.currentGame,
-    gameErrors: state.errors.game
+    gameErrors: state.errors.game,
+    hints: state.ui.hints
   };
 };
 
@@ -2176,7 +2273,8 @@ function (_React$Component) {
     _this.state = {
       grid: _this.grid,
       dragging: false,
-      flipped: _this.flipped
+      flipped: _this.flipped,
+      hint: false
     };
     _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
@@ -2196,10 +2294,32 @@ function (_React$Component) {
     _this.setType = _this.setType.bind(_assertThisInitialized(_this));
     _this.isMovePawnPromotion = _this.isMovePawnPromotion.bind(_assertThisInitialized(_this));
     _this.handlePawnPromotion = _this.handlePawnPromotion.bind(_assertThisInitialized(_this));
+    _this.showHint = _this.showHint.bind(_assertThisInitialized(_this));
+    _this.setHint = _this.setHint.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(PlayBoard, [{
+    key: "showHint",
+    value: function showHint() {
+      if (this.props.hints) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "hint"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-question-circle"
+        }), " ", this.state.hint);
+      }
+
+      return '';
+    }
+  }, {
+    key: "setHint",
+    value: function setHint(newHint) {
+      this.setState({
+        hint: newHint
+      });
+    }
+  }, {
     key: "handlePawnPromotion",
     value: function handlePawnPromotion(move) {
       this.displayPromotion = true;
@@ -2332,6 +2452,15 @@ function (_React$Component) {
       var _this2 = this;
 
       if (this.state.dragging) {
+        if (!this.game.playing) {
+          this.setHint("Click 'Start Game' to being playing");
+          setTimeout(function () {
+            _this2.setState({
+              hint: false
+            });
+          }, 1000);
+        }
+
         var destination = e.target.id;
         var move = [[parseInt(this.origin[0]), parseInt(this.origin[2])], [parseInt(destination[0]), parseInt(destination[2])]];
 
@@ -2393,6 +2522,8 @@ function (_React$Component) {
   }, {
     key: "gameButton",
     value: function gameButton() {
+      var _this3 = this;
+
       if (this.game.playing) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           className: "board_control_button",
@@ -2401,33 +2532,39 @@ function (_React$Component) {
       } else {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           className: "board_control_button",
-          onClick: this.startGame
+          onClick: this.startGame,
+          onMouseEnter: function onMouseEnter() {
+            _this3.setHint('Begin Playing');
+          },
+          onMouseLeave: function onMouseLeave() {
+            _this3.setHint(false);
+          }
         }, " Start Game");
       }
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "chess_table"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.state.hint ? this.showHint() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.flipped ? "board flipped" : "board",
         onMouseMove: this.dragPiece,
         onMouseLeave: this.abortDrag
       }, this.state.dragging ? this.displayDragPiece() : '', this.grid.map(function (row, rIdx) {
         return row.map(function (spot, cIdx) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            onMouseDown: _this3.beginDrag,
-            onMouseUp: _this3.endDrag,
+            onMouseDown: _this4.beginDrag,
+            onMouseUp: _this4.endDrag,
             key: rIdx + cIdx,
             id: [rIdx, cIdx],
             className: (rIdx + cIdx) % 2 === 0 ? 'w' : 'b'
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
-            grayed: _this3.state.dragging && parseInt(_this3.origin[0]) === rIdx && parseInt(_this3.origin[2]) === cIdx ? true : false,
+            grayed: _this4.state.dragging && parseInt(_this4.origin[0]) === rIdx && parseInt(_this4.origin[2]) === cIdx ? true : false,
             pos: [rIdx, cIdx],
-            mark: _this3.state.grid[rIdx][cIdx]
+            mark: _this4.state.grid[rIdx][cIdx]
           }));
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -2442,15 +2579,27 @@ function (_React$Component) {
         }
       }, "Game")), this.game.gameTypes.map(function (gameType) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this3.typeSetting === gameType ? "current_type_button" : "type_button",
+          className: _this4.typeSetting === gameType ? "current_type_button" : "type_button",
           onClick: function onClick() {
-            return _this3.setType(gameType);
+            return _this4.setType(gameType);
+          },
+          onMouseEnter: function onMouseEnter() {
+            _this4.setHint("Set the type of game you'd like to play");
+          },
+          onMouseLeave: function onMouseLeave() {
+            _this4.setHint(false);
           },
           key: gameType
         }, gameType);
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "board_control_button",
-        onClick: this.flipBoard
+        onClick: this.flipBoard,
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint(_this4.game.playing ? 'Flip Board' : 'Change which color you play');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-retweet"
       })), this.gameButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -2463,13 +2612,19 @@ function (_React$Component) {
         }
       }, "Level")), this.game.levels.map(function (level) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this3.game.level === level ? "current_level_button" : "level_button",
+          className: _this4.game.level === level ? "current_level_button" : "level_button",
           onClick: function onClick() {
-            return _this3.setLevel(level);
+            return _this4.setLevel(level);
+          },
+          onMouseEnter: function onMouseEnter() {
+            _this4.setHint("Set computer level (level 0 means you play both sides)");
+          },
+          onMouseLeave: function onMouseLeave() {
+            _this4.setHint(false);
           },
           key: level
         }, level);
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.game.level > 0 ? 'Play against AI' : '(You play both sides)'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "colors"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: this.game.playing && this.currentPlayer === this.playerColor ? "active_player" : "",
@@ -2528,7 +2683,8 @@ __webpack_require__.r(__webpack_exports__);
 var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
     game: state.entities.currentGame,
-    gameErrors: state.errors.game
+    gameErrors: state.errors.game,
+    hints: state.ui.hints
   };
 };
 
@@ -2955,7 +3111,7 @@ function (_React$Component) {
       playerTime: [_this.props.gameTime, 0],
       opponentTime: [_this.props.gameTime, 0],
       chatInput: '',
-      showChat: false
+      hint: false
     };
     _this.chat = [], _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
@@ -2984,10 +3140,32 @@ function (_React$Component) {
     _this.getWhitePoints = _this.getWhitePoints.bind(_assertThisInitialized(_this));
     _this.handleChatInput = _this.handleChatInput.bind(_assertThisInitialized(_this));
     _this.sendChat = _this.sendChat.bind(_assertThisInitialized(_this));
+    _this.showHint = _this.showHint.bind(_assertThisInitialized(_this));
+    _this.setHint = _this.setHint.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(VsBoard, [{
+    key: "showHint",
+    value: function showHint() {
+      if (this.props.hints) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "hint"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-question-circle"
+        }), " ", this.state.hint);
+      }
+
+      return '';
+    }
+  }, {
+    key: "setHint",
+    value: function setHint(newHint) {
+      this.setState({
+        hint: newHint
+      });
+    }
+  }, {
     key: "sendChat",
     value: function sendChat() {
       this.playSub.perform('relayMessage', {
@@ -3459,7 +3637,7 @@ function (_React$Component) {
       var movesHeight = controlsHeight - 486;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "chess_table"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.state.hint ? this.showHint() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.flipped ? "board flipped" : "board",
         onMouseMove: this.dragPiece,
         onMouseLeave: this.abortDrag
@@ -3506,6 +3684,12 @@ function (_React$Component) {
         style: {
           'width': '50px'
         },
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint("Flip Board");
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        },
         onClick: this.flipBoard
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-retweet"
@@ -3514,6 +3698,12 @@ function (_React$Component) {
         style: {
           'width': '50px'
         },
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint("Offer Draw");
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        },
         onClick: this.offerDraw
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-handshake"
@@ -3521,6 +3711,12 @@ function (_React$Component) {
         className: "board_control_button",
         style: {
           'width': '50px'
+        },
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint("Resign Game");
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
         },
         onClick: this.resign
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -3658,7 +3854,8 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
     userId: state.session.currentUserId,
     userRating: state.entities.users[state.session.currentUserId].rating,
     game: state.entities.currentGame,
-    gameErrors: state.errors.game
+    gameErrors: state.errors.game,
+    hints: state.ui.hints
   };
 };
 
@@ -5126,7 +5323,8 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Menu).call(this, props));
     _this.state = {
-      viewSize: window.innerWidth
+      viewSize: window.innerWidth,
+      hint: false
     };
     _this.handleResize = _this.handleResize.bind(_assertThisInitialized(_this));
     _this.smallMenu = false;
@@ -5134,10 +5332,39 @@ function (_React$Component) {
     _this.toggleCollapse = _this.toggleCollapse.bind(_assertThisInitialized(_this));
     _this.collapseButton = _this.collapseButton.bind(_assertThisInitialized(_this));
     _this.mobile = typeof window.orientation !== 'undefined';
+    _this.showHint = _this.showHint.bind(_assertThisInitialized(_this));
+    _this.setHint = _this.setHint.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(Menu, [{
+    key: "showHint",
+    value: function showHint() {
+      var _this2 = this;
+
+      if (this.props.hints) {
+        setTimeout(function () {
+          _this2.setState({
+            hint: false
+          });
+        }, 1000);
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "hint"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-question-circle"
+        }), " ", this.state.hint);
+      }
+
+      return '';
+    }
+  }, {
+    key: "setHint",
+    value: function setHint(newHint) {
+      this.setState({
+        hint: newHint
+      });
+    }
+  }, {
     key: "collapseButton",
     value: function collapseButton() {
       if (this.smallMenu) {
@@ -5191,22 +5418,38 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      var _this3 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.hint ? this.showHint() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "greeting"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.smallMenu ? this.nothing() : this.props.user.username + ',', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "ahoy"
+        className: "ahoy",
+        style: this.smallMenu ? {
+          'marginLeft': '8px'
+        } : {}
       }, " ", this.smallMenu ? '' : 'Ahoy!', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "small_pirate"
       }))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.smallMenu ? "pusher small_menu" : "pusher"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.smallMenu ? "menu small_menu" : "menu"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "splash_option",
+        onClick: this.props.toggleHints,
+        onMouseEnter: function onMouseEnter() {
+          _this3.setHint('Hints pop up here');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this3.setHint(false);
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-question-circle"
+      }), " ", this.smallMenu ? '' : this.props.hints ? 'Turn Hints Off' : 'Turn Hints On'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/home',
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-home"
-      }), " ", this.smallMenu ? '' : 'Home'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        className: "fas fa-comments"
+      }), " ", this.smallMenu ? '' : 'Community'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/profile',
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -5215,13 +5458,18 @@ function (_React$Component) {
         to: '/play',
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-chess-knight"
-      }), " ", this.smallMenu ? '' : 'New Game'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        className: "fas fa-robot"
+      }), " ", this.smallMenu ? '' : 'Play Computer'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/sandbox',
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-chess-board"
       }), " ", this.smallMenu ? '' : 'Sandbox'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: '/tutorial',
+        className: "splash_option"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-video"
+      }), " ", this.smallMenu ? '' : 'Video Tour'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/',
         className: "splash_option",
         onClick: this.props.logout
@@ -5256,13 +5504,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _menu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./menu */ "./frontend/components/menu/menu.jsx");
 /* harmony import */ var _actions_session_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../actions/session_actions */ "./frontend/actions/session_actions.js");
+/* harmony import */ var _actions_ui_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../actions/ui_actions */ "./frontend/actions/ui_actions.js");
+
 
 
 
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    user: state.entities.users[state.session.currentUserId]
+    user: state.entities.users[state.session.currentUserId],
+    hints: state.ui.hints
   };
 };
 
@@ -5270,6 +5521,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     logout: function logout() {
       return dispatch(Object(_actions_session_actions__WEBPACK_IMPORTED_MODULE_2__["logout"])());
+    },
+    toggleHints: function toggleHints() {
+      return dispatch(Object(_actions_ui_actions__WEBPACK_IMPORTED_MODULE_3__["toggleHints"])());
     }
   };
 };
@@ -6940,9 +7194,10 @@ function (_React$Component) {
       challenged: false,
       gameType: 'Standard',
       gameTime: 10,
-      playerList: ['T1000robot'],
+      playerList: [],
       currentMessage: '',
-      playing: false
+      playing: false,
+      hint: false
     };
     _this.playerRatings = {
       T1000robot: 850
@@ -6962,11 +7217,33 @@ function (_React$Component) {
     _this.showVsBoard = _this.showVsBoard.bind(_assertThisInitialized(_this));
     _this.lobbyButton = _this.lobbyButton.bind(_assertThisInitialized(_this));
     _this.leaveGame = _this.leaveGame.bind(_assertThisInitialized(_this));
+    _this.showHint = _this.showHint.bind(_assertThisInitialized(_this));
+    _this.setHint = _this.setHint.bind(_assertThisInitialized(_this));
     _this.mobile = typeof window.orientation !== 'undefined';
     return _this;
   }
 
   _createClass(PlayBar, [{
+    key: "showHint",
+    value: function showHint() {
+      if (this.props.hints && !this.state.playing) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "hint"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-question-circle"
+        }), " ", this.state.hint);
+      }
+
+      return '';
+    }
+  }, {
+    key: "setHint",
+    value: function setHint(newHint) {
+      this.setState({
+        hint: newHint
+      });
+    }
+  }, {
     key: "leaveGame",
     value: function leaveGame() {
       this.setState({
@@ -7180,17 +7457,28 @@ function (_React$Component) {
   }, {
     key: "lobbyButton",
     value: function lobbyButton() {
+      var _this2 = this;
+
       if (!this.state.visible) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           className: this.mobile ? "board_control_button_mobile" : "board_control_button",
-          onClick: this.enterLobby
+          onClick: this.enterLobby,
+          onMouseEnter: function onMouseEnter() {
+            _this2.setHint('Become visible for other players to challenge you');
+          },
+          onMouseLeave: function onMouseLeave() {
+            _this2.setHint(false);
+          }
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-sign-in-alt"
         }), " Enter Lobby");
       } else {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           className: this.mobile ? "board_control_button_mobile" : "board_control_button",
-          onClick: this.leaveLobby
+          onClick: this.leaveLobby,
+          onMouseLeave: function onMouseLeave() {
+            _this2.setHint(false);
+          }
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-sign-in-alt",
           style: {
@@ -7202,7 +7490,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.mobile) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -7219,9 +7507,9 @@ function (_React$Component) {
           className: "fas fa-chess-knight"
         }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.gameTypes.map(function (gameType) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: _this2.state.gameType === gameType ? "current_type_button_mobile" : "type_button_mobile",
+            className: _this3.state.gameType === gameType ? "current_type_button_mobile" : "type_button_mobile",
             onClick: function onClick() {
-              return _this2.setType(gameType);
+              return _this3.setType(gameType);
             },
             key: gameType
           }, gameType);
@@ -7238,9 +7526,9 @@ function (_React$Component) {
           className: "far fa-clock"
         }), this.times.map(function (time) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: _this2.state.gameTime === time ? "current_time_button_mobile" : "time_button_mobile",
+            className: _this3.state.gameTime === time ? "current_time_button_mobile" : "time_button_mobile",
             onClick: function onClick() {
-              return _this2.setTime(time);
+              return _this3.setTime(time);
             },
             key: time
           }, " ", time, ":00");
@@ -7249,7 +7537,7 @@ function (_React$Component) {
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-users"
         }), " Players"), this.lobbyButton(), this.state.playerList.map(function (player, idx) {
-          if (player === _this2.props.user.username) {
+          if (player === _this3.props.user.username) {
             return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               className: "player_bar_mobile",
               key: idx
@@ -7257,7 +7545,7 @@ function (_React$Component) {
               className: "player_icon_mobile"
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
               className: "fas fa-user"
-            })), player + ' (' + _this2.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            })), player + ' (' + _this3.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
               className: "time_button_mobile challenge_mobile",
               style: {
                 'color': 'lightgray'
@@ -7271,10 +7559,10 @@ function (_React$Component) {
               className: "player_icon_mobile"
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
               className: "fas fa-user"
-            })), player + ' (' + _this2.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            })), player + ' (' + _this3.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
               className: "time_button_mobile challenge_mobile",
               onClick: function onClick() {
-                return _this2.challengePlayer(player);
+                return _this3.challengePlayer(player);
               }
             }, " Challenge"));
           }
@@ -7282,8 +7570,14 @@ function (_React$Component) {
       }
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "play_bar"
-      }, this.state.challenged ? this.showChallengedBox() : '', this.state.playing ? this.showVsBoard() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "play_bar",
+        onMouseEnter: function onMouseEnter() {
+          _this3.setHint('Play live matches with other users');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this3.setHint(false);
+        }
+      }, this.state.hint ? this.showHint() : '', this.state.challenged ? this.showChallengedBox() : '', this.state.playing ? this.showVsBoard() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "controls_heading",
         style: {
           'height': '42px'
@@ -7298,9 +7592,15 @@ function (_React$Component) {
         className: "fas fa-chess-knight"
       }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.gameTypes.map(function (gameType) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this2.state.gameType === gameType ? "current_type_button" : "type_button",
+          className: _this3.state.gameType === gameType ? "current_type_button" : "type_button",
+          onMouseEnter: function onMouseEnter() {
+            _this3.setHint('To challenge another player, first select the game type');
+          },
+          onMouseLeave: function onMouseLeave() {
+            _this3.setHint(false);
+          },
           onClick: function onClick() {
-            return _this2.setType(gameType);
+            return _this3.setType(gameType);
           },
           key: gameType
         }, gameType);
@@ -7314,37 +7614,52 @@ function (_React$Component) {
         className: "far fa-clock"
       }), this.times.map(function (time) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this2.state.gameTime === time ? "current_time_button" : "time_button",
+          className: _this3.state.gameTime === time ? "current_time_button" : "time_button",
+          onMouseEnter: function onMouseEnter() {
+            _this3.setHint('Choose the amount of time on the clock for your challenge');
+          },
+          onMouseLeave: function onMouseLeave() {
+            _this3.setHint(false);
+          },
           onClick: function onClick() {
-            return _this2.setTime(time);
+            return _this3.setTime(time);
           },
           key: time
         }, " ", time, ":00");
       }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "small_heading"
+        className: "small_heading",
+        onMouseEnter: function onMouseEnter() {
+          _this3.setHint('Here you see other users waiting to play');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this3.setHint(false);
+        }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-users"
-      }), " Players"), this.lobbyButton(), this.state.playerList.map(function (player, idx) {
-        if (player === _this2.props.user.username) {
+      }), " Players"), this.lobbyButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "players_waiting"
+      }, this.state.playerList.length === 0 ? '(There are no players waiting)' : this.state.playerList.map(function (player, idx) {
+        if (player === _this3.props.user.username) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_bar",
-            key: idx
-          }, player + ' (' + _this2.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "time_button challenge",
-            style: {
-              'color': 'lightgray'
+            key: idx,
+            onMouseEnter: function onMouseEnter() {
+              _this3.setHint('You cannot challenge yourself');
+            },
+            onMouseLeave: function onMouseLeave() {
+              _this3.setHint(false);
             }
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          }, player + ' (' + _this3.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-user"
-          }), " (This is you)"));
+          }), " (This is you)");
         } else if (player === 'T1000robot') {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_bar",
             key: idx
-          }, player + ' (' + _this2.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          }, player + ' (' + _this3.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "time_button challenge",
             onClick: function onClick() {
-              return _this2.challengePlayer(player);
+              return _this3.challengePlayer(player);
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
             to: '/play',
@@ -7358,17 +7673,23 @@ function (_React$Component) {
         } else {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_bar",
-            key: idx
-          }, player + ' (' + _this2.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            key: idx,
+            onMouseEnter: function onMouseEnter() {
+              _this3.setHint('Challenge this player to a game');
+            },
+            onMouseLeave: function onMouseLeave() {
+              _this3.setHint(false);
+            }
+          }, player + ' (' + _this3.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "time_button challenge",
             onClick: function onClick() {
-              return _this2.challengePlayer(player);
+              return _this3.challengePlayer(player);
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-user"
           }), " Challenge"));
         }
-      })));
+      }))));
     }
   }]);
 
@@ -7395,7 +7716,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var mapStateToProps = function mapStateToProps(state, ownprops) {
   return {
-    user: state.entities.users[state.session.currentUserId]
+    user: state.entities.users[state.session.currentUserId],
+    hints: state.ui.hints
   };
 };
 
@@ -7999,6 +8321,8 @@ function (_React$Component) {
       }).then(function (res) {
         //this.setState({games: Object.values(res)});
         _this2.games = Object.values(res);
+
+        _this2.render();
       });
     }
   }, {
@@ -8007,6 +8331,7 @@ function (_React$Component) {
       var _this3 = this;
 
       var posts = this.props.posts.reverse();
+      var games = Array.from(this.games).reverse();
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "feed"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -8020,7 +8345,7 @@ function (_React$Component) {
         }
       }), this.props.user.username), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "profile_content"
-      }, "Current Rating: ", this.props.user.rating, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Games to date: ", this.games.length, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Game History:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.games.length === 0 ? '(no games to show)' : this.games.map(function (game, idx) {
+      }, "Current Rating: ", this.props.user.rating, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Games to date: ", this.games.length, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Game History:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.games.length === 0 ? '(no games to show)' : games.map(function (game, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: idx
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_item__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -8862,6 +9187,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _entities_reducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./entities_reducer */ "./frontend/reducers/entities_reducer.js");
 /* harmony import */ var _errors_reducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./errors_reducer */ "./frontend/reducers/errors_reducer.js");
 /* harmony import */ var _session_reducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./session_reducer */ "./frontend/reducers/session_reducer.js");
+/* harmony import */ var _ui_reducer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ui_reducer */ "./frontend/reducers/ui_reducer.js");
+
 
 
 
@@ -8869,7 +9196,8 @@ __webpack_require__.r(__webpack_exports__);
 var rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
   entities: _entities_reducer__WEBPACK_IMPORTED_MODULE_1__["default"],
   errors: _errors_reducer__WEBPACK_IMPORTED_MODULE_2__["default"],
-  session: _session_reducer__WEBPACK_IMPORTED_MODULE_3__["default"]
+  session: _session_reducer__WEBPACK_IMPORTED_MODULE_3__["default"],
+  ui: _ui_reducer__WEBPACK_IMPORTED_MODULE_4__["default"]
 });
 /* harmony default export */ __webpack_exports__["default"] = (rootReducer);
 
@@ -8946,6 +9274,39 @@ var sessionReducer = function sessionReducer() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (sessionReducer);
+
+/***/ }),
+
+/***/ "./frontend/reducers/ui_reducer.js":
+/*!*****************************************!*\
+  !*** ./frontend/reducers/ui_reducer.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_ui_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/ui_actions */ "./frontend/actions/ui_actions.js");
+
+
+var uiReducer = function uiReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+  Object.freeze(state);
+  var newState = Object.assign({}, state);
+
+  switch (action.type) {
+    case _actions_ui_actions__WEBPACK_IMPORTED_MODULE_0__["TOGGLE_HINTS"]:
+      return Object.assign(newState, {
+        hints: !newState.hints
+      });
+
+    default:
+      return state;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (uiReducer);
 
 /***/ }),
 

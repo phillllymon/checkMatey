@@ -6,7 +6,8 @@ import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = (state, ownProps) => ({
     game: state.entities.currentGame,
-    gameErrors: state.errors.game
+    gameErrors: state.errors.game,
+    hints: state.ui.hints
 });
 
 const mapDispatchToProps = (dispatch) => ({
