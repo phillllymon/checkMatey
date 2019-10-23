@@ -1,24 +1,24 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# [CheckMatey](https://checkmatey.herokuapp.com/#/)
 
-Things you may want to cover:
+------
 
-* Ruby version
+### Tech Stack
 
-* System dependencies
+* Ruby on Rails
+* React / Redux
+* PostgreSQL
 
-* Configuration
+------
 
-* Database creation
+### [Live Link](https://checkmatey.herokuapp.com/#/)
 
-* Database initialization
+Welcome to CheckMatey, an online chess community inspired by Chess.com.
 
-* How to run the test suite
+------
+### How to Use
+------
+![Splash Page](https://github.com/phillllymon/checkMatey/blob/master/app/assets/images/checkMateySpash.png)
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
-
-* ...
