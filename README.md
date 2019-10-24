@@ -37,6 +37,62 @@ CheckMatey is a fully-functional chess application. Users can log in, post in th
 ------
 Below are some code snippets:
 
+* An important part of making the chessboard interface immersive is the ability to flip board and see the other player's perspective. The board is made of highly-styled css elements packed into a container just the right size. This is the board element:
+
+
+```js
+      <div
+          className={this.flipped ? "board flipped" : "board"}
+          onMouseMove={this.dragPiece}
+          onMouseLeave={this.abortDrag}
+      >
+      {
+            this.grid.map((row, rIdx) => {
+                return (
+                    row.map((spot, cIdx) => {
+                        return (
+                            <div
+                                onMouseDown={this.beginDrag}
+                                onMouseUp={this.endDrag}
+                                key={rIdx + cIdx}
+                                id={[rIdx, cIdx]}
+                                className={(rIdx + cIdx) % 2 === 0 ? 'w' : 'b'}
+                            >
+                                <Piece
+                                    grayed={this.state.dragging &&
+                                        parseInt(this.origin[0]) === rIdx
+                                        && parseInt(this.origin[2]) === cIdx ?
+                                        true : false}
+                                    pos={[rIdx, cIdx]}
+                                    mark={this.state.grid[rIdx][cIdx]}
+                                />
+                            </div>
+                        );
+                    })
+                );
+            })
+        }
+        </div>
+```
+The variable ```js this.flipped ``` determines which class the board div will have, and this css ensures the squares appear in the correct order:
+```css
+      .board {
+          display: flex;
+          flex-wrap: wrap;
+          width: 60vw;
+          height: 60vw;
+          max-height: 90vh;
+          max-width: 90vh;
+          border: 10px solid rgb(75, 59, 53);
+          border-radius: 5px;
+          margin-right: 2vw;
+      }
+      
+      .flipped {
+          flex-wrap: wrap-reverse;
+          flex-direction: row-reverse;
+      }
+```
 * One technical challenge of this application was setting up the board for a multiplayer match in chess960. For regular chess, the game logic lives on the frontend and each player keeps a separate version of the game. Those versions are both updated when a player broadcasts a move on the game channel. However, since chess960 involves setting a random starting position for pieces, both players need a way to make sure they start with the same board. When a new game is started, this Ruby code is run on the backend, and the starting position is then broadcast to both players:
 
 ```ruby
