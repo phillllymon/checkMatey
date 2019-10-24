@@ -74,7 +74,7 @@ Below are some code snippets:
         }
         </div>
 ```
-The variable ```js this.flipped ``` determines which class the board div will have, and this css ensures the squares appear in the correct order:
+The variable ```this.flipped``` determines which class the board div will have, and this css ensures the squares appear in the correct order:
 ```css
       .board {
           display: flex;
