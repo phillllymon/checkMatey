@@ -96,24 +96,24 @@ The variable ```this.flipped``` determines which class the board div will have, 
 * One technical challenge of this application was setting up the board for a multiplayer match in chess960. For regular chess, the game logic lives on the frontend and each player keeps a separate version of the game. Those versions are both updated when a player broadcasts a move on the game channel. However, since chess960 involves setting a random starting position for pieces, both players need a way to make sure they start with the same board. When a new game is started, this Ruby code is run on the backend, and the starting position is then broadcast to both players:
 
 ```ruby
-if gameType == 'Chess960'
-      row = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
-      newRow = []
-      while row.length > 0
-        nextIdx = rand(0...row.length)
-        newRow << row[nextIdx]
-        row = row[0...nextIdx].concat(row[nextIdx + 1...row.length])
+      if gameType == 'Chess960'
+            row = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
+            newRow = []
+            while row.length > 0
+                  nextIdx = rand(0...row.length)
+                  newRow << row[nextIdx]
+                  row = row[0...nextIdx].concat(row[nextIdx + 1...row.length])
+            end
+            gameType = newRow
       end
-      gameType = newRow
-    end
-    ActionCable.server.broadcast("WaitingChannel", {
-      playerWhite: playerWhite, 
-      playerBlack: playerBlack,
-      gameType: gameType,
-      gameTime: challenge['gameTime'],
-      gameId: rand()
-    })
-    }
+      ActionCable.server.broadcast("WaitingChannel", {
+            playerWhite: playerWhite, 
+            playerBlack: playerBlack,
+            gameType: gameType,
+            gameTime: challenge['gameTime'],
+            gameId: rand()
+            })
+      }
 ```
 
 Contributors:
