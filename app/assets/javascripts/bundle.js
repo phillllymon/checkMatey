@@ -332,7 +332,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //websocket testing above^^^^ code from var ws = new WebSocket("wss://echo.websocket.org");
 
 document.addEventListener("DOMContentLoaded", function () {
-  var preloadedState = {};
+  var preloadedState = {
+    ui: {
+      hints: true
+    }
+  };
 
   if (window.currentUser) {
     preloadedState = {
@@ -39522,7 +39526,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
