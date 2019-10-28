@@ -235,8 +235,13 @@ export class Game {
     }
 
     makeAIMove() {
-        this.makeMove(this.getAIMove());
-        return this.grid;
+        if (!this.isGameOver()) {
+            this.makeMove(this.getAIMove());
+            return this.grid;
+        }
+        else {
+            console.log(this.gameOverMessage);
+        }
     }
 
     getAIMove() {

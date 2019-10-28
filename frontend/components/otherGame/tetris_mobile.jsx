@@ -286,7 +286,7 @@ class TetrisMobile extends React.Component {
                             </center>
                         </div>
                         <button
-                        onClick={() => this.handleControls('down')}
+                        onTouchStart={() => this.handleControls('down')}
                         style={{
                             'width': '100%',
                             'height': '28vw'
@@ -295,7 +295,7 @@ class TetrisMobile extends React.Component {
                         <i className="fas fa-arrow-down"></i>
                         </button>
                         <button
-                        onClick={() => this.handleControls('drop')}
+                        onTouchStart={() => this.handleControls('drop')}
                         style={{
                             'width': '100%',
                             'height': '28vw'
@@ -311,7 +311,7 @@ class TetrisMobile extends React.Component {
                             'display': 'flex'
                         }}>
                         <button
-                        onClick={() => this.handleControls('left')}
+                        onTouchStart={() => this.handleControls('left')}
                         style={{
                             'width': '100%',
                             
@@ -320,7 +320,7 @@ class TetrisMobile extends React.Component {
                         <i className="fas fa-arrow-left"></i><br /><br /><br />
                         </button>
                         <button
-                        onClick={(e) => {
+                        onTouchStart={(e) => {
                             e.preventDefault();
                             this.handleControls('rotate')
                         }}
@@ -332,7 +332,7 @@ class TetrisMobile extends React.Component {
                         <i className="fas fa-undo"></i><br /><br /><br />
                         </button>
                         <button
-                        onClick={() => this.handleControls('right')}
+                        onTouchStart={() => this.handleControls('right')}
                         style={{
                             'width': '100%',
                             

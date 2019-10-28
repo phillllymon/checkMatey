@@ -1761,8 +1761,12 @@ function () {
   }, {
     key: "makeAIMove",
     value: function makeAIMove() {
-      this.makeMove(this.getAIMove());
-      return this.grid;
+      if (!this.isGameOver()) {
+        this.makeMove(this.getAIMove());
+        return this.grid;
+      } else {
+        console.log(this.gameOverMessage);
+      }
     }
   }, {
     key: "getAIMove",
@@ -2341,6 +2345,26 @@ function (_React$Component) {
     value: function popupWindow() {
       var _this2 = this;
 
+      if (this.gameOverMessage) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "modal_back"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          style: {
+            'position': 'relative'
+          }
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "challenge_box"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "challenge_box_header"
+        }, this.gameOverMessage), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.gameOverMessage === 'Checkmate!' ? (this.game.currentPlayer === 'white' ? 'Black' : 'White') + ' wins!' : 'The game ends in stalemate.', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: this.resetGame,
+          className: "time_button"
+        }, "New Game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: this.props.backToHome,
+          className: "time_button"
+        }, "Leave Board"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)))));
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal_back"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -2351,7 +2375,7 @@ function (_React$Component) {
         className: "challenge_box"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "challenge_box_header"
-      }, "Game in progress"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Abandon current game?", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Game in progress!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Abandon current game?", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: this.resetGame,
         className: "time_button"
       }, "Yes, start new game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -2425,6 +2449,11 @@ function (_React$Component) {
     key: "setLevel",
     value: function setLevel(level) {
       this.game.level = level;
+
+      if (this.game.currentPlayer === this.compColor) {
+        this.takeComputerTurn();
+      }
+
       this.setState({});
     }
   }, {
@@ -2525,14 +2554,21 @@ function (_React$Component) {
     value: function takeComputerTurn() {
       var _this3 = this;
 
-      setTimeout(function () {
-        _this3.grid = _this3.game.makeAIMove();
-        _this3.currentPlayer = _this3.game.currentPlayer;
+      if (!this.game.isGameOver()) {
+        setTimeout(function () {
+          _this3.grid = _this3.game.makeAIMove();
+          _this3.currentPlayer = _this3.game.currentPlayer;
 
-        _this3.setState({
-          grid: _this3.grid
+          _this3.setState({
+            grid: _this3.grid
+          });
+        }, Math.random() * 500 + 500);
+      } else {
+        this.gameOverMessage = this.game.gameOverMessage;
+        this.setState({
+          popup: true
         });
-      }, Math.random() * 500 + 500);
+      }
     }
   }, {
     key: "endDrag",
@@ -7233,7 +7269,7 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Record:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text_mobile"
       }, this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highTime.slice(0, 10)))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: function onClick() {
+        onTouchStart: function onTouchStart() {
           return _this6.handleControls('down');
         },
         style: {
@@ -7244,7 +7280,7 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-arrow-down"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: function onClick() {
+        onTouchStart: function onTouchStart() {
           return _this6.handleControls('drop');
         },
         style: {
@@ -7263,7 +7299,7 @@ function (_React$Component) {
           'display': 'flex'
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: function onClick() {
+        onTouchStart: function onTouchStart() {
           return _this6.handleControls('left');
         },
         style: {
@@ -7273,7 +7309,7 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-arrow-left"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: function onClick(e) {
+        onTouchStart: function onTouchStart(e) {
           e.preventDefault();
 
           _this6.handleControls('rotate');
@@ -7285,7 +7321,7 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-undo"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: function onClick() {
+        onTouchStart: function onTouchStart() {
           return _this6.handleControls('right');
         },
         style: {

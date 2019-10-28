@@ -62,12 +62,35 @@ class PlayBoard extends React.Component {
     }
 
     popupWindow() {
+        if (this.gameOverMessage) {
+            return (
+                <div className="modal_back">
+                    <div style={{ 'position': 'relative' }}>
+                        <div className="challenge_box">
+                            <div className="challenge_box_header">
+                                {this.gameOverMessage}
+                        </div>
+                            <center>
+                                <br />
+                                {this.gameOverMessage === 'Checkmate!' ? (this.game.currentPlayer === 'white' ? 'Black' : 'White') + ' wins!' : 'The game ends in stalemate.'}
+                            <br />
+                                <br />
+                                <button onClick={this.resetGame} className="time_button" >New Game</button>
+                                <button onClick={this.props.backToHome} className="time_button" >Leave Board</button>
+                                <br />
+                                <br />
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
         return (
             <div className="modal_back">
                 <div style={{ 'position': 'relative' }}>
                     <div className="challenge_box">
                         <div className="challenge_box_header">
-                            Game in progress
+                            Game in progress!
                         </div>
                         <center>
                             <br/>
@@ -132,6 +155,9 @@ class PlayBoard extends React.Component {
 
     setLevel(level) {
         this.game.level = level;
+        if (this.game.currentPlayer === this.compColor) {
+            this.takeComputerTurn();
+        }
         this.setState({});
     }
 
@@ -210,13 +236,19 @@ class PlayBoard extends React.Component {
     }
 
     takeComputerTurn(){
-        setTimeout( () => {
-            this.grid = this.game.makeAIMove();
-            this.currentPlayer = this.game.currentPlayer;
-            this.setState({
-                grid: this.grid
-            });
-        }, Math.random() * 500 + 500);
+        if (!this.game.isGameOver()){
+            setTimeout(() => {
+                this.grid = this.game.makeAIMove();
+                this.currentPlayer = this.game.currentPlayer;
+                this.setState({
+                    grid: this.grid
+                });
+            }, Math.random() * 500 + 500);
+        }
+        else {
+            this.gameOverMessage = this.game.gameOverMessage;
+            this.setState({popup: true});
+        }
     }
 
     endDrag(e) {
