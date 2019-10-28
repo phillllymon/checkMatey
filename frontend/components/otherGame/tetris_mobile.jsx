@@ -332,7 +332,7 @@ class TetrisMobile extends React.Component {
                         <i className="fas fa-undo"></i><br /><br /><br />
                         </button>
                         <button
-                        onTouchStart={() => this.handleControls('right')}
+                        onTouchStart={(e) => this.handleControls('right')}
                         style={{
                             'width': '100%',
                             

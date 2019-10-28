@@ -14,7 +14,8 @@ class PlayBoard extends React.Component {
             dragging: false,
             flipped: this.flipped,
             hint: false,
-            popup: false
+            popup: false,
+            suggestLogin: false
         }
         this.started = false;
         this.dragPiece = this.dragPiece.bind(this);
@@ -41,6 +42,7 @@ class PlayBoard extends React.Component {
         this.popupWindow = this.popupWindow.bind(this);
         this.getBlackPoints = this.getBlackPoints.bind(this);
         this.getWhitePoints = this.getWhitePoints.bind(this);
+        this.highlightSquare = null;
     }
 
     getBlackPoints() {
@@ -108,19 +110,90 @@ class PlayBoard extends React.Component {
         );
     }
 
+    showSuggestion() {
+        if (this.state.suggestLogin) {
+            return (
+                <div 
+                    className="suggest_login"
+                >
+                    <div 
+                        className="dismiss_circle"
+                        onClick={() => this.setState({suggestLogin: false})}
+                    >
+                        X
+                    </div>
+                    Ready to see more of CheckMatey?
+                        <button
+                        className="board_control_button"
+                        style={{
+                            'backgroundColor': 'orange',
+                            'color': 'white'
+                        }}
+                        onClick={() => this.props.login({ username: 'DemoUser', password: '123456' })}
+                    >
+                        Demo Login
+                        </button>
+                </div>
+            );
+        }
+        else {
+            return '';
+        }
+    }
+
     showHint() {
         if (this.props.hints) {
+            let picId = '';
+            if (this.state.hint === 'In Pawn Clash, the pawns begin on the 4th and 5th ranks.') {
+                picId = "pawn_clash_diagram";
+            }
+            else if (this.state.hint === 'In Chess960, your capital pieces start in a random order.') {
+                picId = "chess_960_diagram";
+            }
             return (
                 <div className="hint">
-                    <i className="fas fa-question-circle"></i> {this.state.hint}
+                    <div
+                        className="dismiss_circle"
+                        style={{
+                            'position': 'absolute',
+                            'left': '10px',
+                            'top': '10px'
+                        }}
+                        onClick={() => this.setState({ hint: false })}
+                    >
+                        X
+                    </div>
+                    <div id={picId}>
+                    </div>
+                    {this.state.hint}
                 </div>
             );
         }
         return '';
     }
 
-    setHint(newHint) {
-        this.setState({ hint: newHint });
+    setHint(newHint, hintKey = 0) {
+        if (hintKey === 0) {
+            this.setState({ hint: newHint });
+        }
+        else {
+            switch (hintKey) {
+                case 1:
+                    this.setState({ hint: 'Select Standard Chess'});
+                    break;
+                case 2:
+                    this.setState({ hint: 'In Chess960, your capital pieces start in a random order.' });
+                    break;
+                case 3:
+                    this.setState({ hint: 'In Pawn Clash, the pawns begin on the 4th and 5th ranks.' });
+                    break;
+                case 4:
+                    this.setState({ hint: 'Check!'});
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     handlePawnPromotion(move) {
@@ -183,6 +256,11 @@ class PlayBoard extends React.Component {
 
     componentDidMount() {
         this.startGame();
+        this.mounted = true;
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     switchSides(e) {
@@ -239,7 +317,11 @@ class PlayBoard extends React.Component {
         if (!this.game.isGameOver()){
             setTimeout(() => {
                 this.grid = this.game.makeAIMove();
+                this.highlightSquare = this.game.AIMove[1];
                 this.currentPlayer = this.game.currentPlayer;
+                if (this.game.inCheck) {
+                    this.setHint('', 4);
+                }
                 this.setState({
                     grid: this.grid
                 });
@@ -282,12 +364,18 @@ class PlayBoard extends React.Component {
                 else {
                     this.game.makeMove(move);
                 }
+                this.highlightSquare = move[1];
+                if (this.game.moves.length > 8 && !this.alreadyAsked && !this.props.userId) {
+                    this.setState({suggestLogin: true});
+                    this.alreadyAsked = true;
+                }
                 this.started = true;
                 this.currentPlayer = this.game.currentPlayer;   //pawn promotion has to replicate from here
                 this.grid = this.game.grid;
                 this.setState({
                     grid: this.grid,
-                    dragging: false
+                    dragging: false,
+                    hint: false
                 });
                 this.markToDrag = null;
                 this.origin = null;
@@ -334,10 +422,11 @@ class PlayBoard extends React.Component {
     }
 
     render() {
+        let highlightSquare = this.highlightSquare;
         let controlsHeight = (0.6 * window.innerWidth < 0.9 * window.innerHeight ?
             0.6 * window.innerWidth :
             0.9 * window.innerHeight);
-        let movesHeight = controlsHeight - 495;
+        let movesHeight = controlsHeight - (this.state.suggestLogin ? 595 : 495);
         return (
             <div className="chess_table">
                 {this.state.popup ? this.popupWindow() : ''}
@@ -352,6 +441,28 @@ class PlayBoard extends React.Component {
                         this.grid.map((row, rIdx) => {
                             return (
                                 row.map((spot, cIdx) => {
+                                    if (highlightSquare &&
+                                        highlightSquare[0] === rIdx &&
+                                        highlightSquare[1] === cIdx) {
+                                        return (
+                                            <div
+                                                onMouseDown={this.beginDrag}
+                                                onMouseUp={this.endDrag}
+                                                key={rIdx + cIdx}
+                                                id={[rIdx, cIdx]}
+                                                className={(rIdx + cIdx) % 2 === 0 ? 'w highlight' : 'b highlight'}
+                                            >
+                                                <Piece
+                                                    grayed={this.state.dragging &&
+                                                        parseInt(this.origin[0]) === rIdx
+                                                        && parseInt(this.origin[2]) === cIdx ?
+                                                        true : false}
+                                                    pos={[rIdx, cIdx]}
+                                                    mark={this.state.grid[rIdx][cIdx]}
+                                                />
+                                            </div>
+                                        );
+                                    }
                                     return (
                                         <div
                                             onMouseDown={this.beginDrag}
@@ -384,11 +495,11 @@ class PlayBoard extends React.Component {
                         </div>
                     </div>
                         {
-                            this.game.gameTypes.map((gameType) => {
+                            this.game.gameTypes.map((gameType, idx) => {
                                 return (
                                     <button className={this.typeSetting === gameType ? "current_type_button" : "type_button"}
                                         onClick={() => this.setType(gameType)}
-                                        onMouseEnter={() => { this.setHint("Set the type of game you'd like to play") }}
+                                        onMouseEnter={() => { this.setHint('', idx + 1) }}
                                         onMouseLeave={() => { this.setHint(false) }}
                                         key={gameType}>{gameType}</button>
 
@@ -408,7 +519,7 @@ class PlayBoard extends React.Component {
                                 return (
                                     <button className={this.game.level === level ? "current_level_button" : "level_button"}
                                     onClick={() => this.setLevel(level)} 
-                                        onMouseEnter={() => { this.setHint("Set computer level (level 0 means you play both sides)") }}
+                                        onMouseEnter={() => { this.setHint("Set computer level (Level 0 means you play both sides)") }}
                                         onMouseLeave={() => { this.setHint(false) }}
                                     key={level}>{level}</button>
                                     
@@ -476,16 +587,17 @@ class PlayBoard extends React.Component {
                     <div className="outer_list">
                             <div style={{ 'height': `${movesHeight}px` }} className="moves_list">
                             {
-                                this.game.moves.map((move, idx) => {
+                                movesHeight > 0 ? this.game.moves.map((move, idx) => {
                                     return (
                                         <div className={idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not"} key={idx}>
                                             {move}
                                         </div>
                                     );
-                                })
+                                }) : ''
                             }
                         </div>
-                    </div> 
+                    </div>
+                    {this.showSuggestion()} 
                     <button
                         className={"board_control_button"}
                         onClick={this.flipBoard}

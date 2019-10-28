@@ -42,6 +42,7 @@ export class Game {
         this.initializeGrid = this.initializeGrid.bind(this);
         this.initializeGrid();
         this.points = [getBlackPoints(this.grid), getWhitePoints(this.grid)];
+        this.AIMove = null;
     }
 
     initializeGrid() {
@@ -236,7 +237,8 @@ export class Game {
 
     makeAIMove() {
         if (!this.isGameOver()) {
-            this.makeMove(this.getAIMove());
+            this.AIMove = this.getAIMove();
+            this.makeMove(this.AIMove);
             return this.grid;
         }
         else {
