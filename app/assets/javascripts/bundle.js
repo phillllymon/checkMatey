@@ -395,7 +395,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _session_login_form_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./session/login_form_container */ "./frontend/components/session/login_form_container.js");
 /* harmony import */ var _session_signup_form_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./session/signup_form_container */ "./frontend/components/session/signup_form_container.js");
 /* harmony import */ var _chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chess_table/chess_table_container */ "./frontend/components/chess_table/chess_table_container.js");
-/* harmony import */ var _splash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./splash */ "./frontend/components/splash.jsx");
+/* harmony import */ var _splash_container__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./splash_container */ "./frontend/components/splash_container.js");
 /* harmony import */ var _mobile_splash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./mobile_splash */ "./frontend/components/mobile_splash.jsx");
 /* harmony import */ var _otherGame_other_game_container__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./otherGame/other_game_container */ "./frontend/components/otherGame/other_game_container.js");
 /* harmony import */ var _otherGame_other_game_container_mobile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./otherGame/other_game_container_mobile */ "./frontend/components/otherGame/other_game_container_mobile.js");
@@ -545,7 +545,7 @@ function (_React$Component) {
             to: "/home"
           }));
         } else {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_splash__WEBPACK_IMPORTED_MODULE_4__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_splash_container__WEBPACK_IMPORTED_MODULE_4__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
             path: "/login",
             component: _session_login_form_container__WEBPACK_IMPORTED_MODULE_1__["default"]
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
@@ -1869,10 +1869,13 @@ function (_React$Component) {
     value: function render() {
       if (this.props.mode === 'playComputer') {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "modal_back",
+          className: "modal_back"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "close_x",
           onClick: this.backToHome
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_play_board_play_board_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        }, "X")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_play_board_play_board_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
           mode: 'playCompuer',
+          backToHome: this.backToHome,
           player: this.props.player
         }));
       }
@@ -2265,6 +2268,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var PlayBoard =
 /*#__PURE__*/
 function (_React$Component) {
@@ -2283,8 +2287,10 @@ function (_React$Component) {
       grid: _this.grid,
       dragging: false,
       flipped: _this.flipped,
-      hint: false
+      hint: false,
+      popup: false
     };
+    _this.started = false;
     _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
     _this.endDrag = _this.endDrag.bind(_assertThisInitialized(_this));
@@ -2305,10 +2311,59 @@ function (_React$Component) {
     _this.handlePawnPromotion = _this.handlePawnPromotion.bind(_assertThisInitialized(_this));
     _this.showHint = _this.showHint.bind(_assertThisInitialized(_this));
     _this.setHint = _this.setHint.bind(_assertThisInitialized(_this));
+    _this.switchSides = _this.switchSides.bind(_assertThisInitialized(_this));
+    _this.popupWindow = _this.popupWindow.bind(_assertThisInitialized(_this));
+    _this.getBlackPoints = _this.getBlackPoints.bind(_assertThisInitialized(_this));
+    _this.getWhitePoints = _this.getWhitePoints.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(PlayBoard, [{
+    key: "getBlackPoints",
+    value: function getBlackPoints() {
+      if (this.game.points[0] > this.game.points[1]) {
+        return ' +' + (this.game.points[0] - this.game.points[1]).toString();
+      } else {
+        return '';
+      }
+    }
+  }, {
+    key: "getWhitePoints",
+    value: function getWhitePoints() {
+      if (this.game.points[1] > this.game.points[0]) {
+        return ' +' + (this.game.points[1] - this.game.points[0]).toString();
+      } else {
+        return '';
+      }
+    }
+  }, {
+    key: "popupWindow",
+    value: function popupWindow() {
+      var _this2 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "modal_back"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'position': 'relative'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "challenge_box"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "challenge_box_header"
+      }, "Game in progress"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Abandon current game?", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.resetGame,
+        className: "time_button"
+      }, "Yes, start new game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: function onClick() {
+          _this2.setState({
+            popup: false
+          });
+        },
+        className: "time_button"
+      }, "No, keep playing"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)))));
+    }
+  }, {
     key: "showHint",
     value: function showHint() {
       if (this.props.hints) {
@@ -2357,11 +2412,14 @@ function (_React$Component) {
     value: function setType(typeSetting) {
       this.typeSetting = typeSetting;
 
-      if (!this.game.playing) {
+      if (!this.started) {
         this.resetGame();
+        this.setState({});
+      } else {
+        this.setState({
+          popup: true
+        });
       }
-
-      this.setState({});
     }
   }, {
     key: "setLevel",
@@ -2375,12 +2433,15 @@ function (_React$Component) {
       this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"](this.typeSetting);
       this.grid = this.game.grid;
       this.setState({
+        popup: false,
         grid: this.grid
       });
+      this.startGame();
     }
   }, {
     key: "startGame",
     value: function startGame(e) {
+      this.started = false;
       this.game.start();
       this.currentPlayer = this.game.currentPlayer;
       this.setState({});
@@ -2390,15 +2451,28 @@ function (_React$Component) {
       }
     }
   }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.startGame();
+    }
+  }, {
+    key: "switchSides",
+    value: function switchSides(e) {
+      this.flipped = this.flipped ? false : true;
+      this.playerColor = this.playerColor === 'white' ? 'black' : 'white';
+      this.compColor = this.playerColor === 'white' ? 'black' : 'white';
+      this.setState({
+        flipped: this.flipped
+      });
+
+      if (this.currentPlayer === this.compColor) {
+        this.takeComputerTurn();
+      }
+    }
+  }, {
     key: "flipBoard",
     value: function flipBoard(e) {
       this.flipped = this.flipped ? false : true;
-
-      if (!this.game.playing) {
-        this.playerColor = this.playerColor === 'white' ? 'black' : 'white';
-        this.compColor = this.playerColor === 'white' ? 'black' : 'white';
-      }
-
       this.setState({
         flipped: this.flipped
       });
@@ -2449,22 +2523,27 @@ function (_React$Component) {
   }, {
     key: "takeComputerTurn",
     value: function takeComputerTurn() {
-      this.grid = this.game.makeAIMove();
-      this.currentPlayer = this.game.currentPlayer;
-      this.setState({
-        grid: this.grid
-      });
+      var _this3 = this;
+
+      setTimeout(function () {
+        _this3.grid = _this3.game.makeAIMove();
+        _this3.currentPlayer = _this3.game.currentPlayer;
+
+        _this3.setState({
+          grid: _this3.grid
+        });
+      }, Math.random() * 500 + 500);
     }
   }, {
     key: "endDrag",
     value: function endDrag(e) {
-      var _this2 = this;
+      var _this4 = this;
 
       if (this.state.dragging) {
         if (!this.game.playing) {
           this.setHint("Click 'Start Game' to being playing");
           setTimeout(function () {
-            _this2.setState({
+            _this4.setState({
               hint: false
             });
           }, 1000);
@@ -2492,6 +2571,7 @@ function (_React$Component) {
             this.game.makeMove(move);
           }
 
+          this.started = true;
           this.currentPlayer = this.game.currentPlayer; //pawn promotion has to replicate from here
 
           this.grid = this.game.grid;
@@ -2502,12 +2582,7 @@ function (_React$Component) {
           this.markToDrag = null;
           this.origin = null; /////COMPUTER TURN BELOW ///////
 
-          if (!this.game.isGameOver()) {
-            setTimeout(function () {
-              _this2.takeComputerTurn();
-            }, Math.random() * 1500);
-          } /////COMPUTER TURN ABOVE ///////        
-
+          this.takeComputerTurn(); /////COMPUTER TURN ABOVE ///////        
         } else {
           this.setState({
             grid: this.grid,
@@ -2531,22 +2606,26 @@ function (_React$Component) {
   }, {
     key: "gameButton",
     value: function gameButton() {
-      var _this3 = this;
+      var _this5 = this;
 
       if (this.game.playing) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           className: "board_control_button",
+          style: {
+            'height': '35px',
+            'padding': '5px'
+          },
           onClick: this.resetGame
-        }, " Reset Game");
+        }, " Restart Game");
       } else {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           className: "board_control_button",
           onClick: this.startGame,
           onMouseEnter: function onMouseEnter() {
-            _this3.setHint('Begin Playing');
+            _this5.setHint('Begin Playing');
           },
           onMouseLeave: function onMouseLeave() {
-            _this3.setHint(false);
+            _this5.setHint(false);
           }
         }, " Start Game");
       }
@@ -2554,26 +2633,28 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this6 = this;
 
+      var controlsHeight = 0.6 * window.innerWidth < 0.9 * window.innerHeight ? 0.6 * window.innerWidth : 0.9 * window.innerHeight;
+      var movesHeight = controlsHeight - 495;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "chess_table"
-      }, this.state.hint ? this.showHint() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.state.popup ? this.popupWindow() : '', this.state.hint ? this.showHint() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.flipped ? "board flipped" : "board",
         onMouseMove: this.dragPiece,
         onMouseLeave: this.abortDrag
       }, this.state.dragging ? this.displayDragPiece() : '', this.grid.map(function (row, rIdx) {
         return row.map(function (spot, cIdx) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            onMouseDown: _this4.beginDrag,
-            onMouseUp: _this4.endDrag,
+            onMouseDown: _this6.beginDrag,
+            onMouseUp: _this6.endDrag,
             key: rIdx + cIdx,
             id: [rIdx, cIdx],
             className: (rIdx + cIdx) % 2 === 0 ? 'w' : 'b'
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
-            grayed: _this4.state.dragging && parseInt(_this4.origin[0]) === rIdx && parseInt(_this4.origin[2]) === cIdx ? true : false,
+            grayed: _this6.state.dragging && parseInt(_this6.origin[0]) === rIdx && parseInt(_this6.origin[2]) === cIdx ? true : false,
             pos: [rIdx, cIdx],
-            mark: _this4.state.grid[rIdx][cIdx]
+            mark: _this6.state.grid[rIdx][cIdx]
           }));
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -2586,81 +2667,120 @@ function (_React$Component) {
         style: {
           'marginLeft': '10px'
         }
-      }, "Game")), this.game.gameTypes.map(function (gameType) {
+      }, this.gameButton())), this.game.gameTypes.map(function (gameType) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this4.typeSetting === gameType ? "current_type_button" : "type_button",
+          className: _this6.typeSetting === gameType ? "current_type_button" : "type_button",
           onClick: function onClick() {
-            return _this4.setType(gameType);
+            return _this6.setType(gameType);
           },
           onMouseEnter: function onMouseEnter() {
-            _this4.setHint("Set the type of game you'd like to play");
+            _this6.setHint("Set the type of game you'd like to play");
           },
           onMouseLeave: function onMouseLeave() {
-            _this4.setHint(false);
+            _this6.setHint(false);
           },
           key: gameType
         }, gameType);
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "board_control_button",
-        onClick: this.flipBoard,
-        onMouseEnter: function onMouseEnter() {
-          _this4.setHint(_this4.game.playing ? 'Flip Board' : 'Change which color you play');
-        },
-        onMouseLeave: function onMouseLeave() {
-          _this4.setHint(false);
-        }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-retweet"
-      })), this.gameButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "controls_heading"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-robot"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
           'marginLeft': '10px'
         }
-      }, "Level")), this.game.levels.map(function (level) {
+      }, "Level:"), this.game.levels.map(function (level) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this4.game.level === level ? "current_level_button" : "level_button",
+          className: _this6.game.level === level ? "current_level_button" : "level_button",
           onClick: function onClick() {
-            return _this4.setLevel(level);
+            return _this6.setLevel(level);
           },
           onMouseEnter: function onMouseEnter() {
-            _this4.setHint("Set computer level (level 0 means you play both sides)");
+            _this6.setHint("Set computer level (level 0 means you play both sides)");
           },
           onMouseLeave: function onMouseLeave() {
-            _this4.setHint(false);
+            _this6.setHint(false);
           },
           key: level
         }, level);
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.game.level > 0 ? 'Play against AI' : '(You play both sides)'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "colors"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: this.game.playing && this.currentPlayer === this.playerColor ? "active_player" : "",
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.game.level > 0 ? 'Play against AI' : 'You play both sides'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "captured_pieces",
         style: {
-          'color': this.playerColor
+          'color': this.compColor
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-user"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      }, this.game.capturedPieces[this.playerColor === 'black' ? 1 : 0].map(function (mark, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          key: idx
+        }, Object(_piece__WEBPACK_IMPORTED_MODULE_1__["getPieceIcon"])(mark));
+      }), this.compColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "colors"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.game.playing && this.currentPlayer === this.compColor ? "active_player" : "",
         style: {
           'color': this.compColor
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-robot"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "game_alert"
-      }, this.game.inCheck ? this.game.isGameOver() ? 'Checkmate!' : 'Check!' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "controls_text",
+        style: {
+          'color': this.compColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "plays ", this.compColor))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
+        onClick: this.switchSides
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-up"
+      }), " Swap ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-down"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "colors"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.game.playing && this.currentPlayer === this.playerColor ? "active_player" : "",
+        style: {
+          'color': this.playerColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "controls_text",
+        style: {
+          'color': this.playerColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "plays ", this.playerColor))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "captured_pieces",
+        style: {
+          'color': this.playerColor
+        }
+      }, this.game.capturedPieces[this.compColor === 'black' ? 1 : 0].map(function (mark, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          key: idx
+        }, Object(_piece__WEBPACK_IMPORTED_MODULE_1__["getPieceIcon"])(mark));
+      }), this.playerColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "outer_list"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'height': "".concat(movesHeight, "px")
+        },
         className: "moves_list"
       }, this.game.moves.map(function (move, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not",
           key: idx
         }, move);
-      }))))));
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
+        onClick: this.flipBoard,
+        onMouseEnter: function onMouseEnter() {
+          _this6.setHint(_this6.game.playing ? 'Flip Board' : 'Change which color you play');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this6.setHint(false);
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-retweet"
+      }), " Flip Board"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
+        onClick: this.props.backToHome
+      }, "Quit"))));
     }
   }]);
 
@@ -5349,14 +5469,7 @@ function (_React$Component) {
   _createClass(Menu, [{
     key: "showHint",
     value: function showHint() {
-      var _this2 = this;
-
       if (this.props.hints) {
-        setTimeout(function () {
-          _this2.setState({
-            hint: false
-          });
-        }, 1000);
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "hint"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -5368,10 +5481,20 @@ function (_React$Component) {
     }
   }, {
     key: "setHint",
-    value: function setHint(newHint) {
+    value: function setHint(newHint, time) {
+      var _this2 = this;
+
       this.setState({
         hint: newHint
       });
+
+      if (time) {
+        setTimeout(function () {
+          if (_this2.mounted) _this2.setState({
+            hint: false
+          });
+        }, time);
+      }
     }
   }, {
     key: "collapseButton",
@@ -5413,11 +5536,13 @@ function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       window.addEventListener("resize", this.handleResize);
+      this.mounted = true;
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       window.removeEventListener("resize", this.handleResize);
+      this.mounted = false;
     }
   }, {
     key: "nothing",
@@ -5446,7 +5571,7 @@ function (_React$Component) {
         className: "splash_option",
         onClick: this.props.toggleHints,
         onMouseEnter: function onMouseEnter() {
-          _this3.setHint('Hints pop up here');
+          _this3.setHint('Hints pop up here', 2000);
         },
         onMouseLeave: function onMouseLeave() {
           _this3.setHint(false);
@@ -5454,27 +5579,57 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-question-circle"
       }), " ", this.smallMenu ? '' : this.props.hints ? 'Turn Hints Off' : 'Turn Hints On'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        onMouseEnter: function onMouseEnter() {
+          _this3.setHint('Discuss chess with other players');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this3.setHint(false);
+        },
         to: '/home',
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-comments"
       }), " ", this.smallMenu ? '' : 'Community'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/profile',
+        onMouseEnter: function onMouseEnter() {
+          _this3.setHint('See your rating, posts, and past games');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this3.setHint(false);
+        },
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-user"
       }), " ", this.smallMenu ? '' : 'Profile'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/play',
+        onMouseEnter: function onMouseEnter() {
+          _this3.setHint('Play an urated game against the computer');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this3.setHint(false);
+        },
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-robot"
       }), " ", this.smallMenu ? '' : 'Play Computer'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/sandbox',
+        onMouseEnter: function onMouseEnter() {
+          _this3.setHint('Record moves to share with the community');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this3.setHint(false);
+        },
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-chess-board"
       }), " ", this.smallMenu ? '' : 'Sandbox'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/tutorial',
+        onMouseEnter: function onMouseEnter() {
+          _this3.setHint('Watch a video showing the main features of CheckMatey');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this3.setHint(false);
+        },
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-video"
@@ -7247,7 +7402,26 @@ function (_React$Component) {
     }
   }, {
     key: "setHint",
-    value: function setHint(newHint) {
+    value: function setHint(newHint, gameType) {
+      if (gameType) {
+        switch (gameType) {
+          case 'Standard':
+            newHint += ': Standard Chess';
+            break;
+
+          case 'Chess960':
+            newHint += ': In Chess960, your capital pieces start on the back rank as usual, but in a random order.';
+            break;
+
+          case 'Pawn Clash':
+            newHint += ': In Pawn Clash, the pawns start on the 4th and 5th rank.';
+            break;
+
+          default:
+            break;
+        }
+      }
+
       this.setState({
         hint: newHint
       });
@@ -7603,7 +7777,7 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           className: _this3.state.gameType === gameType ? "current_type_button" : "type_button",
           onMouseEnter: function onMouseEnter() {
-            _this3.setHint('To challenge another player, first select the game type');
+            _this3.setHint('To challenge another player, first select the game type', gameType);
           },
           onMouseLeave: function onMouseLeave() {
             _this3.setHint(false);
@@ -9015,54 +9189,139 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 
 
-var Splash = function Splash(props) {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    id: "splash"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    id: "splash_top"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    id: "top_content"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    id: "splash_set"
-  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    id: "splash_top_words"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    id: "splash_logo"
-  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Play Chess on the High Seas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Play with over 2.5 members")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Improve over time")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Learn from your mistakes"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    to: "/signup"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "play_now"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-chess-knight"
-  }), " Play Now"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "splash_bar"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "splash_option",
-    to: "/signup"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-user-plus"
-  }), " Sign Up"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "splash_option",
-    to: "/login"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-sign-in-alt"
-  }), " Log In"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "splash_option",
-    to: "/play"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-robot"
-  }), " Play Computer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "splash_option",
-    to: "/notChess"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-cubes"
-  }), " Not Chess")));
-};
+
+var Splash =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Splash, _React$Component);
+
+  function Splash(props) {
+    var _this;
+
+    _classCallCheck(this, Splash);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Splash).call(this, props));
+    _this.demoLogin = _this.demoLogin.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(Splash, [{
+    key: "demoLogin",
+    value: function demoLogin(e) {
+      e.preventDefault();
+      this.props.login({
+        username: 'DemoUser',
+        password: '123456'
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "splash"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "splash_top"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "top_content"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "splash_set"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "splash_top_words"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "splash_logo"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Play Chess on the High Seas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Play with over 2.5 members")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Improve over time")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Learn from your mistakes"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: "/play"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "play_now"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-knight"
+      }), " Play Now"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "splash_bar"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        onClick: this.demoLogin,
+        className: "splash_option"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-pawn"
+      }), " Demo Login"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        className: "splash_option",
+        to: "/signup"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user-plus"
+      }), " Sign Up"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        className: "splash_option",
+        to: "/login"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-sign-in-alt"
+      }), " Log In"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        className: "splash_option",
+        to: "/play"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-robot"
+      }), " Play Computer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        className: "splash_option",
+        to: "/notChess"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-cubes"
+      }), " I Prefer Tetris")));
+    }
+  }]);
+
+  return Splash;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Splash);
+
+/***/ }),
+
+/***/ "./frontend/components/splash_container.js":
+/*!*************************************************!*\
+  !*** ./frontend/components/splash_container.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_session_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/session_actions */ "./frontend/actions/session_actions.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _splash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./splash */ "./frontend/components/splash.jsx");
+
+
+
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    login: function login(user) {
+      return dispatch(Object(_actions_session_actions__WEBPACK_IMPORTED_MODULE_0__["login"])(user));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(_splash__WEBPACK_IMPORTED_MODULE_2__["default"]));
 
 /***/ }),
 
@@ -9129,9 +9388,9 @@ function (_React$Component) {
         width: "100%",
         height: "100%",
         src: "https://www.youtube.com/embed/hL5pk2PQe5k",
-        frameborder: "0",
+        frameBorder: "0",
         allow: "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture",
-        allowfullscreen: true
+        allowFullScreen: true
       })));
     }
   }]);

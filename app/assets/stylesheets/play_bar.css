@@ -13,6 +13,7 @@
     font-size: 150%;
     padding: 20px;
     border-bottom: 1px solid gray;
+    color: gray;
 }
 
 .challenge_box {
@@ -26,6 +27,7 @@
     background-color: rgb(230, 230, 230);
     border-radius: 4px;
     overflow: hidden;
+    color: black;
     box-shadow: 0 2px 12px -5px rgba(0, 0, 0, 1);
 }
 

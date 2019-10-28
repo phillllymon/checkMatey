@@ -10,6 +10,17 @@
     height: 10%;
 }
 
+.close_x {
+    font-family: sans-serif;
+    font-size: 40px;
+    color: lightgray;
+}
+
+.close_x:hover {
+    color: white;
+    cursor: pointer;
+}
+
 .board {
     display: flex;
     flex-wrap: wrap;

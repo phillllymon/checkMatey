@@ -2,7 +2,7 @@ import React from 'react';
 import LoginFormContainer from './session/login_form_container';
 import SignupFormContainer from './session/signup_form_container';
 import ChessTableContainer from './chess_table/chess_table_container';
-import Splash from './splash';
+import SplashContainer from './splash_container';
 import MobileSplash from './mobile_splash';
 import OtherGameContainer from './otherGame/other_game_container';
 import OtherGameContainerMobile from './otherGame/other_game_container_mobile';
@@ -95,7 +95,7 @@ class App extends React.Component {
             else {
                 return (
                     <div>
-                        <Splash />                                  
+                        <SplashContainer />                                  
                         <Route path="/login" component={LoginFormContainer} />
                         <Route path="/signup" component={SignupFormContainer} />
                         <Route path="/notChess" component={OtherGameContainer} />

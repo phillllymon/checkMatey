@@ -18,6 +18,7 @@
     font-size: 150%;
     height: 22px;
     justify-content: center;
+    align-items: center;
     background-color: rgb(135, 129, 123);
     color: lightgray;
 }
@@ -116,7 +117,7 @@
     border-bottom: 2px solid gray;
     border-top: 2px solid lightgray;
     border-left: 2px solid lightgray; 
-    margin: 5px;
+    margin-left: 5px;
 }
 
 .level_button:hover {
@@ -138,7 +139,7 @@
     border-left: 2px solid gray;
     border-bottom: 2px solid lightgray;
     border-right: 2px solid lightgray;
-    margin: 5px; 
+    margin-left: 5px; 
 }
 
 .current_level_button:focus {
@@ -207,7 +208,8 @@
     margin: 10px;
     font-size: 40px;
     display: flex;
-    justify-content: space-around;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .active_player {
@@ -231,8 +233,15 @@
     position: absolute;
     width: 100%;
     color: black;
-    font-size: 15px;
+    font-size: 1px;
     background-color: orange;
+}
+
+.controls_text {
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
 }
 
 

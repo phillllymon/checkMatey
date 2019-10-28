@@ -19,8 +19,8 @@ class ChessTable extends React.Component {
         if (this.props.mode === 'playComputer'){
             return (
                 <div>
-                    <div className="modal_back" onClick={this.backToHome}></div>
-                    <PlayBoardContainer mode={'playCompuer'} player={this.props.player} />
+                    <div className="modal_back" ><div className="close_x" onClick={this.backToHome}>X</div></div>
+                    <PlayBoardContainer mode={'playCompuer'} backToHome={this.backToHome} player={this.props.player} />
                 </div>
             );
         }

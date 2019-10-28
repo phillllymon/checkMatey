@@ -54,7 +54,22 @@ class PlayBar extends React.Component {
         return '';
     }
 
-    setHint(newHint) {
+    setHint(newHint, gameType) {
+        if (gameType) {
+            switch (gameType) {
+                case 'Standard':
+                    newHint += ': Standard Chess';
+                    break;
+                case 'Chess960':
+                    newHint += ': In Chess960, your capital pieces start on the back rank as usual, but in a random order.';
+                    break;
+                case 'Pawn Clash':
+                    newHint += ': In Pawn Clash, the pawns start on the 4th and 5th rank.';
+                    break;
+                default:
+                    break;
+            }
+        }
         this.setState({hint: newHint});
     }
 
@@ -379,7 +394,7 @@ class PlayBar extends React.Component {
                     this.gameTypes.map((gameType) => {
                         return (
                             <button className={this.state.gameType === gameType ? "current_type_button" : "type_button"}
-                                onMouseEnter={() => {this.setHint('To challenge another player, first select the game type')}}
+                                onMouseEnter={() => {this.setHint('To challenge another player, first select the game type', gameType)}}
                                 onMouseLeave={() => {this.setHint(false)}}
                                 onClick={() => this.setType(gameType)}
                                 key={gameType}>{gameType}</button>

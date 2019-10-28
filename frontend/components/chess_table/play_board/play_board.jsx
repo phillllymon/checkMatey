@@ -1,6 +1,7 @@
 import React from 'react';
 import Piece from '../piece';
 import { Game } from '../chess/game';
+import { getPieceIcon } from '../piece';
 
 class PlayBoard extends React.Component {
     constructor(props) {
@@ -12,8 +13,10 @@ class PlayBoard extends React.Component {
             grid: this.grid,
             dragging: false,
             flipped: this.flipped,
-            hint: false
+            hint: false,
+            popup: false
         }
+        this.started = false;
         this.dragPiece = this.dragPiece.bind(this);
         this.beginDrag = this.beginDrag.bind(this);
         this.endDrag = this.endDrag.bind(this);
@@ -34,6 +37,52 @@ class PlayBoard extends React.Component {
         this.handlePawnPromotion = this.handlePawnPromotion.bind(this);
         this.showHint = this.showHint.bind(this);
         this.setHint = this.setHint.bind(this);
+        this.switchSides = this.switchSides.bind(this);
+        this.popupWindow = this.popupWindow.bind(this);
+        this.getBlackPoints = this.getBlackPoints.bind(this);
+        this.getWhitePoints = this.getWhitePoints.bind(this);
+    }
+
+    getBlackPoints() {
+        if (this.game.points[0] > this.game.points[1]) {
+            return ' +' + (this.game.points[0] - this.game.points[1]).toString();
+        }
+        else {
+            return '';
+        }
+    }
+
+    getWhitePoints() {
+        if (this.game.points[1] > this.game.points[0]) {
+            return ' +' + (this.game.points[1] - this.game.points[0]).toString();
+        }
+        else {
+            return '';
+        }
+    }
+
+    popupWindow() {
+        return (
+            <div className="modal_back">
+                <div style={{ 'position': 'relative' }}>
+                    <div className="challenge_box">
+                        <div className="challenge_box_header">
+                            Game in progress
+                        </div>
+                        <center>
+                            <br/>
+                            Abandon current game?
+                            <br/>
+                            <br/>
+                            <button onClick={this.resetGame} className="time_button" >Yes, start new game</button>
+                            <button onClick={() => {this.setState({popup: false})}} className="time_button" >No, keep playing</button>
+                            <br/>
+                            <br/>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     showHint() {
@@ -72,10 +121,13 @@ class PlayBoard extends React.Component {
 
     setType(typeSetting) {
         this.typeSetting = typeSetting;
-        if (!this.game.playing){
+        if (!this.started){
             this.resetGame();
+            this.setState({});
         }
-        this.setState({});
+        else {
+            this.setState({ popup: true });
+        }
     }
 
     setLevel(level) {
@@ -87,11 +139,14 @@ class PlayBoard extends React.Component {
         this.game = new Game(this.typeSetting);
         this.grid = this.game.grid;
         this.setState({
+            popup: false,
             grid: this.grid
         });
+        this.startGame();
     }
 
     startGame(e) {
+        this.started = false;
         this.game.start();
         this.currentPlayer = this.game.currentPlayer;
         this.setState({});
@@ -100,12 +155,22 @@ class PlayBoard extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.startGame();
+    }
+
+    switchSides(e) {
+        this.flipped = this.flipped ? false : true;
+        this.playerColor = this.playerColor === 'white' ? 'black' : 'white';
+        this.compColor = this.playerColor === 'white' ? 'black' : 'white';
+        this.setState({ flipped: this.flipped });
+        if (this.currentPlayer === this.compColor) {
+            this.takeComputerTurn();
+        }
+    }
+
     flipBoard(e) {
         this.flipped = this.flipped ? false : true;
-        if (!this.game.playing){
-            this.playerColor = this.playerColor === 'white' ? 'black' : 'white';
-            this.compColor = this.playerColor === 'white' ? 'black' : 'white';
-        }
         this.setState({ flipped: this.flipped });
     }
 
@@ -145,11 +210,13 @@ class PlayBoard extends React.Component {
     }
 
     takeComputerTurn(){
-        this.grid = this.game.makeAIMove();
-        this.currentPlayer = this.game.currentPlayer;
-        this.setState({
-            grid: this.grid
-        });
+        setTimeout( () => {
+            this.grid = this.game.makeAIMove();
+            this.currentPlayer = this.game.currentPlayer;
+            this.setState({
+                grid: this.grid
+            });
+        }, Math.random() * 500 + 500);
     }
 
     endDrag(e) {
@@ -183,6 +250,7 @@ class PlayBoard extends React.Component {
                 else {
                     this.game.makeMove(move);
                 }
+                this.started = true;
                 this.currentPlayer = this.game.currentPlayer;   //pawn promotion has to replicate from here
                 this.grid = this.game.grid;
                 this.setState({
@@ -192,11 +260,7 @@ class PlayBoard extends React.Component {
                 this.markToDrag = null;
                 this.origin = null;
                 /////COMPUTER TURN BELOW ///////
-                if (!this.game.isGameOver()){
-                    setTimeout( () => {
-                        this.takeComputerTurn();
-                    }, Math.random()*1500);
-                }
+                this.takeComputerTurn();
                 /////COMPUTER TURN ABOVE ///////        
             }
             else {
@@ -222,7 +286,7 @@ class PlayBoard extends React.Component {
     gameButton() {
         if (this.game.playing) {
             return (
-                <button className={"board_control_button"} onClick={this.resetGame}> Reset Game</button>
+                <button className={"board_control_button"} style={{ 'height': '35px', 'padding': '5px' }} onClick={this.resetGame}> Restart Game</button>
             );
         }
         else {
@@ -238,8 +302,13 @@ class PlayBoard extends React.Component {
     }
 
     render() {
+        let controlsHeight = (0.6 * window.innerWidth < 0.9 * window.innerHeight ?
+            0.6 * window.innerWidth :
+            0.9 * window.innerHeight);
+        let movesHeight = controlsHeight - 495;
         return (
             <div className="chess_table">
+                {this.state.popup ? this.popupWindow() : ''}
                 {this.state.hint ? this.showHint() : ''}
                 <div
                     className={this.flipped ? "board flipped" : "board"}
@@ -279,7 +348,7 @@ class PlayBoard extends React.Component {
                     <div className="controls_heading">
                             <i className="fas fa-chess-knight"></i>
                         <div style={{ 'marginLeft': '10px' }}>
-                            Game
+                                {this.gameButton()}
                         </div>
                     </div>
                         {
@@ -296,19 +365,12 @@ class PlayBoard extends React.Component {
                         }
                     <br/>
                     
-                    <button 
-                        className={"board_control_button"} 
-                        onClick={this.flipBoard}
-                            onMouseEnter={() => { this.setHint(this.game.playing ? 'Flip Board' : 'Change which color you play') }}
-                            onMouseLeave={() => { this.setHint(false) }}
-                    ><i className="fas fa-retweet"></i></button>
-                    {this.gameButton()}
+                    
                         <div className="controls_heading">
-                            <i className="fas fa-robot"></i>
                             <div style={{ 'marginLeft': '10px' }}>
-                                Level
+                                Level:
                             </div>
-                        </div>
+                        
                         {
                             this.game.levels.map( (level) => {
                                 return (
@@ -321,22 +383,66 @@ class PlayBoard extends React.Component {
                                 );
                             })
                         }
-                        <div>
-                            {this.game.level > 0 ? 'Play against AI' : '(You play both sides)'}
                         </div>
-                    <div className="colors">
-                        <span className={this.game.playing && this.currentPlayer === this.playerColor ? "active_player" : ""} style={{ 'color': this.playerColor }} ><i className="fas fa-user"></i></span> 
-                        <span className={this.game.playing && this.currentPlayer === this.compColor ? "active_player" : ""}  style={{ 'color': this.compColor }} ><i className="fas fa-robot"></i></span>
+                        <div>
+                            {this.game.level > 0 ? 'Play against AI' : 'You play both sides'}
+                        </div>
+                    <div className="captured_pieces" style={{ 'color': this.compColor }}>
+                        {
+                            this.game.capturedPieces[(this.playerColor === 'black' ? 1 : 0)].map((mark, idx) => {
+                                return (
+                                    <span key={idx}>{getPieceIcon(mark)}</span>
+                                )
+                            })
+                        }
+                        {this.compColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()}
+                    </div>
+                    <div className="colors"> 
+                        <div 
+                            className={this.game.playing && this.currentPlayer === this.compColor ? "active_player" : ""}  
+                            style={{ 'color': this.compColor }} 
+                        >
+                            <i className="fas fa-robot"></i> 
+                        </div>
+                        <div className="controls_text" style={{ 'color': this.compColor }}>
+                            <div>plays {this.compColor}</div>
+                        </div>
+                    </div>
+                        <button
+                            className="board_control_button"
+                            onClick={this.switchSides}
+                        >
+                                <i className="fas fa-arrow-up"></i> Swap <i className="fas fa-arrow-down"></i>
+                        </button>
+                        
+                    <div className="colors"> 
+                        <div
+                            className={this.game.playing && this.currentPlayer === this.playerColor ? "active_player" : ""}
+                            style={{ 'color': this.playerColor }}
+                        >
+                            <i className="fas fa-user"></i>
+                        </div>
+                        <div className="controls_text" style={{'color': this.playerColor}}>
+                            <div>plays {this.playerColor}</div>
+                        </div>
+                    </div>
+                    <div className="captured_pieces" style={{ 'color': this.playerColor }}>
+                        {
+                            this.game.capturedPieces[(this.compColor === 'black' ? 1 : 0)].map((mark, idx) => {
+                                return (
+                                    <span key={idx}>{getPieceIcon(mark)}</span>
+                                )
+                            })
+                        }
+                        {this.playerColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()}
                     </div>
                     
                     
                     
                     
-                    <div className="game_alert">
-                    {this.game.inCheck ? (this.game.isGameOver() ? 'Checkmate!' : 'Check!' ) : ''}<br/>
-                    </div>
+                    
                     <div className="outer_list">
-                        <div className="moves_list">
+                            <div style={{ 'height': `${movesHeight}px` }} className="moves_list">
                             {
                                 this.game.moves.map((move, idx) => {
                                     return (
@@ -347,7 +453,19 @@ class PlayBoard extends React.Component {
                                 })
                             }
                         </div>
-                    </div>
+                    </div> 
+                    <button
+                        className={"board_control_button"}
+                        onClick={this.flipBoard}
+                        onMouseEnter={() => { this.setHint(this.game.playing ? 'Flip Board' : 'Change which color you play') }}
+                        onMouseLeave={() => { this.setHint(false) }}
+                    ><i className="fas fa-retweet"></i> Flip Board</button>
+                    <button
+                        className="board_control_button"
+                        onClick={this.props.backToHome}
+                    >
+                        Quit
+                    </button>
                     </center>
                 </div>
             </div>

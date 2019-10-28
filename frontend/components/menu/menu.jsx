@@ -21,9 +21,6 @@ class Menu extends React.Component {
 
     showHint() {
         if (this.props.hints) {
-            setTimeout(() => {
-                this.setState({hint: false});
-            }, 1000);
             return (
                 <div className="hint">
                     <i className="fas fa-question-circle"></i> {this.state.hint}
@@ -33,8 +30,13 @@ class Menu extends React.Component {
         return '';
     }
 
-    setHint(newHint) {
+    setHint(newHint, time) {
         this.setState({ hint: newHint });
+        if (time) {
+            setTimeout(() => {
+                if (this.mounted) this.setState({ hint: false });
+            }, time);
+        }
     }
 
     collapseButton() {
@@ -73,10 +75,12 @@ class Menu extends React.Component {
 
     componentDidMount() {
         window.addEventListener("resize", this.handleResize);
+        this.mounted = true;
     }
 
     componentWillUnmount() {
         window.removeEventListener("resize", this.handleResize);
+        this.mounted = false;
     }
 
     nothing() {
@@ -105,33 +109,43 @@ class Menu extends React.Component {
                 <div className={this.smallMenu ? "menu small_menu" : "menu"}>
                     <div className="splash_option" 
                         onClick={this.props.toggleHints}
-                        onMouseEnter={() => { this.setHint('Hints pop up here') }}
+                        onMouseEnter={() => { this.setHint('Hints pop up here', 2000) }}
                         onMouseLeave={() => { this.setHint(false) }}
                     >
                         <i className="fas fa-question-circle"></i> {this.smallMenu ? '' : (this.props.hints ? 'Turn Hints Off' : 'Turn Hints On')}
                     </div>
                     <Link
+                        onMouseEnter={() => { this.setHint('Discuss chess with other players') }}
+                        onMouseLeave={() => { this.setHint(false) }}
                         to={'/home'}
                         className="splash_option">
                         <i className="fas fa-comments"></i> {this.smallMenu ? '' : 'Community'}
                     </Link>
                     <Link
                         to={'/profile'}
+                        onMouseEnter={() => { this.setHint('See your rating, posts, and past games') }}
+                        onMouseLeave={() => { this.setHint(false) }}
                         className="splash_option">
                         <i className="fas fa-user"></i> {this.smallMenu ? '' : 'Profile'}
                     </Link>
                     <Link
                         to={'/play'}
+                        onMouseEnter={() => { this.setHint('Play an urated game against the computer') }}
+                        onMouseLeave={() => { this.setHint(false) }}
                         className="splash_option">
                         <i className="fas fa-robot"></i> {this.smallMenu ? '' : 'Play Computer'}
                     </Link>
                     <Link
                         to={'/sandbox'}
+                        onMouseEnter={() => { this.setHint('Record moves to share with the community') }}
+                        onMouseLeave={() => { this.setHint(false) }}
                         className="splash_option">
                         <i className="fas fa-chess-board"></i> {this.smallMenu ? '' : 'Sandbox'}
                     </Link>
                     <Link
                         to={'/tutorial'}
+                        onMouseEnter={() => { this.setHint('Watch a video showing the main features of CheckMatey') }}
+                        onMouseLeave={() => { this.setHint(false) }}
                         className="splash_option">
                         <i className="fas fa-video"></i> {this.smallMenu ? '' : 'Video Tour'}
                     </Link>
