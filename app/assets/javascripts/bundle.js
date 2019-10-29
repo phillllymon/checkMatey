@@ -3583,9 +3583,9 @@ function (_React$Component) {
 
       if (this.winner) {
         if (this.winner === this.player) {
-          endMessage = endMessage + ' Your rating went up by four points.';
+          endMessage = endMessage + ' Your rating went up by 4 points.';
         } else {
-          endMessage = endMessage + ' Your rating went down by four points.';
+          endMessage = endMessage + ' Your rating went down by 4 points.';
         }
       } else {
         endMessage = endMessage + ' Your rating remains the same.';
