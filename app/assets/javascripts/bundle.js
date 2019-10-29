@@ -2693,6 +2693,7 @@ function (_React$Component) {
 
         if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.game.level === 0) {
           this.game.makeMove(move);
+          this.highlightSquare = move[1];
           this.currentPlayer = this.game.currentPlayer;
           this.grid = this.game.grid;
           this.setState({
