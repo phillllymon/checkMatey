@@ -2550,6 +2550,7 @@ function (_React$Component) {
   }, {
     key: "resetGame",
     value: function resetGame() {
+      this.highlightSquare = null;
       this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"](this.typeSetting);
       this.grid = this.game.grid;
       this.setState({

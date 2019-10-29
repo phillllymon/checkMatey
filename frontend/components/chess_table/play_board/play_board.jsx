@@ -235,6 +235,7 @@ class PlayBoard extends React.Component {
     }
 
     resetGame() {
+        this.highlightSquare = null;
         this.game = new Game(this.typeSetting);
         this.grid = this.game.grid;
         this.setState({
