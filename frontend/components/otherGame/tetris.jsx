@@ -32,6 +32,7 @@ class Tetris extends React.Component {
 
     componentDidMount() {
         this.getHighScore();
+        this.startGame();
     }
 
     componentWillUnmount() {
@@ -104,6 +105,9 @@ class Tetris extends React.Component {
             this.promptName = true;
             this.setState({});
         }
+        else {
+            document.getElementById("start_button").focus();
+        }
     }
 
     startGame(e) {
@@ -170,7 +174,26 @@ class Tetris extends React.Component {
 
     startButton(){
         return (
-            <button className="tetris_button" onClick={this.startGame}>Start Game</button>
+            <button id="start_button" className="tetris_button" onClick={this.startGame}>New Game</button>
+        );
+    }
+
+    describeControls(){
+        return (
+            <div className="tetris_stats">
+                <div className="smaller_text">
+                <center>
+                    Controls:
+                    
+                    <br/>
+                    -WASD or arrow keys
+                    <br/>
+                    -SPACE BAR to drop
+                    <br/>
+                    
+                </center>
+                </div>
+            </div>
         );
     }
 
@@ -237,7 +260,7 @@ class Tetris extends React.Component {
                     </center>
                 </div>
                     
-                    {this.state.playing ? '' : this.startButton()}
+                    {this.state.playing ? this.describeControls() : this.startButton()}
                 
             </div>
         );

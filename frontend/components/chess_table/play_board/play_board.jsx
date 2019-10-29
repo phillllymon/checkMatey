@@ -371,7 +371,7 @@ class PlayBoard extends React.Component {
                     this.game.makeMove(move);
                 }
                 this.highlightSquare = move[1];
-                if (this.game.moves.length > 8 && !this.alreadyAsked && !this.props.userId) {
+                if (this.game.moves.length > 6 && !this.alreadyAsked && !this.props.userId) {
                     this.setState({suggestLogin: true});
                     this.alreadyAsked = true;
                 }
@@ -432,7 +432,7 @@ class PlayBoard extends React.Component {
         let controlsHeight = (0.6 * window.innerWidth < 0.9 * window.innerHeight ?
             0.6 * window.innerWidth :
             0.9 * window.innerHeight);
-        let movesHeight = controlsHeight - (this.state.suggestLogin ? 595 : 495);
+        let movesHeight = controlsHeight - 495;
         return (
             <div className="chess_table">
                 {this.state.popup ? this.popupWindow() : ''}
@@ -501,7 +501,7 @@ class PlayBoard extends React.Component {
                         </div>
                     </div>
                         {
-                            this.game.gameTypes.map((gameType, idx) => {
+                            this.state.suggestLogin ? this.showSuggestion() : this.game.gameTypes.map((gameType, idx) => {
                                 return (
                                     <button className={this.typeSetting === gameType ? "current_type_button" : "type_button"}
                                         onClick={() => this.setType(gameType)}
@@ -591,7 +591,7 @@ class PlayBoard extends React.Component {
                     
                     
                     <div className="outer_list">
-                            <div style={{ 'height': `${movesHeight}px` }} className="moves_list">
+                            <div style={{ 'height': `${movesHeight > 0 ? movesHeight : 0}px` }} className="moves_list">
                             {
                                 movesHeight > 0 ? this.game.moves.map((move, idx) => {
                                     return (
@@ -603,7 +603,7 @@ class PlayBoard extends React.Component {
                             }
                         </div>
                     </div>
-                    {this.showSuggestion()} 
+                     
                     <button
                         className={"board_control_button"}
                         onClick={this.flipBoard}

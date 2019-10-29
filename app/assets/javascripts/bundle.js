@@ -551,6 +551,9 @@ function (_React$Component) {
                 mode: 'playComputer'
               });
             }
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+            path: "/notChess",
+            component: _otherGame_other_game_container__WEBPACK_IMPORTED_MODULE_6__["default"]
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Redirect"], {
             to: "/home"
           }));
@@ -714,10 +717,16 @@ function (_React$Component) {
 
       this.setHint("This board is for experimenting. No chess rules apply.");
       setTimeout(function () {
-        _this2.setState({
+        if (_this2.mounted) _this2.setState({
           hint: false
         });
       }, 2500);
+      this.mounted = true;
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.mounted = false;
     }
   }, {
     key: "startPosition",
@@ -2728,7 +2737,7 @@ function (_React$Component) {
 
           this.highlightSquare = move[1];
 
-          if (this.game.moves.length > 8 && !this.alreadyAsked && !this.props.userId) {
+          if (this.game.moves.length > 6 && !this.alreadyAsked && !this.props.userId) {
             this.setState({
               suggestLogin: true
             });
@@ -2802,7 +2811,7 @@ function (_React$Component) {
 
       var highlightSquare = this.highlightSquare;
       var controlsHeight = 0.6 * window.innerWidth < 0.9 * window.innerHeight ? 0.6 * window.innerWidth : 0.9 * window.innerHeight;
-      var movesHeight = controlsHeight - (this.state.suggestLogin ? 595 : 495);
+      var movesHeight = controlsHeight - 495;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "chess_table"
       }, this.state.popup ? this.popupWindow() : '', this.state.hint ? this.showHint() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -2847,7 +2856,7 @@ function (_React$Component) {
         style: {
           'marginLeft': '10px'
         }
-      }, this.gameButton())), this.game.gameTypes.map(function (gameType, idx) {
+      }, this.gameButton())), this.state.suggestLogin ? this.showSuggestion() : this.game.gameTypes.map(function (gameType, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           className: _this8.typeSetting === gameType ? "current_type_button" : "type_button",
           onClick: function onClick() {
@@ -2938,7 +2947,7 @@ function (_React$Component) {
         className: "outer_list"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
-          'height': "".concat(movesHeight, "px")
+          'height': "".concat(movesHeight > 0 ? movesHeight : 0, "px")
         },
         className: "moves_list"
       }, movesHeight > 0 ? this.game.moves.map(function (move, idx) {
@@ -2946,7 +2955,7 @@ function (_React$Component) {
           className: idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not",
           key: idx
         }, move);
-      }) : '')), this.showSuggestion(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }) : '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "board_control_button",
         onClick: this.flipBoard,
         onMouseEnter: function onMouseEnter() {
@@ -5700,7 +5709,8 @@ function (_React$Component) {
           }, "Begin Tour")));
 
         case 2:
-          document.getElementById("new_post").focus();
+          var inputBox = document.getElementById("new_post");
+          if (inputBox) inputBox.focus();
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "tour",
             style: {
@@ -6061,7 +6071,7 @@ function (_React$Component) {
         className: "splash_option",
         onClick: this.props.toggleHints,
         onMouseEnter: function onMouseEnter() {
-          _this4.setHint('Hints pop up here', 2000);
+          _this4.setHint('Hints pop up here');
         },
         onMouseLeave: function onMouseLeave() {
           _this4.setHint(false);
@@ -6093,7 +6103,7 @@ function (_React$Component) {
       }), " ", this.smallMenu ? '' : 'Profile'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/play',
         onMouseEnter: function onMouseEnter() {
-          _this4.setHint('Play an urated game against the computer');
+          _this4.setHint('Play an unrated game against the computer');
         },
         onMouseLeave: function onMouseLeave() {
           _this4.setHint(false);
@@ -6126,8 +6136,25 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-video"
       }), " ", this.smallMenu ? '' : 'Video Tour'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: '/notChess',
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint('Play Tetris instead');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        },
+        className: "splash_option"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-cubes"
+      }), " ", this.smallMenu ? '' : 'I prefer Tetris'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/',
         className: "splash_option",
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint('Leave CheckMatey');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        },
         onClick: function onClick() {
           _this4.props.setTour(false);
 
@@ -6138,9 +6165,15 @@ function (_React$Component) {
         style: {
           'transform': 'rotate(180deg)'
         }
-      }), " ", this.smallMenu ? '' : 'Signout'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), " ", this.smallMenu ? '' : 'Log Out'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "splash_option",
-        onClick: this.toggleCollapse
+        onClick: this.toggleCollapse,
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint(_this4.smallMenu ? 'Show Full Menu' : 'Collapse Menu');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        }
       }, this.collapseButton())));
     }
   }]);
@@ -6688,7 +6721,7 @@ function (_React$Component) {
   _createClass(OtherGame, [{
     key: "backToSplash",
     value: function backToSplash() {
-      this.props.history.push('/');
+      this.props.history.push('/home');
     }
   }, {
     key: "notBack",
@@ -6699,9 +6732,11 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        onClick: this.backToSplash,
         className: "modal_back"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "close_x",
+        onClick: this.backToSplash
+      }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         onClick: this.notBack,
         className: "tetris_box"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tetris__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -7132,6 +7167,7 @@ function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.getHighScore();
+      this.startGame();
     }
   }, {
     key: "componentWillUnmount",
@@ -7213,6 +7249,8 @@ function (_React$Component) {
       if (this.game.score > this.highScore) {
         this.promptName = true;
         this.setState({});
+      } else {
+        document.getElementById("start_button").focus();
       }
     }
   }, {
@@ -7316,9 +7354,19 @@ function (_React$Component) {
     key: "startButton",
     value: function startButton() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        id: "start_button",
         className: "tetris_button",
         onClick: this.startGame
-      }, "Start Game");
+      }, "New Game");
+    }
+  }, {
+    key: "describeControls",
+    value: function describeControls() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tetris_stats"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "smaller_text"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Controls:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "-WASD or arrow keys", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "-SPACE BAR to drop", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))));
     }
   }, {
     key: "render",
@@ -7364,7 +7412,7 @@ function (_React$Component) {
         className: "tetris_stats"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Score:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Lines: ", this.game.lines, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text"
-      }, "interval: ", this.interval))), this.state.playing ? '' : this.startButton());
+      }, "interval: ", this.interval))), this.state.playing ? this.describeControls() : this.startButton());
     }
   }]);
 
@@ -8416,7 +8464,7 @@ function (_React$Component) {
             className: "player_bar",
             key: idx,
             onMouseEnter: function onMouseEnter() {
-              _this4.setHint('You cannot challenge yourself');
+              _this4.setHint('You have a challenge pending with this player');
             },
             onMouseLeave: function onMouseLeave() {
               _this4.setHint(false);
@@ -8457,6 +8505,12 @@ function (_React$Component) {
         to: '/play'
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         id: "play_computer",
+        onMouseEnter: function onMouseEnter() {
+          _this4.setHint('Play an unrated game against the computer');
+        },
+        onMouseLeave: function onMouseLeave() {
+          _this4.setHint(false);
+        },
         className: "board_control_button"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-robot"
@@ -9849,7 +9903,7 @@ function (_React$Component) {
         id: "splash_top_words"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "splash_logo"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Play Chess on the High Seas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Play with over 2.5 members")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Improve over time")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Learn from your mistakes"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Play Chess on the High Seas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Play with over 2.5 members")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Learn from other players")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Improve over time"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: "/play"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "play_now"

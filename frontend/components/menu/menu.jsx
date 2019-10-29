@@ -62,7 +62,8 @@ class Menu extends React.Component {
                     </div>
                 );
             case 2:
-                document.getElementById("new_post").focus();
+                let inputBox = document.getElementById("new_post");
+                if (inputBox) inputBox.focus();
                 return (
                     <div
                         className="tour"
@@ -447,7 +448,7 @@ class Menu extends React.Component {
                 <div className={this.smallMenu ? "menu small_menu" : "menu"}>
                     <div className="splash_option" 
                         onClick={this.props.toggleHints}
-                        onMouseEnter={() => { this.setHint('Hints pop up here', 2000) }}
+                        onMouseEnter={() => { this.setHint('Hints pop up here') }}
                         onMouseLeave={() => { this.setHint(false) }}
                     >
                         <i className="fas fa-question-circle"></i> {this.smallMenu ? '' : (this.props.hints ? 'Turn Hints Off' : 'Turn Hints On')}
@@ -468,7 +469,7 @@ class Menu extends React.Component {
                     </Link>
                     <Link
                         to={'/play'}
-                        onMouseEnter={() => { this.setHint('Play an urated game against the computer') }}
+                        onMouseEnter={() => { this.setHint('Play an unrated game against the computer') }}
                         onMouseLeave={() => { this.setHint(false) }}
                         className="splash_option">
                         <i className="fas fa-robot"></i> {this.smallMenu ? '' : 'Play Computer'}
@@ -489,18 +490,32 @@ class Menu extends React.Component {
                         className="splash_option">
                         <i className="fas fa-video"></i> {this.smallMenu ? '' : 'Video Tour'}
                     </Link>
+                    <Link
+                        to={'/notChess'}
+                        onMouseEnter={() => { this.setHint('Play Tetris instead') }}
+                        onMouseLeave={() => { this.setHint(false) }}
+                        className="splash_option">
+                        <i className="fas fa-cubes"></i> {this.smallMenu ? '' : 'I prefer Tetris'}
+                    </Link>
                     <Link 
                         to={'/'}
-                        className="splash_option" 
+                        className="splash_option"
+                        onMouseEnter={() => { this.setHint('Leave CheckMatey') }}
+                        onMouseLeave={() => { this.setHint(false) }} 
                         onClick={() => {
                             this.props.setTour(false);
                             this.props.logout();
                         }}>
                         <i className="fas fa-sign-in-alt" style={{
                             'transform': 'rotate(180deg)'
-                        }}></i> {this.smallMenu ? '' : 'Signout'}
+                        }}></i> {this.smallMenu ? '' : 'Log Out'}
                     </Link>
-                    <div className="splash_option" onClick={this.toggleCollapse}>
+                    <div 
+                        className="splash_option" 
+                        onClick={this.toggleCollapse}
+                        onMouseEnter={() => { this.setHint(this.smallMenu ? 'Show Full Menu' : 'Collapse Menu') }}
+                        onMouseLeave={() => { this.setHint(false) }} 
+                    >
                         {this.collapseButton()}
                     </div>
                     

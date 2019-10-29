@@ -515,7 +515,7 @@ class PlayBar extends React.Component {
                         else if (player === this.state.challengePrompted || player === this.state.challengeMade) {
                             return (
                                 <div className="player_bar" key={idx}
-                                    onMouseEnter={() => { this.setHint('You cannot challenge yourself') }}
+                                    onMouseEnter={() => { this.setHint('You have a challenge pending with this player') }}
                                     onMouseLeave={() => { this.setHint(false) }}
                                 >
                                     <div className="player_pic">
@@ -556,6 +556,8 @@ class PlayBar extends React.Component {
                     <Link to={'/play'}>
                     <button
                         id="play_computer"
+                        onMouseEnter={() => { this.setHint('Play an unrated game against the computer') }}
+                        onMouseLeave={() => { this.setHint(false) }}
                         className="board_control_button"
                     >
                         <i className="fas fa-robot"></i> Play Computer

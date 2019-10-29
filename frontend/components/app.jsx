@@ -88,6 +88,7 @@ class App extends React.Component {
                             render={() => <ChessTableContainer player={'User'}
                                 mode={'playComputer'} />}
                         />
+                        <Route path="/notChess" component={OtherGameContainer} />
                         <Redirect to='/home' />
                     </div>
                 );

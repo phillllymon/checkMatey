@@ -24,8 +24,8 @@ class Splash extends React.Component{
                             <h1>Play Chess on the High Seas</h1>
                             <ul>
                                 <li><h3>Play with over 2.5 members</h3></li>
+                                <li><h3>Learn from other players</h3></li>
                                 <li><h3>Improve over time</h3></li>
-                                <li><h3>Learn from your mistakes</h3></li>
                             </ul>
                             <Link to="/play">
                                 <button className="play_now">

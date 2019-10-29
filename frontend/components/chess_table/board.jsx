@@ -53,8 +53,13 @@ class Board extends React.Component {
     componentDidMount() {
         this.setHint("This board is for experimenting. No chess rules apply.");
         setTimeout( () => {
-            this.setState({hint: false});
+            if (this.mounted) this.setState({hint: false});
         }, 2500);
+        this.mounted = true;
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     startPosition() {

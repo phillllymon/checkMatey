@@ -8,7 +8,7 @@ class OtherGame extends React.Component {
     }
 
     backToSplash() {
-        this.props.history.push('/');
+        this.props.history.push('/home');
     }
 
     notBack(e) {
@@ -17,7 +17,8 @@ class OtherGame extends React.Component {
 
     render() {
         return (
-            <div onClick={this.backToSplash} className="modal_back">
+            <div className="modal_back">
+                <div className="close_x" onClick={this.backToSplash} >X</div>
                 <div onClick={this.notBack} className="tetris_box">
                     <Tetris 
                         fetchAllPosts={this.props.fetchAllPosts}
