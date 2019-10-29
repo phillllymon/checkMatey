@@ -19,6 +19,11 @@ class Feed extends React.Component {
         
         return (
             <div className="feed">
+                <div className="controls_heading" style={{ 'height': '42px' }}>
+                    <div style={{ 'margin': '10px' }}>
+                        <i className="fas fa-comments"></i> Community Forum
+                    </div>
+                </div>
                 <CreatePostContainer />
                 
                 {

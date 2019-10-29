@@ -16,7 +16,9 @@ class PlayBar extends React.Component {
             playerList: [],
             currentMessage: '',
             playing: false,
-            hint: false
+            hint: false,
+            challengePrompted: false,
+            challengeMade: false
             
         }
         this.playerRatings = {
@@ -39,38 +41,121 @@ class PlayBar extends React.Component {
         this.leaveGame = this.leaveGame.bind(this);
         this.showHint = this.showHint.bind(this);
         this.setHint = this.setHint.bind(this);
+        this.promptChallenge = this.promptChallenge.bind(this);
+        this.showChallengeOptions = this.showChallengeOptions.bind(this);
 
         this.mobile = typeof window.orientation !== 'undefined';
     }
 
+    promptChallenge(player) {
+        this.setState({challengePrompted: player});
+    }
+
+    showChallengeOptions() {
+        return (
+            <div className="challenge_box">
+                <div className="challenge_box_header">
+                    Challenge Options:
+                </div>
+                <center>
+                    <br/>
+                    {
+                        this.gameTypes.map((gameType, idx) => {
+                            return (
+                                <button className={this.state.gameType === gameType ? "current_type_button" : "type_button"}
+                                    onMouseEnter={() => { this.setHint('', idx + 1) }}
+                                    onMouseLeave={() => { this.setHint(false) }}
+                                    onClick={() => this.setType(gameType)}
+                                    key={gameType}>{gameType}</button>
+
+                            );
+                        })
+                    }
+
+                    <div className="smaller_heading">
+                        <div style={{ 'margin': '5px' }}>
+                            <i className="far fa-clock"></i>
+                            {
+                                this.times.map((time) => {
+                                    return (
+                                        <button className={this.state.gameTime === time ? "current_time_button" : "time_button"}
+                                            onMouseEnter={() => { this.setHint('Choose the amount of time on the clock for your challenge') }}
+                                            onMouseLeave={() => { this.setHint(false) }}
+                                            onClick={() => this.setTime(time)}
+                                            key={time}> {time}:00</button>
+                                    );
+                                })
+                            }
+                        </div>
+                    </div>
+                    <br/>
+                    <button 
+                        className="board_control_button"
+                        onClick={() => {
+                                let otherGuy = this.state.challengePrompted;
+                                this.challengePlayer(this.state.challengePrompted);
+                                this.setState({
+                                    challengePrompted: false,
+                                    challengeMade: otherGuy
+                                });
+                            }
+                        }
+                    >
+                        Send Challenge!
+                    </button>
+                    <button
+                        className="board_control_button"
+                        onClick={() => this.setState({challengePrompted: false})}
+                    >
+                        Cancel
+                    </button>
+                </center>
+            </div>
+        );
+    }
+
     showHint() {
         if (this.props.hints && !this.state.playing){
+            let picId = '';
+            if (this.state.hint === 'In Pawn Clash, the pawns begin on the 4th and 5th ranks.') {
+                picId = "pawn_clash_diagram";
+            }
+            else if (this.state.hint === 'In Chess960, your capital pieces start in a random order.') {
+                picId = "chess_960_diagram";
+            }
             return (
                 <div className="hint">
-                    <i className="fas fa-question-circle"></i> {this.state.hint}
+                    <div id={picId}>
+                    </div>
+                    {this.state.hint}
                 </div>
             );
         }
         return '';
     }
 
-    setHint(newHint, gameType) {
-        if (gameType) {
-            switch (gameType) {
-                case 'Standard':
-                    newHint += ': Standard Chess';
+    setHint(newHint, hintKey = 0) {
+        if (hintKey === 0) {
+            this.setState({ hint: newHint });
+        }
+        else {
+            switch (hintKey) {
+                case 1:
+                    this.setState({ hint: 'Select Standard Chess' });
                     break;
-                case 'Chess960':
-                    newHint += ': In Chess960, your capital pieces start on the back rank as usual, but in a random order.';
+                case 2:
+                    this.setState({ hint: 'In Chess960, your capital pieces start in a random order.' });
                     break;
-                case 'Pawn Clash':
-                    newHint += ': In Pawn Clash, the pawns start on the 4th and 5th rank.';
+                case 3:
+                    this.setState({ hint: 'In Pawn Clash, the pawns begin on the 4th and 5th ranks.' });
+                    break;
+                case 4:
+                    this.setState({ hint: 'Check!' });
                     break;
                 default:
                     break;
             }
         }
-        this.setState({hint: newHint});
     }
 
     leaveGame() {
@@ -141,6 +226,9 @@ class PlayBar extends React.Component {
     }
 
     declineChallenge() {
+        this.waitSub.perform('relayDecline', {
+            'playerWhoChallenged': this.state.challenged.challenger
+        });
         this.setState({challenged: false});
     }
 
@@ -236,9 +324,18 @@ class PlayBar extends React.Component {
         else if (data.playerWhite) {
             if (data.playerWhite === this.props.user.username) {
                 this.startGame('white', data.playerBlack, data.gameId, data.gameType, data.gameTime);
+                this.leaveLobby();
+                this.setState({challengeMade: false });
             }
             if (data.playerBlack === this.props.user.username) {
                 this.startGame('black', data.playerWhite, data.gameId, data.gameType, data.gameTime);
+                this.leaveLobby();
+                this.setState({ challengeMade: false });
+            }
+        }
+        else if (data.decline) {
+            if (this.props.user.username === data.playerBeingRejected) {
+                this.setState({ challengeMade: false });
             }
         }
         else {
@@ -381,54 +478,21 @@ class PlayBar extends React.Component {
                 onMouseEnter={() => { this.setHint('Play live matches with other users') }}
                 onMouseLeave={() => { this.setHint(false) }}
             >
+                {this.state.challengePrompted ? this.showChallengeOptions() : ''}
                 {this.state.hint ? this.showHint() : ''}
                 {this.state.challenged ? this.showChallengedBox() : ''}
                 {this.state.playing ? this.showVsBoard() : ''}
                 <div className="controls_heading" style={{'height': '42px'}}>
                     <div style={{'margin' : '10px'}}>
-                    <i className="fas fa-chess"></i> Game Room <i className="fas fa-chess-knight"></i>
+                    <i className="fas fa-chess"></i> Game Room
                     </div>
                 </div>
                 <center>
-                {
-                    this.gameTypes.map((gameType) => {
-                        return (
-                            <button className={this.state.gameType === gameType ? "current_type_button" : "type_button"}
-                                onMouseEnter={() => {this.setHint('To challenge another player, first select the game type', gameType)}}
-                                onMouseLeave={() => {this.setHint(false)}}
-                                onClick={() => this.setType(gameType)}
-                                key={gameType}>{gameType}</button>
-
-                        );
-                    })
-                }
                 
-                <div className="smaller_heading">
-                    <div style={{ 'margin': '5px' }}>
-                        <i className="far fa-clock"></i>
-                            {
-                                this.times.map((time) => {
-                                    return (
-                                        <button className={this.state.gameTime === time ? "current_time_button" : "time_button"}
-                                        onMouseEnter={() => { this.setHint('Choose the amount of time on the clock for your challenge') }}
-                                        onMouseLeave={() => { this.setHint(false) }}    
-                                        onClick={() => this.setTime(time)}
-                                            key={time}> {time}:00</button>
-                                    );
-                                })
-                            }
-                    </div>
-                </div>
-                <div className="small_heading"
-                        onMouseEnter={() => { this.setHint('Here you see other users waiting to play') }}
-                        onMouseLeave={() => { this.setHint(false) }}    
-                >
-                        <i className="fas fa-users"></i> Players
-                </div>
                 {this.lobbyButton()}
                 <div className="players_waiting">
                 {
-                    this.state.playerList.length === 0 ? '(There are no players waiting)' :
+                    
                     this.state.playerList.map((player, idx) => {
                         if (player === this.props.user.username){
                             return (
@@ -436,32 +500,32 @@ class PlayBar extends React.Component {
                                     onMouseEnter={() => { this.setHint('You cannot challenge yourself') }}
                                     onMouseLeave={() => { this.setHint(false) }}
                                 >
+                                    <div className="player_pic">
+                                        <i className="fas fa-user"></i>
+                                    </div>
                                     {player + ' (' + this.playerRatings[player] + ')'}
                                     <br />
-                                    <i className="fas fa-user"></i> (This is you)
+                                    <div style={{'height': '25px', 'padding': '5px'}}
+                                        
+                                    > (This is you)</div>
                                 </div>
                             );
                         }
-                        else if (player === 'T1000robot') {
+                        else if (player === this.state.challengePrompted || player === this.state.challengeMade) {
                             return (
-                                <div className="player_bar" key={idx} >
+                                <div className="player_bar" key={idx}
+                                    onMouseEnter={() => { this.setHint('You cannot challenge yourself') }}
+                                    onMouseLeave={() => { this.setHint(false) }}
+                                >
+                                    <div className="player_pic">
+                                        <i className="fas fa-user"></i>
+                                    </div>
                                     {player + ' (' + this.playerRatings[player] + ')'}
-                                    <br/>
-                                    <button
-                                        className="time_button challenge"
-                                        onClick={() => this.challengePlayer(player)}
-                                    >
-                                        <Link
-                                            to={'/play'}
-                                            style={{
-                                                'textDecoration': 'none',
-                                                'color': 'lightgray'
-                                            }}>
-                                            <i className="fas fa-robot"></i> Challenge
-                                        </Link>
-                                    </button>
+                                    <br />
+                                    <div style={{ 'height': '25px', 'padding': '5px', 'color': 'gray'}}
+
+                                    > <br/>Pending...</div>
                                 </div>
-                                
                             );
                         }
                         else {
@@ -470,18 +534,31 @@ class PlayBar extends React.Component {
                                     onMouseEnter={() => { this.setHint('Challenge this player to a game') }}
                                     onMouseLeave={() => { this.setHint(false) }}
                                 >
+                                    <div className="player_pic">
+                                        <i className="fas fa-user"></i>
+                                    </div>
                                     {player + ' (' + this.playerRatings[player] + ')'}
                                     <br />
                                     <button
                                         className="time_button challenge"
-                                        onClick={() => this.challengePlayer(player)}
-                                    ><i className="fas fa-user"></i> Challenge</button>
+                                        onClick={() => this.promptChallenge(player)}
+                                    > Challenge Player</button>
                                 </div>
                             );
                         }
                     })
                 }
                 </div>
+                
+                {this.state.playerList.length === 0 ? '(Lobby is empty)' : ''}
+                
+                    <Link to={'/play'}>
+                    <button
+                        className="board_control_button"
+                    >
+                        <i className="fas fa-robot"></i> Play Computer
+                    </button>
+                    </Link>
                 </center>
             </div>
         );

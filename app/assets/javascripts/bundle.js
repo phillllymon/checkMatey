@@ -275,9 +275,18 @@ var signup = function signup(user) {
   !*** ./frontend/actions/ui_actions.js ***!
   \****************************************/
 /*! exports provided: TOGGLE_HINTS, toggleHints */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/Users/info/Desktop/checkMatey/checkMatey/frontend/actions/ui_actions.js'");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_HINTS", function() { return TOGGLE_HINTS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleHints", function() { return toggleHints; });
+var TOGGLE_HINTS = 'TOGGLE_HINTS';
+var toggleHints = function toggleHints() {
+  return {
+    type: TOGGLE_HINTS
+  };
+};
 
 /***/ }),
 
@@ -4161,14 +4170,827 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 /***/ }),
 
+/***/ "./frontend/components/chess_table/vs_board/vs_board_mobile.jsx":
+/*!**********************************************************************!*\
+  !*** ./frontend/components/chess_table/vs_board/vs_board_mobile.jsx ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _piece__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../piece */ "./frontend/components/chess_table/piece.jsx");
+/* harmony import */ var _chess_game__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../chess/game */ "./frontend/components/chess_table/chess/game.js");
+/* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+
+var VsBoardMobile =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(VsBoardMobile, _React$Component);
+
+  function VsBoardMobile(props) {
+    var _this;
+
+    _classCallCheck(this, VsBoardMobile);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(VsBoardMobile).call(this, props));
+    _this.flipped = _this.props.color === 'black';
+    _this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"](_this.props.gameType);
+    _this.grid = _this.game.grid;
+    _this.state = {
+      grid: _this.grid,
+      dragging: false,
+      flipped: _this.flipped,
+      drawOffered: false,
+      gameIsDone: false,
+      playerTime: [_this.props.gameTime, 0],
+      opponentTime: [_this.props.gameTime, 0],
+      chatInput: '',
+      showChat: false
+    };
+    _this.chat = [], _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
+    _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
+    _this.endDrag = _this.endDrag.bind(_assertThisInitialized(_this));
+    _this.abortDrag = _this.abortDrag.bind(_assertThisInitialized(_this));
+    _this.displayDragPiece = _this.displayDragPiece.bind(_assertThisInitialized(_this));
+    _this.flipBoard = _this.flipBoard.bind(_assertThisInitialized(_this));
+    _this.player = _this.props.player;
+    _this.opponent = _this.props.opponent;
+    _this.playerColor = _this.props.color;
+    _this.opponentColor = _this.playerColor === 'black' ? 'white' : 'black';
+    _this.highlightSquare = null;
+    _this.receiveBroadcast = _this.receiveBroadcast.bind(_assertThisInitialized(_this));
+    _this.offerDraw = _this.offerDraw.bind(_assertThisInitialized(_this));
+    _this.resign = _this.resign.bind(_assertThisInitialized(_this));
+    _this.respondToDrawOffer = _this.respondToDrawOffer.bind(_assertThisInitialized(_this));
+    _this.endTheGame = _this.endTheGame.bind(_assertThisInitialized(_this));
+    _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
+    _this.isMovePawnPromotion = _this.isMovePawnPromotion.bind(_assertThisInitialized(_this));
+    _this.handlePawnPromotion = _this.handlePawnPromotion.bind(_assertThisInitialized(_this));
+    _this.drawButtons = _this.drawButtons.bind(_assertThisInitialized(_this));
+    _this.showEnding = _this.showEnding.bind(_assertThisInitialized(_this));
+    _this.tickClock = _this.tickClock.bind(_assertThisInitialized(_this));
+    _this.startClock = _this.startClock.bind(_assertThisInitialized(_this));
+    _this.getBlackPoints = _this.getBlackPoints.bind(_assertThisInitialized(_this));
+    _this.getWhitePoints = _this.getWhitePoints.bind(_assertThisInitialized(_this));
+    _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
+    _this.handleChatInput = _this.handleChatInput.bind(_assertThisInitialized(_this));
+    _this.sendChat = _this.sendChat.bind(_assertThisInitialized(_this));
+    _this.toggleChat = _this.toggleChat.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(VsBoardMobile, [{
+    key: "toggleChat",
+    value: function toggleChat() {
+      this.setState({
+        showChat: this.state.showChat ? false : true
+      });
+    }
+  }, {
+    key: "sendChat",
+    value: function sendChat() {
+      this.playSub.perform('relayMessage', {
+        'gameId': this.props.gameId,
+        'chat': this.state.chatInput,
+        'player': this.player
+      });
+      this.setState({
+        chatInput: ''
+      });
+    }
+  }, {
+    key: "handleChatInput",
+    value: function handleChatInput(e) {
+      this.setState({
+        chatInput: e.target.value
+      });
+    }
+  }, {
+    key: "handleClick",
+    value: function handleClick(e) {
+      if (this.state.dragging) {
+        this.endDrag(e.target);
+        this.setState({
+          dragging: false
+        });
+      } else {
+        this.beginDrag(e.target);
+      }
+    }
+  }, {
+    key: "getBlackPoints",
+    value: function getBlackPoints() {
+      if (this.game.points[0] > this.game.points[1]) {
+        return ' +' + (this.game.points[0] - this.game.points[1]).toString();
+      } else {
+        return '';
+      }
+    }
+  }, {
+    key: "getWhitePoints",
+    value: function getWhitePoints() {
+      if (this.game.points[1] > this.game.points[0]) {
+        return ' +' + (this.game.points[1] - this.game.points[0]).toString();
+      } else {
+        return '';
+      }
+    }
+  }, {
+    key: "tickClock",
+    value: function tickClock() {
+      if (this.game.currentPlayer === this.playerColor) {
+        var newMinutes = this.state.playerTime[0];
+        var newSeconds = this.state.playerTime[1] - 1;
+
+        if (newSeconds < 0) {
+          newSeconds = 59;
+          newMinutes -= 1;
+
+          if (newMinutes < 0) {
+            newMinutes = 0;
+            newSeconds = 0;
+            this.setState({
+              playerTime: [newMinutes, newSeconds]
+            });
+            window.clearInterval(this.clockInterval);
+            this.playSub.perform('relayTimeout', {
+              'gameId': this.props.gameId,
+              'color': this.playerColor
+            });
+          }
+        }
+
+        this.setState({
+          playerTime: [newMinutes, newSeconds]
+        });
+      } else {
+        var _newMinutes = this.state.opponentTime[0];
+
+        var _newSeconds = this.state.opponentTime[1] - 1;
+
+        if (_newSeconds < 0) {
+          _newSeconds = 59;
+          _newMinutes -= 1;
+        }
+
+        this.setState({
+          opponentTime: [_newMinutes, _newSeconds]
+        });
+      }
+    }
+  }, {
+    key: "showEnding",
+    value: function showEnding(ending) {
+      var headMessage = 'Checkmate!';
+      var endMessage = '';
+
+      switch (ending) {
+        case 'Checkmate!':
+          endMessage = this.winner + ' won by checkmate.';
+          break;
+
+        case 'accept':
+          headMessage = 'Draw';
+          endMessage = 'Game is a draw by agreement.';
+          break;
+
+        case 'Stalemate':
+          headMessage = 'Stalemate';
+          endMessage = 'The game is a stalemate.';
+          break;
+
+        case 'resign':
+          headMessage = 'Resignation';
+          endMessage = this.winner + ' won by resignation.';
+          break;
+
+        case 'timeout':
+          headMessage = 'Timeout';
+          endMessage = this.winner + ' won on time.';
+          window.clearInterval(this.clockInterval);
+          break;
+
+        default:
+          break;
+      }
+
+      if (this.winner) {
+        if (this.winner === this.player) {
+          endMessage = endMessage + ' Your rating went up by four points.';
+        } else {
+          endMessage = endMessage + ' Your rating went down by four points.';
+        }
+      } else {
+        endMessage = endMessage + ' Your rating remains the same.';
+      }
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "modal_back"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'position': 'relative'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "challenge_box_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "challenge_box_header_mobile"
+      }, headMessage), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), endMessage, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "time_button_mobile",
+        onClick: this.props.leaveGame
+      }, "Leave Game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)))));
+    }
+  }, {
+    key: "endTheGame",
+    value: function endTheGame(ending) {
+      switch (ending) {
+        case 'Checkmate!':
+          this.winner = this.game.currentPlayer === this.playerColor ? this.opponent : this.player;
+      }
+
+      this.setState({
+        drawOffered: false,
+        gameIsDone: ending
+      });
+
+      if (this.playerColor === 'white') {
+        $.ajax({
+          url: "/api/games",
+          method: 'POST',
+          data: {
+            game: {
+              player_white: this.player,
+              player_black: this.opponent,
+              moves: Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_3__["seqToString"])(this.game.gameSoFar),
+              winner: this.winner,
+              ending: ending
+            }
+          }
+        });
+      }
+
+      var oldRating = this.props.userRating;
+      var newRating = parseInt(oldRating);
+
+      if (this.winner) {
+        newRating = this.winner === this.player ? newRating + 4 : newRating - 4;
+      }
+
+      $.ajax({
+        url: "/api/users/".concat(this.props.userId),
+        method: 'PATCH',
+        data: {
+          'user': {
+            rating: newRating
+          }
+        }
+      });
+    }
+  }, {
+    key: "drawButtons",
+    value: function drawButtons() {
+      var _this2 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "offerDraw_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Draw offered:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "time_button_mobile",
+        onClick: function onClick() {
+          return _this2.respondToDrawOffer('accept');
+        }
+      }, "Accept"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "time_button_mobile",
+        onClick: function onClick() {
+          return _this2.respondToDrawOffer('decline');
+        }
+      }, "Decline")));
+    }
+  }, {
+    key: "offerDraw",
+    value: function offerDraw() {
+      this.playSub.perform('relayDraw', {
+        'gameId': this.props.gameId,
+        'message': 'offer',
+        'color': this.playerColor
+      });
+    }
+  }, {
+    key: "respondToDrawOffer",
+    value: function respondToDrawOffer(response) {
+      this.playSub.perform('relayDraw', {
+        'gameId': this.props.gameId,
+        'message': response,
+        'color': this.playerColor
+      });
+    }
+  }, {
+    key: "resign",
+    value: function resign() {
+      this.playSub.perform('relayResign', {
+        'gameId': this.props.gameId,
+        'color': this.playerColor
+      });
+    }
+  }, {
+    key: "receiveBroadcast",
+    value: function receiveBroadcast(data) {
+      if (data.gameId === this.props.gameId) {
+        if (data.move) {
+          if (data.color !== this.playerColor) {
+            this.game.makeMove(data.move);
+            this.highlightSquare = data.move[1];
+            this.currentPlayer = this.game.currentPlayer;
+            this.setState({
+              opponentTime: data.time
+            });
+          }
+
+          if (this.game.isGameOver()) {
+            this.endTheGame(this.game.gameOverMessage);
+          }
+        }
+
+        if (data.message) {
+          if (data.color !== this.playerColor) {
+            this.setState({
+              drawOffered: true
+            });
+          }
+
+          if (data.message === 'accept') {
+            this.endTheGame('accept');
+          }
+
+          if (data.message === 'decline') {
+            this.setState({
+              drawOffered: false
+            });
+          }
+        }
+
+        if (data.resign) {
+          this.winner = this.playerColor === data.color ? this.opponent : this.player;
+          this.endTheGame('resign');
+        }
+
+        if (data.timeout) {
+          this.winner = this.playerColor === data.color ? this.opponent : this.player;
+          this.endTheGame('timeout');
+        }
+
+        if (data.chat) {
+          this.chat.push([data.player, data.chat]);
+          this.setState({});
+        }
+      }
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this3 = this;
+
+      this.playSub = App.cable.subscriptions.create({
+        channel: 'Playing'
+      }, {
+        received: function received(data) {
+          _this3.receiveBroadcast(data);
+        }
+      });
+      this.startGame();
+      this.setState({});
+      this.startClock();
+    }
+  }, {
+    key: "startClock",
+    value: function startClock() {
+      this.clockInterval = window.setInterval(this.tickClock, 1000);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      App.cable.subscriptions.remove(this.playSub);
+      window.clearInterval(this.clockInterval);
+    }
+  }, {
+    key: "handlePawnPromotion",
+    value: function handlePawnPromotion(move) {
+      this.displayPromotion = true;
+      move[1].push('special');
+      move[1].push(this.game.currentPlayer === 'white' ? 'q' : 'Q');
+      return move;
+    }
+  }, {
+    key: "isMovePawnPromotion",
+    value: function isMovePawnPromotion(move) {
+      var origin = move[0];
+      var destination = move[1];
+
+      if (this.grid[origin[0]][origin[1]] === 'p' && destination[0] === 0) {
+        return true;
+      }
+
+      if (this.grid[origin[0]][origin[1]] === 'P' && destination[0] === 7) {
+        return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: "startGame",
+    value: function startGame(e) {
+      this.game.start();
+      this.currentPlayer = this.game.currentPlayer;
+    }
+  }, {
+    key: "flipBoard",
+    value: function flipBoard(e) {
+      this.flipped = this.flipped ? false : true;
+
+      if (!this.game.playing) {
+        this.playerColor = this.playerColor === 'white' ? 'black' : 'white';
+        this.compColor = this.playerColor === 'white' ? 'black' : 'white';
+      }
+
+      this.setState({
+        flipped: this.flipped
+      });
+    }
+  }, {
+    key: "displayDragPiece",
+    value: function displayDragPiece() {
+      var dragStyle = {
+        'position': 'fixed',
+        'transform': 'translate(-50%, -50%)',
+        'height': 'auto',
+        'width': 'auto',
+        'fontSize': '6vmin',
+        'cursor': 'grabbing',
+        'pointerEvents': 'none',
+        top: this.state.dragY,
+        left: this.state.dragX
+      };
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: dragStyle
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        mark: this.markToDrag
+      }));
+    }
+  }, {
+    key: "dragPiece",
+    value: function dragPiece(e) {
+      if (this.state.dragging) {
+        this.setState({
+          dragY: e.clientY,
+          dragX: e.clientX
+        });
+      }
+    }
+  }, {
+    key: "beginDrag",
+    value: function beginDrag(target) {
+      if (target.className.includes('fa-chess')) {
+        this.setState({
+          dragging: true
+        });
+        this.origin = target.id;
+        this.markToDrag = this.state.grid[parseInt(this.origin[0])][parseInt(this.origin[2])];
+      }
+    }
+  }, {
+    key: "endDrag",
+    value: function endDrag(target) {
+      if (this.state.dragging) {
+        var destination = target.id;
+        var move = [[parseInt(this.origin[0]), parseInt(this.origin[2])], [parseInt(destination[0]), parseInt(destination[2])]];
+
+        if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.game.level === 0) {
+          this.game.makeMove(move);
+          this.currentPlayer = this.game.currentPlayer;
+          this.grid = this.game.grid;
+          this.setState({
+            grid: this.grid,
+            dragging: false
+          });
+          this.markToDrag = null;
+          this.origin = null;
+        }
+
+        if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.currentPlayer === this.playerColor) {
+          if (this.isMovePawnPromotion(move)) {
+            move = this.handlePawnPromotion(move);
+          }
+
+          this.game.makeMove(move);
+          this.highlightSquare = move[1];
+          this.playSub.perform('relayMove', {
+            'gameId': this.props.gameId,
+            'move': move,
+            'color': this.playerColor,
+            'time': this.state.playerTime
+          });
+          this.currentPlayer = this.game.currentPlayer;
+          this.grid = this.game.grid;
+          this.setState({
+            grid: this.grid,
+            dragging: false,
+            drawOffered: false
+          });
+          this.markToDrag = null;
+          this.origin = null;
+        } else {
+          this.setState({
+            grid: this.grid,
+            dragging: false
+          });
+          this.markToDrag = null;
+          this.origin = null;
+        }
+      }
+    }
+  }, {
+    key: "abortDrag",
+    value: function abortDrag(e) {
+      this.setState({
+        grid: this.grid,
+        dragging: false
+      });
+      this.markToDrag = null;
+      this.origin = null;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this4 = this;
+
+      var highlightSquare = this.highlightSquare;
+
+      if (this.state.showChat) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "chess_table_mobile"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "board_controls_mobile"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button_mobile",
+          style: {
+            'width': '20vw'
+          },
+          onClick: this.flipBoard
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-retweet"
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button_mobile",
+          style: {
+            'width': '20vw'
+          },
+          onClick: this.offerDraw
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-handshake"
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button_mobile",
+          style: {
+            'width': '20vw'
+          },
+          onClick: this.resign
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fab fa-font-awesome-flag"
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button_mobile",
+          style: {
+            'width': '20vw'
+          },
+          onClick: this.toggleChat
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-chess"
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "controls_heading_mobile"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-comments"
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          style: {
+            'marginRight': '2vw',
+            'marginLeft': '2vw',
+            'width': '100%'
+          },
+          className: "bigger",
+          type: "text",
+          value: this.state.chatInput,
+          onChange: this.handleChatInput
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "send_button_mobile",
+          onClick: this.sendChat
+        }, "Send")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "chat_mobile"
+        }, this.chat.map(function (message, idx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: idx % 2 === 0 ? "inactive_move_light bigger" : "inactive_move_dark bigger",
+            key: idx
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            style: {
+              'fontSize': '60%'
+            }
+          }, message[0], ":"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), message[1]);
+        }))));
+      }
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "chess_table_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "board_controls_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button_mobile",
+        style: {
+          'width': '20vw'
+        },
+        onClick: this.flipBoard
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-retweet"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button_mobile",
+        style: {
+          'width': '20vw'
+        },
+        onClick: this.offerDraw
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-handshake"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button_mobile",
+        style: {
+          'width': '20vw'
+        },
+        onClick: this.resign
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fab fa-font-awesome-flag"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button_mobile",
+        style: {
+          'width': '20vw'
+        },
+        onClick: this.toggleChat
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-comments"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "captured_pieces_mobile",
+        style: {
+          'color': this.opponentColor
+        }
+      }, this.game.capturedPieces[this.opponentColor === 'black' ? 0 : 1].map(function (mark, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          key: idx
+        }, Object(_piece__WEBPACK_IMPORTED_MODULE_1__["getPieceIcon"])(mark));
+      }), this.opponentColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "player_info_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.game.playing && this.currentPlayer === this.opponentColor ? "current_player_mobile" : "player_mobile",
+        style: {
+          'color': this.opponentColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user",
+        style: {
+          'marginRight': '10px'
+        }
+      }), " ", this.opponent), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.game.playing && this.currentPlayer === this.opponentColor ? "current_player_mobile" : "player_mobile",
+        style: {
+          'color': this.opponentColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "far fa-clock",
+        style: {
+          'marginRight': '10px'
+        }
+      }), " ", this.state.opponentTime[0], ":", this.state.opponentTime[1] < 10 ? '0' : '', this.state.opponentTime[1])), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.flipped ? "board_mobile flipped_mobile" : "board_mobile"
+      }, this.state.gameIsDone ? this.showEnding(this.state.gameIsDone) : '', this.grid.map(function (row, rIdx) {
+        return row.map(function (spot, cIdx) {
+          if (highlightSquare && highlightSquare[0] === rIdx && highlightSquare[1] === cIdx) {
+            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+              onClick: _this4.handleClick,
+              key: rIdx + cIdx,
+              id: [rIdx, cIdx],
+              className: (rIdx + cIdx) % 2 === 0 ? 'w_mobile highlight_mobile' : 'b_mobile highlight_mobile'
+            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              grayed: _this4.state.dragging && parseInt(_this4.origin[0]) === rIdx && parseInt(_this4.origin[2]) === cIdx ? true : false,
+              pos: [rIdx, cIdx],
+              mark: _this4.state.grid[rIdx][cIdx]
+            }));
+          }
+
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            onClick: _this4.handleClick,
+            key: rIdx + cIdx,
+            id: [rIdx, cIdx],
+            className: (rIdx + cIdx) % 2 === 0 ? 'w_mobile' : 'b_mobile'
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_piece__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            grayed: _this4.state.dragging && parseInt(_this4.origin[0]) === rIdx && parseInt(_this4.origin[2]) === cIdx ? true : false,
+            pos: [rIdx, cIdx],
+            mark: _this4.state.grid[rIdx][cIdx]
+          }));
+        });
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "player_info_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.game.playing && this.currentPlayer === this.playerColor ? "current_player_mobile" : "player_mobile",
+        style: {
+          'color': this.playerColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user",
+        style: {
+          'marginRight': '10px'
+        }
+      }), " ", this.player), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.game.playing && this.currentPlayer === this.playerColor ? "current_player_mobile" : "player_mobile",
+        style: {
+          'color': this.playerColor
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "far fa-clock",
+        style: {
+          'marginRight': '10px'
+        }
+      }), " ", this.state.playerTime[0], ":", this.state.playerTime[1] < 10 ? '0' : '', this.state.playerTime[1])), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "captured_pieces_mobile",
+        style: {
+          'color': this.playerColor
+        }
+      }, this.game.capturedPieces[this.opponentColor === 'black' ? 1 : 0].map(function (mark, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          key: idx
+        }, Object(_piece__WEBPACK_IMPORTED_MODULE_1__["getPieceIcon"])(mark));
+      }), this.playerColor === 'black' ? this.getBlackPoints() : this.getWhitePoints()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "game_alert_mobile"
+      }, this.state.drawOffered ? this.drawButtons() : '', this.game.isGameOver() ? this.game.gameOverMessage : this.game.inCheck ? 'Check!' : ''))));
+    }
+  }]);
+
+  return VsBoardMobile;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (VsBoardMobile);
+
+/***/ }),
+
 /***/ "./frontend/components/chess_table/vs_board/vs_board_mobile_container.js":
 /*!*******************************************************************************!*\
   !*** ./frontend/components/chess_table/vs_board/vs_board_mobile_container.js ***!
   \*******************************************************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/Users/info/Desktop/checkMatey/checkMatey/frontend/components/chess_table/vs_board/vs_board_mobile_container.js'");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../actions/game_actions */ "./frontend/actions/game_actions.js");
+/* harmony import */ var _vs_board_mobile__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./vs_board_mobile */ "./frontend/components/chess_table/vs_board/vs_board_mobile.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+
+
+
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    game: state.entities.currentGame,
+    gameErrors: state.errors.game
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    updateGame: function updateGame(game) {
+      return dispatch(Object(_actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["updateGame"])(game));
+    },
+    archiveGame: _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["archiveGame"]
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["withRouter"])(Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_vs_board_mobile__WEBPACK_IMPORTED_MODULE_2__["default"])));
 
 /***/ }),
 
@@ -4376,7 +5198,18 @@ function (_React$Component) {
       var posts = this.props.posts.reverse();
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "feed"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_create_post_create_post_container__WEBPACK_IMPORTED_MODULE_1__["default"], null), posts.map(function (post, idx) {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "controls_heading",
+        style: {
+          'height': '42px'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'margin': '10px'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-comments"
+      }), " Community Forum")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_create_post_create_post_container__WEBPACK_IMPORTED_MODULE_1__["default"], null), posts.map(function (post, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: idx
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_feed_item_feed_item_container__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -5048,9 +5881,51 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   !*** ./frontend/components/mobile_splash.jsx ***!
   \***********************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/Users/info/Desktop/checkMatey/checkMatey/frontend/components/mobile_splash.jsx'");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+
+
+var MobileSplash = function MobileSplash(props) {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "mobile_container"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "splash_logo_mobile"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "splash_set_mobile"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    className: "mobile_button",
+    to: "/signup"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fas fa-user-plus",
+    style: {
+      'marginRight': '20px'
+    }
+  }), "Sign Up"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    className: "mobile_button",
+    to: "/login"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fas fa-sign-in-alt",
+    style: {
+      'marginRight': '20px'
+    }
+  }), "Log In"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    className: "mobile_button",
+    to: "/notChess"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fas fa-cubes",
+    style: {
+      'marginRight': '20px'
+    }
+  }), "Not Chess")));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (MobileSplash);
 
 /***/ }),
 
@@ -5109,6 +5984,73 @@ function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Cell);
+
+/***/ }),
+
+/***/ "./frontend/components/otherGame/cell_mobile.jsx":
+/*!*******************************************************!*\
+  !*** ./frontend/components/otherGame/cell_mobile.jsx ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var CellMobile =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(CellMobile, _React$Component);
+
+  function CellMobile(props) {
+    var _this;
+
+    _classCallCheck(this, CellMobile);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(CellMobile).call(this, props));
+    _this.getMobileClassName = _this.getMobileClassName.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(CellMobile, [{
+    key: "getMobileClassName",
+    value: function getMobileClassName(status) {
+      return status + "_mobile";
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: this.getMobileClassName(this.props.status)
+      });
+    }
+  }]);
+
+  return CellMobile;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (CellMobile);
 
 /***/ }),
 
@@ -5503,9 +6445,115 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   !*** ./frontend/components/otherGame/other_game_container_mobile.js ***!
   \**********************************************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/Users/info/Desktop/checkMatey/checkMatey/frontend/components/otherGame/other_game_container_mobile.js'");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_post_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/post_actions */ "./frontend/actions/post_actions.js");
+/* harmony import */ var _other_game_mobile_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./other_game_mobile.jsx */ "./frontend/components/otherGame/other_game_mobile.jsx");
+
+
+
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    allPosts: state.entities.posts
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    fetchAllPosts: function fetchAllPosts() {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["fetchAllPosts"])());
+    },
+    createPost: function createPost(post) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["createPost"])(post));
+    },
+    updatePost: function updatePost(post) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["updatePost"])(post));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_other_game_mobile_jsx__WEBPACK_IMPORTED_MODULE_2__["default"]));
+
+/***/ }),
+
+/***/ "./frontend/components/otherGame/other_game_mobile.jsx":
+/*!*************************************************************!*\
+  !*** ./frontend/components/otherGame/other_game_mobile.jsx ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tetris_mobile__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tetris_mobile */ "./frontend/components/otherGame/tetris_mobile.jsx");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+var OtherGameMobile =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(OtherGameMobile, _React$Component);
+
+  function OtherGameMobile(props) {
+    var _this;
+
+    _classCallCheck(this, OtherGameMobile);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(OtherGameMobile).call(this, props));
+    _this.backToSplash = _this.backToSplash.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(OtherGameMobile, [{
+    key: "backToSplash",
+    value: function backToSplash() {
+      this.props.history.push('/');
+    }
+  }, {
+    key: "notBack",
+    value: function notBack(e) {
+      e.stopPropagation();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tetris_mobile__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        fetchAllPosts: this.props.fetchAllPosts,
+        createPost: this.props.createPost,
+        updatePost: this.props.createPost,
+        allPosts: this.props.allPosts
+      });
+    }
+  }]);
+
+  return OtherGameMobile;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (OtherGameMobile);
 
 /***/ }),
 
@@ -6007,6 +7055,436 @@ function (_React$Component) {
 
 /***/ }),
 
+/***/ "./frontend/components/otherGame/tetris_mobile.jsx":
+/*!*********************************************************!*\
+  !*** ./frontend/components/otherGame/tetris_mobile.jsx ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game */ "./frontend/components/otherGame/game.js");
+/* harmony import */ var _cell_mobile__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./cell_mobile */ "./frontend/components/otherGame/cell_mobile.jsx");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+var TetrisMobile =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(TetrisMobile, _React$Component);
+
+  function TetrisMobile(props) {
+    var _this;
+
+    _classCallCheck(this, TetrisMobile);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(TetrisMobile).call(this, props));
+    _this.game = new _game__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    _this.grid = _this.game.grid;
+    _this.piecePos = [2, 4];
+    _this.state = {
+      grid: _this.game.grid,
+      nextGrid: _this.game.nextGrid,
+      level: 1,
+      enteredName: '',
+      fullScreen: false
+    };
+    _this.interval = 1000;
+    _this.handleInput = _this.handleInput.bind(_assertThisInitialized(_this));
+    _this.startGame = _this.startGame.bind(_assertThisInitialized(_this));
+    _this.nextLevel = _this.nextLevel.bind(_assertThisInitialized(_this));
+    _this.startButton = _this.startButton.bind(_assertThisInitialized(_this));
+    _this.highScore = 0;
+    _this.leader = 'no one';
+    _this.highTime = '';
+    _this.getHighScore = _this.getHighScore.bind(_assertThisInitialized(_this));
+    _this.endTheGame = _this.endTheGame.bind(_assertThisInitialized(_this));
+    _this.askForName = _this.askForName.bind(_assertThisInitialized(_this));
+    _this.saveScore = _this.saveScore.bind(_assertThisInitialized(_this));
+    _this.handleEnterName = _this.handleEnterName.bind(_assertThisInitialized(_this));
+    _this.togglePreview = _this.togglePreview.bind(_assertThisInitialized(_this));
+    _this.fullScreen = _this.fullScreen.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(TetrisMobile, [{
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      clearInterval(this.pieceInterval);
+    }
+  }, {
+    key: "togglePreview",
+    value: function togglePreview(e) {
+      e.target.blur();
+      this.game.preview = this.game.preview ? false : true;
+      this.setState({});
+    }
+  }, {
+    key: "handleEnterName",
+    value: function handleEnterName(e) {
+      this.setState({
+        enteredName: e.target.value
+      });
+    }
+  }, {
+    key: "askForName",
+    value: function askForName() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "enter_name tetris_stats"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "New Highscore!", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.saveScore
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        placeholder: "enter your name",
+        value: this.state.enteredName,
+        onChange: this.handleEnterName
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "tetris_button",
+        type: "submit",
+        value: "Save Highscore"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))));
+    }
+  }, {
+    key: "getHighScore",
+    value: function getHighScore() {
+      var _this2 = this;
+
+      $.ajax({
+        url: "/api/scores",
+        method: 'GET'
+      }).then(function (res) {
+        _this2.highScore = res.score;
+        _this2.leader = res.name;
+        _this2.highTime = res.updated_at;
+
+        _this2.setState({});
+      });
+    }
+  }, {
+    key: "saveScore",
+    value: function saveScore(e) {
+      var _this3 = this;
+
+      e.preventDefault();
+      this.promptName = false;
+      $.ajax({
+        url: "/api/scores",
+        method: 'POST',
+        data: {
+          score: {
+            name: this.state.enteredName,
+            score: this.game.score
+          }
+        }
+      }).then(function (res) {
+        _this3.getHighScore();
+      });
+    }
+  }, {
+    key: "endTheGame",
+    value: function endTheGame() {
+      if (this.game.score > this.highScore) {
+        this.promptName = true;
+        this.setState({});
+      }
+    }
+  }, {
+    key: "startGame",
+    value: function startGame(e) {
+      var _this4 = this;
+
+      this.setState({
+        playing: true
+      });
+      this.game = new _game__WEBPACK_IMPORTED_MODULE_1__["default"](this.game.preview, this.game.nextPiece);
+      this.game.start();
+      this.level = this.game.level;
+      this.grid = this.game.grid;
+      this.setState({
+        grid: this.grid,
+        nextGrid: this.game.nextGrid
+      });
+      this.pieceInterval = setInterval(function () {
+        _this4.grid = _this4.game.advanceGame();
+
+        if (_this4.game.gameOver) {
+          clearInterval(_this4.pieceInterval);
+
+          _this4.setState({
+            playing: false
+          });
+
+          _this4.endTheGame();
+        }
+
+        _this4.setState({
+          grid: _this4.grid,
+          nextGrid: _this4.game.nextGrid
+        });
+
+        if (_this4.game.level !== _this4.level) {
+          _this4.level = _this4.game.level;
+
+          _this4.nextLevel();
+        }
+      }, 1000);
+    }
+  }, {
+    key: "nextLevel",
+    value: function nextLevel() {
+      var _this5 = this;
+
+      clearInterval(this.pieceInterval);
+      this.pieceInterval = setInterval(function () {
+        if (_this5.game.level !== _this5.level) {
+          _this5.level = _this5.game.level;
+
+          _this5.nextLevel();
+        }
+
+        _this5.grid = _this5.game.advanceGame();
+
+        if (_this5.game.gameOver) {
+          clearInterval(_this5.pieceInterval);
+
+          _this5.setState({
+            playing: false
+          });
+
+          _this5.endTheGame();
+        }
+
+        _this5.setState({
+          grid: _this5.grid,
+          nextGrid: _this5.game.nextGrid
+        });
+      }, Math.ceil(1000 / this.game.level));
+      this.interval = Math.ceil(1000 / this.game.level);
+    }
+  }, {
+    key: "handleControls",
+    value: function handleControls(input) {
+      if (!this.game.gameOver) {
+        if (input === 'drop') {
+          this.grid = this.game.dropPiece();
+        }
+
+        if (input === 'rotate') {
+          this.grid = this.game.rotateLeft();
+        } else if (input === 'left') {
+          this.grid = this.game.moveLeft();
+        } else if (input === 'down') {
+          this.grid = this.game.moveDown();
+        } else if (input === 'right') {
+          this.grid = this.game.moveRight();
+        }
+
+        this.setState({
+          grid: this.grid
+        });
+      }
+    }
+  }, {
+    key: "handleInput",
+    value: function handleInput(e) {
+      if (!this.game.gameOver) {
+        if (e.keyCode === 32) {
+          this.grid = this.game.dropPiece();
+        }
+
+        if (e.keyCode === 87 || e.keyCode === 38) {
+          this.grid = this.game.rotateLeft();
+        } else if (e.keyCode === 65 || e.keyCode === 37) {
+          this.grid = this.game.moveLeft();
+        } else if (e.keyCode === 83 || e.keyCode === 40) {
+          this.grid = this.game.moveDown();
+        } else if (e.keyCode === 68 || e.keyCode === 39) {
+          this.grid = this.game.moveRight();
+        }
+
+        this.setState({
+          grid: this.grid
+        });
+      }
+    }
+  }, {
+    key: "startButton",
+    value: function startButton() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "start_button_mobile",
+        onClick: this.startGame
+      }, "Start Game");
+    }
+  }, {
+    key: "fullScreen",
+    value: function fullScreen(e) {
+      var theGame = document.getElementById("full");
+
+      if (theGame.requestFullscreen) {
+        theGame.requestFullscreen();
+      } else if (theGame.mozRequestFullScreen) {
+        theGame.mozRequestFullScreen();
+      } else if (theGame.webkitRequestFullscreen) {
+        theGame.webkitRequestFullscreen();
+      } else if (theGame.msRequestFullscreen) {
+        theGame.msRequestFullscreen();
+      }
+
+      this.setState({
+        fullScreen: true
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.getHighScore();
+      var theGame = document.getElementById("full");
+      var playArea = document.getElementById("play");
+      this.playHeight = playArea.offsetHeight;
+      this.totalHeight = window.innerHeight;
+      this.controlsHeight = this.totalHeight - this.playHeight; //this.fullScreen();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this6 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        onClick: this.fullScreen,
+        id: "full",
+        className: "full_screen",
+        onKeyDown: this.handleInput,
+        tabIndex: "0"
+      }, this.promptName ? this.askForName() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "play_area_mobile",
+        id: "play"
+      }, this.state.grid.map(function (row, rIdx) {
+        return row.map(function (cell, cIdx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_cell_mobile__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            key: [rIdx, cIdx],
+            status: cell,
+            pos: [rIdx, cIdx]
+          });
+        });
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "side_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tetris_stats_mobile preview_box"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Next:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "display_preview_mobile"
+      }, this.game.preview ? this.state.nextGrid.map(function (row, rIdx) {
+        return row.map(function (cell, cIdx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_cell_mobile__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            key: [rIdx, cIdx],
+            status: cell
+          });
+        });
+      }) : '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: this.game.preview ? "toggle_button_mobile button_on_mobile" : "toggle_button_mobile",
+        onClick: this.togglePreview
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-circle"
+      })), this.game.preview ? 'on' : 'off'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tetris_stats_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Score:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Lines: ", this.game.lines)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tetris_stats_mobile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Record:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "smaller_text_mobile"
+      }, this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highTime.slice(0, 10)))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onTouchStart: function onTouchStart() {
+          return _this6.handleControls('down');
+        },
+        style: {
+          'width': '100%',
+          'height': '28vw'
+        },
+        className: "tetris_control_button"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-down"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onTouchStart: function onTouchStart() {
+          return _this6.handleControls('drop');
+        },
+        style: {
+          'width': '100%',
+          'height': '28vw'
+        },
+        className: "tetris_control_button"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-download"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "controls",
+        style: {
+          'height': '25vh',
+          'width': '100%',
+          'backgroundColor': 'green',
+          'display': 'flex'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onTouchStart: function onTouchStart() {
+          return _this6.handleControls('left');
+        },
+        style: {
+          'width': '100%'
+        },
+        className: "tetris_control_button"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-left"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onTouchStart: function onTouchStart(e) {
+          e.preventDefault();
+
+          _this6.handleControls('rotate');
+        },
+        style: {
+          'width': '100%'
+        },
+        className: "tetris_control_button"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-undo"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onTouchStart: function onTouchStart(e) {
+          return _this6.handleControls('right');
+        },
+        style: {
+          'width': '100%'
+        },
+        className: "tetris_control_button"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))), this.state.playing ? '' : this.startButton());
+    }
+  }]);
+
+  return TetrisMobile;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (TetrisMobile);
+
+/***/ }),
+
 /***/ "./frontend/components/play_bar/play_bar.jsx":
 /*!***************************************************!*\
   !*** ./frontend/components/play_bar/play_bar.jsx ***!
@@ -6063,7 +7541,9 @@ function (_React$Component) {
       playerList: [],
       currentMessage: '',
       playing: false,
-      hint: false
+      hint: false,
+      challengePrompted: false,
+      challengeMade: false
     };
     _this.playerRatings = {
       T1000robot: 850
@@ -6085,48 +7565,145 @@ function (_React$Component) {
     _this.leaveGame = _this.leaveGame.bind(_assertThisInitialized(_this));
     _this.showHint = _this.showHint.bind(_assertThisInitialized(_this));
     _this.setHint = _this.setHint.bind(_assertThisInitialized(_this));
+    _this.promptChallenge = _this.promptChallenge.bind(_assertThisInitialized(_this));
+    _this.showChallengeOptions = _this.showChallengeOptions.bind(_assertThisInitialized(_this));
     _this.mobile = typeof window.orientation !== 'undefined';
     return _this;
   }
 
   _createClass(PlayBar, [{
+    key: "promptChallenge",
+    value: function promptChallenge(player) {
+      this.setState({
+        challengePrompted: player
+      });
+    }
+  }, {
+    key: "showChallengeOptions",
+    value: function showChallengeOptions() {
+      var _this2 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "challenge_box"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "challenge_box_header"
+      }, "Challenge Options:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.gameTypes.map(function (gameType, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: _this2.state.gameType === gameType ? "current_type_button" : "type_button",
+          onMouseEnter: function onMouseEnter() {
+            _this2.setHint('', idx + 1);
+          },
+          onMouseLeave: function onMouseLeave() {
+            _this2.setHint(false);
+          },
+          onClick: function onClick() {
+            return _this2.setType(gameType);
+          },
+          key: gameType
+        }, gameType);
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "smaller_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'margin': '5px'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "far fa-clock"
+      }), this.times.map(function (time) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: _this2.state.gameTime === time ? "current_time_button" : "time_button",
+          onMouseEnter: function onMouseEnter() {
+            _this2.setHint('Choose the amount of time on the clock for your challenge');
+          },
+          onMouseLeave: function onMouseLeave() {
+            _this2.setHint(false);
+          },
+          onClick: function onClick() {
+            return _this2.setTime(time);
+          },
+          key: time
+        }, " ", time, ":00");
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
+        onClick: function onClick() {
+          var otherGuy = _this2.state.challengePrompted;
+
+          _this2.challengePlayer(_this2.state.challengePrompted);
+
+          _this2.setState({
+            challengePrompted: false,
+            challengeMade: otherGuy
+          });
+        }
+      }, "Send Challenge!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button",
+        onClick: function onClick() {
+          return _this2.setState({
+            challengePrompted: false
+          });
+        }
+      }, "Cancel")));
+    }
+  }, {
     key: "showHint",
     value: function showHint() {
       if (this.props.hints && !this.state.playing) {
+        var picId = '';
+
+        if (this.state.hint === 'In Pawn Clash, the pawns begin on the 4th and 5th ranks.') {
+          picId = "pawn_clash_diagram";
+        } else if (this.state.hint === 'In Chess960, your capital pieces start in a random order.') {
+          picId = "chess_960_diagram";
+        }
+
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "hint"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fas fa-question-circle"
-        }), " ", this.state.hint);
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          id: picId
+        }), this.state.hint);
       }
 
       return '';
     }
   }, {
     key: "setHint",
-    value: function setHint(newHint, gameType) {
-      if (gameType) {
-        switch (gameType) {
-          case 'Standard':
-            newHint += ': Standard Chess';
+    value: function setHint(newHint) {
+      var hintKey = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+      if (hintKey === 0) {
+        this.setState({
+          hint: newHint
+        });
+      } else {
+        switch (hintKey) {
+          case 1:
+            this.setState({
+              hint: 'Select Standard Chess'
+            });
             break;
 
-          case 'Chess960':
-            newHint += ': In Chess960, your capital pieces start on the back rank as usual, but in a random order.';
+          case 2:
+            this.setState({
+              hint: 'In Chess960, your capital pieces start in a random order.'
+            });
             break;
 
-          case 'Pawn Clash':
-            newHint += ': In Pawn Clash, the pawns start on the 4th and 5th rank.';
+          case 3:
+            this.setState({
+              hint: 'In Pawn Clash, the pawns begin on the 4th and 5th ranks.'
+            });
+            break;
+
+          case 4:
+            this.setState({
+              hint: 'Check!'
+            });
             break;
 
           default:
             break;
         }
       }
-
-      this.setState({
-        hint: newHint
-      });
     }
   }, {
     key: "leaveGame",
@@ -6205,6 +7782,9 @@ function (_React$Component) {
   }, {
     key: "declineChallenge",
     value: function declineChallenge() {
+      this.waitSub.perform('relayDecline', {
+        'playerWhoChallenged': this.state.challenged.challenger
+      });
       this.setState({
         challenged: false
       });
@@ -6301,10 +7881,24 @@ function (_React$Component) {
       } else if (data.playerWhite) {
         if (data.playerWhite === this.props.user.username) {
           this.startGame('white', data.playerBlack, data.gameId, data.gameType, data.gameTime);
+          this.leaveLobby();
+          this.setState({
+            challengeMade: false
+          });
         }
 
         if (data.playerBlack === this.props.user.username) {
           this.startGame('black', data.playerWhite, data.gameId, data.gameType, data.gameTime);
+          this.leaveLobby();
+          this.setState({
+            challengeMade: false
+          });
+        }
+      } else if (data.decline) {
+        if (this.props.user.username === data.playerBeingRejected) {
+          this.setState({
+            challengeMade: false
+          });
         }
       } else {
         console.log('something else');
@@ -6342,17 +7936,17 @@ function (_React$Component) {
   }, {
     key: "lobbyButton",
     value: function lobbyButton() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (!this.state.visible) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           className: this.mobile ? "board_control_button_mobile" : "board_control_button",
           onClick: this.enterLobby,
           onMouseEnter: function onMouseEnter() {
-            _this2.setHint('Become visible for other players to challenge you');
+            _this3.setHint('Become visible for other players to challenge you');
           },
           onMouseLeave: function onMouseLeave() {
-            _this2.setHint(false);
+            _this3.setHint(false);
           }
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-sign-in-alt"
@@ -6362,7 +7956,7 @@ function (_React$Component) {
           className: this.mobile ? "board_control_button_mobile" : "board_control_button",
           onClick: this.leaveLobby,
           onMouseLeave: function onMouseLeave() {
-            _this2.setHint(false);
+            _this3.setHint(false);
           }
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-sign-in-alt",
@@ -6375,7 +7969,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       if (this.mobile) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -6392,9 +7986,9 @@ function (_React$Component) {
           className: "fas fa-chess-knight"
         }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.gameTypes.map(function (gameType) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: _this3.state.gameType === gameType ? "current_type_button_mobile" : "type_button_mobile",
+            className: _this4.state.gameType === gameType ? "current_type_button_mobile" : "type_button_mobile",
             onClick: function onClick() {
-              return _this3.setType(gameType);
+              return _this4.setType(gameType);
             },
             key: gameType
           }, gameType);
@@ -6411,9 +8005,9 @@ function (_React$Component) {
           className: "far fa-clock"
         }), this.times.map(function (time) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: _this3.state.gameTime === time ? "current_time_button_mobile" : "time_button_mobile",
+            className: _this4.state.gameTime === time ? "current_time_button_mobile" : "time_button_mobile",
             onClick: function onClick() {
-              return _this3.setTime(time);
+              return _this4.setTime(time);
             },
             key: time
           }, " ", time, ":00");
@@ -6422,7 +8016,7 @@ function (_React$Component) {
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-users"
         }), " Players"), this.lobbyButton(), this.state.playerList.map(function (player, idx) {
-          if (player === _this3.props.user.username) {
+          if (player === _this4.props.user.username) {
             return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               className: "player_bar_mobile",
               key: idx
@@ -6430,7 +8024,7 @@ function (_React$Component) {
               className: "player_icon_mobile"
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
               className: "fas fa-user"
-            })), player + ' (' + _this3.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            })), player + ' (' + _this4.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
               className: "time_button_mobile challenge_mobile",
               style: {
                 'color': 'lightgray'
@@ -6444,10 +8038,10 @@ function (_React$Component) {
               className: "player_icon_mobile"
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
               className: "fas fa-user"
-            })), player + ' (' + _this3.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            })), player + ' (' + _this4.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
               className: "time_button_mobile challenge_mobile",
               onClick: function onClick() {
-                return _this3.challengePlayer(player);
+                return _this4.challengePlayer(player);
               }
             }, " Challenge"));
           }
@@ -6457,12 +8051,12 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "play_bar",
         onMouseEnter: function onMouseEnter() {
-          _this3.setHint('Play live matches with other users');
+          _this4.setHint('Play live matches with other users');
         },
         onMouseLeave: function onMouseLeave() {
-          _this3.setHint(false);
+          _this4.setHint(false);
         }
-      }, this.state.hint ? this.showHint() : '', this.state.challenged ? this.showChallengedBox() : '', this.state.playing ? this.showVsBoard() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.state.challengePrompted ? this.showChallengeOptions() : '', this.state.hint ? this.showHint() : '', this.state.challenged ? this.showChallengedBox() : '', this.state.playing ? this.showVsBoard() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "controls_heading",
         style: {
           'height': '42px'
@@ -6473,108 +8067,78 @@ function (_React$Component) {
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-chess"
-      }), " Game Room ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-chess-knight"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.gameTypes.map(function (gameType) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this3.state.gameType === gameType ? "current_type_button" : "type_button",
-          onMouseEnter: function onMouseEnter() {
-            _this3.setHint('To challenge another player, first select the game type', gameType);
-          },
-          onMouseLeave: function onMouseLeave() {
-            _this3.setHint(false);
-          },
-          onClick: function onClick() {
-            return _this3.setType(gameType);
-          },
-          key: gameType
-        }, gameType);
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "smaller_heading"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          'margin': '5px'
-        }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "far fa-clock"
-      }), this.times.map(function (time) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this3.state.gameTime === time ? "current_time_button" : "time_button",
-          onMouseEnter: function onMouseEnter() {
-            _this3.setHint('Choose the amount of time on the clock for your challenge');
-          },
-          onMouseLeave: function onMouseLeave() {
-            _this3.setHint(false);
-          },
-          onClick: function onClick() {
-            return _this3.setTime(time);
-          },
-          key: time
-        }, " ", time, ":00");
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "small_heading",
-        onMouseEnter: function onMouseEnter() {
-          _this3.setHint('Here you see other users waiting to play');
-        },
-        onMouseLeave: function onMouseLeave() {
-          _this3.setHint(false);
-        }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-users"
-      }), " Players"), this.lobbyButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), " Game Room")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.lobbyButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "players_waiting"
-      }, this.state.playerList.length === 0 ? '(There are no players waiting)' : this.state.playerList.map(function (player, idx) {
-        if (player === _this3.props.user.username) {
+      }, this.state.playerList.map(function (player, idx) {
+        if (player === _this4.props.user.username) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_bar",
             key: idx,
             onMouseEnter: function onMouseEnter() {
-              _this3.setHint('You cannot challenge yourself');
+              _this4.setHint('You cannot challenge yourself');
             },
             onMouseLeave: function onMouseLeave() {
-              _this3.setHint(false);
+              _this4.setHint(false);
             }
-          }, player + ' (' + _this3.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "player_pic"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-user"
-          }), " (This is you)");
-        } else if (player === 'T1000robot') {
+          })), player + ' (' + _this4.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            style: {
+              'height': '25px',
+              'padding': '5px'
+            }
+          }, " (This is you)"));
+        } else if (player === _this4.state.challengePrompted || player === _this4.state.challengeMade) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_bar",
-            key: idx
-          }, player + ' (' + _this3.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "time_button challenge",
-            onClick: function onClick() {
-              return _this3.challengePlayer(player);
+            key: idx,
+            onMouseEnter: function onMouseEnter() {
+              _this4.setHint('You cannot challenge yourself');
+            },
+            onMouseLeave: function onMouseLeave() {
+              _this4.setHint(false);
             }
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
-            to: '/play',
-            style: {
-              'textDecoration': 'none',
-              'color': 'lightgray'
-            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "player_pic"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fas fa-robot"
-          }), " Challenge")));
+            className: "fas fa-user"
+          })), player + ' (' + _this4.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            style: {
+              'height': '25px',
+              'padding': '5px',
+              'color': 'gray'
+            }
+          }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Pending..."));
         } else {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_bar",
             key: idx,
             onMouseEnter: function onMouseEnter() {
-              _this3.setHint('Challenge this player to a game');
+              _this4.setHint('Challenge this player to a game');
             },
             onMouseLeave: function onMouseLeave() {
-              _this3.setHint(false);
+              _this4.setHint(false);
             }
-          }, player + ' (' + _this3.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "time_button challenge",
-            onClick: function onClick() {
-              return _this3.challengePlayer(player);
-            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "player_pic"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-user"
-          }), " Challenge"));
+          })), player + ' (' + _this4.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "time_button challenge",
+            onClick: function onClick() {
+              return _this4.promptChallenge(player);
+            }
+          }, " Challenge Player"));
         }
-      }))));
+      })), this.state.playerList.length === 0 ? '(Lobby is empty)' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+        to: '/play'
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "board_control_button"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-robot"
+      }), " Play Computer"))));
     }
   }]);
 
@@ -6614,14 +8178,733 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 /***/ }),
 
+/***/ "./frontend/components/profile/create_post/create_post.jsx":
+/*!*****************************************************************!*\
+  !*** ./frontend/components/profile/create_post/create_post.jsx ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var CreatePost =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(CreatePost, _React$Component);
+
+  function CreatePost(props) {
+    var _this;
+
+    _classCallCheck(this, CreatePost);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(CreatePost).call(this, props));
+    _this.state = {
+      content: _this.props.post.content
+    };
+    _this.updateContent = _this.updateContent.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(CreatePost, [{
+    key: "updateContent",
+    value: function updateContent(e) {
+      this.setState({
+        content: e.target.value
+      });
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(e) {
+      e.preventDefault();
+      this.props.createPost({
+        content: this.state.content,
+        post_type: "plain"
+      });
+      this.setState({
+        content: ''
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "post_box"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "post_header"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "post_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-comment-medical"
+      }), "What say you?")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "post_content"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "content_box",
+        type: "text",
+        value: this.state.content,
+        placeholder: "Add your two cents...",
+        onChange: this.updateContent
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: this.state.content.length > 0 ? "active_button" : "post_button",
+        type: "submit",
+        disabled: this.state.content.length > 0 ? "" : "disabled"
+      }, "Post"))));
+    }
+  }]);
+
+  return CreatePost;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (CreatePost);
+
+/***/ }),
+
+/***/ "./frontend/components/profile/create_post/create_post_container.js":
+/*!**************************************************************************!*\
+  !*** ./frontend/components/profile/create_post/create_post_container.js ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_post_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../actions/post_actions */ "./frontend/actions/post_actions.js");
+/* harmony import */ var _create_post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./create_post */ "./frontend/components/profile/create_post/create_post.jsx");
+
+
+
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    post: {
+      content: ''
+    }
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    createPost: function createPost(post) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["createPost"])(post));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_create_post__WEBPACK_IMPORTED_MODULE_2__["default"]));
+
+/***/ }),
+
+/***/ "./frontend/components/profile/feed_item/feed_item.jsx":
+/*!*************************************************************!*\
+  !*** ./frontend/components/profile/feed_item/feed_item.jsx ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
+/* harmony import */ var _chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../chess_table/chess_table_container */ "./frontend/components/chess_table/chess_table_container.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+var FeedItem =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(FeedItem, _React$Component);
+
+  function FeedItem(props) {
+    var _this;
+
+    _classCallCheck(this, FeedItem);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(FeedItem).call(this, props));
+    _this.state = {
+      post: _this.props.post,
+      content: _this.props.post.content,
+      mode: 'display'
+    };
+
+    if (_this.state.post.type === 'sequence') {
+      _this.setState({
+        content: 'This User Posted a Sequence'
+      });
+    }
+
+    _this.editBar = _this.editBar.bind(_assertThisInitialized(_this));
+    _this.deletePost = _this.deletePost.bind(_assertThisInitialized(_this));
+    _this.editPost = _this.editPost.bind(_assertThisInitialized(_this));
+    _this.handleInput = _this.handleInput.bind(_assertThisInitialized(_this));
+    _this.updatePost = _this.updatePost.bind(_assertThisInitialized(_this));
+    _this.buttonSpaces = _this.buttonSpaces.bind(_assertThisInitialized(_this));
+    _this.showSeq = _this.showSeq.bind(_assertThisInitialized(_this));
+    _this.seeSeq = false;
+    _this.toggleShow = _this.toggleShow.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(FeedItem, [{
+    key: "toggleShow",
+    value: function toggleShow(e) {
+      this.seeSeq = this.seeSeq ? false : true;
+      this.setState({});
+    }
+  }, {
+    key: "showSeq",
+    value: function showSeq() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Redirect"], {
+        to: {
+          pathname: '/show',
+          state: {
+            post: this.props.post
+          }
+        }
+      }));
+    }
+  }, {
+    key: "buttonSpaces",
+    value: function buttonSpaces() {
+      var answer = [];
+
+      for (var i = 0; i < 64; i++) {
+        if (Math.floor(i / 8) % 2 === 0) {
+          answer.push(i % 2 === 0 ? 'w' : 'b');
+        } else {
+          answer.push(i % 2 === 0 ? 'b' : 'w');
+        }
+      }
+
+      return answer;
+    }
+  }, {
+    key: "updatePost",
+    value: function updatePost(e) {
+      var post = Object.assign(this.props.post, {
+        content: this.state.content
+      });
+      this.props.updatePost(post);
+      this.setState({
+        mode: 'display'
+      });
+    }
+  }, {
+    key: "handleInput",
+    value: function handleInput(e) {
+      this.setState({
+        content: e.target.value
+      });
+    }
+  }, {
+    key: "deletePost",
+    value: function deletePost(e) {
+      this.props.deletePost(this.props.post.id);
+    }
+  }, {
+    key: "editPost",
+    value: function editPost(e) {
+      this.setState({
+        mode: 'edit'
+      });
+    }
+  }, {
+    key: "editBar",
+    value: function editBar() {
+      if (this.props.post.post_type === 'plain') {
+        if (this.state.mode === 'display') {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "edit_bar"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "edit_button",
+            onClick: this.editPost
+          }, "edit"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "edit_button",
+            onClick: this.deletePost
+          }, "delete"));
+        } else {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "edit_bar"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "edit_button",
+            onClick: this.updatePost
+          }, "save changes"));
+        }
+      } else {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "edit_bar"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "edit_button",
+          onClick: this.deletePost
+        }, "delete"));
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var post = this.props.post;
+
+      if (post.post_type === 'plain') {
+        if (this.state.mode === 'display') {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_box"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_header"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_heading"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "time_stamp"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, post.created_at.slice(0, 10))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-comment"
+          }), post.author, " (", post.author_rating, "):")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_content"
+          }, this.props.currentUserId.toString() === post.author_id.toString() || this.props.currentUserId.toString() === 'admin' ? this.editBar() : '', post.content));
+        } else {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_box"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_header"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_heading"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "time_stamp"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, post.created_at.slice(0, 10))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-comment"
+          }), post.author, " (", post.author_rating, "):")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "post_content"
+          }, this.props.currentUserId.toString() === post.author_id.toString() ? this.editBar() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+            type: "text",
+            className: "edit_box",
+            value: this.state.content,
+            onChange: this.handleInput
+          })));
+        }
+      } else if (post.post_type === 'sequence') {
+        var description = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_1__["stringToDescription"])(this.props.post.content);
+        var title = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_1__["stringToTitle"])(this.props.post.content);
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "post_box"
+        }, this.seeSeq ? this.showSeq() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "post_header"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "post_heading"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "time_stamp"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, post.created_at.slice(0, 10))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-comment"
+        }), post.author, " (", post.author_rating, ") shared a sequence:")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "post_content"
+        }, this.props.currentUserId.toString() === post.author_id.toString() ? this.editBar() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "seeSeqButton"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "seeSeqTriangle",
+          onClick: this.toggleShow
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-play"
+        })), this.buttonSpaces().map(function (color, idx) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            key: idx,
+            className: color + " tiny"
+          });
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "seq_title"
+        }, title), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), description));
+      } else {
+        return null;
+      }
+    }
+  }]);
+
+  return FeedItem;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (FeedItem);
+
+/***/ }),
+
+/***/ "./frontend/components/profile/feed_item/feed_item_container.js":
+/*!**********************************************************************!*\
+  !*** ./frontend/components/profile/feed_item/feed_item_container.js ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_post_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../actions/post_actions */ "./frontend/actions/post_actions.js");
+/* harmony import */ var _feed_item__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./feed_item */ "./frontend/components/profile/feed_item/feed_item.jsx");
+
+
+
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    post: ownProps.post,
+    currentUserId: state.session.currentUserId
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    updatePost: function updatePost(post) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["updatePost"])(post));
+    },
+    deletePost: function deletePost(id) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["deletePost"])(id));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_feed_item__WEBPACK_IMPORTED_MODULE_2__["default"]));
+
+/***/ }),
+
+/***/ "./frontend/components/profile/game_item.jsx":
+/*!***************************************************!*\
+  !*** ./frontend/components/profile/game_item.jsx ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var GameItem =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(GameItem, _React$Component);
+
+  function GameItem(props) {
+    var _this;
+
+    _classCallCheck(this, GameItem);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(GameItem).call(this, props));
+    _this.resultMessage = _this.resultMessage.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(GameItem, [{
+    key: "resultMessage",
+    value: function resultMessage() {
+      switch (this.props.game.ending) {
+        case 'accept':
+          return ' Draw by agreement';
+
+        case 'resign':
+          return ' ' + this.props.game.winner + ' won by resignation';
+
+        case 'Stalemate':
+          return ' Game ended in stalemate';
+
+        case 'timeout':
+          return ' ' + this.props.game.winner + ' won on time';
+
+        default:
+          return ' ' + this.props.game.winner + ' won by checkmate';
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "game_list_item"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user",
+        style: {
+          'margin': '5px',
+          'color': 'white'
+        }
+      }), this.props.game.player_white.username, " -", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user",
+        style: {
+          'margin': '5px',
+          'color': 'black'
+        }
+      }), this.props.game.player_black.username, " -", this.resultMessage(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "time_stamp"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, this.props.game.created_at.slice(0, 10))));
+    }
+  }]);
+
+  return GameItem;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (GameItem);
+
+/***/ }),
+
+/***/ "./frontend/components/profile/profile.jsx":
+/*!*************************************************!*\
+  !*** ./frontend/components/profile/profile.jsx ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _create_post_create_post_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./create_post/create_post_container */ "./frontend/components/profile/create_post/create_post_container.js");
+/* harmony import */ var _feed_item_feed_item_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./feed_item/feed_item_container */ "./frontend/components/profile/feed_item/feed_item_container.js");
+/* harmony import */ var _game_item__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./game_item */ "./frontend/components/profile/game_item.jsx");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+var Feed =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Feed, _React$Component);
+
+  function Feed(props) {
+    var _this;
+
+    _classCallCheck(this, Feed);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Feed).call(this, props));
+    _this.games = [];
+    _this.state = {
+      posts: _this.props.posts,
+      games: []
+    };
+    return _this;
+  }
+
+  _createClass(Feed, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.mounted = true;
+      this.props.fetchAllPosts();
+      $.ajax({
+        url: "/api/games/".concat(this.props.userId),
+        method: 'GET'
+      }).then(function (res) {
+        //this.setState({games: Object.values(res)});
+        _this2.games = Object.values(res);
+        if (_this2.mounted) _this2.setState({});
+      });
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.mounted = false;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      var posts = this.props.posts.reverse();
+      var games = Array.from(this.games).reverse();
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "feed"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "profile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "profile_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user",
+        style: {
+          'marginRight': '10px'
+        }
+      }), this.props.user.username), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "profile_content"
+      }, "Current Rating: ", this.props.user.rating, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Games to date: ", this.games.length, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Game History:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.games.length === 0 ? '(no games to show)' : games.map(function (game, idx) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: idx
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_item__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          game: game
+        }));
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "profile_heading"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-comment",
+        style: {
+          'marginRight': '10px'
+        }
+      }), "Your Posts:")), posts.map(function (post, idx) {
+        if (post.author === _this3.props.user.username) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            key: idx
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_feed_item_feed_item_container__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            post: post
+          }));
+        } else {
+          return '';
+        }
+      }));
+    }
+  }]);
+
+  return Feed;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Feed);
+
+/***/ }),
+
+/***/ "./frontend/components/profile/profile_container.js":
+/*!**********************************************************!*\
+  !*** ./frontend/components/profile/profile_container.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_post_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/post_actions */ "./frontend/actions/post_actions.js");
+/* harmony import */ var _profile__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./profile */ "./frontend/components/profile/profile.jsx");
+
+
+
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    userId: state.session.currentUserId,
+    user: state.entities.users[state.session.currentUserId],
+    posts: Object.values(state.entities.posts)
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    createPost: function createPost(post) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["createPost"])(post));
+    },
+    deletePost: function deletePost(id) {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["deletePost"])(id));
+    },
+    fetchAllPosts: function fetchAllPosts() {
+      return dispatch(Object(_actions_post_actions__WEBPACK_IMPORTED_MODULE_1__["fetchAllPosts"])());
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_profile__WEBPACK_IMPORTED_MODULE_2__["default"]));
+
+/***/ }),
+
 /***/ "./frontend/components/profile_home.jsx":
 /*!**********************************************!*\
   !*** ./frontend/components/profile_home.jsx ***!
   \**********************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/Users/info/Desktop/checkMatey/checkMatey/frontend/components/profile_home.jsx'");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _menu_menu_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./menu/menu_container */ "./frontend/components/menu/menu_container.js");
+/* harmony import */ var _profile_profile_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./profile/profile_container */ "./frontend/components/profile/profile_container.js");
+/* harmony import */ var _play_bar_play_bar_container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./play_bar/play_bar_container */ "./frontend/components/play_bar/play_bar_container.js");
+
+
+
+
+
+var ProfileHome = function ProfileHome(props) {
+  if (typeof window.orientation !== 'undefined') {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_play_bar_play_bar_container__WEBPACK_IMPORTED_MODULE_3__["default"], null));
+  } else {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "home"
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_menu_menu_container__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_profile_profile_container__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_play_bar_play_bar_container__WEBPACK_IMPORTED_MODULE_3__["default"], null)));
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (ProfileHome);
 
 /***/ }),
 
@@ -7160,14 +9443,151 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 /***/ }),
 
+/***/ "./frontend/components/splash.jsx":
+/*!****************************************!*\
+  !*** ./frontend/components/splash.jsx ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+var Splash =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Splash, _React$Component);
+
+  function Splash(props) {
+    var _this;
+
+    _classCallCheck(this, Splash);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Splash).call(this, props));
+    _this.demoLogin = _this.demoLogin.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(Splash, [{
+    key: "demoLogin",
+    value: function demoLogin(e) {
+      e.preventDefault();
+      this.props.login({
+        username: 'DemoUser',
+        password: '123456'
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "splash"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "splash_top"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "top_content"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "splash_set"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "splash_top_words"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "splash_logo"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Play Chess on the High Seas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Play with over 2.5 members")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Improve over time")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Learn from your mistakes"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: "/play"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "play_now"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-knight"
+      }), " Play Now"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "splash_bar"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        onClick: this.demoLogin,
+        className: "splash_option"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-chess-pawn"
+      }), " Demo Login"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        className: "splash_option",
+        to: "/signup"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user-plus"
+      }), " Sign Up"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        className: "splash_option",
+        to: "/login"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-sign-in-alt"
+      }), " Log In"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        className: "splash_option",
+        to: "/play"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-robot"
+      }), " Play Computer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        className: "splash_option",
+        to: "/notChess"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-cubes"
+      }), " I Prefer Tetris")));
+    }
+  }]);
+
+  return Splash;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Splash);
+
+/***/ }),
+
 /***/ "./frontend/components/splash_container.js":
 /*!*************************************************!*\
   !*** ./frontend/components/splash_container.js ***!
   \*************************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/Users/info/Desktop/checkMatey/checkMatey/frontend/components/splash_container.js'");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_session_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/session_actions */ "./frontend/actions/session_actions.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _splash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./splash */ "./frontend/components/splash.jsx");
+
+
+
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    login: function login(user) {
+      return dispatch(Object(_actions_session_actions__WEBPACK_IMPORTED_MODULE_0__["login"])(user));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(_splash__WEBPACK_IMPORTED_MODULE_2__["default"]));
 
 /***/ }),
 
@@ -7176,9 +9596,75 @@ throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index
   !*** ./frontend/components/tutorial.jsx ***!
   \******************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/Users/info/Desktop/checkMatey/checkMatey/frontend/components/tutorial.jsx'");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var Tutorial =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Tutorial, _React$Component);
+
+  function Tutorial(props) {
+    var _this;
+
+    _classCallCheck(this, Tutorial);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Tutorial).call(this, props));
+    _this.backToHome = _this.backToHome.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(Tutorial, [{
+    key: "backToHome",
+    value: function backToHome(e) {
+      this.props.history.push('/home');
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "modal_back",
+        onClick: this.backToHome
+      }, "X", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "video"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("iframe", {
+        width: "100%",
+        height: "100%",
+        src: "https://www.youtube.com/embed/hL5pk2PQe5k",
+        frameBorder: "0",
+        allow: "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture",
+        allowFullScreen: true
+      })));
+    }
+  }]);
+
+  return Tutorial;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Tutorial);
 
 /***/ }),
 
@@ -7407,9 +9893,31 @@ var sessionReducer = function sessionReducer() {
   !*** ./frontend/reducers/ui_reducer.js ***!
   \*****************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/Users/info/Desktop/checkMatey/checkMatey/frontend/reducers/ui_reducer.js'");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_ui_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/ui_actions */ "./frontend/actions/ui_actions.js");
+
+
+var uiReducer = function uiReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+  Object.freeze(state);
+  var newState = Object.assign({}, state);
+
+  switch (action.type) {
+    case _actions_ui_actions__WEBPACK_IMPORTED_MODULE_0__["TOGGLE_HINTS"]:
+      return Object.assign(newState, {
+        hints: !newState.hints
+      });
+
+    default:
+      return state;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (uiReducer);
 
 /***/ }),
 

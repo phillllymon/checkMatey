@@ -52,6 +52,13 @@ class WaitingChannel < ApplicationCable::Channel
     })
   end
 
+  def relayDecline(challenge)
+    ActionCable.server.broadcast("WaitingChannel", {
+      playerBeingRejected: challenge['playerWhoChallenged'], 
+      decline: true
+    })
+  end
+
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
     #stop_all_streams
