@@ -34,19 +34,24 @@ class Menu extends React.Component {
                             X
                         </div>
                         <center>
+                            
                             <div style={{ 'fontSize': '150%' }}>
                                 Welcome to CheckMatey!
                             </div>
+                            
                             <br />
+                            
                             <br />
+                            <div className="med_pirate" style={{'marginRight': '5%', 'marginLeft': '5%'}}></div>
                             You are logged in as DemoUser.
                             <br />
                             <br />
                             Click the button below to see a quick tour of the main features.
+                            
                             <br />
                             <br />
                             <br />
-
+                            
 
                             <button
                                 className="board_control_button"
@@ -59,6 +64,7 @@ class Menu extends React.Component {
                                 Begin Tour
                     </button>
                         </center>
+                        
                     </div>
                 );
             case 2:

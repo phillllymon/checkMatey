@@ -21,7 +21,8 @@ class VsBoard extends React.Component {
             playerTime: [this.props.gameTime, 0],
             opponentTime: [this.props.gameTime, 0],
             chatInput: '',
-            hint: false
+            hint: false,
+            resizing: false
         }
         this.chat = [],
         this.dragPiece = this.dragPiece.bind(this);
@@ -56,7 +57,37 @@ class VsBoard extends React.Component {
         this.sendChat = this.sendChat.bind(this);
         this.showHint = this.showHint.bind(this);
         this.setHint = this.setHint.bind(this);
+
+        this.resize = this.resize.bind(this);
+        this.beginResize = this.beginResize.bind(this);
+        this.endResize = this.endResize.bind(this);
+
+        this.controlsHeight = 0;
+        this.movesHeight = 0;
+        this.chatHeight = 0;
         
+    }
+
+    resize(e) {
+        if (this.state.resizing) {
+            let diff = this.resizeFrom - e.clientY;
+            this.resizeFrom = e.clientY;
+            if (this.movesHeight - diff > 10 && this.chatHeight + diff > 10){
+                this.movesHeight -= diff;
+                this.chatHeight += diff;
+                this.setState({});
+            }
+        }
+    }
+
+    beginResize(e) {
+        this.resizeFrom = e.clientY;
+        this.setState({resizing: true});
+    }
+
+    endResize(e) {
+        this.setState({resizing: false});
+        this.resizeFrom = null;
     }
 
     showHint() {
@@ -74,7 +105,8 @@ class VsBoard extends React.Component {
         this.setState({ hint: newHint });
     }
 
-    sendChat() {
+    sendChat(e) {
+        e.preventDefault();
         this.playSub.perform('relayMessage', { 'gameId': this.props.gameId, 'chat': this.state.chatInput, 'player': this.player });
         this.setState({chatInput: ''});
     }
@@ -318,6 +350,11 @@ class VsBoard extends React.Component {
                 }
             }
         );
+        this.controlsHeight = (0.6 * window.innerWidth < 0.9 * window.innerHeight ?
+            0.6 * window.innerWidth :
+            0.9 * window.innerHeight);
+        this.movesHeight = this.controlsHeight - 486;
+        this.chatHeight = 80;
         this.startGame();
         this.setState({});
         this.startClock();
@@ -462,10 +499,6 @@ class VsBoard extends React.Component {
 
     render() {
         let highlightSquare = this.highlightSquare;
-        let controlsHeight = (0.6 * window.innerWidth < 0.9 * window.innerHeight ?
-            0.6 * window.innerWidth :
-            0.9 * window.innerHeight);
-        let movesHeight = controlsHeight - 486;
         return (
             <div className="chess_table">
                 {this.state.hint ? this.showHint() : ''}
@@ -473,6 +506,7 @@ class VsBoard extends React.Component {
                     className={this.flipped ? "board flipped" : "board"}
                     onMouseMove={this.dragPiece}
                     onMouseLeave={this.abortDrag}
+                    onMouseUp={this.abortDrag}
                 >
                     {this.state.dragging ? this.displayDragPiece() : ''}
                     {this.state.gameIsDone ? this.showEnding(this.state.gameIsDone) : ''}
@@ -525,7 +559,7 @@ class VsBoard extends React.Component {
                         })
                     }
                 </div>
-                <div className="board_controls">
+                <div className="board_controls" onMouseUp={this.endResize}>
                     <center>
                     <div className="controls_heading">
                             <i className="fas fa-chess-knight"></i>
@@ -596,7 +630,7 @@ class VsBoard extends React.Component {
                     </div>
 
                     <div className="outer_list">
-                        <div style={{'height': `${movesHeight}px`}} className="moves_list">
+                        <div style={{'height': `${this.movesHeight}px`}} className="moves_list">
                             {
                                 this.game.moves.map((move, idx) => {
                                     return (
@@ -609,25 +643,31 @@ class VsBoard extends React.Component {
                         </div>
                     </div>
                     </center>
-                    <div className="controls_heading">
+                    <div className="controls_heading" onMouseMove={this.resize} style={{'position': 'relative'}}>
+                        <div 
+                            className="control_bar" 
+                            onMouseDown={this.beginResize}
+                        ></div>
                         <i className="fas fa-comments"></i>
-                        <input
-                            style={{
-                                'marginRight': '5px',
-                                'marginLeft': '5px',
-                                'width': '100%'
-                            }}
-                            type="text"
-                            value={this.state.chatInput}
-                            onChange={this.handleChatInput}
-                        />
-                        <button className="send_button" onClick={this.sendChat}>send</button>
+                        <form>
+                            <input
+                                style={{
+                                    'marginRight': '5px',
+                                    'marginLeft': '5px',
+                                    'width': '60%'
+                                }}
+                                type="text"
+                                value={this.state.chatInput}
+                                onChange={this.handleChatInput}
+                            />
+                            <input type="submit" value="Send" id="send_chat" className="send_button" onClick={this.sendChat} />
+                        </form>
                     </div>
-                    <div className="chat">
+                    <div className="chat" style={{'height': `${this.chatHeight}px`}}>
                     {
                         this.chat.map( (message, idx) => {
                             return (
-                                <div className={idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not"} key={idx}>
+                                <div className={idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not"} style={{'paddingLeft': '4px'}} key={idx}>
                                     <i style= {{'fontSize': '60%'}}>{message[0]}:</i>
                                     <br/>
                                     {message[1]}

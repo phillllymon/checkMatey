@@ -3440,7 +3440,8 @@ function (_React$Component) {
       playerTime: [_this.props.gameTime, 0],
       opponentTime: [_this.props.gameTime, 0],
       chatInput: '',
-      hint: false
+      hint: false,
+      resizing: false
     };
     _this.chat = [], _this.dragPiece = _this.dragPiece.bind(_assertThisInitialized(_this));
     _this.beginDrag = _this.beginDrag.bind(_assertThisInitialized(_this));
@@ -3471,10 +3472,46 @@ function (_React$Component) {
     _this.sendChat = _this.sendChat.bind(_assertThisInitialized(_this));
     _this.showHint = _this.showHint.bind(_assertThisInitialized(_this));
     _this.setHint = _this.setHint.bind(_assertThisInitialized(_this));
+    _this.resize = _this.resize.bind(_assertThisInitialized(_this));
+    _this.beginResize = _this.beginResize.bind(_assertThisInitialized(_this));
+    _this.endResize = _this.endResize.bind(_assertThisInitialized(_this));
+    _this.controlsHeight = 0;
+    _this.movesHeight = 0;
+    _this.chatHeight = 0;
     return _this;
   }
 
   _createClass(VsBoard, [{
+    key: "resize",
+    value: function resize(e) {
+      if (this.state.resizing) {
+        var diff = this.resizeFrom - e.clientY;
+        this.resizeFrom = e.clientY;
+
+        if (this.movesHeight - diff > 10 && this.chatHeight + diff > 10) {
+          this.movesHeight -= diff;
+          this.chatHeight += diff;
+          this.setState({});
+        }
+      }
+    }
+  }, {
+    key: "beginResize",
+    value: function beginResize(e) {
+      this.resizeFrom = e.clientY;
+      this.setState({
+        resizing: true
+      });
+    }
+  }, {
+    key: "endResize",
+    value: function endResize(e) {
+      this.setState({
+        resizing: false
+      });
+      this.resizeFrom = null;
+    }
+  }, {
     key: "showHint",
     value: function showHint() {
       if (this.props.hints) {
@@ -3496,7 +3533,8 @@ function (_React$Component) {
     }
   }, {
     key: "sendChat",
-    value: function sendChat() {
+    value: function sendChat(e) {
+      e.preventDefault();
       this.playSub.perform('relayMessage', {
         'gameId': this.props.gameId,
         'chat': this.state.chatInput,
@@ -3793,6 +3831,9 @@ function (_React$Component) {
           _this3.receiveBroadcast(data);
         }
       });
+      this.controlsHeight = 0.6 * window.innerWidth < 0.9 * window.innerHeight ? 0.6 * window.innerWidth : 0.9 * window.innerHeight;
+      this.movesHeight = this.controlsHeight - 486;
+      this.chatHeight = 80;
       this.startGame();
       this.setState({});
       this.startClock();
@@ -3962,14 +4003,13 @@ function (_React$Component) {
       var _this4 = this;
 
       var highlightSquare = this.highlightSquare;
-      var controlsHeight = 0.6 * window.innerWidth < 0.9 * window.innerHeight ? 0.6 * window.innerWidth : 0.9 * window.innerHeight;
-      var movesHeight = controlsHeight - 486;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "chess_table"
       }, this.state.hint ? this.showHint() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.flipped ? "board flipped" : "board",
         onMouseMove: this.dragPiece,
-        onMouseLeave: this.abortDrag
+        onMouseLeave: this.abortDrag,
+        onMouseUp: this.abortDrag
       }, this.state.dragging ? this.displayDragPiece() : '', this.state.gameIsDone ? this.showEnding(this.state.gameIsDone) : '', this.grid.map(function (row, rIdx) {
         return row.map(function (spot, cIdx) {
           if (highlightSquare && highlightSquare[0] === rIdx && highlightSquare[1] === cIdx) {
@@ -3999,7 +4039,8 @@ function (_React$Component) {
           }));
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "board_controls"
+        className: "board_controls",
+        onMouseUp: this.endResize
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "controls_heading"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -4114,7 +4155,7 @@ function (_React$Component) {
         className: "outer_list"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
-          'height': "".concat(movesHeight, "px")
+          'height': "".concat(this.movesHeight, "px")
         },
         className: "moves_list"
       }, this.game.moves.map(function (move, idx) {
@@ -4123,26 +4164,42 @@ function (_React$Component) {
           key: idx
         }, move);
       })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "controls_heading"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "controls_heading",
+        onMouseMove: this.resize,
+        style: {
+          'position': 'relative'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "control_bar",
+        onMouseDown: this.beginResize
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-comments"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         style: {
           'marginRight': '5px',
           'marginLeft': '5px',
-          'width': '100%'
+          'width': '60%'
         },
         type: "text",
         value: this.state.chatInput,
         onChange: this.handleChatInput
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "submit",
+        value: "Send",
+        id: "send_chat",
         className: "send_button",
         onClick: this.sendChat
-      }, "send")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "chat"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "chat",
+        style: {
+          'height': "".concat(this.chatHeight, "px")
+        }
       }, this.chat.map(function (message, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: idx % 2 === 0 ? "inactive_move_light not" : "inactive_move_dark not",
+          style: {
+            'paddingLeft': '4px'
+          },
           key: idx
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           style: {
@@ -5697,7 +5754,13 @@ function (_React$Component) {
             style: {
               'fontSize': '150%'
             }
-          }, "Welcome to CheckMatey!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "You are logged in as DemoUser.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Click the button below to see a quick tour of the main features.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          }, "Welcome to CheckMatey!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "med_pirate",
+            style: {
+              'marginRight': '5%',
+              'marginLeft': '5%'
+            }
+          }), "You are logged in as DemoUser.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Click the button below to see a quick tour of the main features.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "board_control_button",
             style: {
               'backgroundColor': 'orange',
@@ -9896,6 +9959,8 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "splash_top"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "ship"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "top_content"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "splash_set"

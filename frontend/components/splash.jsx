@@ -16,6 +16,9 @@ class Splash extends React.Component{
         return (
             <div id="splash">
                 <div id="splash_top">
+                    <div id="ship">
+                        
+                    </div>
                     <div id="top_content">
                         <div id="splash_set"></div>
                         <div id="splash_top_words">
