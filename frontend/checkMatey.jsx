@@ -27,7 +27,7 @@ import * as PostActions from './actions/post_actions';
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    let preloadedState = {ui: {hints: true}};
+    let preloadedState = {ui: {hints: true, tour: false}};
     if (window.currentUser){
         preloadedState = {
             entities: {

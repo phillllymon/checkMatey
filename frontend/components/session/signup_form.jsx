@@ -42,6 +42,7 @@ class SignupForm extends React.Component {
 
     demoLogin(e) {
         e.preventDefault();
+        this.props.setTour(1);
         this.props.login({ username: 'DemoUser', password: '123456' });
         <Redirect to='/home' />
     }

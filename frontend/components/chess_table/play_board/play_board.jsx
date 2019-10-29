@@ -129,7 +129,10 @@ class PlayBoard extends React.Component {
                             'backgroundColor': 'orange',
                             'color': 'white'
                         }}
-                        onClick={() => this.props.login({ username: 'DemoUser', password: '123456' })}
+                        onClick={() => {
+                            this.props.setTour(1);
+                            this.props.login({ username: 'DemoUser', password: '123456' });
+                        }}
                     >
                         Demo Login
                         </button>
@@ -155,6 +158,7 @@ class PlayBoard extends React.Component {
                     <div
                         className="dismiss_circle"
                         style={{
+                            'display': this.state.hint === 'Check!' ? 'flex' : 'none',
                             'position': 'absolute',
                             'left': '10px',
                             'top': '10px'

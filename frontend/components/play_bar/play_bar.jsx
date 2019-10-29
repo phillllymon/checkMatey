@@ -372,6 +372,7 @@ class PlayBar extends React.Component {
         if (!this.state.visible){
             return (
                 <button
+                    id="lobby_button"
                     className={this.mobile ? "board_control_button_mobile" : "board_control_button"}
                     onClick={this.enterLobby}
                     onMouseEnter={() => { this.setHint('Become visible for other players to challenge you') }}
@@ -554,6 +555,7 @@ class PlayBar extends React.Component {
                 
                     <Link to={'/play'}>
                     <button
+                        id="play_computer"
                         className="board_control_button"
                     >
                         <i className="fas fa-robot"></i> Play Computer

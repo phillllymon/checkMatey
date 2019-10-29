@@ -17,6 +17,342 @@ class Menu extends React.Component {
         this.mobile = typeof window.orientation !== 'undefined';
         this.showHint = this.showHint.bind(this);
         this.setHint = this.setHint.bind(this);
+        this.tourWindow = this.tourWindow.bind(this);
+    }
+
+    tourWindow() {
+        switch (this.props.tour) {
+            case 1:
+                return (
+                    <div
+                        className="tour"
+                    >
+                        <div
+                            className="dismiss_circle"
+                            onClick={() => this.props.setTour(false)}
+                        >
+                            X
+                        </div>
+                        <center>
+                            <div style={{ 'fontSize': '150%' }}>
+                                Welcome to CheckMatey!
+                            </div>
+                            <br />
+                            <br />
+                            You are logged in as DemoUser.
+                            <br />
+                            <br />
+                            Click the button below to see a quick tour of the main features.
+                            <br />
+                            <br />
+                            <br />
+
+
+                            <button
+                                className="board_control_button"
+                                style={{
+                                    'backgroundColor': 'orange',
+                                    'color': 'white'
+                                }}
+                                onClick={() => this.props.setTour(2)}
+                            >
+                                Begin Tour
+                    </button>
+                        </center>
+                    </div>
+                );
+            case 2:
+                document.getElementById("new_post").focus();
+                return (
+                    <div
+                        className="tour"
+                        style={{
+                            'top': '200px',
+                            'width': '400px'
+                        }}
+                    >
+                        <div
+                            className="dismiss_circle"
+                            onClick={() => this.props.setTour(false)}
+                        >
+                            X
+                        </div>
+                        <center>
+                            <div style={{ 'fontSize': '150%' }}>
+                                <i className="fas fa-arrow-up"></i> Share your thoughts
+                            </div>
+                            <br />
+                            <br />
+                            This is the community forum for discussing general chess and pirate-related topics.
+                            <br />
+                            <br />
+                        
+                        </center>
+                        <div className="tour_buttons">
+                            <button
+                                className="board_control_button"
+                                style={{
+                                    'backgroundColor': 'orange',
+                                    'color': 'white'
+                                }}
+                                onClick={() => this.props.setTour(this.props.tour - 1)}
+                            >
+                                <i className="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <div>
+                                1/5
+                            </div>
+                            <button
+                                className="board_control_button"
+                                style={{
+                                    'backgroundColor': 'orange',
+                                    'color': 'white'
+                                }}
+                                onClick={() => this.props.setTour(this.props.tour + 1)}
+                            >
+                                Continue <i className="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                );
+            case 3:
+                let lobbyButton = document.getElementById("lobby_button");
+                lobbyButton.focus();
+                let leftPos = lobbyButton.offsetLeft - 30;
+                let topPos = lobbyButton.offsetTop;
+                return (
+                    <div
+                        className="tour"
+                        style={{
+                            'top': topPos,
+                            'left': leftPos,
+                            'transform': 'translate(-100%, 0)',
+                            'width': '400px'
+                        }}
+                    >
+                        <div
+                            className="dismiss_circle"
+                            onClick={() => this.props.setTour(false)}
+                        >
+                            X
+                        </div>
+                        <center>
+                            <div style={{ 'fontSize': '150%' }}>
+                                <i className="fas fa-arrow-right" style={{'float': 'right'}}></i> Game Room
+                            </div>
+                            <br />
+                            <br />
+                            Enter the lobby to be visible to other players. You can challenge any player in the lobby to a match.
+                            <br />
+                            <br />
+
+                        </center>
+                        <div className="tour_buttons">
+                            <button
+                                className="board_control_button"
+                                style={{
+                                    'backgroundColor': 'orange',
+                                    'color': 'white'
+                                }}
+                                onClick={() => this.props.setTour(this.props.tour - 1)}
+                            >
+                                <i className="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <div>
+                                2/5
+                            </div>
+                            <button
+                                className="board_control_button"
+                                style={{
+                                    'backgroundColor': 'orange',
+                                    'color': 'white'
+                                }}
+                                onClick={() => this.props.setTour(this.props.tour + 1)}
+                            >
+                                Continue <i className="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                );
+            case 4:
+                let compButton = document.getElementById("play_computer");
+                compButton.focus();
+                let compLeftPos = compButton.offsetLeft - 30;
+                let compTopPos = compButton.offsetTop;
+                return (
+                    <div
+                        className="tour"
+                        style={{
+                            'top': compTopPos,
+                            'left': compLeftPos,
+                            'transform': 'translate(-100%, 0)',
+                            'width': '400px'
+                        }}
+                    >
+                        <div
+                            className="dismiss_circle"
+                            onClick={() => this.props.setTour(false)}
+                        >
+                            X
+                        </div>
+                        <center>
+                            <div style={{ 'fontSize': '150%' }}>
+                                <i className="fas fa-arrow-right" style={{ 'float': 'right' }}></i> Play Computer
+                            </div>
+                            <br />
+                            <br />
+                            Of course, if no players are available for a match, you can always play against the computer.
+                            <br />
+                            <br />
+
+                        </center>
+                        <div className="tour_buttons">
+                            <button
+                                className="board_control_button"
+                                style={{
+                                    'backgroundColor': 'orange',
+                                    'color': 'white'
+                                }}
+                                onClick={() => this.props.setTour(this.props.tour - 1)}
+                            >
+                                <i className="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <div>
+                                3/5
+                            </div>
+                            <button
+                                className="board_control_button"
+                                style={{
+                                    'backgroundColor': 'orange',
+                                    'color': 'white'
+                                }}
+                                onClick={() => this.props.setTour(this.props.tour + 1)}
+                            >
+                                Continue <i className="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                );
+            case 5:
+                let sandLink = document.getElementById("sandbox_link");
+                sandLink.focus();
+                let sandLeftPos = sandLink.offsetLeft + 170;
+                let sandTopPos = sandLink.offsetTop + 100;
+                return (
+                    <div
+                        className="tour"
+                        style={{
+                            'top': sandTopPos,
+                            'left': sandLeftPos,
+                            'transform': 'none',
+                            'width': '400px'
+                        }}
+                    >
+                        <div
+                            className="dismiss_circle"
+                            onClick={() => this.props.setTour(false)}
+                        >
+                            X
+                        </div>
+                        <center>
+                            <div style={{ 'fontSize': '150%' }}>
+                                <i className="fas fa-arrow-left" style={{ 'float': 'left' }}></i> Chess Sandbox
+                            </div>
+                            <br />
+                            <br />
+                            In the chess sandbox, you can move pieces around with no rules. You can also record a sequence of moves to share with other players.
+                            <br />
+                            <br />
+
+                        </center>
+                        <div className="tour_buttons">
+                            <button
+                                className="board_control_button"
+                                style={{
+                                    'backgroundColor': 'orange',
+                                    'color': 'white'
+                                }}
+                                onClick={() => this.props.setTour(this.props.tour - 1)}
+                            >
+                                <i className="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <div>
+                                4/5
+                            </div>
+                            <button
+                                className="board_control_button"
+                                style={{
+                                    'backgroundColor': 'orange',
+                                    'color': 'white'
+                                }}
+                                onClick={() => this.props.setTour(this.props.tour + 1)}
+                            >
+                                Continue <i className="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                );
+            case 6:
+                let videoLink = document.getElementById("video_link");
+                videoLink.focus();
+                let videoLeftPos = videoLink.offsetLeft + 170;
+                let videoTopPos = videoLink.offsetTop + 100;
+                return (
+                    <div
+                        className="tour"
+                        style={{
+                            'top': videoTopPos,
+                            'left': videoLeftPos,
+                            'transform': 'none',
+                            'width': '400px'
+                        }}
+                    >
+                        <div
+                            className="dismiss_circle"
+                            onClick={() => this.props.setTour(false)}
+                        >
+                            X
+                        </div>
+                        <center>
+                            <div style={{ 'fontSize': '150%' }}>
+                                <i className="fas fa-arrow-left" style={{ 'float': 'left' }}></i> Video Tour
+                            </div>
+                            <br />
+                            <br />
+                            For a more detailed look at all the features of CheckMatey, watch the video tour. Thanks for taking a look around!
+                            <br />
+                            <br />
+
+                        </center>
+                        <div className="tour_buttons">
+                            <button
+                                className="board_control_button"
+                                style={{
+                                    'backgroundColor': 'orange',
+                                    'color': 'white'
+                                }}
+                                onClick={() => this.props.setTour(this.props.tour - 1)}
+                            >
+                                <i className="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <div>
+                                5/5
+                            </div>
+                            <button
+                                className="board_control_button"
+                                style={{
+                                    'backgroundColor': 'orange',
+                                    'color': 'white'
+                                }}
+                                onClick={() => this.props.setTour(false)}
+                            >
+                                Close Tour
+                            </button>
+                        </div>
+                    </div>
+                );
+        }
+        
     }
 
     showHint() {
@@ -76,6 +412,7 @@ class Menu extends React.Component {
     componentDidMount() {
         window.addEventListener("resize", this.handleResize);
         this.mounted = true;
+        this.setState({});
     }
 
     componentWillUnmount() {
@@ -92,6 +429,7 @@ class Menu extends React.Component {
     render() {
         return (
             <div>
+                {this.props.tour && this.mounted ? this.tourWindow() : ''}
                 {this.state.hint ? this.showHint() : ''}
                 <div className="greeting">
                     
@@ -136,6 +474,7 @@ class Menu extends React.Component {
                         <i className="fas fa-robot"></i> {this.smallMenu ? '' : 'Play Computer'}
                     </Link>
                     <Link
+                        id="sandbox_link"
                         to={'/sandbox'}
                         onMouseEnter={() => { this.setHint('Record moves to share with the community') }}
                         onMouseLeave={() => { this.setHint(false) }}
@@ -143,6 +482,7 @@ class Menu extends React.Component {
                         <i className="fas fa-chess-board"></i> {this.smallMenu ? '' : 'Sandbox'}
                     </Link>
                     <Link
+                        id="video_link"
                         to={'/tutorial'}
                         onMouseEnter={() => { this.setHint('Watch a video showing the main features of CheckMatey') }}
                         onMouseLeave={() => { this.setHint(false) }}
@@ -152,7 +492,10 @@ class Menu extends React.Component {
                     <Link 
                         to={'/'}
                         className="splash_option" 
-                        onClick={this.props.logout}>
+                        onClick={() => {
+                            this.props.setTour(false);
+                            this.props.logout();
+                        }}>
                         <i className="fas fa-sign-in-alt" style={{
                             'transform': 'rotate(180deg)'
                         }}></i> {this.smallMenu ? '' : 'Signout'}

@@ -32,6 +32,7 @@ class CreatePost extends React.Component {
                 <div className="post_content">
                     <form onSubmit={this.handleSubmit}>
                         <input
+                            id="new_post"
                             className="content_box"
                             type="text"
                             value={this.state.content}

@@ -274,17 +274,26 @@ var signup = function signup(user) {
 /*!****************************************!*\
   !*** ./frontend/actions/ui_actions.js ***!
   \****************************************/
-/*! exports provided: TOGGLE_HINTS, toggleHints */
+/*! exports provided: TOGGLE_HINTS, SET_TOUR, toggleHints, setTour */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_HINTS", function() { return TOGGLE_HINTS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_TOUR", function() { return SET_TOUR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleHints", function() { return toggleHints; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setTour", function() { return setTour; });
 var TOGGLE_HINTS = 'TOGGLE_HINTS';
+var SET_TOUR = 'SET_TOUR';
 var toggleHints = function toggleHints() {
   return {
     type: TOGGLE_HINTS
+  };
+};
+var setTour = function setTour(newTour) {
+  return {
+    type: SET_TOUR,
+    newTour: newTour
   };
 };
 
@@ -334,7 +343,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 document.addEventListener("DOMContentLoaded", function () {
   var preloadedState = {
     ui: {
-      hints: true
+      hints: true,
+      tour: false
     }
   };
 
@@ -1888,9 +1898,11 @@ function (_React$Component) {
 
       if (this.props.mode === 'sandbox') {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "modal_back",
+          className: "modal_back"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "close_x",
           onClick: this.backToHome
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board_container__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        }, "X")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board_container__WEBPACK_IMPORTED_MODULE_1__["default"], {
           postSeq: this.props.postSeq,
           mode: 'sandbox'
         }));
@@ -2413,7 +2425,9 @@ function (_React$Component) {
             'color': 'white'
           },
           onClick: function onClick() {
-            return _this3.props.login({
+            _this3.props.setTour(1);
+
+            _this3.props.login({
               username: 'DemoUser',
               password: '123456'
             });
@@ -2442,6 +2456,7 @@ function (_React$Component) {
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "dismiss_circle",
           style: {
+            'display': this.state.hint === 'Check!' ? 'flex' : 'none',
             'position': 'absolute',
             'left': '10px',
             'top': '10px'
@@ -2970,6 +2985,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_session_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../actions/session_actions */ "./frontend/actions/session_actions.js");
 /* harmony import */ var _play_board__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./play_board */ "./frontend/components/chess_table/play_board/play_board.jsx");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _actions_ui_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../actions/ui_actions */ "./frontend/actions/ui_actions.js");
+
 
 
 
@@ -2993,6 +3010,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     archiveGame: _actions_game_actions__WEBPACK_IMPORTED_MODULE_1__["archiveGame"],
     login: function login(user) {
       return dispatch(Object(_actions_session_actions__WEBPACK_IMPORTED_MODULE_2__["login"])(user));
+    },
+    setTour: function setTour(newTour) {
+      return dispatch(Object(_actions_ui_actions__WEBPACK_IMPORTED_MODULE_5__["setTour"])(newTour));
     }
   };
 };
@@ -5081,6 +5101,7 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        id: "new_post",
         className: "content_box",
         type: "text",
         value: this.state.content,
@@ -5645,10 +5666,296 @@ function (_React$Component) {
     _this.mobile = typeof window.orientation !== 'undefined';
     _this.showHint = _this.showHint.bind(_assertThisInitialized(_this));
     _this.setHint = _this.setHint.bind(_assertThisInitialized(_this));
+    _this.tourWindow = _this.tourWindow.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(Menu, [{
+    key: "tourWindow",
+    value: function tourWindow() {
+      var _this2 = this;
+
+      switch (this.props.tour) {
+        case 1:
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "dismiss_circle",
+            onClick: function onClick() {
+              return _this2.props.setTour(false);
+            }
+          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            style: {
+              'fontSize': '150%'
+            }
+          }, "Welcome to CheckMatey!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "You are logged in as DemoUser.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Click the button below to see a quick tour of the main features.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "board_control_button",
+            style: {
+              'backgroundColor': 'orange',
+              'color': 'white'
+            },
+            onClick: function onClick() {
+              return _this2.props.setTour(2);
+            }
+          }, "Begin Tour")));
+
+        case 2:
+          document.getElementById("new_post").focus();
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour",
+            style: {
+              'top': '200px',
+              'width': '400px'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "dismiss_circle",
+            onClick: function onClick() {
+              return _this2.props.setTour(false);
+            }
+          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            style: {
+              'fontSize': '150%'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-arrow-up"
+          }), " Share your thoughts"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "This is the community forum for discussing general chess and pirate-related topics.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour_buttons"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "board_control_button",
+            style: {
+              'backgroundColor': 'orange',
+              'color': 'white'
+            },
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour - 1);
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-left"
+          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "1/5"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "board_control_button",
+            style: {
+              'backgroundColor': 'orange',
+              'color': 'white'
+            },
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour + 1);
+            }
+          }, "Continue ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-right"
+          }))));
+
+        case 3:
+          var lobbyButton = document.getElementById("lobby_button");
+          lobbyButton.focus();
+          var leftPos = lobbyButton.offsetLeft - 30;
+          var topPos = lobbyButton.offsetTop;
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour",
+            style: {
+              'top': topPos,
+              'left': leftPos,
+              'transform': 'translate(-100%, 0)',
+              'width': '400px'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "dismiss_circle",
+            onClick: function onClick() {
+              return _this2.props.setTour(false);
+            }
+          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            style: {
+              'fontSize': '150%'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-arrow-right",
+            style: {
+              'float': 'right'
+            }
+          }), " Game Room"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Enter the lobby to be visible to other players. You can challenge any player in the lobby to a match.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour_buttons"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "board_control_button",
+            style: {
+              'backgroundColor': 'orange',
+              'color': 'white'
+            },
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour - 1);
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-left"
+          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "2/5"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "board_control_button",
+            style: {
+              'backgroundColor': 'orange',
+              'color': 'white'
+            },
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour + 1);
+            }
+          }, "Continue ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-right"
+          }))));
+
+        case 4:
+          var compButton = document.getElementById("play_computer");
+          compButton.focus();
+          var compLeftPos = compButton.offsetLeft - 30;
+          var compTopPos = compButton.offsetTop;
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour",
+            style: {
+              'top': compTopPos,
+              'left': compLeftPos,
+              'transform': 'translate(-100%, 0)',
+              'width': '400px'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "dismiss_circle",
+            onClick: function onClick() {
+              return _this2.props.setTour(false);
+            }
+          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            style: {
+              'fontSize': '150%'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-arrow-right",
+            style: {
+              'float': 'right'
+            }
+          }), " Play Computer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Of course, if no players are available for a match, you can always play against the computer.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour_buttons"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "board_control_button",
+            style: {
+              'backgroundColor': 'orange',
+              'color': 'white'
+            },
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour - 1);
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-left"
+          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "3/5"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "board_control_button",
+            style: {
+              'backgroundColor': 'orange',
+              'color': 'white'
+            },
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour + 1);
+            }
+          }, "Continue ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-right"
+          }))));
+
+        case 5:
+          var sandLink = document.getElementById("sandbox_link");
+          sandLink.focus();
+          var sandLeftPos = sandLink.offsetLeft + 170;
+          var sandTopPos = sandLink.offsetTop + 100;
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour",
+            style: {
+              'top': sandTopPos,
+              'left': sandLeftPos,
+              'transform': 'none',
+              'width': '400px'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "dismiss_circle",
+            onClick: function onClick() {
+              return _this2.props.setTour(false);
+            }
+          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            style: {
+              'fontSize': '150%'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-arrow-left",
+            style: {
+              'float': 'left'
+            }
+          }), " Chess Sandbox"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "In the chess sandbox, you can move pieces around with no rules. You can also record a sequence of moves to share with other players.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour_buttons"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "board_control_button",
+            style: {
+              'backgroundColor': 'orange',
+              'color': 'white'
+            },
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour - 1);
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-left"
+          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "4/5"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "board_control_button",
+            style: {
+              'backgroundColor': 'orange',
+              'color': 'white'
+            },
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour + 1);
+            }
+          }, "Continue ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-right"
+          }))));
+
+        case 6:
+          var videoLink = document.getElementById("video_link");
+          videoLink.focus();
+          var videoLeftPos = videoLink.offsetLeft + 170;
+          var videoTopPos = videoLink.offsetTop + 100;
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour",
+            style: {
+              'top': videoTopPos,
+              'left': videoLeftPos,
+              'transform': 'none',
+              'width': '400px'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "dismiss_circle",
+            onClick: function onClick() {
+              return _this2.props.setTour(false);
+            }
+          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            style: {
+              'fontSize': '150%'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-arrow-left",
+            style: {
+              'float': 'left'
+            }
+          }), " Video Tour"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "For a more detailed look at all the features of CheckMatey, watch the video tour. Thanks for taking a look around!", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour_buttons"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "board_control_button",
+            style: {
+              'backgroundColor': 'orange',
+              'color': 'white'
+            },
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour - 1);
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-left"
+          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "5/5"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "board_control_button",
+            style: {
+              'backgroundColor': 'orange',
+              'color': 'white'
+            },
+            onClick: function onClick() {
+              return _this2.props.setTour(false);
+            }
+          }, "Close Tour")));
+      }
+    }
+  }, {
     key: "showHint",
     value: function showHint() {
       if (this.props.hints) {
@@ -5664,7 +5971,7 @@ function (_React$Component) {
   }, {
     key: "setHint",
     value: function setHint(newHint, time) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.setState({
         hint: newHint
@@ -5672,7 +5979,7 @@ function (_React$Component) {
 
       if (time) {
         setTimeout(function () {
-          if (_this2.mounted) _this2.setState({
+          if (_this3.mounted) _this3.setState({
             hint: false
           });
         }, time);
@@ -5719,6 +6026,7 @@ function (_React$Component) {
     value: function componentDidMount() {
       window.addEventListener("resize", this.handleResize);
       this.mounted = true;
+      this.setState({});
     }
   }, {
     key: "componentWillUnmount",
@@ -5734,9 +6042,9 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.hint ? this.showHint() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.tour && this.mounted ? this.tourWindow() : '', this.state.hint ? this.showHint() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "greeting"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.smallMenu ? this.nothing() : this.props.user.username + ',', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ahoy",
@@ -5753,19 +6061,19 @@ function (_React$Component) {
         className: "splash_option",
         onClick: this.props.toggleHints,
         onMouseEnter: function onMouseEnter() {
-          _this3.setHint('Hints pop up here', 2000);
+          _this4.setHint('Hints pop up here', 2000);
         },
         onMouseLeave: function onMouseLeave() {
-          _this3.setHint(false);
+          _this4.setHint(false);
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-question-circle"
       }), " ", this.smallMenu ? '' : this.props.hints ? 'Turn Hints Off' : 'Turn Hints On'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         onMouseEnter: function onMouseEnter() {
-          _this3.setHint('Discuss chess with other players');
+          _this4.setHint('Discuss chess with other players');
         },
         onMouseLeave: function onMouseLeave() {
-          _this3.setHint(false);
+          _this4.setHint(false);
         },
         to: '/home',
         className: "splash_option"
@@ -5774,10 +6082,10 @@ function (_React$Component) {
       }), " ", this.smallMenu ? '' : 'Community'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/profile',
         onMouseEnter: function onMouseEnter() {
-          _this3.setHint('See your rating, posts, and past games');
+          _this4.setHint('See your rating, posts, and past games');
         },
         onMouseLeave: function onMouseLeave() {
-          _this3.setHint(false);
+          _this4.setHint(false);
         },
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -5785,32 +6093,34 @@ function (_React$Component) {
       }), " ", this.smallMenu ? '' : 'Profile'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/play',
         onMouseEnter: function onMouseEnter() {
-          _this3.setHint('Play an urated game against the computer');
+          _this4.setHint('Play an urated game against the computer');
         },
         onMouseLeave: function onMouseLeave() {
-          _this3.setHint(false);
+          _this4.setHint(false);
         },
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-robot"
       }), " ", this.smallMenu ? '' : 'Play Computer'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        id: "sandbox_link",
         to: '/sandbox',
         onMouseEnter: function onMouseEnter() {
-          _this3.setHint('Record moves to share with the community');
+          _this4.setHint('Record moves to share with the community');
         },
         onMouseLeave: function onMouseLeave() {
-          _this3.setHint(false);
+          _this4.setHint(false);
         },
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-chess-board"
       }), " ", this.smallMenu ? '' : 'Sandbox'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        id: "video_link",
         to: '/tutorial',
         onMouseEnter: function onMouseEnter() {
-          _this3.setHint('Watch a video showing the main features of CheckMatey');
+          _this4.setHint('Watch a video showing the main features of CheckMatey');
         },
         onMouseLeave: function onMouseLeave() {
-          _this3.setHint(false);
+          _this4.setHint(false);
         },
         className: "splash_option"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -5818,7 +6128,11 @@ function (_React$Component) {
       }), " ", this.smallMenu ? '' : 'Video Tour'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: '/',
         className: "splash_option",
-        onClick: this.props.logout
+        onClick: function onClick() {
+          _this4.props.setTour(false);
+
+          _this4.props.logout();
+        }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-sign-in-alt",
         style: {
@@ -5859,7 +6173,8 @@ __webpack_require__.r(__webpack_exports__);
 var mapStateToProps = function mapStateToProps(state) {
   return {
     user: state.entities.users[state.session.currentUserId],
-    hints: state.ui.hints
+    hints: state.ui.hints,
+    tour: state.ui.tour
   };
 };
 
@@ -5870,6 +6185,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     toggleHints: function toggleHints() {
       return dispatch(Object(_actions_ui_actions__WEBPACK_IMPORTED_MODULE_3__["toggleHints"])());
+    },
+    setTour: function setTour(newTour) {
+      return dispatch(Object(_actions_ui_actions__WEBPACK_IMPORTED_MODULE_3__["setTour"])(newTour));
     }
   };
 };
@@ -7942,6 +8260,7 @@ function (_React$Component) {
 
       if (!this.state.visible) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          id: "lobby_button",
           className: this.mobile ? "board_control_button_mobile" : "board_control_button",
           onClick: this.enterLobby,
           onMouseEnter: function onMouseEnter() {
@@ -8137,6 +8456,7 @@ function (_React$Component) {
       })), this.state.playerList.length === 0 ? '(Lobby is empty)' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
         to: '/play'
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        id: "play_computer",
         className: "board_control_button"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-robot"
@@ -9033,6 +9353,7 @@ function (_React$Component) {
     key: "demoLogin",
     value: function demoLogin(e) {
       e.preventDefault();
+      this.props.setTour(1);
       this.props.login({
         username: 'DemoUser',
         password: '123456'
@@ -9147,8 +9468,10 @@ function (_React$Component) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_session_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/session_actions */ "./frontend/actions/session_actions.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _login_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./login_form */ "./frontend/components/session/login_form.jsx");
+/* harmony import */ var _actions_ui_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/ui_actions */ "./frontend/actions/ui_actions.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _login_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./login_form */ "./frontend/components/session/login_form.jsx");
+
 
 
 
@@ -9171,11 +9494,14 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     clearErrors: function clearErrors() {
       return dispatch(Object(_actions_session_actions__WEBPACK_IMPORTED_MODULE_0__["receiveSessionErrors"])([]));
+    },
+    setTour: function setTour(newTour) {
+      return dispatch(Object(_actions_ui_actions__WEBPACK_IMPORTED_MODULE_1__["setTour"])(newTour));
     }
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(_login_form__WEBPACK_IMPORTED_MODULE_2__["default"]));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, mapDispatchToProps)(_login_form__WEBPACK_IMPORTED_MODULE_3__["default"]));
 
 /***/ }),
 
@@ -9274,6 +9600,7 @@ function (_React$Component) {
     key: "demoLogin",
     value: function demoLogin(e) {
       e.preventDefault();
+      this.props.setTour(1);
       this.props.login({
         username: 'DemoUser',
         password: '123456'
@@ -9410,8 +9737,10 @@ function (_React$Component) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_session_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/session_actions */ "./frontend/actions/session_actions.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _signup_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./signup_form */ "./frontend/components/session/signup_form.jsx");
+/* harmony import */ var _actions_ui_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/ui_actions */ "./frontend/actions/ui_actions.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _signup_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./signup_form */ "./frontend/components/session/signup_form.jsx");
+
 
 
 
@@ -9437,11 +9766,14 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     login: function login(user) {
       return dispatch(Object(_actions_session_actions__WEBPACK_IMPORTED_MODULE_0__["login"])(user));
+    },
+    setTour: function setTour(newTour) {
+      return dispatch(Object(_actions_ui_actions__WEBPACK_IMPORTED_MODULE_1__["setTour"])(newTour));
     }
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(_signup_form__WEBPACK_IMPORTED_MODULE_2__["default"]));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, mapDispatchToProps)(_signup_form__WEBPACK_IMPORTED_MODULE_3__["default"]));
 
 /***/ }),
 
@@ -9525,12 +9857,7 @@ function (_React$Component) {
         className: "fas fa-chess-knight"
       }), " Play Now"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "splash_bar"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        onClick: this.demoLogin,
-        className: "splash_option"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-chess-pawn"
-      }), " Demo Login"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         className: "splash_option",
         to: "/signup"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -9655,10 +9982,10 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("iframe", {
         width: "100%",
         height: "100%",
-        src: "https://www.youtube.com/embed/hL5pk2PQe5k",
-        frameBorder: "0",
+        src: "https://www.youtube.com/embed/MNlpxrdSCoU?rel=0",
+        frameborder: "0",
         allow: "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture",
-        allowFullScreen: true
+        allowfullscreen: true
       })));
     }
   }]);
@@ -9912,6 +10239,11 @@ var uiReducer = function uiReducer() {
     case _actions_ui_actions__WEBPACK_IMPORTED_MODULE_0__["TOGGLE_HINTS"]:
       return Object.assign(newState, {
         hints: !newState.hints
+      });
+
+    case _actions_ui_actions__WEBPACK_IMPORTED_MODULE_0__["SET_TOUR"]:
+      return Object.assign(newState, {
+        tour: action.newTour
       });
 
     default:

@@ -3,6 +3,7 @@ import { archiveGame, updateGame } from '../../../actions/game_actions';
 import { login } from '../../../actions/session_actions';
 import PlayBoard from './play_board';
 import { withRouter } from 'react-router-dom';
+import { setTour } from '../../../actions/ui_actions';
 
 const mapStateToProps = (state, ownProps) => ({
     userId: state.session.currentUserId,
@@ -14,7 +15,8 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch) => ({
     updateGame: (game) => dispatch(updateGame(game)),
     archiveGame: archiveGame,
-    login: (user) => dispatch(login(user))
+    login: (user) => dispatch(login(user)),
+    setTour: (newTour) => dispatch(setTour(newTour))
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PlayBoard));

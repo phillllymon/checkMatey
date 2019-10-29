@@ -27,7 +27,7 @@ class ChessTable extends React.Component {
         if (this.props.mode === 'sandbox') {
             return (
                 <div>
-                    <div className="modal_back" onClick={this.backToHome}></div>
+                    <div className="modal_back" ><div className="close_x" onClick={this.backToHome}>X</div></div>
                     <BoardContainer postSeq={this.props.postSeq} mode={'sandbox'} />
                 </div>
             );

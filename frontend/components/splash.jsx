@@ -36,10 +36,6 @@ class Splash extends React.Component{
                     </div>
                 </div>
                 <div className="splash_bar">
-                    <div 
-                        onClick={this.demoLogin}
-                        className="splash_option"
-                    ><i className="fas fa-chess-pawn"></i> Demo Login</div>
                     <Link className="splash_option" to="/signup"><i className="fas fa-user-plus"></i> Sign Up</Link>
                     <Link className="splash_option" to="/login"><i className="fas fa-sign-in-alt"></i> Log In</Link>
                     <Link className="splash_option" to="/play"><i className="fas fa-robot"></i> Play Computer</Link>
