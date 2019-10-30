@@ -27,6 +27,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'jquery-rails'
 gem 'redis', '~> 3.0'
 
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

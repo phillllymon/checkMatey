@@ -49,7 +49,7 @@ ul {
 }
 
 li {
-    margin-left: 50px;
+    margin-left: 3vw;
     padding-bottom: 22px;
     
 }
@@ -62,10 +62,13 @@ li {
 
 #splash_set {
     float: right;
-    margin-right: 50px;
+    margin-right: 5vw;
     background: url(<%= asset_path("chess_set_transparent.png") %>);
-    width: 573px;
-    height: 353px;
+    background-size: cover;
+    width: 50vw;
+    height: 31vw;
+    max-width: 573px;
+    max-height: 353px;
 }
 
 #ship {
@@ -85,19 +88,21 @@ li {
 }
 
 @keyframes sailing {
-    0%      {left: 80%; opacity: 0}
+    0%      {left: 80%; opacity: 0; top: 185px}
     10%     {opacity: 0.3; transform: rotate(6deg)}
+    20%     {top: 170px}
     30%     {transform: rotate(0deg)}
-    40%     {opacity: 0.05}
+    40%     {opacity: 0.05; top: 185px}
     50%     {transform: rotate(6deg)}
-    60%     {opacity: 0.05}
+    60%     {opacity: 0.05; top: 170px}
     70%     {opacity: 0.4; transform: rotate(0deg)}
+    80%     {top: 185px}
     90%     {transform: rotate(6deg)}
-    100%    {left: 32%; opacity: 0.9; width: 300px; height: 270px; transform: rotate(3deg)}
+    100%    {left: 32%; opacity: 0.9; top: 175px; width: 300px; height: 270px; transform: rotate(3deg)}
 }
 
 #splash_top_words {
-    margin-left: 50px;
+    margin-left: 3vw;
     width: 460px;
 }
 
@@ -121,7 +126,7 @@ li {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(75, 59, 53, 0.6);
+    background-color: rgba(75, 59, 53, 0.6); 
     height: 50px;
     max-width: 1200px;
     border-radius: 5px;

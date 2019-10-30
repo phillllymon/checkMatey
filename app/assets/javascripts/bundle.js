@@ -4040,7 +4040,8 @@ function (_React$Component) {
         });
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "board_controls",
-        onMouseUp: this.endResize
+        onMouseUp: this.endResize,
+        onMouseMove: this.resize
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "controls_heading"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -4165,7 +4166,6 @@ function (_React$Component) {
         }, move);
       })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "controls_heading",
-        onMouseMove: this.resize,
         style: {
           'position': 'relative'
         }
@@ -5844,7 +5844,7 @@ function (_React$Component) {
             style: {
               'float': 'right'
             }
-          }), " Game Room"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Enter the lobby to be visible to other players. You can challenge any player in the lobby to a match.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          }), " Game Room"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Leave or enter the game room lobby at any time. Players in the lobby are visible to others. You can challenge players in the lobby to a match.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "tour_buttons"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "board_control_button",
@@ -7965,7 +7965,7 @@ function (_React$Component) {
     _this.times = [2, 5, 10, 15];
     _this.gameTypes = ['Standard', 'Chess960', 'Pawn Clash'];
     _this.state = {
-      visible: false,
+      visible: true,
       challenged: false,
       gameType: 'Standard',
       gameTime: 10,
@@ -8385,6 +8385,7 @@ function (_React$Component) {
         }), " Enter Lobby");
       } else {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          id: "lobby_button",
           className: this.mobile ? "board_control_button_mobile" : "board_control_button",
           onClick: this.leaveLobby,
           onMouseLeave: function onMouseLeave() {
@@ -8501,7 +8502,7 @@ function (_React$Component) {
         className: "fas fa-chess"
       }), " Game Room")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.lobbyButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "players_waiting"
-      }, this.state.playerList.map(function (player, idx) {
+      }, this.state.playerList.length === 0 ? '(lobby is empty)' : '', this.state.playerList.map(function (player, idx) {
         if (player === _this4.props.user.username) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_bar",
@@ -8564,7 +8565,7 @@ function (_React$Component) {
             }
           }, " Challenge Player"));
         }
-      })), this.state.playerList.length === 0 ? '(Lobby is empty)' : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
         to: '/play'
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         id: "play_computer",
@@ -9963,7 +9964,10 @@ function (_React$Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "top_content"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        id: "splash_set"
+        id: "splash_set",
+        style: {
+          'display': window.innerWidth < 1000 ? 'none' : ''
+        }
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "splash_top_words"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {

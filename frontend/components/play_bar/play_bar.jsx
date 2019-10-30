@@ -9,7 +9,7 @@ class PlayBar extends React.Component {
         this.times = [2, 5, 10, 15];
         this.gameTypes = ['Standard', 'Chess960', 'Pawn Clash'];
         this.state = {
-            visible: false,
+            visible: true,
             challenged: false,
             gameType: 'Standard',
             gameTime: 10,
@@ -383,6 +383,7 @@ class PlayBar extends React.Component {
         else {
             return (
                 <button
+                    id="lobby_button"
                     className={this.mobile ? "board_control_button_mobile" : "board_control_button"}
                     onClick={this.leaveLobby}
                     onMouseLeave={() => { this.setHint(false) }}
@@ -492,6 +493,7 @@ class PlayBar extends React.Component {
                 
                 {this.lobbyButton()}
                 <div className="players_waiting">
+                        {this.state.playerList.length === 0 ? '(lobby is empty)' : ''}
                 {
                     
                     this.state.playerList.map((player, idx) => {
@@ -551,7 +553,6 @@ class PlayBar extends React.Component {
                 }
                 </div>
                 
-                {this.state.playerList.length === 0 ? '(Lobby is empty)' : ''}
                 
                     <Link to={'/play'}>
                     <button

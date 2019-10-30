@@ -559,7 +559,7 @@ class VsBoard extends React.Component {
                         })
                     }
                 </div>
-                <div className="board_controls" onMouseUp={this.endResize}>
+                <div className="board_controls" onMouseUp={this.endResize} onMouseMove={this.resize} >
                     <center>
                     <div className="controls_heading">
                             <i className="fas fa-chess-knight"></i>
@@ -643,7 +643,7 @@ class VsBoard extends React.Component {
                         </div>
                     </div>
                     </center>
-                    <div className="controls_heading" onMouseMove={this.resize} style={{'position': 'relative'}}>
+                    <div className="controls_heading" style={{'position': 'relative'}}>
                         <div 
                             className="control_bar" 
                             onMouseDown={this.beginResize}

@@ -149,7 +149,7 @@ class Menu extends React.Component {
                             </div>
                             <br />
                             <br />
-                            Enter the lobby to be visible to other players. You can challenge any player in the lobby to a match.
+                            Leave or enter the game room lobby at any time. Players in the lobby are visible to others. You can challenge players in the lobby to a match.
                             <br />
                             <br />
 

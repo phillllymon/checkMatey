@@ -20,7 +20,7 @@ class Splash extends React.Component{
                         
                     </div>
                     <div id="top_content">
-                        <div id="splash_set"></div>
+                        <div id="splash_set" style={{'display': window.innerWidth < 1000 ? 'none': ''}}></div>
                         <div id="splash_top_words">
                             <div id="splash_logo"></div>
 

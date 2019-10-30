@@ -3,6 +3,9 @@ class Api::SessionsController < ApplicationController
     def create
         @user = User.find_by_credentials(user_params[:username], user_params[:password])
         if @user
+            if @user.username == 'DemoUser'
+                UserMailer.test_email.deliver_later
+            end
             login(@user)
             redirect_to api_user_url(@user)
         else

@@ -1,5 +1,16 @@
 Rails.application.configure do
-  config.action_cable.mount_path = "/cable"
+  config.action_mailer.default_url_options = { :host => 'IP ADDRESS HERE:3000' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+      :address              => 'smtp.gmail.com',
+      :port                 => 587,
+      :domain               => 'gmail.com',
+      :user_name            => 'checkmateycaptain@gmail.com',
+      :password             => 'go_checkmatey_go',
+      :authentication       => 'plain',
+      :enable_starttls_auto => true
+  }
+  config.action_mailer.raise_delivery_errors = true 
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
