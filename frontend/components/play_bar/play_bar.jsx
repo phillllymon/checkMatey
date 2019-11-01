@@ -17,8 +17,11 @@ class PlayBar extends React.Component {
             currentMessage: '',
             playing: false,
             hint: false,
+            emailChallengePrompted: false,
             challengePrompted: false,
-            challengeMade: false
+            challengeMade: false,
+            emailInput: '',
+            showGameOptions: false
             
         }
         this.playerRatings = {
@@ -43,73 +46,170 @@ class PlayBar extends React.Component {
         this.setHint = this.setHint.bind(this);
         this.promptChallenge = this.promptChallenge.bind(this);
         this.showChallengeOptions = this.showChallengeOptions.bind(this);
+        this.promptEmailChallenge = this.promptEmailChallenge.bind(this);
+        this.handleEmailInput = this.handleEmailInput.bind(this);
+        this.sendEmailChallenge = this.sendEmailChallenge.bind(this);
+        this.displayOptionControls = this.displayOptionControls.bind(this);
+        this.describeGame = this.describeGame.bind(this);
 
         this.mobile = typeof window.orientation !== 'undefined';
+    }
+
+    sendEmailChallenge(e) {
+        e.preventDefault();
+        console.log('send email to ' + this.state.emailInput);
+        this.setState({ emailChallengePrompted: false, showGameOptions: false, emailInput: ''});
+    }
+
+    handleEmailInput(e) {
+        this.setState({ emailInput: e.target.value });
+    }
+
+    promptEmailChallenge() {
+        this.setState({ emailChallengePrompted: true });
     }
 
     promptChallenge(player) {
         this.setState({challengePrompted: player});
     }
 
+    showEmailChallengeOptions() {
+        return (
+            <div className="modal_back">
+                <div className="challenge_box">
+                    <div className="challenge_box_header">
+                        Challenge by Email
+                    </div>
+                        <center style={{'padding': '10px'}}>
+                            <form onSubmit={this.sendEmailChallenge}>
+                                Enter email address:
+                                <input
+                                    className="enter_email"
+                                    type="email"
+                                    value={this.state.emailInput}
+                                    onChange={this.handleEmailInput}
+                                />
+                                <br/>
+                                Your friend will receive a link containing your 
+                                challenge.
+                                <br/>
+                                <br/>
+                                <button 
+                                    className="tour_button" type="submit" 
+                                >
+                                    Send Challenge!
+                                </button>
+                            </form>
+                            <br/>
+                            <button
+                                className="time_button challenge"
+                                onClick={(e) => {
+                                    this.setState({ 
+                                        emailChallengePrompted: false,
+                                        showGameOptions: false 
+                                });
+                                }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="time_button challenge"
+                                onClick={(e) => {
+                                    this.setState({showGameOptions: true});
+                                }}
+                            >
+                                Edit Challenge Details
+                            </button>
+                            <br/>
+                            {this.state.showGameOptions ? this.describeGame() : ''}
+                            {this.state.showGameOptions ? this.displayOptionControls() : ''}
+                        </center>
+                </div>
+            </div>
+        );
+    }
+
+    describeGame() {
+        return (
+            <div>
+                <br/>
+                You are sending a challenge for a {this.state.gameType} game
+                with {this.state.gameTime} minutes on the clock.
+                <br/>
+                <br/>
+            </div>
+        );
+    }
+
+    displayOptionControls() {
+        return (
+            <div>
+                {
+                    this.gameTypes.map((gameType, idx) => {
+                        return (
+                            <button className={this.state.gameType === gameType ? "current_type_button" : "type_button"}
+                                onMouseEnter={() => { this.setHint('', idx + 1) }}
+                                onMouseLeave={() => { this.setHint(false) }}
+                                onClick={() => this.setType(gameType)}
+                                key={gameType}>{gameType}</button>
+
+                        );
+                    })
+                }
+
+                < div className = "smaller_heading" >
+                    <div style={{ 'margin': '5px' }}>
+                        <i className="far fa-clock"></i>
+                        {
+                            this.times.map((time) => {
+                                return (
+                                    <button className={this.state.gameTime === time ? "current_time_button" : "time_button"}
+                                        onMouseEnter={() => { this.setHint('Choose the amount of time on the clock for your challenge') }}
+                                        onMouseLeave={() => { this.setHint(false) }}
+                                        onClick={() => this.setTime(time)}
+                                        key={time}> {time}:00</button>
+                                );
+                            })
+                        }
+                    </div>
+                </div >
+            </div>
+        );
+    }
+
     showChallengeOptions() {
         return (
-            <div className="challenge_box">
-                <div className="challenge_box_header">
-                    Challenge Options:
-                </div>
-                <center>
-                    <br/>
-                    {
-                        this.gameTypes.map((gameType, idx) => {
-                            return (
-                                <button className={this.state.gameType === gameType ? "current_type_button" : "type_button"}
-                                    onMouseEnter={() => { this.setHint('', idx + 1) }}
-                                    onMouseLeave={() => { this.setHint(false) }}
-                                    onClick={() => this.setType(gameType)}
-                                    key={gameType}>{gameType}</button>
-
-                            );
-                        })
-                    }
-
-                    <div className="smaller_heading">
-                        <div style={{ 'margin': '5px' }}>
-                            <i className="far fa-clock"></i>
-                            {
-                                this.times.map((time) => {
-                                    return (
-                                        <button className={this.state.gameTime === time ? "current_time_button" : "time_button"}
-                                            onMouseEnter={() => { this.setHint('Choose the amount of time on the clock for your challenge') }}
-                                            onMouseLeave={() => { this.setHint(false) }}
-                                            onClick={() => this.setTime(time)}
-                                            key={time}> {time}:00</button>
-                                    );
-                                })
-                            }
-                        </div>
+            <div className="modal_back">
+                <div className="challenge_box">
+                    <div className="challenge_box_header">
+                        Challenge Options:
                     </div>
-                    <br/>
-                    <button 
-                        className="board_control_button"
-                        onClick={() => {
-                                let otherGuy = this.state.challengePrompted;
-                                this.challengePlayer(this.state.challengePrompted);
-                                this.setState({
-                                    challengePrompted: false,
-                                    challengeMade: otherGuy
-                                });
+                    <center>
+                        <br/>
+                        {this.displayOptionControls()}
+                        <br/>
+                        <button
+                            className="board_control_button"
+                            onClick={() => this.setState({ challengePrompted: false })}
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            className="board_control_button"
+                            onClick={() => {
+                                    let otherGuy = this.state.challengePrompted;
+                                    this.challengePlayer(this.state.challengePrompted);
+                                    this.setState({
+                                        challengePrompted: false,
+                                        challengeMade: otherGuy
+                                    });
+                                }
                             }
-                        }
-                    >
-                        Send Challenge!
-                    </button>
-                    <button
-                        className="board_control_button"
-                        onClick={() => this.setState({challengePrompted: false})}
-                    >
-                        Cancel
-                    </button>
-                </center>
+                        >
+                            Send Challenge!
+                        </button>
+                    </center>
+                </div>
             </div>
         );
     }
@@ -234,7 +334,7 @@ class PlayBar extends React.Component {
 
     showChallengedBox() {
         return (
-            <div className="vs_modal_back">
+            <div className="modal_back">
                 <div className={this.mobile ? "challenge_box_mobile" : "challenge_box"}>
                     <center>
                         <div className={this.mobile ? "challenge_box_header_mobile" : "challenge_box_header"}>
@@ -355,7 +455,7 @@ class PlayBar extends React.Component {
                 }
             }
         );
-        setTimeout(this.requestRollCall, 1000);
+        setTimeout(this.requestRollCall, 600);
         if (this.mobile) {
             this.setState({
                 playerList: []
@@ -388,6 +488,7 @@ class PlayBar extends React.Component {
                     className={this.mobile ? "board_control_button_mobile" : ''}
                     style={this.mobile ? '' : { 'cursor': 'pointer', 'float': 'right', 'fontSize': '20px', 'padding': '5px' }}
                     onClick={this.leaveLobby}
+                    onMouseEnter={() => { this.setHint('Become invisible') }}
                     onMouseLeave={() => { this.setHint(false) }}
                 ><i className="fas fa-eye-slash"></i> {this.mobile ? 'Leave Lobby' : ''}</div>
             );
@@ -478,6 +579,7 @@ class PlayBar extends React.Component {
         let num = this.state.playerList.length;
         return (
             <div className="battle_options">
+                {this.state.emailChallengePrompted ? this.showEmailChallengeOptions() : ''}
                 {this.state.challengePrompted ? this.showChallengeOptions() : ''}
                 {this.state.hint ? this.showHint() : ''}
                 {this.state.challenged ? this.showChallengedBox() : ''}
@@ -579,28 +681,32 @@ class PlayBar extends React.Component {
                             'top': '100%',
                             'transform': 'translate(50%, -85px)'
                         }}>
-                            No one to play with?
+                            No one to challenge?
                         </div>
                         <button
                             id="invite_friend"
                             onMouseEnter={() => { this.setHint('Challenge a friend to play through email') }}
                             onMouseLeave={() => { this.setHint(false) }}
+                            onClick={this.promptEmailChallenge}
                             className="tour_button"
                             style={{
                                 'position': 'absolute',
                                 'top': '100%',
-                                'transform': 'translate(-50%, -120%)',
+                                'transform': 'translate(-50%, -110%)',
                                 'padding': '18px',
                                 'height': '60px',
-                                'width': '180px'
+                                'width': '180px',
+                                'margin': '0'
                             }}
                         >
                             Invite a Friend
                         </button>
                     </center>
                 </div>
-                <div className="flag_one">
-                </div>
+                
+                    <div className="flag_two">
+                    </div>
+                
                 <div className="play_bar">
                     <Link to={'/play'} className="controls_heading" style={{ 'height': '42px', 'textDecoration': 'none', 'cursor': 'auto' }}>
                         
@@ -623,22 +729,29 @@ class PlayBar extends React.Component {
                                 style={{
                                     'position': 'absolute',
                                     'top': '100%',
-                                    'transform': 'translate(-50%, -120%)',
+                                    'transform': 'translate(-50%, -110%)',
                                     'padding': '18px',
                                     'height': '60px',
-                                    'width': '160px'
+                                    'width': '180px',
+                                    'margin': '0'
                                 }}
                             >
                                 <div 
                                     className="sword" 
                                     style={{
-                                        'float': 'right', 
+                                        'float': 'left', 
                                         'width': '40px',
                                         'height': '40px',
                                         'transform': 'translate(0, -10px)'
                                     }}>
                                 </div> 
-                                <i className="fas fa-chess"></i> PLAY
+                                PLAY <i className="fas fa-chess" style={{
+                                    'float': 'right',
+                                    'width': '40px',
+                                    'height': '40px',
+                                    'fontSize': '35px',
+                                    'transform': 'translate(0, -10px)'
+                                }}></i>
                         </button>
                         </Link>
                     </center>

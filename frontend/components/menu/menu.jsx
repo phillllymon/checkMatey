@@ -11,7 +11,6 @@ class Menu extends React.Component {
         };
         this.handleResize = this.handleResize.bind(this);
         this.smallMenu = false;
-        this.nothing = this.nothing.bind(this);
         this.toggleCollapse = this.toggleCollapse.bind(this);
         this.collapseButton = this.collapseButton.bind(this);
         this.mobile = typeof window.orientation !== 'undefined';
@@ -383,29 +382,12 @@ class Menu extends React.Component {
         this.mounted = false;
     }
 
-    nothing() {
-        return (
-            <br/>
-        );
-    }
-
     render() {
         return (
             <div>
                 {this.props.tour && this.mounted ? this.tourWindow() : ''}
                 {this.state.hint ? this.showHint() : ''}
-                <div className="greeting">
-                    
-                    <div>
-                        <center>
-                        {this.smallMenu ? this.nothing() : this.props.user.username + ','}
-                        <div className="ahoy" style={this.smallMenu ? {'marginLeft': '8px'} : {}}> {this.smallMenu ? '' : 'Ahoy!'}
-                            <div className="small_pirate"></div>
-                        </div> 
-                        </center>
-                    </div>
-                    
-                </div>
+                <div className={this.smallMenu ? "small_pirate" : "menu_pirate"}></div>                
                 <div className={this.smallMenu ? "pusher small_menu" : "pusher"}></div>
                 <div className={this.smallMenu ? "menu small_menu" : "menu"}>
                     <div className="splash_option" 

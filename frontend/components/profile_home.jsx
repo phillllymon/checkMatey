@@ -19,8 +19,13 @@ const ProfileHome = (props) => {
             <div>
                 <div className="home">
                     <MenuContainer />
-                    <ProfileContainer />
-                    <PlayBarContainer />
+                    <div>
+                        <div className="home_stack">
+                            Ahoy, {props.user.username}!
+                        </div>
+                        <PlayBarContainer />
+                        <ProfileContainer />
+                    </div>
                 </div>
 
             </div>

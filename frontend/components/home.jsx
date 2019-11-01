@@ -20,10 +20,8 @@ const Home = (props) => {
                 <div className="home">
                     <MenuContainer />
                     <div>
-                        <div className="home_stack">
-                            <center>
-                                Choose Your Battle!
-                            </center>
+                        <div className="home_stack"> 
+                            Ahoy, {props.user.username}!
                         </div>
                         <PlayBarContainer />
                         <FeedContainer />

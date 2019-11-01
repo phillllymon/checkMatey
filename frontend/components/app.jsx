@@ -73,8 +73,14 @@ class App extends React.Component {
                 return (
                     <div>
                         <Route path="/tutorial" component={Tutorial} />
-                        <Route path="/home" component={Home} />
-                        <Route path="/profile" component={ProfileHome} />
+                        <Route
+                            path="/home"
+                            render={() => <Home user={this.props.user}/>}
+                        />
+                        <Route
+                            path="/profile"
+                            render={() => <ProfileHome user={this.props.user} />}
+                        />
                         <Route
                             path="/sandbox"
                             render={() => <ChessTableContainer mode={'sandbox'} />}

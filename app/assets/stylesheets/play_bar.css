@@ -5,7 +5,7 @@
     align-items: center;
 }
 .play_bar {
-    z-index: 2;
+    z-index: 0;
     position: relative;
     width: 250px;
     height: 40vh;
@@ -20,6 +20,7 @@
     font-family: sans-serif;
     color: rgb(100, 100, 100);
     background-color: rgb(230, 230, 230);
+    box-shadow: 0 2px 12px -5px rgba(0, 0, 0, 1);
 }
 
 .challenge_box_header {
@@ -32,9 +33,9 @@
 
 .challenge_box {
     position: fixed;
-    top: 25%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
     width: 300px;
     font-family: sans-serif;
     font-size: 20px;
@@ -165,5 +166,17 @@
 .tour_button:hover {
     background-color: darkorange;
     cursor: pointer;
+}
+
+.battle_text {
+    font-size: 40px;
+    font-family: sans-serif;
+    padding: 10px;
+}
+
+.enter_email {
+    width: 80%;
+    font-size: 20px;
+    margin: 5px;
 }
 

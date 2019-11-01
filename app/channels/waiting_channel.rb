@@ -2,6 +2,7 @@ class WaitingChannel < ApplicationCable::Channel
   def subscribed
     # stream_from "some_channel"
     stream_from "WaitingChannel"
+    requestRollCall
   end
 
   def requestRollCall

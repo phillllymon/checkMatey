@@ -20,7 +20,7 @@
 
 .menu {
     position: fixed;
-    top: 88px;
+    top: 140px;
     display: flex;
     flex-direction: column;
     width: 205px;
@@ -39,11 +39,30 @@
     width: 60px;
 }
 
-
 .small_pirate {
-    float: right;
+    position: fixed;
+    left: 10px;
+    top: 82px;
     background: url(<%= asset_path("small_transparent.png") %>);
     height: 59px;
     width: 59px;
     
 }
+
+.menu_pirate {
+    position: fixed;
+    top: 15px;
+    left: 30px;
+    background-image: url(<%= asset_path("medium_transparent.png") %>);
+    width: 120px;
+    height: 127px;
+}
+
+.med_pirate {
+    float: right;
+    margin-right: 10%;
+    background-image: url(<%= asset_path("medium_transparent.png") %>);
+    width: 120px;
+    height: 127px;
+}
+
