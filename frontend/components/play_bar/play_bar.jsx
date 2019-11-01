@@ -21,6 +21,9 @@ class PlayBar extends React.Component {
             challengePrompted: false,
             challengeMade: false,
             emailInput: '',
+            personalMessage: '',
+            friendName: '',
+            yourName: '',
             showGameOptions: false
             
         }
@@ -51,14 +54,36 @@ class PlayBar extends React.Component {
         this.sendEmailChallenge = this.sendEmailChallenge.bind(this);
         this.displayOptionControls = this.displayOptionControls.bind(this);
         this.describeGame = this.describeGame.bind(this);
+        this.handleYourNameInput = this.handleYourNameInput.bind(this);
+        this.handlePersonalMessageInput = this.handlePersonalMessageInput.bind(this);
+        this.handleFriendNameInput = this.handleFriendNameInput.bind(this);
 
         this.mobile = typeof window.orientation !== 'undefined';
+    }
+
+    handlePersonalMessageInput(e) {
+        this.setState({ personalMessage: e.target.value });
+    }
+
+    handleFriendNameInput(e) {
+        this.setState({ friendName: e.target.value });
+    }
+
+    handleYourNameInput(e) {
+        this.setState({ yourName: e.target.value });
     }
 
     sendEmailChallenge(e) {
         e.preventDefault();
         console.log('send email to ' + this.state.emailInput);
-        this.setState({ emailChallengePrompted: false, showGameOptions: false, emailInput: ''});
+        this.setState({ 
+            emailChallengePrompted: false, 
+            showGameOptions: false, 
+            emailInput: '',
+            yourName: '',
+            friendName: '',
+            personalMessage: ''
+        });
     }
 
     handleEmailInput(e) {
@@ -75,12 +100,21 @@ class PlayBar extends React.Component {
 
     showEmailChallengeOptions() {
         return (
-            <div className="modal_back">
-                <div className="challenge_box">
+            <div className="modal_back" onClick={() => {
+                this.setState({
+                    emailChallengePrompted: false,
+                    showGameOptions: false,
+                    emailInput: '',
+                    yourName: '',
+                    friendName: '',
+                    personalMessage: ''
+                });
+            }}>
+                <div className="challenge_box" onClick={(e) => e.stopPropagation()} >
                     <div className="challenge_box_header">
                         Challenge by Email
                     </div>
-                        <center style={{'padding': '10px'}}>
+                    <center style={{ 'padding': '10px', 'maxHeight': '90vh', 'overflow': 'auto'}}>
                             <form onSubmit={this.sendEmailChallenge}>
                                 Enter email address:
                                 <input
@@ -99,15 +133,47 @@ class PlayBar extends React.Component {
                                 >
                                     Send Challenge!
                                 </button>
+                                <br/>
+                                <br/>
+                                <div style={{'fontSize': '70%'}}>
+                                    Optional:
+                                </div>
+                                <input
+                                    className="enter_email"
+                                    style={{'width': '40%', 'fontSize': '70%'}}
+                                    type="text"
+                                    placeholder="friend's name"
+                                    value={this.state.friendName}
+                                    onChange={this.handleFriendNameInput}
+                                />
+                                <input
+                                    className="enter_email"
+                                style={{ 'width': '40%', 'fontSize': '70%' }}
+                                    type="text"
+                                    placeholder="your name"
+                                    value={this.state.yourName}
+                                    onChange={this.handleYourNameInput}
+                                />
+                                <input
+                                    className="enter_email"
+                                    style={{'fontSize': '70%'}}
+                                    type="text"
+                                    placeholder="personal message"
+                                    value={this.state.personalMessage}
+                                    onChange={this.handlePersonalMessageInput}
+                                />
                             </form>
-                            <br/>
                             <button
                                 className="time_button challenge"
                                 onClick={(e) => {
                                     this.setState({ 
                                         emailChallengePrompted: false,
-                                        showGameOptions: false 
-                                });
+                                        showGameOptions: false,
+                                        emailInput: '',
+                                        yourName: '',
+                                        friendName: '',
+                                        personalMessage: ''
+                                    });
                                 }}
                             >
                                 Cancel

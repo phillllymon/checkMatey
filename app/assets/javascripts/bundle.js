@@ -7934,6 +7934,9 @@ function (_React$Component) {
       challengePrompted: false,
       challengeMade: false,
       emailInput: '',
+      personalMessage: '',
+      friendName: '',
+      yourName: '',
       showGameOptions: false
     };
     _this.playerRatings = {
@@ -7963,11 +7966,35 @@ function (_React$Component) {
     _this.sendEmailChallenge = _this.sendEmailChallenge.bind(_assertThisInitialized(_this));
     _this.displayOptionControls = _this.displayOptionControls.bind(_assertThisInitialized(_this));
     _this.describeGame = _this.describeGame.bind(_assertThisInitialized(_this));
+    _this.handleYourNameInput = _this.handleYourNameInput.bind(_assertThisInitialized(_this));
+    _this.handlePersonalMessageInput = _this.handlePersonalMessageInput.bind(_assertThisInitialized(_this));
+    _this.handleFriendNameInput = _this.handleFriendNameInput.bind(_assertThisInitialized(_this));
     _this.mobile = typeof window.orientation !== 'undefined';
     return _this;
   }
 
   _createClass(PlayBar, [{
+    key: "handlePersonalMessageInput",
+    value: function handlePersonalMessageInput(e) {
+      this.setState({
+        personalMessage: e.target.value
+      });
+    }
+  }, {
+    key: "handleFriendNameInput",
+    value: function handleFriendNameInput(e) {
+      this.setState({
+        friendName: e.target.value
+      });
+    }
+  }, {
+    key: "handleYourNameInput",
+    value: function handleYourNameInput(e) {
+      this.setState({
+        yourName: e.target.value
+      });
+    }
+  }, {
     key: "sendEmailChallenge",
     value: function sendEmailChallenge(e) {
       e.preventDefault();
@@ -7975,7 +8002,10 @@ function (_React$Component) {
       this.setState({
         emailChallengePrompted: false,
         showGameOptions: false,
-        emailInput: ''
+        emailInput: '',
+        yourName: '',
+        friendName: '',
+        personalMessage: ''
       });
     }
   }, {
@@ -8005,14 +8035,29 @@ function (_React$Component) {
       var _this2 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "modal_back"
+        className: "modal_back",
+        onClick: function onClick() {
+          _this2.setState({
+            emailChallengePrompted: false,
+            showGameOptions: false,
+            emailInput: '',
+            yourName: '',
+            friendName: '',
+            personalMessage: ''
+          });
+        }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "challenge_box"
+        className: "challenge_box",
+        onClick: function onClick(e) {
+          return e.stopPropagation();
+        }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "challenge_box_header"
       }, "Challenge by Email"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", {
         style: {
-          'padding': '10px'
+          'padding': '10px',
+          'maxHeight': '90vh',
+          'overflow': 'auto'
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.sendEmailChallenge
@@ -8024,12 +8069,49 @@ function (_React$Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Your friend will receive a link containing your challenge.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "tour_button",
         type: "submit"
-      }, "Send Challenge!")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Send Challenge!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          'fontSize': '70%'
+        }
+      }, "Optional:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "enter_email",
+        style: {
+          'width': '40%',
+          'fontSize': '70%'
+        },
+        type: "text",
+        placeholder: "friend's name",
+        value: this.state.friendName,
+        onChange: this.handleFriendNameInput
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "enter_email",
+        style: {
+          'width': '40%',
+          'fontSize': '70%'
+        },
+        type: "text",
+        placeholder: "your name",
+        value: this.state.yourName,
+        onChange: this.handleYourNameInput
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "enter_email",
+        style: {
+          'fontSize': '70%'
+        },
+        type: "text",
+        placeholder: "personal message",
+        value: this.state.personalMessage,
+        onChange: this.handlePersonalMessageInput
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "time_button challenge",
         onClick: function onClick(e) {
           _this2.setState({
             emailChallengePrompted: false,
-            showGameOptions: false
+            showGameOptions: false,
+            emailInput: '',
+            yourName: '',
+            friendName: '',
+            personalMessage: ''
           });
         }
       }, "Cancel"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
