@@ -23,3 +23,9 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.home_stack {
+    padding-top: 20px;
+    font-size: 40px;
+    font-family: sans-serif;
+}

@@ -11,6 +11,11 @@ class User < ApplicationRecord
 
     attr_reader :password
 
+    def set_logout_status(newStatus)
+        self.logged_out = newStatus
+        self.save
+    end
+
     def self.generate_session_token
         SecureRandom::urlsafe_base64
     end

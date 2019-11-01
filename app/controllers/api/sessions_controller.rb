@@ -3,8 +3,17 @@ class Api::SessionsController < ApplicationController
     def create
         @user = User.find_by_credentials(user_params[:username], user_params[:password])
         if @user
-            if @user.username == 'DemoUser'
+            if @user.username == 'DemoUser' && user_params[:demo]
                 UserMailer.test_email.deliver_later
+                if !@user.logged_out 
+                    @user = User.find_by_credentials('DemoUser2', '123456')
+                end
+                if !@user.logged_out 
+                    @user = User.find_by_credentials('DemoUser3', '123456')
+                end
+                if !@user.logged_out 
+                    @user = User.find_by_credentials('DemoUser4', '123456')
+                end
             end
             login(@user)
             redirect_to api_user_url(@user)
@@ -25,7 +34,7 @@ class Api::SessionsController < ApplicationController
     private
 
     def user_params
-        params.require(:user).permit(:username, :password)
+        params.require(:user).permit(:username, :password, :demo)
     end
 
 end

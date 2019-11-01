@@ -54,11 +54,7 @@ class Menu extends React.Component {
                             
 
                             <button
-                                className="board_control_button"
-                                style={{
-                                    'backgroundColor': 'orange',
-                                    'color': 'white'
-                                }}
+                                className="tour_button"
                                 onClick={() => this.props.setTour(2)}
                             >
                                 Begin Tour
@@ -97,11 +93,7 @@ class Menu extends React.Component {
                         </center>
                         <div className="tour_buttons">
                             <button
-                                className="board_control_button"
-                                style={{
-                                    'backgroundColor': 'orange',
-                                    'color': 'white'
-                                }}
+                                className="tour_button"
                                 onClick={() => this.props.setTour(this.props.tour - 1)}
                             >
                                 <i className="fas fa-chevron-left"></i> Previous
@@ -110,11 +102,7 @@ class Menu extends React.Component {
                                 1/5
                             </div>
                             <button
-                                className="board_control_button"
-                                style={{
-                                    'backgroundColor': 'orange',
-                                    'color': 'white'
-                                }}
+                                className="tour_button"
                                 onClick={() => this.props.setTour(this.props.tour + 1)}
                             >
                                 Continue <i className="fas fa-chevron-right"></i>
@@ -156,11 +144,7 @@ class Menu extends React.Component {
                         </center>
                         <div className="tour_buttons">
                             <button
-                                className="board_control_button"
-                                style={{
-                                    'backgroundColor': 'orange',
-                                    'color': 'white'
-                                }}
+                                className="tour_button"
                                 onClick={() => this.props.setTour(this.props.tour - 1)}
                             >
                                 <i className="fas fa-chevron-left"></i> Previous
@@ -169,11 +153,7 @@ class Menu extends React.Component {
                                 2/5
                             </div>
                             <button
-                                className="board_control_button"
-                                style={{
-                                    'backgroundColor': 'orange',
-                                    'color': 'white'
-                                }}
+                                className="tour_button"
                                 onClick={() => this.props.setTour(this.props.tour + 1)}
                             >
                                 Continue <i className="fas fa-chevron-right"></i>
@@ -215,11 +195,7 @@ class Menu extends React.Component {
                         </center>
                         <div className="tour_buttons">
                             <button
-                                className="board_control_button"
-                                style={{
-                                    'backgroundColor': 'orange',
-                                    'color': 'white'
-                                }}
+                                className="tour_button"
                                 onClick={() => this.props.setTour(this.props.tour - 1)}
                             >
                                 <i className="fas fa-chevron-left"></i> Previous
@@ -228,11 +204,7 @@ class Menu extends React.Component {
                                 3/5
                             </div>
                             <button
-                                className="board_control_button"
-                                style={{
-                                    'backgroundColor': 'orange',
-                                    'color': 'white'
-                                }}
+                                className="tour_button"
                                 onClick={() => this.props.setTour(this.props.tour + 1)}
                             >
                                 Continue <i className="fas fa-chevron-right"></i>
@@ -274,11 +246,7 @@ class Menu extends React.Component {
                         </center>
                         <div className="tour_buttons">
                             <button
-                                className="board_control_button"
-                                style={{
-                                    'backgroundColor': 'orange',
-                                    'color': 'white'
-                                }}
+                                className="tour_button"
                                 onClick={() => this.props.setTour(this.props.tour - 1)}
                             >
                                 <i className="fas fa-chevron-left"></i> Previous
@@ -287,11 +255,7 @@ class Menu extends React.Component {
                                 4/5
                             </div>
                             <button
-                                className="board_control_button"
-                                style={{
-                                    'backgroundColor': 'orange',
-                                    'color': 'white'
-                                }}
+                                className="tour_button"
                                 onClick={() => this.props.setTour(this.props.tour + 1)}
                             >
                                 Continue <i className="fas fa-chevron-right"></i>
@@ -333,11 +297,7 @@ class Menu extends React.Component {
                         </center>
                         <div className="tour_buttons">
                             <button
-                                className="board_control_button"
-                                style={{
-                                    'backgroundColor': 'orange',
-                                    'color': 'white'
-                                }}
+                                className="tour_button"
                                 onClick={() => this.props.setTour(this.props.tour - 1)}
                             >
                                 <i className="fas fa-chevron-left"></i> Previous
@@ -346,11 +306,7 @@ class Menu extends React.Component {
                                 5/5
                             </div>
                             <button
-                                className="board_control_button"
-                                style={{
-                                    'backgroundColor': 'orange',
-                                    'color': 'white'
-                                }}
+                                className="tour_button"
                                 onClick={() => this.props.setTour(false)}
                             >
                                 Close Tour

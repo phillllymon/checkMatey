@@ -371,25 +371,25 @@ class PlayBar extends React.Component {
     lobbyButton() {
         if (!this.state.visible){
             return (
-                <button
+                <div
                     id="lobby_button"
-                    className={this.mobile ? "board_control_button_mobile" : "board_control_button"}
+                    className={this.mobile ? "board_control_button_mobile" : ''}
+                    style={this.mobile ? '' : {'cursor': 'pointer', 'float': 'right', 'fontSize': '20px', 'padding': '5px'}}
                     onClick={this.enterLobby}
                     onMouseEnter={() => { this.setHint('Become visible for other players to challenge you') }}
                     onMouseLeave={() => { this.setHint(false) }}
-                ><i className="fas fa-sign-in-alt"></i> Enter Lobby</button>
+                ><i className="fas fa-eye"></i>{this.mobile ? 'Enter Lobby' : ''}</div>
             );
         }
         else {
             return (
-                <button
+                <div
                     id="lobby_button"
-                    className={this.mobile ? "board_control_button_mobile" : "board_control_button"}
+                    className={this.mobile ? "board_control_button_mobile" : ''}
+                    style={this.mobile ? '' : { 'cursor': 'pointer', 'float': 'right', 'fontSize': '20px', 'padding': '5px' }}
                     onClick={this.leaveLobby}
                     onMouseLeave={() => { this.setHint(false) }}
-                ><i className="fas fa-sign-in-alt" style={{
-                    'transform' : 'rotate(180deg)'
-                }}></i> Leave Lobby</button>
+                ><i className="fas fa-eye-slash"></i> {this.mobile ? 'Leave Lobby' : ''}</div>
             );
         }
     }
@@ -475,96 +475,174 @@ class PlayBar extends React.Component {
                 </div>
             );
         }
+        let num = this.state.playerList.length;
         return (
-            <div className="play_bar"
-                onMouseEnter={() => { this.setHint('Play live matches with other users') }}
-                onMouseLeave={() => { this.setHint(false) }}
-            >
+            <div className="battle_options">
                 {this.state.challengePrompted ? this.showChallengeOptions() : ''}
                 {this.state.hint ? this.showHint() : ''}
                 {this.state.challenged ? this.showChallengedBox() : ''}
                 {this.state.playing ? this.showVsBoard() : ''}
-                <div className="controls_heading" style={{'height': '42px'}}>
-                    <div style={{'margin' : '10px'}}>
-                    <i className="fas fa-chess"></i> Game Room
+                <div className="play_bar"
+                    onMouseEnter={() => { this.setHint('Play live matches with other users') }}
+                    onMouseLeave={() => { this.setHint(false) }}
+                >
+                    <div className="controls_heading" style={{ 'height': '42px' }}>
+                        <div style={{ 'margin': '10px' }}>
+                            <i className="fas fa-users"></i> Multiplayer
+                        </div>
                     </div>
-                </div>
-                <center>
-                
-                {this.lobbyButton()}
-                <div className="players_waiting">
-                        {this.state.playerList.length === 0 ? '(lobby is empty)' : ''}
-                {
                     
-                    this.state.playerList.map((player, idx) => {
-                        if (player === this.props.user.username){
-                            return (
-                                <div className="player_bar" key={idx} 
-                                    onMouseEnter={() => { this.setHint('You cannot challenge yourself') }}
-                                    onMouseLeave={() => { this.setHint(false) }}
-                                >
-                                    <div className="player_pic">
-                                        <i className="fas fa-user"></i>
-                                    </div>
-                                    {player + ' (' + this.playerRatings[player] + ')'}
-                                    <br />
-                                    <div style={{'height': '25px', 'padding': '5px'}}
-                                        
-                                    > (This is you)</div>
-                                </div>
-                            );
-                        }
-                        else if (player === this.state.challengePrompted || player === this.state.challengeMade) {
-                            return (
-                                <div className="player_bar" key={idx}
-                                    onMouseEnter={() => { this.setHint('You have a challenge pending with this player') }}
-                                    onMouseLeave={() => { this.setHint(false) }}
-                                >
-                                    <div className="player_pic">
-                                        <i className="fas fa-user"></i>
-                                    </div>
-                                    {player + ' (' + this.playerRatings[player] + ')'}
-                                    <br />
-                                    <div style={{ 'height': '25px', 'padding': '5px', 'color': 'gray'}}
+                    <center>
 
-                                    > <br/>Pending...</div>
-                                </div>
-                            );
-                        }
-                        else {
-                            return (
-                                <div className="player_bar" key={idx} 
-                                    onMouseEnter={() => { this.setHint('Challenge this player to a game') }}
-                                    onMouseLeave={() => { this.setHint(false) }}
-                                >
-                                    <div className="player_pic">
-                                        <i className="fas fa-user"></i>
-                                    </div>
-                                    {player + ' (' + this.playerRatings[player] + ')'}
-                                    <br />
-                                    <button
-                                        className="time_button challenge"
-                                        onClick={() => this.promptChallenge(player)}
-                                    > Challenge Player</button>
-                                </div>
-                            );
-                        }
-                    })
-                }
+                        {this.lobbyButton()}
+                        <div className="players_waiting">
+                            {num === 0 ? '(no players online)' : num + ' player' + (num === 1 ? '' : 's') + ' online:'}
+                            {
+
+                                this.state.playerList.map((player, idx) => {
+                                    if (player === this.props.user.username) {
+                                        return (
+                                            <div className="player_bar" key={idx}
+                                                onMouseEnter={() => { this.setHint('You cannot challenge yourself') }}
+                                                onMouseLeave={() => { this.setHint(false) }}
+                                            >
+                                                <div className="player_pic">
+                                                    <i className="fas fa-user"></i>
+                                                </div>
+                                                {player + ' (' + this.playerRatings[player] + ')'}
+                                                <br />
+                                                <div style={{ 'height': '25px', 'padding': '5px' }}
+
+                                                > (This is you)</div>
+                                            </div>
+                                        );
+                                    }
+                                    else if (player === this.state.challengePrompted || player === this.state.challengeMade) {
+                                        return (
+                                            <div className="player_bar" key={idx}
+                                                onMouseEnter={() => { this.setHint('You have a challenge pending with this player') }}
+                                                onMouseLeave={() => { this.setHint(false) }}
+                                            >
+                                                <div className="player_pic">
+                                                    <i className="fas fa-user"></i>
+                                                </div>
+                                                {player + ' (' + this.playerRatings[player] + ')'}
+                                                <br />
+                                                <div style={{ 'height': '25px', 'padding': '5px', 'color': 'gray' }}
+
+                                                > <br />Pending...</div>
+                                            </div>
+                                        );
+                                    }
+                                    else {
+                                        return (
+                                            <div className="player_bar" key={idx}
+                                                onMouseEnter={() => { this.setHint('Challenge this player to a game') }}
+                                                onMouseLeave={() => { this.setHint(false) }}
+                                            >
+                                                <div className="player_pic">
+                                                    <i className="fas fa-user"></i>
+                                                </div>
+                                                {player + ' (' + this.playerRatings[player] + ')'}
+                                                <br />
+                                                <button
+                                                    className="time_button challenge"
+                                                    onClick={() => this.promptChallenge(player)}
+                                                > Challenge Player</button>
+                                            </div>
+                                        );
+                                    }
+                                })
+                            }
+                            <div
+                                className="pirate_right"
+                                style={{
+                                    'position': 'absolute',
+                                    'top': '100%',
+                                    'left': '150px',
+                                    'transform': 'translate(0, -200px)'
+                                }}
+                            >
+                            </div>
+                            <div 
+                                className="pirate_left"
+                                style={{
+                                    'position': 'absolute',
+                                    'top': '100%',
+                                    'transform': 'translate(0, -160px)'
+                                }}    
+                            >
+                            </div>
+                        </div>
+                        <div style={{
+                            'position': 'absolute',
+                            'top': '100%',
+                            'transform': 'translate(50%, -85px)'
+                        }}>
+                            No one to play with?
+                        </div>
+                        <button
+                            id="invite_friend"
+                            onMouseEnter={() => { this.setHint('Challenge a friend to play through email') }}
+                            onMouseLeave={() => { this.setHint(false) }}
+                            className="tour_button"
+                            style={{
+                                'position': 'absolute',
+                                'top': '100%',
+                                'transform': 'translate(-50%, -120%)',
+                                'padding': '18px',
+                                'height': '60px',
+                                'width': '180px'
+                            }}
+                        >
+                            Invite a Friend
+                        </button>
+                    </center>
                 </div>
-                
-                
-                    <Link to={'/play'}>
-                    <button
-                        id="play_computer"
-                        onMouseEnter={() => { this.setHint('Play an unrated game against the computer') }}
-                        onMouseLeave={() => { this.setHint(false) }}
-                        className="board_control_button"
-                    >
-                        <i className="fas fa-robot"></i> Play Computer
-                    </button>
+                <div className="flag_one">
+                </div>
+                <div className="play_bar">
+                    <Link to={'/play'} className="controls_heading" style={{ 'height': '42px', 'textDecoration': 'none', 'cursor': 'auto' }}>
+                        
+                            <div style={{ 'margin': '10px' }}>
+                                <i className="fas fa-robot"></i> Play Computer
+                            </div>
+                        
                     </Link>
-                </center>
+                    
+                    <center>
+                    <div className="computer_block">
+                    </div>
+                    
+                        <Link to={'/play'}>
+                            <button
+                                id="play_computer"
+                                onMouseEnter={() => { this.setHint('Play an unrated game against the computer') }}
+                                onMouseLeave={() => { this.setHint(false) }}
+                                className="tour_button"
+                                style={{
+                                    'position': 'absolute',
+                                    'top': '100%',
+                                    'transform': 'translate(-50%, -120%)',
+                                    'padding': '18px',
+                                    'height': '60px',
+                                    'width': '160px'
+                                }}
+                            >
+                                <div 
+                                    className="sword" 
+                                    style={{
+                                        'float': 'right', 
+                                        'width': '40px',
+                                        'height': '40px',
+                                        'transform': 'translate(0, -10px)'
+                                    }}>
+                                </div> 
+                                <i className="fas fa-chess"></i> PLAY
+                        </button>
+                        </Link>
+                    </center>
+                </div>
             </div>
         );
     }

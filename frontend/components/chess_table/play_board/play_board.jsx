@@ -131,7 +131,7 @@ class PlayBoard extends React.Component {
                         }}
                         onClick={() => {
                             this.props.setTour(1);
-                            this.props.login({ username: 'DemoUser', password: '123456' });
+                            this.props.login({ username: 'DemoUser', password: '123456', demo: true });
                         }}
                     >
                         Demo Login

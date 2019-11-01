@@ -19,8 +19,15 @@ const Home = (props) => {
             <div>
                 <div className="home">
                     <MenuContainer />
-                    <FeedContainer />
-                    <PlayBarContainer />
+                    <div>
+                        <div className="home_stack">
+                            <center>
+                                Choose Your Battle!
+                            </center>
+                        </div>
+                        <PlayBarContainer />
+                        <FeedContainer />
+                    </div>
                 </div>
 
             </div>

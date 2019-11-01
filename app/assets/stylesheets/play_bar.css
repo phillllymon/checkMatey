@@ -1,14 +1,25 @@
+.battle_options {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 .play_bar {
-    min-width: 250px;
-    background-color: rgb(230, 230, 230);
+    z-index: 2;
+    position: relative;
+    width: 250px;
+    height: 40vh;
+    min-height: 300px;
     border-radius: 4px;
     margin-top: 8px;
     margin-right: 8px;
+    margin-left: 8px;
     overflow: hidden;
     border: 1px solid orange;
     font-size: 15px;
     font-family: sans-serif;
-    color: rgb(135, 129, 123);
+    color: rgb(100, 100, 100);
+    background-color: rgb(230, 230, 230);
 }
 
 .challenge_box_header {
@@ -31,7 +42,7 @@
     border-radius: 4px;
     overflow: hidden;
     color: black;
-    box-shadow: 0 2px 12px -5px rgba(0, 0, 0, 1);
+     
 }
 
 .time_button {
@@ -140,3 +151,19 @@
     font-size: 40px;
     padding: 5px;
 }
+
+.tour_button {
+    height: 45px;
+    font-size: 20px;
+    padding: 10px;
+    background-color: orange;
+    color: white;
+    margin: 5px;
+    border-radius: 3px;
+}
+
+.tour_button:hover {
+    background-color: darkorange;
+    cursor: pointer;
+}
+

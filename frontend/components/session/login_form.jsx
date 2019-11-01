@@ -42,7 +42,7 @@ class LoginForm extends React.Component {
     demoLogin(e) {
         e.preventDefault();
         this.props.setTour(1);
-        this.props.login({username: 'DemoUser', password: '123456'});
+        this.props.login({username: 'DemoUser', password: '123456', demo: 'true'});
         <Redirect to='/home' />
     }
 
