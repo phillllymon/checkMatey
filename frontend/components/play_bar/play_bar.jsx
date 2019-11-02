@@ -75,7 +75,26 @@ class PlayBar extends React.Component {
 
     sendEmailChallenge(e) {
         e.preventDefault();
-        console.log('send email to ' + this.state.emailInput);
+        let yourName = this.state.yourName;
+        let message = this.state.personalMessage;
+        if (yourName === '') {
+            yourName = 'A User';
+        }
+        if (message === '') {
+            message = "Let's Play!"
+        }
+        $.ajax({
+            url: `/api/email`,
+            method: 'POST',
+            data: { email: {
+                address: this.state.emailInput,
+                friendName: this.state.friendName,
+                yourName: yourName,
+                message: message
+            }}
+        }).then((res) => {
+            console.log(res);
+        });
         this.setState({ 
             emailChallengePrompted: false, 
             showGameOptions: false, 
