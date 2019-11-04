@@ -37,6 +37,7 @@ class ChessTable extends React.Component {
                 <div>
                     <div className="modal_back"></div>
                     <VsBoardContainer 
+                        backToLobby={this.props.backToLobby}
                         mode={'vs'} 
                         player={this.props.player}
                         opponent={this.props.opponent}

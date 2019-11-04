@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import React from 'react';
 
 class Tutorial extends React.Component {
@@ -13,8 +15,16 @@ class Tutorial extends React.Component {
 
     render() {
         return (
-            <div className="modal_back" onClick={this.backToHome}>
-                X
+            <div className="modal_back" >
+                <Link 
+                    to={'/home'}
+                    style={{
+                        'textDecoration': 'none',
+                        'color': 'gray'
+                    }}
+                >
+                    X
+                </Link>
                 <div className="video">
                     <iframe 
                         width="100%" 

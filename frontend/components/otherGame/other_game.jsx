@@ -1,5 +1,6 @@
 import React from 'react';
 import Tetris from './tetris';
+import { Link } from 'react-router-dom';
 
 class OtherGame extends React.Component {
     constructor(props) {
@@ -18,7 +19,7 @@ class OtherGame extends React.Component {
     render() {
         return (
             <div className="modal_back">
-                <div className="close_x" onClick={this.backToSplash} >X</div>
+                <Link to={'/home'} style={{'textDecoration': 'none'}}><div className="close_x" >X</div></Link>
                 <div onClick={this.notBack} className="tetris_box">
                     <Tetris 
                         fetchAllPosts={this.props.fetchAllPosts}

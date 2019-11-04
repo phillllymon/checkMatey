@@ -45,16 +45,8 @@ class App extends React.Component {
                 return (
                     <div>
                         <MobileSplash />
-                        {/* <Route
-                            path="/login"
-                            render={() => <LoginFormContainer  mobile={true} />}
-                        /> */}
                         <Route path="/signup" component={SignupFormContainer} />
                         <Route path="/login" component={LoginFormContainer} />
-                        {/* <Route
-                            path="/signup"
-                            render={() => <SignupFormContainer mobile={true} />}
-                        /> */}
                         <Route
                             path="/notChess"
                             render={() => <OtherGameContainerMobile mobile={true} />}
@@ -72,7 +64,17 @@ class App extends React.Component {
             if (this.props.userId) {
                 return (
                     <div>
-                        <Route path="/tutorial" component={Tutorial} />
+                        <Route
+                            path="/tutorial"
+                            render={() => {
+                                return (
+                                    <div>
+                                        
+                                        <Tutorial />
+                                    </div>
+                                );
+                            }}
+                        />
                         <Route
                             path="/home"
                             render={() => <Home user={this.props.user}/>}
@@ -83,18 +85,49 @@ class App extends React.Component {
                         />
                         <Route
                             path="/sandbox"
-                            render={() => <ChessTableContainer mode={'sandbox'} />}
+                            render={() => {
+                                return (
+                                    <div>
+                                        <Home user={this.props.user} />
+                                        <ChessTableContainer mode={'sandbox'} />
+                                    </div>
+                                );
+                            }}
                         />
                         <Route
                             path="/show"
-                            render={() => <ChessTableContainer />}
+                            render={() => {
+                                return (
+                                    <div>
+                                        <Home user={this.props.user} />
+                                        <ChessTableContainer />
+                                    </div>
+                                );
+                            }}
                         />
                         <Route
                             path="/play"
-                            render={() => <ChessTableContainer player={'User'}
-                                mode={'playComputer'} />}
+                            render={() => {
+                                return (
+                                    <div>
+                                        <Home user={this.props.user} />
+                                        <ChessTableContainer player={'User'}
+                                            mode={'playComputer'} />
+                                    </div>
+                                );
+                            }}
                         />
-                        <Route path="/notChess" component={OtherGameContainer} />
+                        <Route
+                            path="/notChess"
+                            render={() => {
+                                return (
+                                    <div>
+                                        <Home user={this.props.user} />
+                                        <OtherGameContainer />
+                                    </div>
+                                );
+                            }}
+                        />
                         <Redirect to='/home' />
                     </div>
                 );

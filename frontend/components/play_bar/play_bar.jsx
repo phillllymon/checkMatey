@@ -26,7 +26,8 @@ class PlayBar extends React.Component {
             personalMessage: '',
             friendName: '',
             yourName: '',
-            showGameOptions: false
+            showGameOptions: false,
+            showMessage: false
             
         }
         this.playerRatings = {
@@ -63,8 +64,25 @@ class PlayBar extends React.Component {
         this.challengeEmail = this.challengeEmail.bind(this);
         this.showChallengedBoxEmail = this.showChallengedBoxEmail.bind(this);
         this.acceptChallengeEmail = this.acceptChallengeEmail.bind(this);
+        this.showMessage = this.showMessage.bind(this);
+        this.messageToShow = this.messageToShow.bind(this);
 
         this.mobile = typeof window.orientation !== 'undefined';
+    }
+
+    showMessage(message) {
+        this.setState({ showMessage: message });
+        setTimeout( () => {
+            this.setState({ showMessage: false });
+        }, 8000);
+    }
+
+    messageToShow() {
+        return (
+            <div className="hint">
+                {this.state.showMessage}
+            </div>
+        );
     }
 
     handlePersonalMessageInput(e) {
@@ -81,6 +99,7 @@ class PlayBar extends React.Component {
 
     sendEmailChallenge(e) {
         e.preventDefault();
+        this.showMessage('Challenge Sent!');
         let yourName = this.state.yourName;
         let message = this.state.personalMessage;
         let challengeId = Math.random().toString().slice(2);
@@ -128,7 +147,7 @@ class PlayBar extends React.Component {
 
     showEmailChallengeOptions() {
         return (
-            <div className="modal_back" onClick={() => {
+            <div className="modal_back" style={{zIndex:3}} onClick={() => {
                 this.setState({
                     emailChallengePrompted: false,
                     showGameOptions: false,
@@ -144,7 +163,7 @@ class PlayBar extends React.Component {
                     </div>
                     <center style={{ 'padding': '10px', 'maxHeight': '90vh', 'overflow': 'auto'}}>
                             <form onSubmit={this.sendEmailChallenge}>
-                                Enter email address:
+                                Enter your friend's email:
                                 <input
                                     className="enter_email"
                                     type="email"
@@ -376,6 +395,7 @@ class PlayBar extends React.Component {
         return (
             <div>
                 <ChessTableContainer 
+                    backToLobby={this.enterLobby}
                     mode={'vs'}
                     player={this.props.user.username}
                     color={this.state.playing.color}
@@ -582,6 +602,8 @@ class PlayBar extends React.Component {
             this.props.challenges.forEach( (challenge) => {
                 if (challenge[0] === data.challengeId) {
                     this.challengeEmail(data.username, challenge[1], challenge[2]);
+                    this.props.clearChallenges();
+                    this.showMessage('Your email challenge has been answered!');
                 }
             });
         }
@@ -614,7 +636,7 @@ class PlayBar extends React.Component {
             }
         );
         setTimeout(this.requestRollCall, 600);
-        setTimeout(this.announceChallengeId, 600);
+        setTimeout(this.announceChallengeId, 1000);
         if (this.mobile) {
             this.setState({
                 playerList: []
@@ -655,10 +677,10 @@ class PlayBar extends React.Component {
     }
 
     render() {
-        
         if (this.mobile) {
             return (
                 <div className="play_bar_mobile">
+                    {this.state.challengedEmail ? this.showChallengedBoxEmail() : ''}
                     {this.state.challenged ? this.showChallengedBox() : ''}
                     {this.state.playing ? this.showVsBoard() : ''}
                     <div className="controls_heading_mobile">
@@ -745,11 +767,13 @@ class PlayBar extends React.Component {
                 {this.state.challenged ? this.showChallengedBox() : ''}
                 {this.state.challengedEmail ? this.showChallengedBoxEmail() : ''}
                 {this.state.playing ? this.showVsBoard() : ''}
+                {this.state.showMessage ? this.messageToShow() : ''}
                 <div className="play_bar"
+                    id="multiplayer" 
                     onMouseEnter={() => { this.setHint('Play live matches with other users') }}
                     onMouseLeave={() => { this.setHint(false) }}
                 >
-                    <div className="controls_heading" style={{ 'height': '42px' }}>
+                    <div className="controls_heading better_color" style={{ 'height': '42px' }}>
                         <div style={{ 'margin': '10px' }}>
                             <i className="fas fa-users"></i> Multiplayer
                         </div>
@@ -869,8 +893,8 @@ class PlayBar extends React.Component {
                     <div className="flag_two">
                     </div>
                 
-                <div className="play_bar">
-                    <Link to={'/play'} className="controls_heading" style={{ 'height': '42px', 'textDecoration': 'none', 'cursor': 'auto' }}>
+                <div className="play_bar" id="compGame">
+                    <Link to={'/play'} className="controls_heading better_color" style={{ 'height': '42px', 'textDecoration': 'none', 'cursor': 'auto' }}>
                         
                             <div style={{ 'margin': '10px' }}>
                                 <i className="fas fa-robot"></i> Play Computer

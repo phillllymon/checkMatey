@@ -274,7 +274,7 @@ var signup = function signup(user) {
 /*!****************************************!*\
   !*** ./frontend/actions/ui_actions.js ***!
   \****************************************/
-/*! exports provided: TOGGLE_HINTS, SET_TOUR, SET_CHALLENGE, toggleHints, setTour, makeEmailChallenge */
+/*! exports provided: TOGGLE_HINTS, SET_TOUR, SET_CHALLENGE, CLEAR_CHALLENGES, toggleHints, setTour, makeEmailChallenge, clearChallenges */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -282,12 +282,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_HINTS", function() { return TOGGLE_HINTS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_TOUR", function() { return SET_TOUR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_CHALLENGE", function() { return SET_CHALLENGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_CHALLENGES", function() { return CLEAR_CHALLENGES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleHints", function() { return toggleHints; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setTour", function() { return setTour; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeEmailChallenge", function() { return makeEmailChallenge; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearChallenges", function() { return clearChallenges; });
 var TOGGLE_HINTS = 'TOGGLE_HINTS';
 var SET_TOUR = 'SET_TOUR';
 var SET_CHALLENGE = 'SET_CHALLENGE';
+var CLEAR_CHALLENGES = 'CLEAR_CHALLENGES';
 var toggleHints = function toggleHints() {
   return {
     type: TOGGLE_HINTS
@@ -303,6 +306,11 @@ var makeEmailChallenge = function makeEmailChallenge(challengeId) {
   return {
     type: SET_CHALLENGE,
     challengeId: challengeId
+  };
+};
+var clearChallenges = function clearChallenges() {
+  return {
+    type: CLEAR_CHALLENGES
   };
 };
 
@@ -525,7 +533,9 @@ function (_React$Component) {
         if (this.props.userId) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
             path: "/tutorial",
-            component: _tutorial__WEBPACK_IMPORTED_MODULE_9__["default"]
+            render: function render() {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tutorial__WEBPACK_IMPORTED_MODULE_9__["default"], null));
+            }
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
             path: "/home",
             render: function render() {
@@ -543,26 +553,36 @@ function (_React$Component) {
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
             path: "/sandbox",
             render: function render() {
-              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_home__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                user: _this2.props.user
+              }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
                 mode: 'sandbox'
-              });
+              }));
             }
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
             path: "/show",
             render: function render() {
-              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], null);
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_home__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                user: _this2.props.user
+              }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], null));
             }
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
             path: "/play",
             render: function render() {
-              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_home__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                user: _this2.props.user
+              }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_3__["default"], {
                 player: 'User',
                 mode: 'playComputer'
-              });
+              }));
             }
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
             path: "/notChess",
-            component: _otherGame_other_game_container__WEBPACK_IMPORTED_MODULE_6__["default"]
+            render: function render() {
+              return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_home__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                user: _this2.props.user
+              }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_otherGame_other_game_container__WEBPACK_IMPORTED_MODULE_6__["default"], null));
+            }
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Redirect"], {
             to: "/home"
           }));
@@ -1931,6 +1951,7 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "modal_back"
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_vs_board_vs_board_container__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          backToLobby: this.props.backToLobby,
           mode: 'vs',
           player: this.props.player,
           opponent: this.props.opponent,
@@ -2748,7 +2769,7 @@ function (_React$Component) {
 
           this.highlightSquare = move[1];
 
-          if (this.game.moves.length > 6 && !this.alreadyAsked && !this.props.userId) {
+          if (this.game.moves.length > 4 && !this.alreadyAsked && !this.props.userId) {
             this.setState({
               suggestLogin: true
             });
@@ -3843,8 +3864,8 @@ function (_React$Component) {
         }
       });
       this.controlsHeight = 0.6 * window.innerWidth < 0.9 * window.innerHeight ? 0.6 * window.innerWidth : 0.9 * window.innerHeight;
-      this.movesHeight = this.controlsHeight - 486;
-      this.chatHeight = 80;
+      this.movesHeight = (this.controlsHeight - 406) / 2;
+      this.chatHeight = this.movesHeight;
       this.startGame();
       this.setState({});
       this.startClock();
@@ -3857,6 +3878,7 @@ function (_React$Component) {
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
+      this.props.backToLobby();
       App.cable.subscriptions.remove(this.playSub);
       window.clearInterval(this.clockInterval);
     }
@@ -4015,7 +4037,10 @@ function (_React$Component) {
 
       var highlightSquare = this.highlightSquare;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "chess_table"
+        className: "chess_table",
+        style: {
+          zIndex: 3
+        }
       }, this.state.hint ? this.showHint() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: this.flipped ? "board flipped" : "board",
         onMouseMove: this.dragPiece,
@@ -5299,7 +5324,7 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "feed"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "controls_heading",
+        className: "controls_heading  better_color",
         style: {
           'height': '42px'
         }
@@ -5668,6 +5693,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _menu_menu_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./menu/menu_container */ "./frontend/components/menu/menu_container.js");
 /* harmony import */ var _feed_feed_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./feed/feed_container */ "./frontend/components/feed/feed_container.js");
 /* harmony import */ var _play_bar_play_bar_container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./play_bar/play_bar_container */ "./frontend/components/play_bar/play_bar_container.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
 
 
 
@@ -5680,6 +5707,7 @@ var Home = function Home(props) {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "home"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_menu_menu_container__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      id: "ahoy",
       className: "home_stack"
     }, "Ahoy, ", props.user.username, "!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_play_bar_play_bar_container__WEBPACK_IMPORTED_MODULE_3__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_feed_feed_container__WEBPACK_IMPORTED_MODULE_2__["default"], null))));
   }
@@ -5756,50 +5784,55 @@ function (_React$Component) {
       switch (this.props.tour) {
         case 1:
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "tour"
+            className: "tour",
+            style: {
+              'top': 0,
+              'left': '100%',
+              'width': '400px',
+              'transform': 'translate(-110%, 20px)'
+            }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "dismiss_circle",
             onClick: function onClick() {
               return _this2.props.setTour(false);
             }
-          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            style: {
-              'fontSize': '150%'
-            }
-          }, "Welcome to CheckMatey!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "med_pirate",
-            style: {
-              'marginRight': '5%',
-              'marginLeft': '5%'
-            }
-          }), "You are logged in as DemoUser.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Click the button below to see a quick tour of the main features.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "tour_button",
+            style: {
+              'float': 'right'
+            },
             onClick: function onClick() {
               return _this2.props.setTour(2);
             }
-          }, "Begin Tour")));
+          }, "Begin Tour"), "Welcome to CheckMatey!", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Want to see a quick tour?", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
 
         case 2:
           var inputBox = document.getElementById("new_post");
-          if (inputBox) inputBox.focus();
+          var newTop = 0;
+          var newLeft = 0;
+
+          if (inputBox) {
+            inputBox.focus();
+            newTop = inputBox.offsetTop;
+            newLeft = inputBox.offsetLeft;
+          } else {
+            this.props.setTour(false);
+          }
+
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "tour",
             style: {
-              'top': '200px',
-              'width': '400px'
+              'top': newTop,
+              'left': newLeft,
+              'width': '500px',
+              'transform': 'translate(150px, -105%)'
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "dismiss_circle",
             onClick: function onClick() {
               return _this2.props.setTour(false);
             }
-          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            style: {
-              'fontSize': '150%'
-            }
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fas fa-arrow-up"
-          }), " Share your thoughts"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "This is the community forum for discussing general chess and pirate-related topics.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "This is the community forum for discussing general chess and pirate-related topics.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "tour_buttons"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "tour_button",
@@ -5808,26 +5841,30 @@ function (_React$Component) {
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-chevron-left"
-          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "1/5"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "1/6"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "tour_button",
             onClick: function onClick() {
               return _this2.props.setTour(_this2.props.tour + 1);
             }
           }, "Continue ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-chevron-right"
-          }))));
+          }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            style: {
+              'fontSize': '150%'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-arrow-down"
+          }), " Share your thoughts"));
 
         case 3:
-          var lobbyButton = document.getElementById("lobby_button");
-          lobbyButton.focus();
-          var leftPos = lobbyButton.offsetLeft - 30;
-          var topPos = lobbyButton.offsetTop;
+          var multi = document.getElementById("multiplayer");
+          var leftPos = multi.offsetLeft + multi.offsetWidth + 10;
+          var topPos = multi.offsetTop;
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "tour",
             style: {
               'top': topPos,
               'left': leftPos,
-              'transform': 'translate(-100%, 0)',
               'width': '400px'
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -5840,11 +5877,11 @@ function (_React$Component) {
               'fontSize': '150%'
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fas fa-arrow-right",
+            className: "fas fa-arrow-left",
             style: {
-              'float': 'right'
+              'float': 'left'
             }
-          }), " Game Room"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Leave or enter the game room lobby at any time. Players in the lobby are visible to others. You can challenge players in the lobby to a match.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          }), " Play Other Users"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Other players online appear here. You can challenge another player to a live match.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "tour_buttons"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "tour_button",
@@ -5853,7 +5890,7 @@ function (_React$Component) {
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-chevron-left"
-          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "2/5"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "2/6"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "tour_button",
             onClick: function onClick() {
               return _this2.props.setTour(_this2.props.tour + 1);
@@ -5863,17 +5900,61 @@ function (_React$Component) {
           }))));
 
         case 4:
-          var compButton = document.getElementById("play_computer");
-          compButton.focus();
-          var compLeftPos = compButton.offsetLeft - 30;
-          var compTopPos = compButton.offsetTop;
+          var multiNew = document.getElementById("multiplayer");
+          var leftPosNew = multiNew.offsetLeft + multiNew.offsetWidth - 10;
+          var topPosNew = multiNew.offsetTop + multiNew.offsetHeight - 50;
+          document.getElementById("invite_friend").focus();
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "tour",
             style: {
-              'top': compTopPos,
-              'left': compLeftPos,
-              'transform': 'translate(-100%, 0)',
+              'top': topPosNew,
+              'left': leftPosNew,
               'width': '400px'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "dismiss_circle",
+            onClick: function onClick() {
+              return _this2.props.setTour(false);
+            }
+          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            style: {
+              'fontSize': '150%'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-arrow-left",
+            style: {
+              'float': 'left'
+            }
+          }), " Challenge By Email"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "If your opponenet isn't online now, you can send an email invitation. Once your friend clicks a link in the email, your game will begin.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour_buttons"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "tour_button",
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour - 1);
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-left"
+          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "3/6"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "tour_button",
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour + 1);
+            }
+          }, "Continue ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-right"
+          }))));
+
+        case 5:
+          var compGame = document.getElementById("compGame");
+          var leftPosComp = compGame.offsetLeft;
+          var topPosComp = compGame.offsetTop + compGame.offsetHeight - 50;
+          document.getElementById("play_computer").focus();
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour",
+            style: {
+              'top': topPosComp,
+              'left': leftPosComp,
+              'width': '400px',
+              'transform': 'translate(-96%, 0)'
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "dismiss_circle",
@@ -5889,7 +5970,7 @@ function (_React$Component) {
             style: {
               'float': 'right'
             }
-          }), " Play Computer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Of course, if no players are available for a match, you can always play against the computer.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          }), " Play Computer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Of course, if you have no human opponent you can play against the computer at any time.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "tour_buttons"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "tour_button",
@@ -5898,52 +5979,7 @@ function (_React$Component) {
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-chevron-left"
-          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "3/5"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "tour_button",
-            onClick: function onClick() {
-              return _this2.props.setTour(_this2.props.tour + 1);
-            }
-          }, "Continue ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fas fa-chevron-right"
-          }))));
-
-        case 5:
-          var sandLink = document.getElementById("sandbox_link");
-          sandLink.focus();
-          var sandLeftPos = sandLink.offsetLeft + 170;
-          var sandTopPos = sandLink.offsetTop + 100;
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "tour",
-            style: {
-              'top': sandTopPos,
-              'left': sandLeftPos,
-              'transform': 'none',
-              'width': '400px'
-            }
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "dismiss_circle",
-            onClick: function onClick() {
-              return _this2.props.setTour(false);
-            }
-          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            style: {
-              'fontSize': '150%'
-            }
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fas fa-arrow-left",
-            style: {
-              'float': 'left'
-            }
-          }), " Chess Sandbox"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "In the chess sandbox, you can move pieces around with no rules. You can also record a sequence of moves to share with other players.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "tour_buttons"
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "tour_button",
-            onClick: function onClick() {
-              return _this2.props.setTour(_this2.props.tour - 1);
-            }
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fas fa-chevron-left"
-          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "4/5"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "4/6"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "tour_button",
             onClick: function onClick() {
               return _this2.props.setTour(_this2.props.tour + 1);
@@ -5953,16 +5989,11 @@ function (_React$Component) {
           }))));
 
         case 6:
-          var videoLink = document.getElementById("video_link");
-          videoLink.focus();
-          var videoLeftPos = videoLink.offsetLeft + 170;
-          var videoTopPos = videoLink.offsetTop + 100;
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "tour",
             style: {
-              'top': videoTopPos,
-              'left': videoLeftPos,
-              'transform': 'none',
+              'top': 400,
+              'left': 160,
               'width': '400px'
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -5979,7 +6010,7 @@ function (_React$Component) {
             style: {
               'float': 'left'
             }
-          }), " Video Tour"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "For a more detailed look at all the features of CheckMatey, watch the video tour. Thanks for taking a look around!", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          }), " Chess Sandbox"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "The chess sandbox is a board for experimenting. You can move the pieces around with no rules. You can also record a sequence of moves to share with other players.", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "tour_buttons"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "tour_button",
@@ -5988,7 +6019,47 @@ function (_React$Component) {
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-chevron-left"
-          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "5/5"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "5/6"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "tour_button",
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour + 1);
+            }
+          }, "Continue ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-right"
+          }))));
+
+        case 7:
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour",
+            style: {
+              'top': 455,
+              'left': 175,
+              'width': '400px'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "dismiss_circle",
+            onClick: function onClick() {
+              return _this2.props.setTour(false);
+            }
+          }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            style: {
+              'fontSize': '150%'
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-arrow-left",
+            style: {
+              'float': 'left'
+            }
+          }), " Video Tour"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "For a more detail on all the features of CheckMatey, watch the video tour. Thanks for taking a look around!", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "tour_buttons"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "tour_button",
+            onClick: function onClick() {
+              return _this2.props.setTour(_this2.props.tour - 1);
+            }
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-chevron-left"
+          }), " Previous"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "6/6"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "tour_button",
             onClick: function onClick() {
               return _this2.props.setTour(false);
@@ -6701,6 +6772,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _tetris__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tetris */ "./frontend/components/otherGame/tetris.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -6718,6 +6790,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -6752,10 +6825,14 @@ function (_React$Component) {
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal_back"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+        to: '/home',
+        style: {
+          'textDecoration': 'none'
+        }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "close_x",
-        onClick: this.backToSplash
-      }, "X"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "close_x"
+      }, "X")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         onClick: this.notBack,
         className: "tetris_box"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tetris__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -7349,6 +7426,8 @@ function (_React$Component) {
   }, {
     key: "handleInput",
     value: function handleInput(e) {
+      e.preventDefault();
+
       if (!this.game.gameOver) {
         if (e.keyCode === 32) {
           this.grid = this.game.dropPiece();
@@ -7382,7 +7461,10 @@ function (_React$Component) {
     key: "describeControls",
     value: function describeControls() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "tetris_stats"
+        className: "tetris_stats",
+        style: {
+          'marginBottom': '0px'
+        }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Controls:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "-WASD or arrow keys", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "-SPACE BAR to drop", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))));
@@ -7939,7 +8021,8 @@ function (_React$Component) {
       personalMessage: '',
       friendName: '',
       yourName: '',
-      showGameOptions: false
+      showGameOptions: false,
+      showMessage: false
     };
     _this.playerRatings = {
       T1000robot: 850
@@ -7975,11 +8058,34 @@ function (_React$Component) {
     _this.challengeEmail = _this.challengeEmail.bind(_assertThisInitialized(_this));
     _this.showChallengedBoxEmail = _this.showChallengedBoxEmail.bind(_assertThisInitialized(_this));
     _this.acceptChallengeEmail = _this.acceptChallengeEmail.bind(_assertThisInitialized(_this));
+    _this.showMessage = _this.showMessage.bind(_assertThisInitialized(_this));
+    _this.messageToShow = _this.messageToShow.bind(_assertThisInitialized(_this));
     _this.mobile = typeof window.orientation !== 'undefined';
     return _this;
   }
 
   _createClass(PlayBar, [{
+    key: "showMessage",
+    value: function showMessage(message) {
+      var _this2 = this;
+
+      this.setState({
+        showMessage: message
+      });
+      setTimeout(function () {
+        _this2.setState({
+          showMessage: false
+        });
+      }, 8000);
+    }
+  }, {
+    key: "messageToShow",
+    value: function messageToShow() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "hint"
+      }, this.state.showMessage);
+    }
+  }, {
     key: "handlePersonalMessageInput",
     value: function handlePersonalMessageInput(e) {
       this.setState({
@@ -8004,6 +8110,7 @@ function (_React$Component) {
     key: "sendEmailChallenge",
     value: function sendEmailChallenge(e) {
       e.preventDefault();
+      this.showMessage('Challenge Sent!');
       var yourName = this.state.yourName;
       var message = this.state.personalMessage;
       var challengeId = Math.random().toString().slice(2);
@@ -8065,12 +8172,15 @@ function (_React$Component) {
   }, {
     key: "showEmailChallengeOptions",
     value: function showEmailChallengeOptions() {
-      var _this2 = this;
+      var _this3 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal_back",
+        style: {
+          zIndex: 3
+        },
         onClick: function onClick() {
-          _this2.setState({
+          _this3.setState({
             emailChallengePrompted: false,
             showGameOptions: false,
             emailInput: '',
@@ -8094,7 +8204,7 @@ function (_React$Component) {
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.sendEmailChallenge
-      }, "Enter email address:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, "Enter your friend's email:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         className: "enter_email",
         type: "email",
         value: this.state.emailInput,
@@ -8138,7 +8248,7 @@ function (_React$Component) {
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "time_button challenge",
         onClick: function onClick(e) {
-          _this2.setState({
+          _this3.setState({
             emailChallengePrompted: false,
             showGameOptions: false,
             emailInput: '',
@@ -8150,7 +8260,7 @@ function (_React$Component) {
       }, "Cancel"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "time_button challenge",
         onClick: function onClick(e) {
-          _this2.setState({
+          _this3.setState({
             showGameOptions: true
           });
         }
@@ -8164,19 +8274,19 @@ function (_React$Component) {
   }, {
     key: "displayOptionControls",
     value: function displayOptionControls() {
-      var _this3 = this;
+      var _this4 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.gameTypes.map(function (gameType, idx) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this3.state.gameType === gameType ? "current_type_button" : "type_button",
+          className: _this4.state.gameType === gameType ? "current_type_button" : "type_button",
           onMouseEnter: function onMouseEnter() {
-            _this3.setHint('', idx + 1);
+            _this4.setHint('', idx + 1);
           },
           onMouseLeave: function onMouseLeave() {
-            _this3.setHint(false);
+            _this4.setHint(false);
           },
           onClick: function onClick() {
-            return _this3.setType(gameType);
+            return _this4.setType(gameType);
           },
           key: gameType
         }, gameType);
@@ -8190,15 +8300,15 @@ function (_React$Component) {
         className: "far fa-clock"
       }), this.times.map(function (time) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: _this3.state.gameTime === time ? "current_time_button" : "time_button",
+          className: _this4.state.gameTime === time ? "current_time_button" : "time_button",
           onMouseEnter: function onMouseEnter() {
-            _this3.setHint('Choose the amount of time on the clock for your challenge');
+            _this4.setHint('Choose the amount of time on the clock for your challenge');
           },
           onMouseLeave: function onMouseLeave() {
-            _this3.setHint(false);
+            _this4.setHint(false);
           },
           onClick: function onClick() {
-            return _this3.setTime(time);
+            return _this4.setTime(time);
           },
           key: time
         }, " ", time, ":00");
@@ -8207,7 +8317,7 @@ function (_React$Component) {
   }, {
     key: "showChallengeOptions",
     value: function showChallengeOptions() {
-      var _this4 = this;
+      var _this5 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal_back"
@@ -8218,18 +8328,18 @@ function (_React$Component) {
       }, "Challenge Options:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.displayOptionControls(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "board_control_button",
         onClick: function onClick() {
-          return _this4.setState({
+          return _this5.setState({
             challengePrompted: false
           });
         }
       }, "Cancel"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "board_control_button",
         onClick: function onClick() {
-          var otherGuy = _this4.state.challengePrompted;
+          var otherGuy = _this5.state.challengePrompted;
 
-          _this4.challengePlayer(_this4.state.challengePrompted);
+          _this5.challengePlayer(_this5.state.challengePrompted);
 
-          _this4.setState({
+          _this5.setState({
             challengePrompted: false,
             challengeMade: otherGuy
           });
@@ -8321,6 +8431,7 @@ function (_React$Component) {
       }
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        backToLobby: this.enterLobby,
         mode: 'vs',
         player: this.props.user.username,
         color: this.state.playing.color,
@@ -8490,7 +8601,7 @@ function (_React$Component) {
   }, {
     key: "receiveBroadcast",
     value: function receiveBroadcast(data) {
-      var _this5 = this;
+      var _this6 = this;
 
       if (data.requestRollCall) {
         this.announcePresence();
@@ -8542,7 +8653,11 @@ function (_React$Component) {
       } else if (data.challengeId) {
         this.props.challenges.forEach(function (challenge) {
           if (challenge[0] === data.challengeId) {
-            _this5.challengeEmail(data.username, challenge[1], challenge[2]);
+            _this6.challengeEmail(data.username, challenge[1], challenge[2]);
+
+            _this6.props.clearChallenges();
+
+            _this6.showMessage('Your email challenge has been answered!');
           }
         });
       } else if (data.challengerEmail) {
@@ -8573,7 +8688,7 @@ function (_React$Component) {
         }
       });
       setTimeout(this.requestRollCall, 600);
-      setTimeout(this.announceChallengeId, 600);
+      setTimeout(this.announceChallengeId, 1000);
 
       if (this.mobile) {
         this.setState({
@@ -8592,7 +8707,7 @@ function (_React$Component) {
   }, {
     key: "lobbyButton",
     value: function lobbyButton() {
-      var _this6 = this;
+      var _this7 = this;
 
       if (!this.state.visible) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -8606,10 +8721,10 @@ function (_React$Component) {
           },
           onClick: this.enterLobby,
           onMouseEnter: function onMouseEnter() {
-            _this6.setHint('Become visible for other players to challenge you');
+            _this7.setHint('Become visible for other players to challenge you');
           },
           onMouseLeave: function onMouseLeave() {
-            _this6.setHint(false);
+            _this7.setHint(false);
           }
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-eye"
@@ -8626,10 +8741,10 @@ function (_React$Component) {
           },
           onClick: this.leaveLobby,
           onMouseEnter: function onMouseEnter() {
-            _this6.setHint('Become invisible');
+            _this7.setHint('Become invisible');
           },
           onMouseLeave: function onMouseLeave() {
-            _this6.setHint(false);
+            _this7.setHint(false);
           }
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-eye-slash"
@@ -8639,12 +8754,12 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this7 = this;
+      var _this8 = this;
 
       if (this.mobile) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "play_bar_mobile"
-        }, this.state.challenged ? this.showChallengedBox() : '', this.state.playing ? this.showVsBoard() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        }, this.state.challengedEmail ? this.showChallengedBoxEmail() : '', this.state.challenged ? this.showChallengedBox() : '', this.state.playing ? this.showVsBoard() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "controls_heading_mobile"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           style: {
@@ -8656,9 +8771,9 @@ function (_React$Component) {
           className: "fas fa-chess-knight"
         }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.gameTypes.map(function (gameType) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: _this7.state.gameType === gameType ? "current_type_button_mobile" : "type_button_mobile",
+            className: _this8.state.gameType === gameType ? "current_type_button_mobile" : "type_button_mobile",
             onClick: function onClick() {
-              return _this7.setType(gameType);
+              return _this8.setType(gameType);
             },
             key: gameType
           }, gameType);
@@ -8675,9 +8790,9 @@ function (_React$Component) {
           className: "far fa-clock"
         }), this.times.map(function (time) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: _this7.state.gameTime === time ? "current_time_button_mobile" : "time_button_mobile",
+            className: _this8.state.gameTime === time ? "current_time_button_mobile" : "time_button_mobile",
             onClick: function onClick() {
-              return _this7.setTime(time);
+              return _this8.setTime(time);
             },
             key: time
           }, " ", time, ":00");
@@ -8686,7 +8801,7 @@ function (_React$Component) {
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-users"
         }), " Players"), this.lobbyButton(), this.state.playerList.map(function (player, idx) {
-          if (player === _this7.props.user.username) {
+          if (player === _this8.props.user.username) {
             return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               className: "player_bar_mobile",
               key: idx
@@ -8694,7 +8809,7 @@ function (_React$Component) {
               className: "player_icon_mobile"
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
               className: "fas fa-user"
-            })), player + ' (' + _this7.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            })), player + ' (' + _this8.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
               className: "time_button_mobile challenge_mobile",
               style: {
                 'color': 'lightgray'
@@ -8708,10 +8823,10 @@ function (_React$Component) {
               className: "player_icon_mobile"
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
               className: "fas fa-user"
-            })), player + ' (' + _this7.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            })), player + ' (' + _this8.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
               className: "time_button_mobile challenge_mobile",
               onClick: function onClick() {
-                return _this7.challengePlayer(player);
+                return _this8.challengePlayer(player);
               }
             }, " Challenge"));
           }
@@ -8722,16 +8837,17 @@ function (_React$Component) {
       var height = (window.innerHeight * 0.4 < 300 ? 300 : window.innerHeight * 0.4) - 150;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "battle_options"
-      }, this.state.emailChallengePrompted ? this.showEmailChallengeOptions() : '', this.state.challengePrompted ? this.showChallengeOptions() : '', this.state.hint ? this.showHint() : '', this.state.challenged ? this.showChallengedBox() : '', this.state.challengedEmail ? this.showChallengedBoxEmail() : '', this.state.playing ? this.showVsBoard() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.state.emailChallengePrompted ? this.showEmailChallengeOptions() : '', this.state.challengePrompted ? this.showChallengeOptions() : '', this.state.hint ? this.showHint() : '', this.state.challenged ? this.showChallengedBox() : '', this.state.challengedEmail ? this.showChallengedBoxEmail() : '', this.state.playing ? this.showVsBoard() : '', this.state.showMessage ? this.messageToShow() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "play_bar",
+        id: "multiplayer",
         onMouseEnter: function onMouseEnter() {
-          _this7.setHint('Play live matches with other users');
+          _this8.setHint('Play live matches with other users');
         },
         onMouseLeave: function onMouseLeave() {
-          _this7.setHint(false);
+          _this8.setHint(false);
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "controls_heading",
+        className: "controls_heading better_color",
         style: {
           'height': '42px'
         }
@@ -8748,41 +8864,41 @@ function (_React$Component) {
           'overflow': 'auto'
         }
       }, this.lobbyButton(), num === 0 ? '(no players online)' : num + ' player' + (num === 1 ? '' : 's') + ' online:', this.state.playerList.map(function (player, idx) {
-        if (player === _this7.props.user.username) {
+        if (player === _this8.props.user.username) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_bar",
             key: idx,
             onMouseEnter: function onMouseEnter() {
-              _this7.setHint('You cannot challenge yourself');
+              _this8.setHint('You cannot challenge yourself');
             },
             onMouseLeave: function onMouseLeave() {
-              _this7.setHint(false);
+              _this8.setHint(false);
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_pic"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-user"
-          })), player + ' (' + _this7.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          })), player + ' (' + _this8.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             style: {
               'height': '25px',
               'padding': '5px'
             }
           }, " (This is you)"));
-        } else if (player === _this7.state.challengePrompted || player === _this7.state.challengeMade) {
+        } else if (player === _this8.state.challengePrompted || player === _this8.state.challengeMade) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_bar",
             key: idx,
             onMouseEnter: function onMouseEnter() {
-              _this7.setHint('You have a challenge pending with this player');
+              _this8.setHint('You have a challenge pending with this player');
             },
             onMouseLeave: function onMouseLeave() {
-              _this7.setHint(false);
+              _this8.setHint(false);
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_pic"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-user"
-          })), player + ' (' + _this7.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          })), player + ' (' + _this8.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             style: {
               'height': '25px',
               'padding': '5px',
@@ -8794,19 +8910,19 @@ function (_React$Component) {
             className: "player_bar",
             key: idx,
             onMouseEnter: function onMouseEnter() {
-              _this7.setHint('Challenge this player to a game');
+              _this8.setHint('Challenge this player to a game');
             },
             onMouseLeave: function onMouseLeave() {
-              _this7.setHint(false);
+              _this8.setHint(false);
             }
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_pic"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fas fa-user"
-          })), player + ' (' + _this7.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          })), player + ' (' + _this8.playerRatings[player] + ')', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "time_button challenge",
             onClick: function onClick() {
-              return _this7.promptChallenge(player);
+              return _this8.promptChallenge(player);
             }
           }, " Challenge Player"));
         }
@@ -8834,10 +8950,10 @@ function (_React$Component) {
       }, "No one to challenge?"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         id: "invite_friend",
         onMouseEnter: function onMouseEnter() {
-          _this7.setHint('Challenge a friend to play through email');
+          _this8.setHint('Challenge a friend to play through email');
         },
         onMouseLeave: function onMouseLeave() {
-          _this7.setHint(false);
+          _this8.setHint(false);
         },
         onClick: this.promptEmailChallenge,
         className: "tour_button",
@@ -8853,10 +8969,11 @@ function (_React$Component) {
       }, "Invite a Friend"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "flag_two"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "play_bar"
+        className: "play_bar",
+        id: "compGame"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
         to: '/play',
-        className: "controls_heading",
+        className: "controls_heading better_color",
         style: {
           'height': '42px',
           'textDecoration': 'none',
@@ -8875,10 +8992,10 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         id: "play_computer",
         onMouseEnter: function onMouseEnter() {
-          _this7.setHint('Play an unrated game against the computer');
+          _this8.setHint('Play an unrated game against the computer');
         },
         onMouseLeave: function onMouseLeave() {
-          _this7.setHint(false);
+          _this8.setHint(false);
         },
         className: "tour_button",
         style: {
@@ -8946,6 +9063,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     makeEmailChallenge: function makeEmailChallenge(challengeId) {
       return dispatch(Object(_actions_ui_actions__WEBPACK_IMPORTED_MODULE_1__["makeEmailChallenge"])(challengeId));
+    },
+    clearChallenges: function clearChallenges() {
+      return dispatch(Object(_actions_ui_actions__WEBPACK_IMPORTED_MODULE_1__["clearChallenges"])());
     }
   };
 };
@@ -9567,7 +9687,7 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "profile"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "profile_heading"
+        className: "profile_heading better_color"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-user",
         style: {
@@ -9582,7 +9702,7 @@ function (_React$Component) {
           game: game
         }));
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "profile_heading"
+        className: "profile_heading better_color"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-comment",
         style: {
@@ -9773,7 +9893,10 @@ function (_React$Component) {
     _this.backToSplash = _this.backToSplash.bind(_assertThisInitialized(_this));
     _this.toSignup = _this.toSignup.bind(_assertThisInitialized(_this));
     _this.demoLogin = _this.demoLogin.bind(_assertThisInitialized(_this));
+    _this.animateDemoLogin = _this.animateDemoLogin.bind(_assertThisInitialized(_this));
     _this.mobile = typeof window.orientation !== 'undefined';
+    _this.interval = null;
+    _this.demoName = ['D', 'e', 'm', 'o', 'U', 's', 'e', 'r'];
     return _this;
   }
 
@@ -9785,6 +9908,30 @@ function (_React$Component) {
       return function (e) {
         _this2.setState(_defineProperty({}, field, e.target.value));
       };
+    }
+  }, {
+    key: "animateDemoLogin",
+    value: function animateDemoLogin() {
+      var _this3 = this;
+
+      this.interval = setInterval(function () {
+        if (_this3.demoName.length > 0) {
+          var nextChar = _this3.demoName.shift();
+
+          _this3.setState({
+            username: _this3.state.username + nextChar
+          });
+        } else {
+          _this3.setState({
+            password: _this3.state.password + 'a'
+          });
+        }
+      }, 60);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      clearInterval(this.interval);
     }
   }, {
     key: "handleSubmit",
@@ -9809,6 +9956,7 @@ function (_React$Component) {
     key: "demoLogin",
     value: function demoLogin(e) {
       e.preventDefault();
+      this.animateDemoLogin();
       this.props.setTour(1);
       this.props.login({
         username: 'DemoUser',
@@ -10021,7 +10169,10 @@ function (_React$Component) {
     _this.backToSplash = _this.backToSplash.bind(_assertThisInitialized(_this));
     _this.toLogin = _this.toLogin.bind(_assertThisInitialized(_this));
     _this.demoLogin = _this.demoLogin.bind(_assertThisInitialized(_this));
+    _this.animateDemoLogin = _this.animateDemoLogin.bind(_assertThisInitialized(_this));
     _this.mobile = typeof window.orientation !== 'undefined';
+    _this.interval = null;
+    _this.demoName = ['D', 'e', 'm', 'o', 'U', 's', 'e', 'r'];
     return _this;
   }
 
@@ -10033,6 +10184,30 @@ function (_React$Component) {
       return function (e) {
         _this2.setState(_defineProperty({}, field, e.target.value));
       };
+    }
+  }, {
+    key: "animateDemoLogin",
+    value: function animateDemoLogin() {
+      var _this3 = this;
+
+      this.interval = setInterval(function () {
+        if (_this3.demoName.length > 0) {
+          var nextChar = _this3.demoName.shift();
+
+          _this3.setState({
+            username: _this3.state.username + nextChar
+          });
+        } else {
+          _this3.setState({
+            password: _this3.state.password + 'a'
+          });
+        }
+      }, 60);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      clearInterval(this.interval);
     }
   }, {
     key: "handleSubmit",
@@ -10057,6 +10232,7 @@ function (_React$Component) {
     key: "demoLogin",
     value: function demoLogin(e) {
       e.preventDefault();
+      this.animateDemoLogin();
       this.props.setTour(1);
       this.props.login({
         username: 'DemoUser',
@@ -10392,8 +10568,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10411,6 +10588,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -10437,12 +10615,17 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "modal_back",
-        onClick: this.backToHome
-      }, "X", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "modal_back"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__["Link"], {
+        to: '/home',
+        style: {
+          'textDecoration': 'none',
+          'color': 'gray'
+        }
+      }, "X"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "video"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("iframe", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("iframe", {
         width: "100%",
         height: "100%",
         src: "https://www.youtube.com/embed/MNlpxrdSCoU?rel=0",
@@ -10454,7 +10637,7 @@ function (_React$Component) {
   }]);
 
   return Tutorial;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Tutorial);
 
@@ -10711,6 +10894,10 @@ var uiReducer = function uiReducer() {
 
     case _actions_ui_actions__WEBPACK_IMPORTED_MODULE_0__["SET_CHALLENGE"]:
       newState.challenges.push(action.challengeId);
+      return newState;
+
+    case _actions_ui_actions__WEBPACK_IMPORTED_MODULE_0__["CLEAR_CHALLENGES"]:
+      newState.challenges = [];
       return newState;
 
     default:

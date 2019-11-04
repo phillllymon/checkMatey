@@ -353,8 +353,8 @@ class VsBoard extends React.Component {
         this.controlsHeight = (0.6 * window.innerWidth < 0.9 * window.innerHeight ?
             0.6 * window.innerWidth :
             0.9 * window.innerHeight);
-        this.movesHeight = this.controlsHeight - 486;
-        this.chatHeight = 80;
+        this.movesHeight = (this.controlsHeight - 406)/2;
+        this.chatHeight = this.movesHeight;
         this.startGame();
         this.setState({});
         this.startClock();
@@ -365,6 +365,7 @@ class VsBoard extends React.Component {
     }
 
     componentWillUnmount() {
+        this.props.backToLobby();
         App.cable.subscriptions.remove(this.playSub);
         window.clearInterval(this.clockInterval);
     }
@@ -500,7 +501,7 @@ class VsBoard extends React.Component {
     render() {
         let highlightSquare = this.highlightSquare;
         return (
-            <div className="chess_table">
+            <div className="chess_table" style={{zIndex:3}}>
                 {this.state.hint ? this.showHint() : ''}
                 <div
                     className={this.flipped ? "board flipped" : "board"}

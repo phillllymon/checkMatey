@@ -24,6 +24,10 @@
     color: lightgray;
 }
 
+.better_color {
+    background-color: rgb(58, 59, 56);
+}
+
 .seq_post_button {
     margin: 10px;
     height: 40px;

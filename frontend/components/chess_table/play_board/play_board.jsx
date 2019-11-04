@@ -371,7 +371,7 @@ class PlayBoard extends React.Component {
                     this.game.makeMove(move);
                 }
                 this.highlightSquare = move[1];
-                if (this.game.moves.length > 6 && !this.alreadyAsked && !this.props.userId) {
+                if (this.game.moves.length > 4 && !this.alreadyAsked && !this.props.userId) {
                     this.setState({suggestLogin: true});
                     this.alreadyAsked = true;
                 }

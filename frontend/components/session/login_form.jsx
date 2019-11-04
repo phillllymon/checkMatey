@@ -15,14 +15,34 @@ class LoginForm extends React.Component {
         this.backToSplash = this.backToSplash.bind(this);
         this.toSignup = this.toSignup.bind(this);
         this.demoLogin = this.demoLogin.bind(this);
+        this.animateDemoLogin = this.animateDemoLogin.bind(this);
 
         this.mobile = typeof window.orientation !== 'undefined';
+
+        this.interval = null;
+        this.demoName = ['D','e','m','o','U','s','e','r'];
     }
 
     updateField(field) {
         return (e) => {
             this.setState({ [field]: e.target.value });
         };
+    }
+
+    animateDemoLogin() {
+        this.interval = setInterval( () => {
+            if (this.demoName.length > 0) {
+                let nextChar = this.demoName.shift();
+                this.setState({ username: this.state.username + nextChar });
+            }
+            else {
+                this.setState({ password: this.state.password + 'a'});
+            }
+        }, 60);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     handleSubmit(e) {
@@ -41,6 +61,7 @@ class LoginForm extends React.Component {
 
     demoLogin(e) {
         e.preventDefault();
+        this.animateDemoLogin();
         this.props.setTour(1);
         this.props.login({username: 'DemoUser', password: '123456', demo: 'true'});
         <Redirect to='/home' />

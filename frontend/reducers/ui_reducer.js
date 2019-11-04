@@ -1,7 +1,8 @@
 import {
     TOGGLE_HINTS,
     SET_TOUR,
-    SET_CHALLENGE
+    SET_CHALLENGE,
+    CLEAR_CHALLENGES
 } from '../actions/ui_actions';
 
 const uiReducer = (state = {}, action) => {
@@ -14,6 +15,9 @@ const uiReducer = (state = {}, action) => {
             return Object.assign(newState, {tour: action.newTour});
         case SET_CHALLENGE:
             newState.challenges.push(action.challengeId);
+            return newState;
+        case CLEAR_CHALLENGES:
+            newState.challenges = [];
             return newState;
         default:
             return state;

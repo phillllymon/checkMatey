@@ -1,1 +1,7 @@
-Someone is challenging you!
+Ahoy<%= @friendName === '' ? '' : ' ' + @friendName %>!
+
+<%= @yourName %> invites you to play a game of chess on CheckMatey!
+
+<%= @message %>
+
+https://checkmatey.herokuapp.com/challenges/<%= @username %>/<%= @yourName == 'A User' ? 'User' : @yourName%>/<%= @challengeId %>/<%= @gameType %>/<%= @gameTime %>

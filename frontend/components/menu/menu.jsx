@@ -25,52 +25,11 @@ class Menu extends React.Component {
                 return (
                     <div
                         className="tour"
-                    >
-                        <div
-                            className="dismiss_circle"
-                            onClick={() => this.props.setTour(false)}
-                        >
-                            X
-                        </div>
-                        <center>
-                            
-                            <div style={{ 'fontSize': '150%' }}>
-                                Welcome to CheckMatey!
-                            </div>
-                            
-                            <br />
-                            
-                            <br />
-                            <div className="med_pirate" style={{'marginRight': '5%', 'marginLeft': '5%'}}></div>
-                            You are logged in as DemoUser.
-                            <br />
-                            <br />
-                            Click the button below to see a quick tour of the main features.
-                            
-                            <br />
-                            <br />
-                            <br />
-                            
-
-                            <button
-                                className="tour_button"
-                                onClick={() => this.props.setTour(2)}
-                            >
-                                Begin Tour
-                    </button>
-                        </center>
-                        
-                    </div>
-                );
-            case 2:
-                let inputBox = document.getElementById("new_post");
-                if (inputBox) inputBox.focus();
-                return (
-                    <div
-                        className="tour"
                         style={{
-                            'top': '200px',
-                            'width': '400px'
+                            'top': 0,
+                            'left': '100%',
+                            'width': '400px',
+                            'transform': 'translate(-110%, 20px)'
                         }}
                     >
                         <div
@@ -80,10 +39,59 @@ class Menu extends React.Component {
                             X
                         </div>
                         <center>
-                            <div style={{ 'fontSize': '150%' }}>
-                                <i className="fas fa-arrow-up"></i> Share your thoughts
-                            </div>
+                            
+                            <button
+                                className="tour_button"
+                                style={{ 'float': 'right' }}
+                                onClick={() => this.props.setTour(2)}
+                            >
+                                Begin Tour
+                            </button>
+                            
+                            
+                            Welcome to CheckMatey!
                             <br />
+                            <br/>
+                            Want to see a quick tour?
+    
+    
+                            <br />
+                            
+
+                            
+                        </center>
+                        
+                    </div>
+                );
+            case 2:
+                let inputBox = document.getElementById("new_post");
+                let newTop = 0;
+                let newLeft = 0;
+                if (inputBox) {
+                    inputBox.focus();
+                    newTop = inputBox.offsetTop;
+                    newLeft = inputBox.offsetLeft;
+                }
+                else {
+                    this.props.setTour(false);
+                }
+                return (
+                    <div
+                        className="tour"
+                        style={{
+                            'top': newTop,
+                            'left': newLeft,
+                            'width': '500px',
+                            'transform': 'translate(150px, -105%)'
+                        }}
+                    >
+                        <div
+                            className="dismiss_circle"
+                            onClick={() => this.props.setTour(false)}
+                        >
+                            X
+                        </div>
+                        <center>
                             <br />
                             This is the community forum for discussing general chess and pirate-related topics.
                             <br />
@@ -98,7 +106,7 @@ class Menu extends React.Component {
                                 <i className="fas fa-chevron-left"></i> Previous
                             </button>
                             <div>
-                                1/5
+                                1/6
                             </div>
                             <button
                                 className="tour_button"
@@ -107,20 +115,22 @@ class Menu extends React.Component {
                                 Continue <i className="fas fa-chevron-right"></i>
                             </button>
                         </div>
+                        <br/>
+                        <div style={{ 'fontSize': '150%' }}>
+                            <i className="fas fa-arrow-down"></i> Share your thoughts
+                            </div>
                     </div>
                 );
             case 3:
-                let lobbyButton = document.getElementById("lobby_button");
-                lobbyButton.focus();
-                let leftPos = lobbyButton.offsetLeft - 30;
-                let topPos = lobbyButton.offsetTop;
+                let multi = document.getElementById("multiplayer");
+                let leftPos = multi.offsetLeft + multi.offsetWidth + 10;
+                let topPos = multi.offsetTop;
                 return (
                     <div
                         className="tour"
                         style={{
                             'top': topPos,
                             'left': leftPos,
-                            'transform': 'translate(-100%, 0)',
                             'width': '400px'
                         }}
                     >
@@ -132,11 +142,11 @@ class Menu extends React.Component {
                         </div>
                         <center>
                             <div style={{ 'fontSize': '150%' }}>
-                                <i className="fas fa-arrow-right" style={{'float': 'right'}}></i> Game Room
+                                <i className="fas fa-arrow-left" style={{'float': 'left'}}></i> Play Other Users
                             </div>
                             <br />
                             <br />
-                            Leave or enter the game room lobby at any time. Players in the lobby are visible to others. You can challenge players in the lobby to a match.
+                            Other players online appear here. You can challenge another player to a live match.
                             <br />
                             <br />
 
@@ -149,7 +159,7 @@ class Menu extends React.Component {
                                 <i className="fas fa-chevron-left"></i> Previous
                             </button>
                             <div>
-                                2/5
+                                2/6
                             </div>
                             <button
                                 className="tour_button"
@@ -161,18 +171,68 @@ class Menu extends React.Component {
                     </div>
                 );
             case 4:
-                let compButton = document.getElementById("play_computer");
-                compButton.focus();
-                let compLeftPos = compButton.offsetLeft - 30;
-                let compTopPos = compButton.offsetTop;
+                let multiNew = document.getElementById("multiplayer");
+                let leftPosNew = multiNew.offsetLeft + multiNew.offsetWidth - 10;
+                let topPosNew = multiNew.offsetTop + multiNew.offsetHeight - 50;
+                document.getElementById("invite_friend").focus();
                 return (
                     <div
                         className="tour"
                         style={{
-                            'top': compTopPos,
-                            'left': compLeftPos,
-                            'transform': 'translate(-100%, 0)',
+                            'top': topPosNew,
+                            'left': leftPosNew,
                             'width': '400px'
+                        }}
+                    >
+                        <div
+                            className="dismiss_circle"
+                            onClick={() => this.props.setTour(false)}
+                        >
+                            X
+                        </div>
+                        <center>
+                            <div style={{ 'fontSize': '150%' }}>
+                                <i className="fas fa-arrow-left" style={{ 'float': 'left' }}></i> Challenge By Email
+                            </div>
+                            <br />
+                            <br />
+                            If your opponenet isn't online now, you can send an email invitation. Once your friend clicks a link in the email, your game will begin.
+                            <br />
+                            <br />
+
+                        </center>
+                        <div className="tour_buttons">
+                            <button
+                                className="tour_button"
+                                onClick={() => this.props.setTour(this.props.tour - 1)}
+                            >
+                                <i className="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <div>
+                                3/6
+                            </div>
+                            <button
+                                className="tour_button"
+                                onClick={() => this.props.setTour(this.props.tour + 1)}
+                            >
+                                Continue <i className="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                );
+            case 5:
+                let compGame = document.getElementById("compGame");
+                let leftPosComp = compGame.offsetLeft;
+                let topPosComp = compGame.offsetTop + compGame.offsetHeight - 50;
+                document.getElementById("play_computer").focus();
+                return (
+                    <div
+                        className="tour"
+                        style={{
+                            'top': topPosComp,
+                            'left': leftPosComp,
+                            'width': '400px',
+                            'transform': 'translate(-96%, 0)'
                         }}
                     >
                         <div
@@ -187,7 +247,7 @@ class Menu extends React.Component {
                             </div>
                             <br />
                             <br />
-                            Of course, if no players are available for a match, you can always play against the computer.
+                            Of course, if you have no human opponent you can play against the computer at any time.
                             <br />
                             <br />
 
@@ -200,7 +260,7 @@ class Menu extends React.Component {
                                 <i className="fas fa-chevron-left"></i> Previous
                             </button>
                             <div>
-                                3/5
+                                4/6
                             </div>
                             <button
                                 className="tour_button"
@@ -211,19 +271,14 @@ class Menu extends React.Component {
                         </div>
                     </div>
                 );
-            case 5:
-                let sandLink = document.getElementById("sandbox_link");
-                sandLink.focus();
-                let sandLeftPos = sandLink.offsetLeft + 170;
-                let sandTopPos = sandLink.offsetTop + 100;
+            case 6:
                 return (
                     <div
                         className="tour"
                         style={{
-                            'top': sandTopPos,
-                            'left': sandLeftPos,
-                            'transform': 'none',
-                            'width': '400px'
+                            'top': 400,
+                            'left': 160,
+                            'width': '400px',
                         }}
                     >
                         <div
@@ -238,7 +293,7 @@ class Menu extends React.Component {
                             </div>
                             <br />
                             <br />
-                            In the chess sandbox, you can move pieces around with no rules. You can also record a sequence of moves to share with other players.
+                            The chess sandbox is a board for experimenting. You can move the pieces around with no rules. You can also record a sequence of moves to share with other players. 
                             <br />
                             <br />
 
@@ -251,7 +306,7 @@ class Menu extends React.Component {
                                 <i className="fas fa-chevron-left"></i> Previous
                             </button>
                             <div>
-                                4/5
+                                5/6
                             </div>
                             <button
                                 className="tour_button"
@@ -262,19 +317,14 @@ class Menu extends React.Component {
                         </div>
                     </div>
                 );
-            case 6:
-                let videoLink = document.getElementById("video_link");
-                videoLink.focus();
-                let videoLeftPos = videoLink.offsetLeft + 170;
-                let videoTopPos = videoLink.offsetTop + 100;
+            case 7:
                 return (
                     <div
                         className="tour"
                         style={{
-                            'top': videoTopPos,
-                            'left': videoLeftPos,
-                            'transform': 'none',
-                            'width': '400px'
+                            'top': 455,
+                            'left': 175,
+                            'width': '400px',
                         }}
                     >
                         <div
@@ -289,7 +339,7 @@ class Menu extends React.Component {
                             </div>
                             <br />
                             <br />
-                            For a more detailed look at all the features of CheckMatey, watch the video tour. Thanks for taking a look around!
+                            For a more detail on all the features of CheckMatey, watch the video tour. Thanks for taking a look around!
                             <br />
                             <br />
 
@@ -302,7 +352,7 @@ class Menu extends React.Component {
                                 <i className="fas fa-chevron-left"></i> Previous
                             </button>
                             <div>
-                                5/5
+                                6/6
                             </div>
                             <button
                                 className="tour_button"

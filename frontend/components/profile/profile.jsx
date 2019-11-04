@@ -36,7 +36,7 @@ class Feed extends React.Component {
         return (
             <div className="feed">
                 <div className="profile">
-                    <div className="profile_heading">
+                    <div className="profile_heading better_color">
                         <i className="fas fa-user" style={{'marginRight': '10px'}}></i>
                         {this.props.user.username}
                     </div>
@@ -58,7 +58,7 @@ class Feed extends React.Component {
                             })
                         }
                     </div>
-                    <div className="profile_heading">
+                    <div className="profile_heading better_color">
                         <i className="fas fa-comment" style={{ 'marginRight': '10px' }}></i>
                         Your Posts:
                     </div>
