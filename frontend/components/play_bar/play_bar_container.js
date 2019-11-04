@@ -4,7 +4,8 @@ import PlayBar from './play_bar';
 
 const mapStateToProps = (state, ownprops) => ({
     user: state.entities.users[state.session.currentUserId],
-    hints: state.ui.hints
+    hints: state.ui.hints,
+    challenges: state.ui.challenges
 });
 
 const mapDispatchToProps = (dispatch) => ({

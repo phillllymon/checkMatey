@@ -12,6 +12,7 @@ class PlayBar extends React.Component {
         this.state = {
             visible: true,
             challenged: false,
+            challengedEmail: false,
             gameType: 'Standard',
             gameTime: 10,
             playerList: [],
@@ -59,6 +60,9 @@ class PlayBar extends React.Component {
         this.handlePersonalMessageInput = this.handlePersonalMessageInput.bind(this);
         this.handleFriendNameInput = this.handleFriendNameInput.bind(this);
         this.announceChallengeId = this.announceChallengeId.bind(this);
+        this.challengeEmail = this.challengeEmail.bind(this);
+        this.showChallengedBoxEmail = this.showChallengedBoxEmail.bind(this);
+        this.acceptChallengeEmail = this.acceptChallengeEmail.bind(this);
 
         this.mobile = typeof window.orientation !== 'undefined';
     }
@@ -86,7 +90,7 @@ class PlayBar extends React.Component {
         if (message === '') {
             message = "Let's Play!"
         }
-        this.props.makeEmailChallenge(challengeId);
+        this.props.makeEmailChallenge([challengeId, this.state.gameType, this.state.gameTime]);
         $.ajax({
             url: `/api/email`,
             method: 'POST',
@@ -405,6 +409,16 @@ class PlayBar extends React.Component {
         this.setState({gameTime: newTime});
     }
 
+    acceptChallengeEmail() {
+        this.waitSub.perform('relayAcceptance', {
+            'playerWhoChallenged': this.state.challengedEmail.challenger,
+            'playerWhoAccepts': this.props.user.username,
+            'gameType': this.state.challengedEmail.gameType,
+            'gameTime': this.state.challengedEmail.gameTime
+        });
+        this.setState({ challengedEmail: false });
+    }
+
     acceptChallenge() {
         this.waitSub.perform('relayAcceptance', { 
             'playerWhoChallenged': this.state.challenged.challenger, 
@@ -451,6 +465,38 @@ class PlayBar extends React.Component {
         );
     }
 
+    showChallengedBoxEmail() {
+        return (
+            <div className="modal_back">
+                <div className={this.mobile ? "challenge_box_mobile" : "challenge_box"}>
+                    <center>
+                        <div className={this.mobile ? "challenge_box_header_mobile" : "challenge_box_header"}>
+                            Ready to Play?
+                    </div>
+                        <br />
+                        {this.state.challengedEmail.challenger} is ready for your match!
+                    <br />
+                        <br />
+                        <button className={this.mobile ? "board_control_button_mobile" : "board_control_button"}
+                            onClick={this.acceptChallengeEmail}
+                        >Begin!</button>
+                        <br />
+                        <br />
+                    </center>
+                </div>
+            </div>
+        );
+    }
+
+    challengeEmail(player, gameType, gameTime) {
+        this.waitSub.perform('relayEmailChallenge', {
+            'challengerEmail': this.props.user.username,
+            'challengeeEmail': player,
+            'gameType': gameType,
+            'gameTime': gameTime
+        });
+    }
+
     challengePlayer(player) {
         this.waitSub.perform('relayChallenge', {
             'challenger': this.props.user.username,
@@ -478,7 +524,7 @@ class PlayBar extends React.Component {
     }
 
     announceChallengeId() {
-        this.waitSub.perform('relayChallengeId', { 'challengeId': this.props.user.email }); //if user had email challenge link, challengeId is saved as that user's email
+        this.waitSub.perform('relayChallengeId', { 'challengeId': this.props.user.email, 'username': this.props.user.username }); //if user had email challenge link, challengeId is saved as that user's email
     }
 
     requestRollCall() {
@@ -533,7 +579,22 @@ class PlayBar extends React.Component {
             }
         }
         else if (data.challengeId) {
-            console.log(data.challengeId);
+            this.props.challenges.forEach( (challenge) => {
+                if (challenge[0] === data.challengeId) {
+                    this.challengeEmail(data.username, challenge[1], challenge[2]);
+                }
+            });
+        }
+        else if (data.challengerEmail) {
+            if (this.props.user.username === data.challengeeEmail) {
+                this.setState({
+                    challengedEmail: {
+                        challenger: data.challengerEmail,
+                        gameType: data.gameType,
+                        gameTime: data.gameTime
+                    }
+                });
+            }
         }
         else {
             console.log('something else');
@@ -682,6 +743,7 @@ class PlayBar extends React.Component {
                 {this.state.challengePrompted ? this.showChallengeOptions() : ''}
                 {this.state.hint ? this.showHint() : ''}
                 {this.state.challenged ? this.showChallengedBox() : ''}
+                {this.state.challengedEmail ? this.showChallengedBoxEmail() : ''}
                 {this.state.playing ? this.showVsBoard() : ''}
                 <div className="play_bar"
                     onMouseEnter={() => { this.setHint('Play live matches with other users') }}

@@ -26,6 +26,15 @@ class WaitingChannel < ApplicationCable::Channel
     })
   end
 
+  def relayEmailChallenge(challenge)
+    ActionCable.server.broadcast("WaitingChannel", {
+      challengerEmail: challenge['challengerEmail'], 
+      challengeeEmail: challenge['challengeeEmail'],
+      gameType: challenge['gameType'],
+      gameTime: challenge['gameTime']
+    })
+  end
+
   def relayAcceptance(challenge)
     playerWhite = challenge['playerWhoChallenged']
     playerBlack = challenge['playerWhoAccepts']
@@ -62,7 +71,8 @@ class WaitingChannel < ApplicationCable::Channel
 
   def relayChallengeId(data)
     ActionCable.server.broadcast("WaitingChannel", {
-      challengeId: data['challengeId']
+      challengeId: data['challengeId'],
+      username: data['username']
     })
   end
 
