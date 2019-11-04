@@ -152,7 +152,9 @@ class Tetris extends React.Component {
     }
 
     handleInput(e) {
-        e.preventDefault();
+        if (this.state.playing){
+            e.preventDefault();
+        }
         if (!this.game.gameOver){
             if (e.keyCode === 32) {
                 this.grid = this.game.dropPiece();
@@ -181,7 +183,7 @@ class Tetris extends React.Component {
 
     describeControls(){
         return (
-            <div className="tetris_stats" style={{'marginBottom': '0px'}}>
+            <div className="tetris_stats" >
                 <div className="smaller_text">
                 <center>
                     Controls:

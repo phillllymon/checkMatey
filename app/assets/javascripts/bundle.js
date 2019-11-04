@@ -7426,7 +7426,9 @@ function (_React$Component) {
   }, {
     key: "handleInput",
     value: function handleInput(e) {
-      e.preventDefault();
+      if (this.state.playing) {
+        e.preventDefault();
+      }
 
       if (!this.game.gameOver) {
         if (e.keyCode === 32) {
@@ -7461,10 +7463,7 @@ function (_React$Component) {
     key: "describeControls",
     value: function describeControls() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "tetris_stats",
-        style: {
-          'marginBottom': '0px'
-        }
+        className: "tetris_stats"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Controls:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "-WASD or arrow keys", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "-SPACE BAR to drop", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))));
