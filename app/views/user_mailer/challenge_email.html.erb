@@ -9,9 +9,21 @@
       <%= @yourName %> invites you to play a game on CheckMatey!
       <br>
       <%= @message %>
+      <br>
+      gameId: <%= @challengeId %>
+      <br>
+      gameType: <%= @gameType %>
+      <br>
+      gameTime: <%= @gameTime %>
+      <br>
+      username: <%= @username %>
     </p>
     
-    https://checkmatey.herokuapp.com/#/
+    https://checkmatey.herokuapp.com/challenges/<%= @username %>/<%= @yourName == 'A User' ? 'User' : @yourName%>/<%= @challengeId %>/<%= @gameType %>/<%= @gameTime %>
+
+    localhost:3000/challenges/<%= @username %>/<%= @yourName == 'A User' ? 'User' : @yourName%>/<%= @challengeId %>/<%= @gameType %>/<%= @gameTime %>
+
+
 
   </body>
 </html>

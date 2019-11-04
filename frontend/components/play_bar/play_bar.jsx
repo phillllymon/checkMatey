@@ -1,6 +1,7 @@
 import React from 'react';
 import ChessTableContainer from '../chess_table/chess_table_container';
 import { Link } from 'react-router-dom';
+import { makeEmailChallenge } from '../../actions/ui_actions';
 
 
 class PlayBar extends React.Component {
@@ -57,6 +58,7 @@ class PlayBar extends React.Component {
         this.handleYourNameInput = this.handleYourNameInput.bind(this);
         this.handlePersonalMessageInput = this.handlePersonalMessageInput.bind(this);
         this.handleFriendNameInput = this.handleFriendNameInput.bind(this);
+        this.announceChallengeId = this.announceChallengeId.bind(this);
 
         this.mobile = typeof window.orientation !== 'undefined';
     }
@@ -77,12 +79,14 @@ class PlayBar extends React.Component {
         e.preventDefault();
         let yourName = this.state.yourName;
         let message = this.state.personalMessage;
+        let challengeId = Math.random().toString().slice(2);
         if (yourName === '') {
             yourName = 'A User';
         }
         if (message === '') {
             message = "Let's Play!"
         }
+        this.props.makeEmailChallenge(challengeId);
         $.ajax({
             url: `/api/email`,
             method: 'POST',
@@ -90,10 +94,11 @@ class PlayBar extends React.Component {
                 address: this.state.emailInput,
                 friendName: this.state.friendName,
                 yourName: yourName,
-                message: message
+                message: message,
+                challengeId: challengeId,
+                gameType: this.state.gameType,
+                gameTime: this.state.gameTime
             }}
-        }).then((res) => {
-            console.log(res);
         });
         this.setState({ 
             emailChallengePrompted: false, 
@@ -472,6 +477,10 @@ class PlayBar extends React.Component {
         }
     }
 
+    announceChallengeId() {
+        this.waitSub.perform('relayChallengeId', { 'challengeId': this.props.user.email }); //if user had email challenge link, challengeId is saved as that user's email
+    }
+
     requestRollCall() {
         this.waitSub.perform('requestRollCall', {});
     }
@@ -523,6 +532,9 @@ class PlayBar extends React.Component {
                 this.setState({ challengeMade: false });
             }
         }
+        else if (data.challengeId) {
+            console.log(data.challengeId);
+        }
         else {
             console.log('something else');
             console.log(data);
@@ -541,6 +553,7 @@ class PlayBar extends React.Component {
             }
         );
         setTimeout(this.requestRollCall, 600);
+        setTimeout(this.announceChallengeId, 600);
         if (this.mobile) {
             this.setState({
                 playerList: []
@@ -662,6 +675,7 @@ class PlayBar extends React.Component {
             );
         }
         let num = this.state.playerList.length;
+        let height = (window.innerHeight * 0.4 < 300 ? 300 : window.innerHeight * 0.4) - 150;
         return (
             <div className="battle_options">
                 {this.state.emailChallengePrompted ? this.showEmailChallengeOptions() : ''}
@@ -681,8 +695,9 @@ class PlayBar extends React.Component {
                     
                     <center>
 
-                        {this.lobbyButton()}
-                        <div className="players_waiting">
+                        
+                        <div className="players_waiting" style={{'height': `${height}px`, 'overflow': 'auto'}}>
+                            {this.lobbyButton()}
                             {num === 0 ? '(no players online)' : num + ' player' + (num === 1 ? '' : 's') + ' online:'}
                             {
 

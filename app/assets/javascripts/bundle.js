@@ -274,17 +274,20 @@ var signup = function signup(user) {
 /*!****************************************!*\
   !*** ./frontend/actions/ui_actions.js ***!
   \****************************************/
-/*! exports provided: TOGGLE_HINTS, SET_TOUR, toggleHints, setTour */
+/*! exports provided: TOGGLE_HINTS, SET_TOUR, SET_CHALLENGE, toggleHints, setTour, makeEmailChallenge */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_HINTS", function() { return TOGGLE_HINTS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_TOUR", function() { return SET_TOUR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_CHALLENGE", function() { return SET_CHALLENGE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleHints", function() { return toggleHints; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setTour", function() { return setTour; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeEmailChallenge", function() { return makeEmailChallenge; });
 var TOGGLE_HINTS = 'TOGGLE_HINTS';
 var SET_TOUR = 'SET_TOUR';
+var SET_CHALLENGE = 'SET_CHALLENGE';
 var toggleHints = function toggleHints() {
   return {
     type: TOGGLE_HINTS
@@ -294,6 +297,12 @@ var setTour = function setTour(newTour) {
   return {
     type: SET_TOUR,
     newTour: newTour
+  };
+};
+var makeEmailChallenge = function makeEmailChallenge(challengeId) {
+  return {
+    type: SET_CHALLENGE,
+    challengeId: challengeId
   };
 };
 
@@ -325,26 +334,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
- //messing around with websockets
-// var ws = new WebSocket("wss://echo.websocket.org");
-// ws.onopen = function (evt) {
-//     console.log("Connection open ...");
-//     ws.send("Hello WebSockets!");
-// };
-// ws.onmessage = function (evt) {
-//     console.log("Received Message: " + evt.data);
-//     ws.close();
-// };
-// ws.onclose = function (evt) {
-//     console.log("Connection closed.");
-// }; 
-//websocket testing above^^^^ code from var ws = new WebSocket("wss://echo.websocket.org");
 
 document.addEventListener("DOMContentLoaded", function () {
   var preloadedState = {
     ui: {
       hints: true,
-      tour: false
+      tour: false,
+      challenges: []
     }
   };
 
@@ -355,6 +351,7 @@ document.addEventListener("DOMContentLoaded", function () {
           id: window.currentUser.id,
           username: window.currentUser.username,
           rating: window.currentUser.rating,
+          email: window.currentUser.email,
           status: 'waiting'
         })
       },
@@ -365,7 +362,9 @@ document.addEventListener("DOMContentLoaded", function () {
         currentUserId: window.currentUser.id
       },
       ui: {
-        hints: true
+        hints: true,
+        tour: false,
+        challenges: []
       }
     };
   }
@@ -7886,6 +7885,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _chess_table_chess_table_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../chess_table/chess_table_container */ "./frontend/components/chess_table/chess_table_container.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _actions_ui_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../actions/ui_actions */ "./frontend/actions/ui_actions.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -7903,6 +7903,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -7969,6 +7970,7 @@ function (_React$Component) {
     _this.handleYourNameInput = _this.handleYourNameInput.bind(_assertThisInitialized(_this));
     _this.handlePersonalMessageInput = _this.handlePersonalMessageInput.bind(_assertThisInitialized(_this));
     _this.handleFriendNameInput = _this.handleFriendNameInput.bind(_assertThisInitialized(_this));
+    _this.announceChallengeId = _this.announceChallengeId.bind(_assertThisInitialized(_this));
     _this.mobile = typeof window.orientation !== 'undefined';
     return _this;
   }
@@ -8000,6 +8002,7 @@ function (_React$Component) {
       e.preventDefault();
       var yourName = this.state.yourName;
       var message = this.state.personalMessage;
+      var challengeId = Math.random().toString().slice(2);
 
       if (yourName === '') {
         yourName = 'A User';
@@ -8009,6 +8012,7 @@ function (_React$Component) {
         message = "Let's Play!";
       }
 
+      this.props.makeEmailChallenge(challengeId);
       $.ajax({
         url: "/api/email",
         method: 'POST',
@@ -8017,11 +8021,12 @@ function (_React$Component) {
             address: this.state.emailInput,
             friendName: this.state.friendName,
             yourName: yourName,
-            message: message
+            message: message,
+            challengeId: challengeId,
+            gameType: this.state.gameType,
+            gameTime: this.state.gameTime
           }
         }
-      }).then(function (res) {
-        console.log(res);
       });
       this.setState({
         emailChallengePrompted: false,
@@ -8429,6 +8434,13 @@ function (_React$Component) {
       }
     }
   }, {
+    key: "announceChallengeId",
+    value: function announceChallengeId() {
+      this.waitSub.perform('relayChallengeId', {
+        'challengeId': this.props.user.email
+      }); //if user had email challenge link, challengeId is saved as that user's email
+    }
+  }, {
     key: "requestRollCall",
     value: function requestRollCall() {
       this.waitSub.perform('requestRollCall', {});
@@ -8483,6 +8495,8 @@ function (_React$Component) {
             challengeMade: false
           });
         }
+      } else if (data.challengeId) {
+        console.log(data.challengeId);
       } else {
         console.log('something else');
         console.log(data);
@@ -8501,6 +8515,7 @@ function (_React$Component) {
         }
       });
       setTimeout(this.requestRollCall, 600);
+      setTimeout(this.announceChallengeId, 600);
 
       if (this.mobile) {
         this.setState({
@@ -8646,6 +8661,7 @@ function (_React$Component) {
       }
 
       var num = this.state.playerList.length;
+      var height = (window.innerHeight * 0.4 < 300 ? 300 : window.innerHeight * 0.4) - 150;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "battle_options"
       }, this.state.emailChallengePrompted ? this.showEmailChallengeOptions() : '', this.state.challengePrompted ? this.showChallengeOptions() : '', this.state.hint ? this.showHint() : '', this.state.challenged ? this.showChallengedBox() : '', this.state.playing ? this.showVsBoard() : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -8667,9 +8683,13 @@ function (_React$Component) {
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-users"
-      }), " Multiplayer")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.lobbyButton(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "players_waiting"
-      }, num === 0 ? '(no players online)' : num + ' player' + (num === 1 ? '' : 's') + ' online:', this.state.playerList.map(function (player, idx) {
+      }), " Multiplayer")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "players_waiting",
+        style: {
+          'height': "".concat(height, "px"),
+          'overflow': 'auto'
+        }
+      }, this.lobbyButton(), num === 0 ? '(no players online)' : num + ' player' + (num === 1 ? '' : 's') + ' online:', this.state.playerList.map(function (player, idx) {
         if (player === _this6.props.user.username) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "player_bar",
@@ -8850,7 +8870,9 @@ function (_React$Component) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _play_bar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./play_bar */ "./frontend/components/play_bar/play_bar.jsx");
+/* harmony import */ var _actions_ui_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/ui_actions */ "./frontend/actions/ui_actions.js");
+/* harmony import */ var _play_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./play_bar */ "./frontend/components/play_bar/play_bar.jsx");
+
 
 
 
@@ -8862,10 +8884,14 @@ var mapStateToProps = function mapStateToProps(state, ownprops) {
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {};
+  return {
+    makeEmailChallenge: function makeEmailChallenge(challengeId) {
+      return dispatch(Object(_actions_ui_actions__WEBPACK_IMPORTED_MODULE_1__["makeEmailChallenge"])(challengeId));
+    }
+  };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_play_bar__WEBPACK_IMPORTED_MODULE_1__["default"]));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_play_bar__WEBPACK_IMPORTED_MODULE_2__["default"]));
 
 /***/ }),
 
@@ -10623,6 +10649,10 @@ var uiReducer = function uiReducer() {
       return Object.assign(newState, {
         tour: action.newTour
       });
+
+    case _actions_ui_actions__WEBPACK_IMPORTED_MODULE_0__["SET_CHALLENGE"]:
+      newState.challenges.push(action.challengeId);
+      return newState;
 
     default:
       return state;

@@ -7,27 +7,9 @@ import * as SessionApiUtil from './util/session_api_util';
 import * as SessionActions from './actions/session_actions';
 import * as PostActions from './actions/post_actions';
 
-//messing around with websockets
-// var ws = new WebSocket("wss://echo.websocket.org");
-
-// ws.onopen = function (evt) {
-//     console.log("Connection open ...");
-//     ws.send("Hello WebSockets!");
-// };
-
-// ws.onmessage = function (evt) {
-//     console.log("Received Message: " + evt.data);
-//     ws.close();
-// };
-
-// ws.onclose = function (evt) {
-//     console.log("Connection closed.");
-// }; 
-//websocket testing above^^^^ code from var ws = new WebSocket("wss://echo.websocket.org");
-
 document.addEventListener("DOMContentLoaded", () => {
 
-    let preloadedState = {ui: {hints: true, tour: false}};
+    let preloadedState = {ui: {hints: true, tour: false, challenges: []}};
     if (window.currentUser){
         preloadedState = {
             entities: {
@@ -36,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         id: window.currentUser.id,
                         username: window.currentUser.username,
                         rating: window.currentUser.rating,
+                        email: window.currentUser.email,
                         status: 'waiting'
                     }
                 }
@@ -47,7 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentUserId: window.currentUser.id
             },
             ui: {
-                hints: true
+                hints: true,
+                tour: false,
+                challenges: []
             }
         };
     }

@@ -1,5 +1,6 @@
 export const TOGGLE_HINTS = 'TOGGLE_HINTS';
 export const SET_TOUR = 'SET_TOUR';
+export const SET_CHALLENGE = 'SET_CHALLENGE';
 
 
 export const toggleHints = () => {
@@ -14,3 +15,10 @@ export const setTour = (newTour) => {
         newTour: newTour
     };
 };
+
+export const makeEmailChallenge = (challengeId) => {
+    return {
+        type: SET_CHALLENGE,
+        challengeId: challengeId
+    };
+}

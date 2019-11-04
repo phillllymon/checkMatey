@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :email, only: [:create]
     
   end
+  get 'challenges/:username/:yourName/:challengeId/:gameType/:gameTime', to: 'challenges#create'
   
   root "static_pages#root" 
 

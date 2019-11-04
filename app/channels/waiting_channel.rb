@@ -60,6 +60,12 @@ class WaitingChannel < ApplicationCable::Channel
     })
   end
 
+  def relayChallengeId(data)
+    ActionCable.server.broadcast("WaitingChannel", {
+      challengeId: data['challengeId']
+    })
+  end
+
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
     #stop_all_streams
