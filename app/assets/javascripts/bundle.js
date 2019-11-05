@@ -6050,7 +6050,7 @@ function (_React$Component) {
             style: {
               'float': 'left'
             }
-          }), " Video Tour"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "For a more detail on all the features of CheckMatey, watch the video tour. Thanks for taking a look around!", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          }), " Video Tour"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "For more details on all the features of CheckMatey, watch the video tour. Thanks for taking a look around!", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "tour_buttons"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "tour_button",

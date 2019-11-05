@@ -339,7 +339,7 @@ class Menu extends React.Component {
                             </div>
                             <br />
                             <br />
-                            For a more detail on all the features of CheckMatey, watch the video tour. Thanks for taking a look around!
+                            For more details on all the features of CheckMatey, watch the video tour. Thanks for taking a look around!
                             <br />
                             <br />
 
