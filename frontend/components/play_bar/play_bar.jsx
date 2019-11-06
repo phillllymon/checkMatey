@@ -147,7 +147,7 @@ class PlayBar extends React.Component {
 
     showEmailChallengeOptions() {
         return (
-            <div className="modal_back" style={{zIndex:3}} onClick={() => {
+            <div className="modal_back" style={{'zIndex':'3'}} onClick={() => {
                 this.setState({
                     emailChallengePrompted: false,
                     showGameOptions: false,
@@ -655,7 +655,7 @@ class PlayBar extends React.Component {
                 <div
                     id="lobby_button"
                     className={this.mobile ? "board_control_button_mobile" : ''}
-                    style={this.mobile ? '' : {'cursor': 'pointer', 'float': 'right', 'fontSize': '20px', 'padding': '5px'}}
+                    style={this.mobile ? {'':''} : {'cursor': 'pointer', 'float': 'right', 'fontSize': '20px', 'padding': '5px'}}
                     onClick={this.enterLobby}
                     onMouseEnter={() => { this.setHint('Become visible for other players to challenge you') }}
                     onMouseLeave={() => { this.setHint(false) }}
@@ -667,7 +667,7 @@ class PlayBar extends React.Component {
                 <div
                     id="lobby_button"
                     className={this.mobile ? "board_control_button_mobile" : ''}
-                    style={this.mobile ? '' : { 'cursor': 'pointer', 'float': 'right', 'fontSize': '20px', 'padding': '5px' }}
+                    style={this.mobile ? {'':''} : { 'cursor': 'pointer', 'float': 'right', 'fontSize': '20px', 'padding': '5px' }}
                     onClick={this.leaveLobby}
                     onMouseEnter={() => { this.setHint('Become invisible') }}
                     onMouseLeave={() => { this.setHint(false) }}
@@ -716,7 +716,7 @@ class PlayBar extends React.Component {
                         </div>
                         <div className="small_heading_mobile">
                             <i className="fas fa-users"></i> Players
-                </div>
+                        </div>
                         {this.lobbyButton()}
                         {
 

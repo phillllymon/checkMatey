@@ -8176,7 +8176,7 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "modal_back",
         style: {
-          zIndex: 3
+          'zIndex': '3'
         },
         onClick: function onClick() {
           _this3.setState({
@@ -8712,7 +8712,9 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           id: "lobby_button",
           className: this.mobile ? "board_control_button_mobile" : '',
-          style: this.mobile ? '' : {
+          style: this.mobile ? {
+            '': ''
+          } : {
             'cursor': 'pointer',
             'float': 'right',
             'fontSize': '20px',
@@ -8732,7 +8734,9 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           id: "lobby_button",
           className: this.mobile ? "board_control_button_mobile" : '',
-          style: this.mobile ? '' : {
+          style: this.mobile ? {
+            '': ''
+          } : {
             'cursor': 'pointer',
             'float': 'right',
             'fontSize': '20px',
