@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { makeEmailChallenge, clearChallenges } from '../../actions/ui_actions';
+import { logout } from '../../actions/session_actions';
 import PlayBar from './play_bar';
 
 const mapStateToProps = (state, ownprops) => ({
@@ -10,7 +11,8 @@ const mapStateToProps = (state, ownprops) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     makeEmailChallenge: (challengeId) => dispatch(makeEmailChallenge(challengeId)),
-    clearChallenges: () => dispatch(clearChallenges())
+    clearChallenges: () => dispatch(clearChallenges()),
+    logout: () => dispatch(logout())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayBar);

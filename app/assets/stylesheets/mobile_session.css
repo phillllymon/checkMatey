@@ -1,8 +1,9 @@
 .session_modal_mobile {
     position: fixed;
     z-index: 2;
-    left: 0;
+    left: 50%;
     top: 15%;
+    transform: translate(-50%, 0);
     width: 100vw;
     background-color: rgb(230, 230, 230);
     border-radius: 5px;

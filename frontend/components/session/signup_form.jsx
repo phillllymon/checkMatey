@@ -72,8 +72,8 @@ class SignupForm extends React.Component {
         if (this.mobile) {
             return(
             <div>
-                <div className="modal_back" onClick={this.backToSplash}></div>
-                <div className="session_modal_mobile">
+                    <div className="modal_back" style={{ 'position': 'absolute' }}  onClick={this.backToSplash}></div>
+                    <div className="session_modal_mobile" style={{ 'position': 'absolute' }} >
                     <br />
                     <div className="errors">
                         <center>

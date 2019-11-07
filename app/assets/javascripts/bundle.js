@@ -8712,9 +8712,7 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           id: "lobby_button",
           className: this.mobile ? "board_control_button_mobile" : '',
-          style: this.mobile ? {
-            '': ''
-          } : {
+          style: this.mobile ? {} : {
             'cursor': 'pointer',
             'float': 'right',
             'fontSize': '20px',
@@ -8734,9 +8732,7 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           id: "lobby_button",
           className: this.mobile ? "board_control_button_mobile" : '',
-          style: this.mobile ? {
-            '': ''
-          } : {
+          style: this.mobile ? {} : {
             'cursor': 'pointer',
             'float': 'right',
             'fontSize': '20px',
@@ -8770,9 +8766,15 @@ function (_React$Component) {
           }
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-chess"
-        }), " Game Room ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fas fa-chess-knight"
-        }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.gameTypes.map(function (gameType) {
+        }), " Game Room ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "board_control_button_mobile",
+          style: {
+            'width': '15vw'
+          },
+          onClick: this.props.logout
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-sign-out-alt"
+        })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.gameTypes.map(function (gameType) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: _this8.state.gameType === gameType ? "current_type_button_mobile" : "type_button_mobile",
             onClick: function onClick() {
@@ -9049,7 +9051,9 @@ function (_React$Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _actions_ui_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/ui_actions */ "./frontend/actions/ui_actions.js");
-/* harmony import */ var _play_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./play_bar */ "./frontend/components/play_bar/play_bar.jsx");
+/* harmony import */ var _actions_session_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../actions/session_actions */ "./frontend/actions/session_actions.js");
+/* harmony import */ var _play_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./play_bar */ "./frontend/components/play_bar/play_bar.jsx");
+
 
 
 
@@ -9069,11 +9073,14 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     clearChallenges: function clearChallenges() {
       return dispatch(Object(_actions_ui_actions__WEBPACK_IMPORTED_MODULE_1__["clearChallenges"])());
+    },
+    logout: function logout() {
+      return dispatch(Object(_actions_session_actions__WEBPACK_IMPORTED_MODULE_2__["logout"])());
     }
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_play_bar__WEBPACK_IMPORTED_MODULE_2__["default"]));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, mapDispatchToProps)(_play_bar__WEBPACK_IMPORTED_MODULE_3__["default"]));
 
 /***/ }),
 
@@ -9976,9 +9983,15 @@ function (_React$Component) {
       if (this.mobile) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "modal_back",
+          style: {
+            'position': 'absolute'
+          },
           onClick: this.backToSplash
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "session_modal_mobile"
+          className: "session_modal_mobile",
+          style: {
+            'position': 'absolute'
+          }
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "errors"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.props.errors.map(function (error, idx) {
@@ -10252,9 +10265,15 @@ function (_React$Component) {
       if (this.mobile) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "modal_back",
+          style: {
+            'position': 'absolute'
+          },
           onClick: this.backToSplash
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "session_modal_mobile"
+          className: "session_modal_mobile",
+          style: {
+            'position': 'absolute'
+          }
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "errors"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, this.props.errors.map(function (error, idx) {

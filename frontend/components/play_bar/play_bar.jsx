@@ -655,7 +655,7 @@ class PlayBar extends React.Component {
                 <div
                     id="lobby_button"
                     className={this.mobile ? "board_control_button_mobile" : ''}
-                    style={this.mobile ? {'':''} : {'cursor': 'pointer', 'float': 'right', 'fontSize': '20px', 'padding': '5px'}}
+                    style={this.mobile ? {} : {'cursor': 'pointer', 'float': 'right', 'fontSize': '20px', 'padding': '5px'}}
                     onClick={this.enterLobby}
                     onMouseEnter={() => { this.setHint('Become visible for other players to challenge you') }}
                     onMouseLeave={() => { this.setHint(false) }}
@@ -667,7 +667,7 @@ class PlayBar extends React.Component {
                 <div
                     id="lobby_button"
                     className={this.mobile ? "board_control_button_mobile" : ''}
-                    style={this.mobile ? {'':''} : { 'cursor': 'pointer', 'float': 'right', 'fontSize': '20px', 'padding': '5px' }}
+                    style={this.mobile ? {} : { 'cursor': 'pointer', 'float': 'right', 'fontSize': '20px', 'padding': '5px' }}
                     onClick={this.leaveLobby}
                     onMouseEnter={() => { this.setHint('Become invisible') }}
                     onMouseLeave={() => { this.setHint(false) }}
@@ -685,7 +685,7 @@ class PlayBar extends React.Component {
                     {this.state.playing ? this.showVsBoard() : ''}
                     <div className="controls_heading_mobile">
                         <div style={{ 'margin': '10px' }}>
-                            <i className="fas fa-chess"></i> Game Room <i className="fas fa-chess-knight"></i>
+                            <i className="fas fa-chess"></i> Game Room <button className="board_control_button_mobile" style={{ 'width': '15vw' }} onClick={this.props.logout}><i className="fas fa-sign-out-alt"></i></button>
                         </div>
                     </div>
                     <center>
