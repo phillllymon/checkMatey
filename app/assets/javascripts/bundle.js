@@ -9983,9 +9983,6 @@ function (_React$Component) {
       if (this.mobile) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "modal_back",
-          style: {
-            'position': 'absolute'
-          },
           onClick: this.backToSplash
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "session_modal_mobile",
@@ -10265,9 +10262,6 @@ function (_React$Component) {
       if (this.mobile) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "modal_back",
-          style: {
-            'position': 'absolute'
-          },
           onClick: this.backToSplash
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "session_modal_mobile",
