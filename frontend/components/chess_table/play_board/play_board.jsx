@@ -2,6 +2,7 @@ import React from 'react';
 import Piece from '../piece';
 import { Game } from '../chess/game';
 import { getPieceIcon } from '../piece';
+import { getPieceColor } from '../chess/chess_helper';
 
 class PlayBoard extends React.Component {
     constructor(props) {
@@ -351,6 +352,13 @@ class PlayBoard extends React.Component {
                 [ parseInt(this.origin[0]), parseInt(this.origin[2]) ], 
                 [ parseInt(destination[0]), parseInt(destination[2]) ]
             ];
+            if (getPieceColor(this.grid[parseInt(this.origin[0])][parseInt(this.origin[2])]) 
+                === (this.currentPlayer === 'white' ? 'black' : 'white')) {
+                this.setHint("You're playing " + this.playerColor + "!");
+                setTimeout(() => {
+                    this.setState({ hint: false });
+                }, 3000);
+            }
             if (destination !== this.origin && this.game.isMoveLegal(move, this.currentPlayer) && this.game.level === 0) {
                 this.game.makeMove(move);
                 this.highlightSquare = move[1];
