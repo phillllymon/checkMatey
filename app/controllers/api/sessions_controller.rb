@@ -6,13 +6,16 @@ class Api::SessionsController < ApplicationController
             if @user.username == 'DemoUser' && user_params[:demo]
                 UserMailer.test_email.deliver_later
                 if !@user.logged_out 
-                    @user = User.find_by_credentials('DemoUser2', '123456')
+                    @user = User.find_by(username: 'DemoUser2')
                 end
                 if !@user.logged_out 
-                    @user = User.find_by_credentials('DemoUser3', '123456')
+                    @user = User.find_by(username: 'DemoUser3')
                 end
                 if !@user.logged_out 
-                    @user = User.find_by_credentials('DemoUser4', '123456')
+                    @user = User.find_by(username: 'DemoUser4')
+                end
+                if !@user.logged_out
+                    @user = pick_demo_account
                 end
             end
             login(@user)
@@ -32,6 +35,17 @@ class Api::SessionsController < ApplicationController
     end
 
     private
+
+    def pick_demo_account
+        users = [
+            User.find_by(username: 'DemoUser'),
+            User.find_by(username: 'DemoUser2'),
+            User.find_by(username: 'DemoUser3'),
+            User.find_by(username: 'DemoUser4')
+        ]
+        update_times = users.map { |user| user.updated_at }
+        users[update_times.index(update_times.min)]
+    end
 
     def user_params
         params.require(:user).permit(:username, :password, :demo)
