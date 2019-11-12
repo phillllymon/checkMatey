@@ -72,7 +72,7 @@ class FeedItem extends React.Component {
     }
 
     editPost(e) {
-        this.setState({mode: 'edit'});
+        this.setState({mode: 'edit', content: this.props.post.content});
     }
 
     editBar() {

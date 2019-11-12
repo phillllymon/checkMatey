@@ -533,7 +533,7 @@ class PlayBoard extends React.Component {
                                 return (
                                     <button className={this.game.level === level ? "current_level_button" : "level_button"}
                                     onClick={() => this.setLevel(level)} 
-                                        onMouseEnter={() => { this.setHint("Set computer level (Level 0 means you play both sides)") }}
+                                        onMouseEnter={() => { this.setHint(level === 0 ? "Set computer level (Level 0 means you play both sides)" : "Level 1 is easy computer") }}
                                         onMouseLeave={() => { this.setHint(false) }}
                                     key={level}>{level}</button>
                                     
@@ -562,7 +562,7 @@ class PlayBoard extends React.Component {
                             <i className="fas fa-robot"></i> 
                         </div>
                         <div className="controls_text" style={{ 'color': this.compColor }}>
-                            <div>plays {this.compColor}</div>
+                            <div>Computer <br/>plays {this.compColor}</div>
                         </div>
                     </div>
                         <button
@@ -580,7 +580,7 @@ class PlayBoard extends React.Component {
                             <i className="fas fa-user"></i>
                         </div>
                         <div className="controls_text" style={{'color': this.playerColor}}>
-                            <div>plays {this.playerColor}</div>
+                            <div>You <br/>play {this.playerColor}</div>
                         </div>
                     </div>
                     <div className="captured_pieces" style={{ 'color': this.playerColor }}>

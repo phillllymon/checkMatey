@@ -2926,7 +2926,7 @@ function (_React$Component) {
             return _this8.setLevel(level);
           },
           onMouseEnter: function onMouseEnter() {
-            _this8.setHint("Set computer level (Level 0 means you play both sides)");
+            _this8.setHint(level === 0 ? "Set computer level (Level 0 means you play both sides)" : "Level 1 is easy computer");
           },
           onMouseLeave: function onMouseLeave() {
             _this8.setHint(false);
@@ -2956,7 +2956,7 @@ function (_React$Component) {
         style: {
           'color': this.compColor
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "plays ", this.compColor))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Computer ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "plays ", this.compColor))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "board_control_button",
         onClick: this.switchSides
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -2977,7 +2977,7 @@ function (_React$Component) {
         style: {
           'color': this.playerColor
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "plays ", this.playerColor))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "You ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "play ", this.playerColor))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "captured_pieces",
         style: {
           'color': this.playerColor
@@ -5534,7 +5534,8 @@ function (_React$Component) {
     key: "editPost",
     value: function editPost(e) {
       this.setState({
-        mode: 'edit'
+        mode: 'edit',
+        content: this.props.post.content
       });
     }
   }, {

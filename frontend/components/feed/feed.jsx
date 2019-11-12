@@ -30,7 +30,7 @@ class Feed extends React.Component {
                     posts.map( (post, idx) => {
                         return (
                             <div key={idx}>
-                                <FeedItemContainer post={post} />
+                                <FeedItemContainer post={post}/>
                             </div>
                         );
                     })
