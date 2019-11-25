@@ -277,7 +277,10 @@ class TetrisMobile extends React.Component {
                                 Lines: {this.game.lines}
                             </center>
                         </div>
-                        <div className="tetris_stats_mobile">
+                        <div className="tetris_stats_mobile" onClick={ () => {
+                            this.startGame();
+                        }
+                        }>
                             <center>
                                 Record: 
                                 <br />
@@ -322,7 +325,7 @@ class TetrisMobile extends React.Component {
                         <button
                         onTouchStart={(e) => {
                             e.preventDefault();
-                            this.handleControls('rotate')
+                            this.handleControls('rotate');
                         }}
                         style={{
                             'width': '100%',

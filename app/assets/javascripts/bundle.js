@@ -1628,7 +1628,7 @@ function () {
     this.makeAIMove = this.makeAIMove.bind(this);
     this.gameTypes = ['Standard', 'Chess960', 'Pawn Clash'];
     this.gameType = gameType;
-    this.levels = [0, 1];
+    this.levels = [0, 1, 2, 3];
     this.level = 1; ///0 is you play both players, 1 is random move, 2 is use API maybe???
 
     this.started = false;
@@ -1812,7 +1812,7 @@ function () {
     key: "makeAIMove",
     value: function makeAIMove() {
       if (!this.isGameOver()) {
-        this.AIMove = this.getAIMove();
+        this.AIMove = this.getAIMove(this.level);
         this.makeMove(this.AIMove);
         return this.grid;
       } else {
@@ -1820,8 +1820,17 @@ function () {
       }
     }
   }, {
+    key: "getString",
+    value: function getString() {
+      var answer = '';
+      this.grid.forEach(function (row) {
+        answer += row.join('');
+      });
+      return answer;
+    }
+  }, {
     key: "getAIMove",
-    value: function getAIMove() {
+    value: function getAIMove(level) {
       var _this = this;
 
       var origins = [];
@@ -1840,16 +1849,18 @@ function () {
           moves.push([origin, destination]);
         });
       });
-      return moves[Math.floor(Math.random() * moves.length)];
+
+      if (level === 1) {
+        return moves[Math.floor(Math.random() * moves.length)];
+      }
+
+      return this.lookMovesAhead(level - 1, moves);
     }
   }, {
-    key: "getString",
-    value: function getString() {
-      var answer = '';
-      this.grid.forEach(function (row) {
-        answer += row.join('');
-      });
-      return answer;
+    key: "lookMovesAhead",
+    value: function lookMovesAhead(num, moves) {
+      console.log(moves);
+      return moves[Math.floor(Math.random() * moves.length)];
     }
   }]);
 
@@ -7889,7 +7900,10 @@ function (_React$Component) {
       })), this.game.preview ? 'on' : 'off'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tetris_stats_mobile"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Score:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.game.score, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Level: ", this.game.level, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Lines: ", this.game.lines)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "tetris_stats_mobile"
+        className: "tetris_stats_mobile",
+        onClick: function onClick() {
+          _this6.startGame();
+        }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, "Record:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highScore, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "smaller_text_mobile"
       }, this.leader, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.highTime.slice(0, 10)))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -41067,7 +41081,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

@@ -32,7 +32,7 @@ export class Game {
         this.makeAIMove = this.makeAIMove.bind(this);
         this.gameTypes = ['Standard', 'Chess960', 'Pawn Clash'];
         this.gameType = gameType;
-        this.levels = [0, 1];
+        this.levels = [0, 1, 2, 3];
         this.level = 1; ///0 is you play both players, 1 is random move, 2 is use API maybe???
         this.started = false;
         this.inCheck = false;
@@ -237,7 +237,7 @@ export class Game {
 
     makeAIMove() {
         if (!this.isGameOver()) {
-            this.AIMove = this.getAIMove();
+            this.AIMove = this.getAIMove(this.level);
             this.makeMove(this.AIMove);
             return this.grid;
         }
@@ -246,7 +246,15 @@ export class Game {
         }
     }
 
-    getAIMove() {
+    getString() {
+        let answer = '';
+        this.grid.forEach((row) => {
+            answer += row.join('');
+        });
+        return answer;
+    }
+
+    getAIMove(level) {
         let origins = [];
         this.grid.forEach( (row, rIdx) => {
             row.forEach( (mark, cIdx) => {
@@ -263,15 +271,15 @@ export class Game {
                 moves.push([origin, destination]);
             });
         });
-        return moves[Math.floor(Math.random()*moves.length)];
+        if (level === 1) {
+            return moves[Math.floor(Math.random()*moves.length)];
+        }
+        return this.lookMovesAhead(level - 1, moves);
     }
 
-    getString() {
-        let answer = '';
-        this.grid.forEach( (row) => {
-            answer += row.join('');
-        });
-        return answer;
+    lookMovesAhead(num, moves) {
+        console.log(moves);
+        return moves[Math.floor(Math.random() * moves.length)];
     }
 
 }
