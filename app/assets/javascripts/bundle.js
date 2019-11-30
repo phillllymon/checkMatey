@@ -1663,7 +1663,6 @@ function () {
           return mark.toLowerCase();
         });
       } else if (this.gameType instanceof Array) {
-        console.log(this.gameType);
         this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
         this.grid[0] = this.gameType;
         this.grid[7] = this.gameType.map(function (mark) {
@@ -1859,7 +1858,80 @@ function () {
   }, {
     key: "lookMovesAhead",
     value: function lookMovesAhead(num, moves) {
-      console.log(moves);
+      var _this2 = this;
+
+      //console.log(moves);
+      if (num === 1) {
+        var outcomes = [];
+
+        var _loop = function _loop(i) {
+          var testGame = new Game('Standard');
+          testGame.grid = _this2.grid.map(function (row) {
+            return row.map(function (spot) {
+              return spot;
+            });
+          });
+          testGame.moves = _this2.moves.map(function (move) {
+            return move;
+          });
+          testGame.currentPlayer = _this2.currentPlayer;
+          testGame.makeMove(moves[i]); //let humanMoves = getAllMoves(testGame.currentPlayer, testGame.grid, testGame);
+
+          var humanMoves = [];
+          var origins = [];
+          testGame.grid.forEach(function (row, rIdx) {
+            row.forEach(function (mark, cIdx) {
+              if (Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceColor"])(mark) === testGame.currentPlayer) {
+                origins.push([rIdx, cIdx]);
+              }
+            });
+          });
+          origins.forEach(function (origin) {
+            var mark = testGame.grid[origin[0]][origin[1]];
+            var pieceType = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceType"])(mark);
+            Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceMoves"])(origin, pieceType, testGame.currentPlayer, testGame.grid, testGame).forEach(function (destination) {
+              humanMoves.push([origin, destination]);
+            });
+          });
+          var subOutcomes = [];
+
+          for (var j = 0; j < humanMoves.length; j++) {
+            var subTestGame = new Game('Standard');
+            subTestGame.start();
+            subTestGame.grid = testGame.grid.map(function (row) {
+              return row.map(function (spot) {
+                return spot;
+              });
+            });
+            subTestGame.moves = testGame.moves.map(function (move) {
+              return move;
+            });
+            subTestGame.makeMove(humanMoves[j]);
+            var advantage = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(subTestGame.grid) - Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(subTestGame.grid);
+
+            if (subTestGame.currentPlayer === 'black') {
+              advantage *= -1;
+            }
+
+            if (subTestGame.inCheck && subTestGame.isGameOver) {
+              subOutcomes.push(100);
+            } else {
+              subOutcomes.push(advantage);
+            }
+          }
+
+          outcomes.push(Math.min.apply(Math, subOutcomes));
+        };
+
+        for (var i = 0; i < moves.length; i++) {
+          _loop(i);
+        }
+
+        console.log(outcomes);
+        console.log(Math.max.apply(Math, outcomes));
+        return moves[outcomes.indexOf(Math.max.apply(Math, outcomes))];
+      }
+
       return moves[Math.floor(Math.random() * moves.length)];
     }
   }]);
@@ -41081,7 +41153,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

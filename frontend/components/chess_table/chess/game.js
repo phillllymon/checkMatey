@@ -82,7 +82,6 @@ export class Game {
             });
         }
         else if (this.gameType instanceof Array) {
-            console.log(this.gameType);
             this.grid = [
                 ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
                 ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
@@ -278,7 +277,68 @@ export class Game {
     }
 
     lookMovesAhead(num, moves) {
-        console.log(moves);
+        //console.log(moves);
+        if (num === 1) {
+            let outcomes = [];
+            for (let i = 0; i < moves.length; i++) {
+                let testGame = new Game('Standard');
+                testGame.grid = this.grid.map( (row) => {
+                    return row.map( (spot) => {
+                        return spot;
+                    });
+                });
+                testGame.moves = this.moves.map( (move) => {
+                    return move;
+                });
+                testGame.currentPlayer = this.currentPlayer;
+                testGame.makeMove(moves[i]);
+                //let humanMoves = getAllMoves(testGame.currentPlayer, testGame.grid, testGame);
+                let humanMoves = [];
+                let origins = [];
+                testGame.grid.forEach((row, rIdx) => {
+                    row.forEach((mark, cIdx) => {
+                        if (getPieceColor(mark) === testGame.currentPlayer) {
+                            origins.push([rIdx, cIdx]);
+                        }
+                    });
+                });
+                origins.forEach((origin) => {
+                    let mark = testGame.grid[origin[0]][origin[1]];
+                    let pieceType = getPieceType(mark);
+                    getPieceMoves(origin, pieceType, testGame.currentPlayer, testGame.grid, testGame).forEach((destination) => {
+                        humanMoves.push([origin, destination]);
+                    });
+                });
+                let subOutcomes = [];
+                for (let j = 0; j < humanMoves.length; j++) {
+                    let subTestGame = new Game('Standard');
+                    subTestGame.start();
+                    subTestGame.grid = testGame.grid.map((row) => {
+                        return row.map((spot) => {
+                            return spot;
+                        });
+                    });
+                    subTestGame.moves = testGame.moves.map((move) => {
+                        return move;
+                    });
+                    subTestGame.makeMove(humanMoves[j]);
+                    let advantage = getWhitePoints(subTestGame.grid) - getBlackPoints(subTestGame.grid);
+                    if (subTestGame.currentPlayer === 'black') {
+                        advantage *= -1;
+                    }
+                    if (subTestGame.inCheck && subTestGame.isGameOver) {
+                        subOutcomes.push(100);
+                    }
+                    else {
+                        subOutcomes.push(advantage);
+                    }
+                }
+                outcomes.push(Math.min(...subOutcomes));
+            }
+            console.log(outcomes);
+            console.log(Math.max(...outcomes));
+            return moves[outcomes.indexOf(Math.max(...outcomes))];
+        }
         return moves[Math.floor(Math.random() * moves.length)];
     }
 
