@@ -2911,9 +2911,8 @@ function (_React$Component) {
             hint: false
           });
           this.markToDrag = null;
-          this.origin = null; /////COMPUTER TURN BELOW ///////
-
-          this.takeComputerTurn(); /////COMPUTER TURN ABOVE ///////        
+          this.origin = null;
+          this.takeComputerTurn(); /////COMPUTER TURN 
         } else {
           this.setState({
             grid: this.grid,

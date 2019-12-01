@@ -399,9 +399,7 @@ class PlayBoard extends React.Component {
                 });
                 this.markToDrag = null;
                 this.origin = null;
-                /////COMPUTER TURN BELOW ///////
-                this.takeComputerTurn();
-                /////COMPUTER TURN ABOVE ///////        
+                this.takeComputerTurn(); /////COMPUTER TURN 
             }
             else {
                 this.setState({
