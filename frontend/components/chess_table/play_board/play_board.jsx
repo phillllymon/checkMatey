@@ -325,17 +325,21 @@ class PlayBoard extends React.Component {
                 this.grid = this.game.makeAIMove();
                 this.highlightSquare = this.game.AIMove[1];
                 this.currentPlayer = this.game.currentPlayer;
-                if (this.game.inCheck) {
+                if (this.game.inCheck && !this.game.isGameOver()) {
                     this.setHint('', 4);
                 }
                 this.setState({
                     grid: this.grid
                 });
+            if (this.game.isGameOver()) {
+                this.gameOverMessage = this.game.gameOverMessage;
+                this.setState({ popup: true });
+            }
             }, Math.random() * 500 + 500);
         }
-        else {
+        if (this.game.isGameOver()) {
             this.gameOverMessage = this.game.gameOverMessage;
-            this.setState({popup: true});
+            this.setState({ popup: true });
         }
     }
 

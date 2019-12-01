@@ -1593,6 +1593,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Game", function() { return Game; });
 /* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
 /* harmony import */ var _chess_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chess_helper */ "./frontend/components/chess_table/chess/chess_helper.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1672,14 +1674,14 @@ function () {
         this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
       } // else {
       //     this.grid = [
-      //         ['-', '-', '-', '-', '-', '-', '-', 'K'],
+      //         ['-', '-', 'R', '-', '-', '-', '-', 'K'],
+      //         ['-', '-', '-', '-', '-', 'P', 'P', 'P'],
       //         ['-', '-', '-', '-', '-', '-', '-', '-'],
       //         ['-', '-', '-', '-', '-', '-', '-', '-'],
       //         ['-', '-', '-', '-', '-', '-', '-', '-'],
       //         ['-', '-', '-', '-', '-', '-', '-', '-'],
-      //         ['-', '-', '-', '-', '-', '-', '-', '-'],
-      //         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-      //         ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
+      //         ['p', 'p', '-', 'p', 'p', 'p', 'p', 'p'],
+      //         ['-', '-', '-', '-', 'k', 'b', 'n', 'r']
       //     ];
       // }
 
@@ -1875,7 +1877,13 @@ function () {
             return move;
           });
           testGame.currentPlayer = _this2.currentPlayer;
-          testGame.makeMove(moves[i]); //let humanMoves = getAllMoves(testGame.currentPlayer, testGame.grid, testGame);
+          testGame.makeMove(moves[i]);
+
+          if (testGame.isGameOver() && testGame.inCheck) {
+            return {
+              v: moves[i]
+            };
+          }
 
           var humanMoves = [];
           var origins = [];
@@ -1911,10 +1919,12 @@ function () {
 
             if (subTestGame.currentPlayer === 'black') {
               advantage *= -1;
-            }
+            } // console.log(subTestGame.inCheck);
+            // console.log(subTestGame.isGameOver());
 
-            if (subTestGame.inCheck && subTestGame.isGameOver) {
-              subOutcomes.push(100);
+
+            if (subTestGame.inCheck && subTestGame.isGameOver()) {
+              subOutcomes.push(-100);
             } else {
               subOutcomes.push(advantage);
             }
@@ -1924,11 +1934,11 @@ function () {
         };
 
         for (var i = 0; i < moves.length; i++) {
-          _loop(i);
+          var _ret = _loop(i);
+
+          if (_typeof(_ret) === "object") return _ret.v;
         }
 
-        console.log(outcomes);
-        console.log(Math.max.apply(Math, outcomes));
         return moves[outcomes.indexOf(Math.max.apply(Math, outcomes))];
       }
 
@@ -2799,15 +2809,25 @@ function (_React$Component) {
           _this5.highlightSquare = _this5.game.AIMove[1];
           _this5.currentPlayer = _this5.game.currentPlayer;
 
-          if (_this5.game.inCheck) {
+          if (_this5.game.inCheck && !_this5.game.isGameOver()) {
             _this5.setHint('', 4);
           }
 
           _this5.setState({
             grid: _this5.grid
           });
+
+          if (_this5.game.isGameOver()) {
+            _this5.gameOverMessage = _this5.game.gameOverMessage;
+
+            _this5.setState({
+              popup: true
+            });
+          }
         }, Math.random() * 500 + 500);
-      } else {
+      }
+
+      if (this.game.isGameOver()) {
         this.gameOverMessage = this.game.gameOverMessage;
         this.setState({
           popup: true

@@ -111,14 +111,14 @@ export class Game {
         }
         // else {
         //     this.grid = [
-        //         ['-', '-', '-', '-', '-', '-', '-', 'K'],
+        //         ['-', '-', 'R', '-', '-', '-', '-', 'K'],
+        //         ['-', '-', '-', '-', '-', 'P', 'P', 'P'],
         //         ['-', '-', '-', '-', '-', '-', '-', '-'],
         //         ['-', '-', '-', '-', '-', '-', '-', '-'],
         //         ['-', '-', '-', '-', '-', '-', '-', '-'],
         //         ['-', '-', '-', '-', '-', '-', '-', '-'],
-        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
-        //         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-        //         ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
+        //         ['p', 'p', '-', 'p', 'p', 'p', 'p', 'p'],
+        //         ['-', '-', '-', '-', 'k', 'b', 'n', 'r']
         //     ];
         // }
         this.gameSoFar.push(this.getString());
@@ -292,7 +292,9 @@ export class Game {
                 });
                 testGame.currentPlayer = this.currentPlayer;
                 testGame.makeMove(moves[i]);
-                //let humanMoves = getAllMoves(testGame.currentPlayer, testGame.grid, testGame);
+                if (testGame.isGameOver() && testGame.inCheck) {
+                    return moves[i];
+                }
                 let humanMoves = [];
                 let origins = [];
                 testGame.grid.forEach((row, rIdx) => {
@@ -326,8 +328,10 @@ export class Game {
                     if (subTestGame.currentPlayer === 'black') {
                         advantage *= -1;
                     }
-                    if (subTestGame.inCheck && subTestGame.isGameOver) {
-                        subOutcomes.push(100);
+                    // console.log(subTestGame.inCheck);
+                    // console.log(subTestGame.isGameOver());
+                    if (subTestGame.inCheck && subTestGame.isGameOver()) {
+                        subOutcomes.push(-100);
                     }
                     else {
                         subOutcomes.push(advantage);
@@ -335,8 +339,6 @@ export class Game {
                 }
                 outcomes.push(Math.min(...subOutcomes));
             }
-            console.log(outcomes);
-            console.log(Math.max(...outcomes));
             return moves[outcomes.indexOf(Math.max(...outcomes))];
         }
         return moves[Math.floor(Math.random() * moves.length)];
