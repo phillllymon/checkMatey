@@ -1863,7 +1863,7 @@ function () {
       var _this2 = this;
 
       //console.log(moves);
-      if (num === 1) {
+      if (num > 0) {
         var outcomes = [];
 
         var _loop = function _loop(i) {
@@ -1877,6 +1877,7 @@ function () {
             return move;
           });
           testGame.currentPlayer = _this2.currentPlayer;
+          console.log(testGame.currentPlayer);
           testGame.makeMove(moves[i]);
 
           if (testGame.isGameOver() && testGame.inCheck) {
@@ -1906,6 +1907,7 @@ function () {
           for (var j = 0; j < humanMoves.length; j++) {
             var subTestGame = new Game('Standard');
             subTestGame.start();
+            subTestGame.currentPlayer = testGame.currentPlayer;
             subTestGame.grid = testGame.grid.map(function (row) {
               return row.map(function (spot) {
                 return spot;
@@ -1919,9 +1921,7 @@ function () {
 
             if (subTestGame.currentPlayer === 'black') {
               advantage *= -1;
-            } // console.log(subTestGame.inCheck);
-            // console.log(subTestGame.isGameOver());
-
+            }
 
             if (subTestGame.inCheck && subTestGame.isGameOver()) {
               subOutcomes.push(-100);
@@ -1939,7 +1939,16 @@ function () {
           if (_typeof(_ret) === "object") return _ret.v;
         }
 
-        return moves[outcomes.indexOf(Math.max.apply(Math, outcomes))];
+        var max = Math.max.apply(Math, outcomes);
+        var indeces = [];
+
+        for (var i = 0; i < outcomes.length; i++) {
+          if (outcomes[i] === max) {
+            indeces.push(i);
+          }
+        }
+
+        return moves[indeces[Math.floor(Math.random() * indeces.length)]];
       }
 
       return moves[Math.floor(Math.random() * moves.length)];
@@ -2702,7 +2711,9 @@ function (_React$Component) {
     key: "resetGame",
     value: function resetGame() {
       this.highlightSquare = null;
+      var level = this.game.level;
       this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"](this.typeSetting);
+      this.game.level = level;
       this.grid = this.game.grid;
       this.setState({
         popup: false,
@@ -3029,14 +3040,14 @@ function (_React$Component) {
             return _this8.setLevel(level);
           },
           onMouseEnter: function onMouseEnter() {
-            _this8.setHint(level === 0 ? "Set computer level (Level 0 means you play both sides)" : "Level 1 is easy computer");
+            _this8.setHint(level === 0 ? "Set computer level (Level 0 means you play both sides)" : "Higher number is harder computer");
           },
           onMouseLeave: function onMouseLeave() {
             _this8.setHint(false);
           },
           key: level
         }, level);
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.game.level > 0 ? 'Play against AI' : 'You play both sides'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.game.level > 0 ? this.game.level > 1 ? this.game.level > 2 ? 'Play against hard AI' : 'Play against medium AI' : 'Play against easy AI' : 'You play both sides'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "captured_pieces",
         style: {
           'color': this.compColor

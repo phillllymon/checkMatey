@@ -241,7 +241,9 @@ class PlayBoard extends React.Component {
 
     resetGame() {
         this.highlightSquare = null;
+        let level = this.game.level;
         this.game = new Game(this.typeSetting);
+        this.game.level = level;
         this.grid = this.game.grid;
         this.setState({
             popup: false,
@@ -537,7 +539,7 @@ class PlayBoard extends React.Component {
                                 return (
                                     <button className={this.game.level === level ? "current_level_button" : "level_button"}
                                     onClick={() => this.setLevel(level)} 
-                                        onMouseEnter={() => { this.setHint(level === 0 ? "Set computer level (Level 0 means you play both sides)" : "Level 1 is easy computer") }}
+                                        onMouseEnter={() => { this.setHint(level === 0 ? "Set computer level (Level 0 means you play both sides)" : "Higher number is harder computer") }}
                                         onMouseLeave={() => { this.setHint(false) }}
                                     key={level}>{level}</button>
                                     
@@ -546,7 +548,7 @@ class PlayBoard extends React.Component {
                         }
                         </div>
                         <div>
-                            {this.game.level > 0 ? 'Play against AI' : 'You play both sides'}
+                            {this.game.level > 0 ? (this.game.level > 1 ? this.game.level > 2 ? 'Play against hard AI' : 'Play against medium AI' : 'Play against easy AI') : 'You play both sides'}
                         </div>
                     <div className="captured_pieces" style={{ 'color': this.compColor }}>
                         {

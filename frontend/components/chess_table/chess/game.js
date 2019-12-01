@@ -278,7 +278,7 @@ export class Game {
 
     lookMovesAhead(num, moves) {
         //console.log(moves);
-        if (num === 1) {
+        if (num > 0) {
             let outcomes = [];
             for (let i = 0; i < moves.length; i++) {
                 let testGame = new Game('Standard');
@@ -291,6 +291,7 @@ export class Game {
                     return move;
                 });
                 testGame.currentPlayer = this.currentPlayer;
+                console.log(testGame.currentPlayer);
                 testGame.makeMove(moves[i]);
                 if (testGame.isGameOver() && testGame.inCheck) {
                     return moves[i];
@@ -315,6 +316,7 @@ export class Game {
                 for (let j = 0; j < humanMoves.length; j++) {
                     let subTestGame = new Game('Standard');
                     subTestGame.start();
+                    subTestGame.currentPlayer = testGame.currentPlayer;
                     subTestGame.grid = testGame.grid.map((row) => {
                         return row.map((spot) => {
                             return spot;
@@ -328,8 +330,6 @@ export class Game {
                     if (subTestGame.currentPlayer === 'black') {
                         advantage *= -1;
                     }
-                    // console.log(subTestGame.inCheck);
-                    // console.log(subTestGame.isGameOver());
                     if (subTestGame.inCheck && subTestGame.isGameOver()) {
                         subOutcomes.push(-100);
                     }
@@ -339,7 +339,14 @@ export class Game {
                 }
                 outcomes.push(Math.min(...subOutcomes));
             }
-            return moves[outcomes.indexOf(Math.max(...outcomes))];
+            let max = Math.max(...outcomes);
+            let indeces = []
+            for (let i = 0; i < outcomes.length; i++) {
+                if (outcomes[i] === max) {
+                    indeces.push(i);
+                }
+            }
+            return moves[indeces[Math.floor(Math.random() * indeces.length)]];
         }
         return moves[Math.floor(Math.random() * moves.length)];
     }
