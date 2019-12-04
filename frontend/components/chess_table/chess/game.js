@@ -291,7 +291,7 @@ export class Game {
                     return move;
                 });
                 testGame.currentPlayer = this.currentPlayer;
-                console.log(testGame.currentPlayer);
+                //console.log(testGame.currentPlayer);
                 testGame.makeMove(moves[i]);
                 if (testGame.isGameOver() && testGame.inCheck) {
                     return moves[i];
@@ -326,15 +326,21 @@ export class Game {
                         return move;
                     });
                     subTestGame.makeMove(humanMoves[j]);
-                    let advantage = getWhitePoints(subTestGame.grid) - getBlackPoints(subTestGame.grid);
-                    if (subTestGame.currentPlayer === 'black') {
-                        advantage *= -1;
-                    }
-                    if (subTestGame.inCheck && subTestGame.isGameOver()) {
-                        subOutcomes.push(-100);
+                    if (num > 1) {
+                        console.log('too hard');
+                        subOutcomes.push(1);
                     }
                     else {
-                        subOutcomes.push(advantage);
+                        let advantage = getWhitePoints(subTestGame.grid) - getBlackPoints(subTestGame.grid);
+                        if (subTestGame.currentPlayer === 'black') {
+                            advantage *= -1;
+                        }
+                        if (subTestGame.inCheck && subTestGame.isGameOver()) {
+                            subOutcomes.push(-100);
+                        }
+                        else {
+                            subOutcomes.push(advantage);
+                        }
                     }
                 }
                 outcomes.push(Math.min(...subOutcomes));

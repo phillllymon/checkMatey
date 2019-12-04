@@ -1876,8 +1876,8 @@ function () {
           testGame.moves = _this2.moves.map(function (move) {
             return move;
           });
-          testGame.currentPlayer = _this2.currentPlayer;
-          console.log(testGame.currentPlayer);
+          testGame.currentPlayer = _this2.currentPlayer; //console.log(testGame.currentPlayer);
+
           testGame.makeMove(moves[i]);
 
           if (testGame.isGameOver() && testGame.inCheck) {
@@ -1917,16 +1917,22 @@ function () {
               return move;
             });
             subTestGame.makeMove(humanMoves[j]);
-            var advantage = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(subTestGame.grid) - Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(subTestGame.grid);
 
-            if (subTestGame.currentPlayer === 'black') {
-              advantage *= -1;
-            }
-
-            if (subTestGame.inCheck && subTestGame.isGameOver()) {
-              subOutcomes.push(-100);
+            if (num > 1) {
+              console.log('too hard');
+              subOutcomes.push(1);
             } else {
-              subOutcomes.push(advantage);
+              var advantage = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(subTestGame.grid) - Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(subTestGame.grid);
+
+              if (subTestGame.currentPlayer === 'black') {
+                advantage *= -1;
+              }
+
+              if (subTestGame.inCheck && subTestGame.isGameOver()) {
+                subOutcomes.push(-100);
+              } else {
+                subOutcomes.push(advantage);
+              }
             }
           }
 
