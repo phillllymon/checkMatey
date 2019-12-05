@@ -7,7 +7,9 @@ import {
     getAllMoves,
     inCheck,
     getBlackPoints,
-    getWhitePoints
+    getWhitePoints,
+    makeTestGame,
+    getPossibleMoves
  } from './chess_helper';
 
 export class Game {
@@ -234,9 +236,9 @@ export class Game {
         return answer;
     }
 
-    makeAIMove() {
+    makeAIMove(setProgress) {
         if (!this.isGameOver()) {
-            this.AIMove = this.getAIMove(this.level);
+            this.AIMove = this.getAIMove(this.level, setProgress);
             this.makeMove(this.AIMove);
             return this.grid;
         }
@@ -253,7 +255,7 @@ export class Game {
         return answer;
     }
 
-    getAIMove(level) {
+    getAIMove(level, setProgress) {
         let origins = [];
         this.grid.forEach( (row, rIdx) => {
             row.forEach( (mark, cIdx) => {
@@ -273,62 +275,64 @@ export class Game {
         if (level === 1) {
             return moves[Math.floor(Math.random()*moves.length)];
         }
-        return this.lookMovesAhead(level - 1, moves);
+        return this.lookMovesAhead(level - 1, moves, setProgress);
     }
 
-    lookMovesAhead(num, moves) {
-        //console.log(moves);
+    lookMovesAhead(num, moves, setProgress) {
         if (num > 0) {
+            let numMoves = moves.length;
             let outcomes = [];
             for (let i = 0; i < moves.length; i++) {
-                let testGame = new Game('Standard');
-                testGame.grid = this.grid.map( (row) => {
-                    return row.map( (spot) => {
-                        return spot;
-                    });
-                });
-                testGame.moves = this.moves.map( (move) => {
-                    return move;
-                });
-                testGame.currentPlayer = this.currentPlayer;
-                //console.log(testGame.currentPlayer);
+                setProgress(i / numMoves);
+                let testGame = makeTestGame(this);
                 testGame.makeMove(moves[i]);
                 if (testGame.isGameOver() && testGame.inCheck) {
                     return moves[i];
                 }
-                let humanMoves = [];
-                let origins = [];
-                testGame.grid.forEach((row, rIdx) => {
-                    row.forEach((mark, cIdx) => {
-                        if (getPieceColor(mark) === testGame.currentPlayer) {
-                            origins.push([rIdx, cIdx]);
-                        }
-                    });
-                });
-                origins.forEach((origin) => {
-                    let mark = testGame.grid[origin[0]][origin[1]];
-                    let pieceType = getPieceType(mark);
-                    getPieceMoves(origin, pieceType, testGame.currentPlayer, testGame.grid, testGame).forEach((destination) => {
-                        humanMoves.push([origin, destination]);
-                    });
-                });
+                let humanMoves = getPossibleMoves(testGame);
                 let subOutcomes = [];
                 for (let j = 0; j < humanMoves.length; j++) {
-                    let subTestGame = new Game('Standard');
-                    subTestGame.start();
-                    subTestGame.currentPlayer = testGame.currentPlayer;
-                    subTestGame.grid = testGame.grid.map((row) => {
-                        return row.map((spot) => {
-                            return spot;
-                        });
-                    });
-                    subTestGame.moves = testGame.moves.map((move) => {
-                        return move;
-                    });
+                    let subTestGame = makeTestGame(testGame);
                     subTestGame.makeMove(humanMoves[j]);
                     if (num > 1) {
-                        console.log('too hard');
-                        subOutcomes.push(1);
+                        let subOutcomes1 = [];
+                        let AIMoves = getPossibleMoves(subTestGame);
+                        for (let k = 0; k < AIMoves.length; k++) {
+                            let subTestGame1 = makeTestGame(subTestGame);
+                            subTestGame1.makeMove(AIMoves[k]);
+                            let subOutcomes2 = [];
+                            if (subTestGame1.isGameOver() && subTestGame1.inCheck) {
+                                subOutcomes2.push(100);
+                            }
+                            else{
+                                let advantage = getWhitePoints(subTestGame1.grid) - getBlackPoints(subTestGame1.grid);
+                                if (subTestGame1.currentPlayer === 'white') {
+                                    advantage *= -1;
+                                }
+                                subOutcomes2.push(advantage);
+                                
+
+                                //////////takes freaking forever
+                                // let subHumanMoves = getPossibleMoves(subTestGame1);
+                                // for (let l = 0; l < subHumanMoves.length; l++) {
+                                //     let subTestGame2 = makeTestGame(subTestGame1);
+                                //     subTestGame2.makeMove(subHumanMoves[l]);
+                                //     let advantage = getWhitePoints(subTestGame2.grid) - getBlackPoints(subTestGame2.grid);
+                                //     if (subTestGame2.currentPlayer === 'black') {
+                                //         advantage *= -1;
+                                //     }
+                                //     if (subTestGame2.inCheck && subTestGame2.isGameOver()) {
+                                //         subOutcomes2.push(-100);
+                                //     }
+                                //     else {
+                                //         subOutcomes2.push(advantage);
+                                //     }
+
+                                // }
+                            }
+                            subOutcomes1.push(Math.min(...subOutcomes2));
+                        }
+                        subOutcomes.push(Math.max(...subOutcomes1));
                     }
                     else {
                         let advantage = getWhitePoints(subTestGame.grid) - getBlackPoints(subTestGame.grid);
@@ -352,6 +356,7 @@ export class Game {
                     indeces.push(i);
                 }
             }
+            setProgress(0);
             return moves[indeces[Math.floor(Math.random() * indeces.length)]];
         }
         return moves[Math.floor(Math.random() * moves.length)];

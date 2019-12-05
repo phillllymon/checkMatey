@@ -1,4 +1,39 @@
 import { snapshotToGrid } from '../../../util/chess_util';
+import { Game } from './game';
+
+export const makeTestGame = (oldGame) => {
+    let answer = new Game('Standard');
+    answer.grid = oldGame.grid.map((row) => {
+        return row.map((spot) => {
+            return spot;
+        });
+    });
+    answer.moves = oldGame.moves.map((move) => {
+        return move;
+    });
+    answer.currentPlayer = oldGame.currentPlayer;
+    return answer;
+};
+
+export const getPossibleMoves = (game) => {
+    let answer = [];
+    let origins = [];
+    game.grid.forEach((row, rIdx) => {
+        row.forEach((mark, cIdx) => {
+            if (getPieceColor(mark) === game.currentPlayer) {
+                origins.push([rIdx, cIdx]);
+            }
+        });
+    });
+    origins.forEach((origin) => {
+        let mark = game.grid[origin[0]][origin[1]];
+        let pieceType = getPieceType(mark);
+        getPieceMoves(origin, pieceType, game.currentPlayer, game.grid, game).forEach((destination) => {
+            answer.push([origin, destination]);
+        });
+    });
+    return answer;
+};
 
 export const getBlackPoints = (grid) => {
     const pointValues = {

@@ -1094,11 +1094,13 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 /*!***************************************************************!*\
   !*** ./frontend/components/chess_table/chess/chess_helper.js ***!
   \***************************************************************/
-/*! exports provided: getBlackPoints, getWhitePoints, getPieceColor, getPieceType, canCastle, getAllDumbMoves, getAllMoves, inCheck, purgeCheckMoves, getPieceMoves, getPieceDumbMoves, getPawnMoves, getPawnSpecialMoves, getKingMoves, getKingSpecialMoves, getKnightMoves, getQueenMoves, getBishopMoves, getRookMoves */
+/*! exports provided: makeTestGame, getPossibleMoves, getBlackPoints, getWhitePoints, getPieceColor, getPieceType, canCastle, getAllDumbMoves, getAllMoves, inCheck, purgeCheckMoves, getPieceMoves, getPieceDumbMoves, getPawnMoves, getPawnSpecialMoves, getKingMoves, getKingSpecialMoves, getKnightMoves, getQueenMoves, getBishopMoves, getRookMoves */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeTestGame", function() { return makeTestGame; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPossibleMoves", function() { return getPossibleMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBlackPoints", function() { return getBlackPoints; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getWhitePoints", function() { return getWhitePoints; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceColor", function() { return getPieceColor; });
@@ -1119,7 +1121,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBishopMoves", function() { return getBishopMoves; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRookMoves", function() { return getRookMoves; });
 /* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game */ "./frontend/components/chess_table/chess/game.js");
 
+
+var makeTestGame = function makeTestGame(oldGame) {
+  var answer = new _game__WEBPACK_IMPORTED_MODULE_1__["Game"]('Standard');
+  answer.grid = oldGame.grid.map(function (row) {
+    return row.map(function (spot) {
+      return spot;
+    });
+  });
+  answer.moves = oldGame.moves.map(function (move) {
+    return move;
+  });
+  answer.currentPlayer = oldGame.currentPlayer;
+  return answer;
+};
+var getPossibleMoves = function getPossibleMoves(game) {
+  var answer = [];
+  var origins = [];
+  game.grid.forEach(function (row, rIdx) {
+    row.forEach(function (mark, cIdx) {
+      if (getPieceColor(mark) === game.currentPlayer) {
+        origins.push([rIdx, cIdx]);
+      }
+    });
+  });
+  origins.forEach(function (origin) {
+    var mark = game.grid[origin[0]][origin[1]];
+    var pieceType = getPieceType(mark);
+    getPieceMoves(origin, pieceType, game.currentPlayer, game.grid, game).forEach(function (destination) {
+      answer.push([origin, destination]);
+    });
+  });
+  return answer;
+};
 var getBlackPoints = function getBlackPoints(grid) {
   var pointValues = {
     'p': 0,
@@ -1593,8 +1629,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Game", function() { return Game; });
 /* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
 /* harmony import */ var _chess_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chess_helper */ "./frontend/components/chess_table/chess/chess_helper.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1811,9 +1845,9 @@ function () {
     }
   }, {
     key: "makeAIMove",
-    value: function makeAIMove() {
+    value: function makeAIMove(setProgress) {
       if (!this.isGameOver()) {
-        this.AIMove = this.getAIMove(this.level);
+        this.AIMove = this.getAIMove(this.level, setProgress);
         this.makeMove(this.AIMove);
         return this.grid;
       } else {
@@ -1831,7 +1865,7 @@ function () {
     }
   }, {
     key: "getAIMove",
-    value: function getAIMove(level) {
+    value: function getAIMove(level, setProgress) {
       var _this = this;
 
       var origins = [];
@@ -1855,105 +1889,99 @@ function () {
         return moves[Math.floor(Math.random() * moves.length)];
       }
 
-      return this.lookMovesAhead(level - 1, moves);
+      return this.lookMovesAhead(level - 1, moves, setProgress);
     }
   }, {
     key: "lookMovesAhead",
-    value: function lookMovesAhead(num, moves) {
-      var _this2 = this;
-
-      //console.log(moves);
+    value: function lookMovesAhead(num, moves, setProgress) {
       if (num > 0) {
+        var numMoves = moves.length;
         var outcomes = [];
 
-        var _loop = function _loop(i) {
-          var testGame = new Game('Standard');
-          testGame.grid = _this2.grid.map(function (row) {
-            return row.map(function (spot) {
-              return spot;
-            });
-          });
-          testGame.moves = _this2.moves.map(function (move) {
-            return move;
-          });
-          testGame.currentPlayer = _this2.currentPlayer; //console.log(testGame.currentPlayer);
-
+        for (var i = 0; i < moves.length; i++) {
+          setProgress(i / numMoves);
+          var testGame = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["makeTestGame"])(this);
           testGame.makeMove(moves[i]);
 
           if (testGame.isGameOver() && testGame.inCheck) {
-            return {
-              v: moves[i]
-            };
+            return moves[i];
           }
 
-          var humanMoves = [];
-          var origins = [];
-          testGame.grid.forEach(function (row, rIdx) {
-            row.forEach(function (mark, cIdx) {
-              if (Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceColor"])(mark) === testGame.currentPlayer) {
-                origins.push([rIdx, cIdx]);
-              }
-            });
-          });
-          origins.forEach(function (origin) {
-            var mark = testGame.grid[origin[0]][origin[1]];
-            var pieceType = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceType"])(mark);
-            Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPieceMoves"])(origin, pieceType, testGame.currentPlayer, testGame.grid, testGame).forEach(function (destination) {
-              humanMoves.push([origin, destination]);
-            });
-          });
+          var humanMoves = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPossibleMoves"])(testGame);
           var subOutcomes = [];
 
           for (var j = 0; j < humanMoves.length; j++) {
-            var subTestGame = new Game('Standard');
-            subTestGame.start();
-            subTestGame.currentPlayer = testGame.currentPlayer;
-            subTestGame.grid = testGame.grid.map(function (row) {
-              return row.map(function (spot) {
-                return spot;
-              });
-            });
-            subTestGame.moves = testGame.moves.map(function (move) {
-              return move;
-            });
+            var subTestGame = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["makeTestGame"])(testGame);
             subTestGame.makeMove(humanMoves[j]);
 
             if (num > 1) {
-              console.log('too hard');
-              subOutcomes.push(1);
+              var subOutcomes1 = [];
+              var AIMoves = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getPossibleMoves"])(subTestGame);
+
+              for (var k = 0; k < AIMoves.length; k++) {
+                var subTestGame1 = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["makeTestGame"])(subTestGame);
+                subTestGame1.makeMove(AIMoves[k]);
+                var subOutcomes2 = [];
+
+                if (subTestGame1.isGameOver() && subTestGame1.inCheck) {
+                  subOutcomes2.push(100);
+                } else {
+                  var advantage = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(subTestGame1.grid) - Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(subTestGame1.grid);
+
+                  if (subTestGame1.currentPlayer === 'white') {
+                    advantage *= -1;
+                  }
+
+                  subOutcomes2.push(advantage); //////////takes freaking forever
+                  // let subHumanMoves = getPossibleMoves(subTestGame1);
+                  // for (let l = 0; l < subHumanMoves.length; l++) {
+                  //     let subTestGame2 = makeTestGame(subTestGame1);
+                  //     subTestGame2.makeMove(subHumanMoves[l]);
+                  //     let advantage = getWhitePoints(subTestGame2.grid) - getBlackPoints(subTestGame2.grid);
+                  //     if (subTestGame2.currentPlayer === 'black') {
+                  //         advantage *= -1;
+                  //     }
+                  //     if (subTestGame2.inCheck && subTestGame2.isGameOver()) {
+                  //         subOutcomes2.push(-100);
+                  //     }
+                  //     else {
+                  //         subOutcomes2.push(advantage);
+                  //     }
+                  // }
+                }
+
+                subOutcomes1.push(Math.min.apply(Math, subOutcomes2));
+              }
+
+              subOutcomes.push(Math.max.apply(Math, subOutcomes1));
             } else {
-              var advantage = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(subTestGame.grid) - Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(subTestGame.grid);
+              var _advantage = Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(subTestGame.grid) - Object(_chess_helper__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(subTestGame.grid);
 
               if (subTestGame.currentPlayer === 'black') {
-                advantage *= -1;
+                _advantage *= -1;
               }
 
               if (subTestGame.inCheck && subTestGame.isGameOver()) {
                 subOutcomes.push(-100);
               } else {
-                subOutcomes.push(advantage);
+                subOutcomes.push(_advantage);
               }
             }
           }
 
           outcomes.push(Math.min.apply(Math, subOutcomes));
-        };
-
-        for (var i = 0; i < moves.length; i++) {
-          var _ret = _loop(i);
-
-          if (_typeof(_ret) === "object") return _ret.v;
         }
 
         var max = Math.max.apply(Math, outcomes);
         var indeces = [];
 
-        for (var i = 0; i < outcomes.length; i++) {
-          if (outcomes[i] === max) {
-            indeces.push(i);
+        for (var _i = 0; _i < outcomes.length; _i++) {
+          if (outcomes[_i] === max) {
+            indeces.push(_i);
           }
         }
 
+        setProgress(0);
         return moves[indeces[Math.floor(Math.random() * indeces.length)]];
       }
 
@@ -2485,6 +2513,7 @@ function (_React$Component) {
     _this.getBlackPoints = _this.getBlackPoints.bind(_assertThisInitialized(_this));
     _this.getWhitePoints = _this.getWhitePoints.bind(_assertThisInitialized(_this));
     _this.highlightSquare = null;
+    _this.setProgress = _this.setProgress.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -2816,13 +2845,30 @@ function (_React$Component) {
       }
     }
   }, {
+    key: "setProgress",
+    value: function setProgress(newVal) {
+      this.setState({
+        progress: newVal
+      });
+    }
+  }, {
     key: "takeComputerTurn",
     value: function takeComputerTurn() {
       var _this5 = this;
 
       if (!this.game.isGameOver()) {
+        this.setState({
+          progress: true
+        });
         setTimeout(function () {
-          _this5.grid = _this5.game.makeAIMove();
+          document.body.style.cursor = 'wait';
+          _this5.grid = _this5.game.makeAIMove(_this5.setProgress);
+          setTimeout(function () {
+            _this5.setState({
+              progress: false
+            });
+          }, 100);
+          document.body.style.cursor = 'default';
           _this5.highlightSquare = _this5.game.AIMove[1];
           _this5.currentPlayer = _this5.game.currentPlayer;
 
@@ -2841,7 +2887,7 @@ function (_React$Component) {
               popup: true
             });
           }
-        }, Math.random() * 500 + 500);
+        }, this.game.level > 2 ? 100 : Math.random() * 500 + 500);
       }
 
       if (this.game.isGameOver()) {
@@ -3045,7 +3091,7 @@ function (_React$Component) {
             return _this8.setLevel(level);
           },
           onMouseEnter: function onMouseEnter() {
-            _this8.setHint(level === 0 ? "Set computer level (Level 0 means you play both sides)" : "Higher number is harder computer");
+            _this8.setHint(level === 0 ? "Set computer level (Level 0 means you play both sides)" : level === 3 ? 'Important Note: Computer turn may take up to a minute!' : 'Higher number means harder computer');
           },
           onMouseLeave: function onMouseLeave() {
             _this8.setHint(false);
@@ -3075,7 +3121,7 @@ function (_React$Component) {
         style: {
           'color': this.compColor
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Computer ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "plays ", this.compColor))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.progress ? 'thinking...' : 'Computer', " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.state.progress ? '' : 'plays ' + this.compColor))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "board_control_button",
         onClick: this.switchSides
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {

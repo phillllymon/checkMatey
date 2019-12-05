@@ -44,6 +44,7 @@ class PlayBoard extends React.Component {
         this.getBlackPoints = this.getBlackPoints.bind(this);
         this.getWhitePoints = this.getWhitePoints.bind(this);
         this.highlightSquare = null;
+        this.setProgress = this.setProgress.bind(this);
     }
 
     getBlackPoints() {
@@ -321,10 +322,20 @@ class PlayBoard extends React.Component {
         }
     }
 
+    setProgress(newVal) {
+        this.setState({progress: newVal});
+    }
+
     takeComputerTurn(){
         if (!this.game.isGameOver()){
+            this.setState({ progress: true });
             setTimeout(() => {
-                this.grid = this.game.makeAIMove();
+                document.body.style.cursor = 'wait';
+                this.grid = this.game.makeAIMove(this.setProgress);
+                setTimeout(() => {
+                    this.setState({progress: false});
+                }, 100);
+                document.body.style.cursor = 'default';
                 this.highlightSquare = this.game.AIMove[1];
                 this.currentPlayer = this.game.currentPlayer;
                 if (this.game.inCheck && !this.game.isGameOver()) {
@@ -333,11 +344,11 @@ class PlayBoard extends React.Component {
                 this.setState({
                     grid: this.grid
                 });
-            if (this.game.isGameOver()) {
-                this.gameOverMessage = this.game.gameOverMessage;
-                this.setState({ popup: true });
-            }
-            }, Math.random() * 500 + 500);
+                if (this.game.isGameOver()) {
+                    this.gameOverMessage = this.game.gameOverMessage;
+                    this.setState({ popup: true });
+                }
+            }, (this.game.level > 2 ? 100 : Math.random() * 500 + 500));
         }
         if (this.game.isGameOver()) {
             this.gameOverMessage = this.game.gameOverMessage;
@@ -537,7 +548,8 @@ class PlayBoard extends React.Component {
                                 return (
                                     <button className={this.game.level === level ? "current_level_button" : "level_button"}
                                     onClick={() => this.setLevel(level)} 
-                                        onMouseEnter={() => { this.setHint(level === 0 ? "Set computer level (Level 0 means you play both sides)" : "Higher number is harder computer") }}
+                                        onMouseEnter={() => { this.setHint(level === 0 ? "Set computer level (Level 0 means you play both sides)" : level === 3 ? 
+                                        'Important Note: Computer turn may take up to a minute!': 'Higher number means harder computer') }}
                                         onMouseLeave={() => { this.setHint(false) }}
                                     key={level}>{level}</button>
                                     
@@ -566,7 +578,7 @@ class PlayBoard extends React.Component {
                             <i className="fas fa-robot"></i> 
                         </div>
                         <div className="controls_text" style={{ 'color': this.compColor }}>
-                            <div>Computer <br/>plays {this.compColor}</div>
+                            <div>{this.state.progress ? 'thinking...' : 'Computer'} <br/>{this.state.progress ? '' : 'plays ' + this.compColor}</div>
                         </div>
                     </div>
                         <button
