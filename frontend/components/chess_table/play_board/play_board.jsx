@@ -354,6 +354,10 @@ class PlayBoard extends React.Component {
             this.gameOverMessage = this.game.gameOverMessage;
             this.setState({ popup: true });
         }
+        if (this.game.moves.length > 4 && !this.alreadyAsked && !this.props.userId) {
+            this.setState({ suggestLogin: true });
+            this.alreadyAsked = true;
+        }
     }
 
     endDrag(e) {
@@ -396,10 +400,7 @@ class PlayBoard extends React.Component {
                     this.game.makeMove(move);
                 }
                 this.highlightSquare = move[1];
-                if (this.game.moves.length > 4 && !this.alreadyAsked && !this.props.userId) {
-                    this.setState({suggestLogin: true});
-                    this.alreadyAsked = true;
-                }
+                
                 this.started = true;
                 this.currentPlayer = this.game.currentPlayer;   //pawn promotion has to replicate from here
                 this.grid = this.game.grid;
