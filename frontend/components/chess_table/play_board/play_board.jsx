@@ -1,8 +1,8 @@
 import React from 'react';
 import Piece from '../piece';
-import { Game } from '../chess/game';
+import { Game } from '../chess/gameNew';
 import { getPieceIcon } from '../piece';
-import { getPieceColor } from '../chess/chess_helper';
+import { getPieceColor } from '../chess/chess_helperNew';
 
 class PlayBoard extends React.Component {
     constructor(props) {

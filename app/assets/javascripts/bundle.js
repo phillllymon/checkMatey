@@ -1617,6 +1617,533 @@ var getRookMoves = function getRookMoves(origin, color, grid) {
 
 /***/ }),
 
+/***/ "./frontend/components/chess_table/chess/chess_helperNew.js":
+/*!******************************************************************!*\
+  !*** ./frontend/components/chess_table/chess/chess_helperNew.js ***!
+  \******************************************************************/
+/*! exports provided: makeTestGame, getPossibleMoves, getBlackPoints, getWhitePoints, getPieceColor, getPieceType, canCastle, getAllDumbMoves, getAllMoves, inCheck, purgeCheckMoves, getPieceMoves, getPieceDumbMoves, getPawnMoves, getPawnSpecialMoves, getKingMoves, getKingSpecialMoves, getKnightMoves, getQueenMoves, getBishopMoves, getRookMoves */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeTestGame", function() { return makeTestGame; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPossibleMoves", function() { return getPossibleMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBlackPoints", function() { return getBlackPoints; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getWhitePoints", function() { return getWhitePoints; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceColor", function() { return getPieceColor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceType", function() { return getPieceType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "canCastle", function() { return canCastle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllDumbMoves", function() { return getAllDumbMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllMoves", function() { return getAllMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "inCheck", function() { return inCheck; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "purgeCheckMoves", function() { return purgeCheckMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceMoves", function() { return getPieceMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPieceDumbMoves", function() { return getPieceDumbMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPawnMoves", function() { return getPawnMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPawnSpecialMoves", function() { return getPawnSpecialMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getKingMoves", function() { return getKingMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getKingSpecialMoves", function() { return getKingSpecialMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getKnightMoves", function() { return getKnightMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getQueenMoves", function() { return getQueenMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBishopMoves", function() { return getBishopMoves; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRookMoves", function() { return getRookMoves; });
+/* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game */ "./frontend/components/chess_table/chess/game.js");
+
+
+var makeTestGame = function makeTestGame(oldGame) {
+  var answer = new _game__WEBPACK_IMPORTED_MODULE_1__["Game"]('Standard');
+  answer.grid = oldGame.grid.map(function (row) {
+    return row.map(function (spot) {
+      return spot;
+    });
+  });
+  answer.moves = oldGame.moves.map(function (move) {
+    return move;
+  });
+  answer.currentPlayer = oldGame.currentPlayer;
+  return answer;
+};
+var getPossibleMoves = function getPossibleMoves(game) {
+  var answer = [];
+  var origins = [];
+  game.grid.forEach(function (row, rIdx) {
+    row.forEach(function (mark, cIdx) {
+      if (getPieceColor(mark) === game.currentPlayer) {
+        origins.push([rIdx, cIdx]);
+      }
+    });
+  });
+  origins.forEach(function (origin) {
+    var mark = game.grid[origin[0]][origin[1]];
+    var pieceType = getPieceType(mark);
+    getPieceMoves(origin, pieceType, game.currentPlayer, game.grid, game).forEach(function (destination) {
+      answer.push([origin, destination]);
+    });
+  });
+  return answer;
+};
+var getBlackPoints = function getBlackPoints(grid) {
+  var pointValues = {
+    'p': 0,
+    'r': 0,
+    'n': 0,
+    'b': 0,
+    'q': 0,
+    'k': 0,
+    '-': 0,
+    'P': 1,
+    'R': 5,
+    'N': 3,
+    'B': 3,
+    'Q': 9,
+    'K': 0
+  };
+  var answer = 0;
+  grid.forEach(function (row) {
+    row.forEach(function (mark) {
+      answer += pointValues[mark];
+    });
+  });
+  return answer;
+};
+var getWhitePoints = function getWhitePoints(grid) {
+  var pointValues = {
+    'p': 1,
+    'r': 5,
+    'n': 3,
+    'b': 3,
+    'q': 9,
+    'k': 0,
+    '-': 0,
+    'P': 0,
+    'R': 0,
+    'N': 0,
+    'B': 0,
+    'Q': 0,
+    'K': 0
+  };
+  var answer = 0;
+  grid.forEach(function (row) {
+    row.forEach(function (mark) {
+      answer += pointValues[mark];
+    });
+  });
+  return answer;
+};
+var getPieceColor = function getPieceColor(mark) {
+  if (['P', 'R', 'B', 'K', 'Q', 'N'].includes(mark)) {
+    return 'black';
+  } else if (['p', 'r', 'b', 'k', 'q', 'n'].includes(mark)) {
+    return 'white';
+  }
+
+  return 'empty';
+};
+var getPieceType = function getPieceType(mark) {
+  if (mark === 'p' || mark === 'P') {
+    return 'pawn';
+  } else if (mark === 'k' || mark === 'K') {
+    return 'king';
+  } else if (mark === 'q' || mark === 'Q') {
+    return 'queen';
+  } else if (mark === 'n' || mark === 'N') {
+    return 'knight';
+  } else if (mark === 'b' || mark === 'B') {
+    return 'bishop';
+  } else if (mark === 'r' || mark === 'R') {
+    return 'rook';
+  }
+
+  return 'empty';
+};
+var canCastle = function canCastle(game, side) {
+  //side is 0 or 7, for queen or kingside, respectively
+  var answer = true;
+  var color = game.currentPlayer;
+  var kingSpace = color === 'black' ? [0, 4] : [7, 4];
+  var rookSpace = [color === 'black' ? 0 : 7, side];
+  var kingMark = color === 'black' ? 'K' : 'k';
+  var rookMark = color === 'black' ? 'R' : 'r';
+  game.gameSoFar.forEach(function (snapshot) {
+    var grid = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["snapshotToGrid"])(snapshot);
+
+    if (grid[rookSpace[0]][rookSpace[1]] !== rookMark || grid[kingSpace[0]][kingSpace[1]] !== kingMark) {
+      answer = false;
+    }
+  });
+  var checkSpots = getAllDumbMoves(color === 'black' ? 'white' : 'black', game.grid, game);
+  var castleDir = side === 0 ? -1 : 1;
+  var spots = [[kingSpace[0], kingSpace[1] + castleDir], [kingSpace[0], kingSpace[1] + 2 * castleDir]];
+  spots.forEach(function (spot) {
+    if (game.grid[spot[0]][spot[1]] !== '-') {
+      answer = false;
+    }
+  });
+  checkSpots.forEach(function (checkSpot) {
+    spots.forEach(function (spot) {
+      if (checkSpot[0] === spot[0] && checkSpot[1] === spot[1]) {
+        answer = false;
+      }
+    });
+  });
+
+  if (inCheck(game.currentPlayer, game.grid, game)) {
+    answer = false;
+  }
+
+  return answer;
+};
+
+var findKing = function findKing(color, grid) {
+  var answer = [];
+  grid.forEach(function (row, rIdx) {
+    row.forEach(function (mark, cIdx) {
+      if (getPieceType(mark) === 'king' && getPieceColor(mark) === color) {
+        answer = [rIdx, cIdx];
+      }
+    });
+  });
+  return answer;
+}; //dumb moves means they include moving yourself into check
+
+
+var getAllDumbMoves = function getAllDumbMoves(color, grid) {
+  var answer = [];
+  grid.forEach(function (row, rIdx) {
+    row.forEach(function (mark, cIdx) {
+      if (getPieceColor(mark) === color) {
+        var origin = [rIdx, cIdx];
+        var pieceType = getPieceType(mark);
+        answer = answer.concat(getPieceDumbMoves(origin, pieceType, color, grid));
+      }
+    });
+  });
+  return answer;
+};
+var getAllMoves = function getAllMoves(color, grid, game) {
+  var answer = [];
+  grid.forEach(function (row, rIdx) {
+    row.forEach(function (mark, cIdx) {
+      if (getPieceColor(mark) === color) {
+        var origin = [rIdx, cIdx];
+        var pieceType = getPieceType(mark);
+        answer = answer.concat(getPieceMoves(origin, pieceType, color, grid, game));
+      }
+    });
+  });
+  return answer;
+};
+
+var onBoard = function onBoard(spot) {
+  if (spot[0] > 7 || spot[0] < 0) {
+    return false;
+  }
+
+  if (spot[1] > 7 || spot[1] < 0) {
+    return false;
+  }
+
+  return true;
+};
+
+var inCheck = function inCheck(color, grid, game) {
+  var kingSpot = findKing(color, grid);
+  var moves = getAllDumbMoves(color === 'white' ? 'black' : 'white', grid, game);
+  var answer = false;
+  moves.forEach(function (spot) {
+    if (spot[0] === kingSpot[0] && spot[1] === kingSpot[1]) {
+      answer = true;
+    }
+  });
+  return answer;
+};
+var purgeCheckMoves = function purgeCheckMoves(moves, origin, color, grid) {
+  var mark = grid[origin[0]][origin[1]];
+  var answer = [];
+  moves.forEach(function (move) {
+    var newGrid = grid.map(function (row) {
+      return row.map(function (mark) {
+        return mark;
+      });
+    });
+    newGrid[move[0]][move[1]] = mark;
+    newGrid[origin[0]][origin[1]] = '-';
+
+    if (!inCheck(color, newGrid)) {
+      answer.push(move);
+    }
+  });
+  return answer;
+};
+var getPieceMoves = function getPieceMoves(origin, pieceType, pieceColor, grid, game) {
+  if (pieceType === 'pawn') {
+    var moves = getPawnMoves(origin, pieceColor, grid, game);
+    var purgeMoves = purgeCheckMoves(moves, origin, pieceColor, grid);
+    var specialMoves = getPawnSpecialMoves(origin, pieceColor, grid, game);
+    return purgeMoves.concat(specialMoves);
+  } else if (pieceType === 'king') {
+    var _moves = getKingMoves(origin, pieceColor, grid, game);
+
+    var _purgeMoves = purgeCheckMoves(_moves, origin, pieceColor, grid);
+
+    var _specialMoves = getKingSpecialMoves(origin, pieceColor, grid, game);
+
+    return _purgeMoves.concat(_specialMoves);
+  } else if (pieceType === 'queen') {
+    var _moves2 = getQueenMoves(origin, pieceColor, grid);
+
+    var _purgeMoves2 = purgeCheckMoves(_moves2, origin, pieceColor, grid);
+
+    return _purgeMoves2;
+  } else if (pieceType === 'knight') {
+    var _moves3 = getKnightMoves(origin, pieceColor, grid);
+
+    var _purgeMoves3 = purgeCheckMoves(_moves3, origin, pieceColor, grid);
+
+    return _purgeMoves3;
+  } else if (pieceType === 'bishop') {
+    var _moves4 = getBishopMoves(origin, pieceColor, grid);
+
+    var _purgeMoves4 = purgeCheckMoves(_moves4, origin, pieceColor, grid);
+
+    return _purgeMoves4;
+  } else if (pieceType === 'rook') {
+    var _moves5 = getRookMoves(origin, pieceColor, grid);
+
+    var _purgeMoves5 = purgeCheckMoves(_moves5, origin, pieceColor, grid);
+
+    return _purgeMoves5;
+  }
+}; //includes moving into check
+
+var getPieceDumbMoves = function getPieceDumbMoves(origin, pieceType, pieceColor, grid) {
+  if (pieceType === 'pawn') {
+    return getPawnMoves(origin, pieceColor, grid);
+  } else if (pieceType === 'king') {
+    return getKingMoves(origin, pieceColor, grid);
+  } else if (pieceType === 'queen') {
+    return getQueenMoves(origin, pieceColor, grid);
+  } else if (pieceType === 'knight') {
+    return getKnightMoves(origin, pieceColor, grid);
+  } else if (pieceType === 'bishop') {
+    return getBishopMoves(origin, pieceColor, grid);
+  } else if (pieceType === 'rook') {
+    return getRookMoves(origin, pieceColor, grid);
+  }
+};
+var getPawnMoves = function getPawnMoves(origin, color, grid) {
+  var thisPieceColor = getPieceColor(grid[origin[0]][origin[1]]);
+
+  if (thisPieceColor !== color) {
+    return false;
+  }
+
+  var answer = [];
+  var advDir = color === 'black' ? 1 : -1;
+  var advSpot = [origin[0] + advDir, origin[1]];
+
+  if (onBoard(advSpot)) {
+    var advMark = grid[advSpot[0]][advSpot[1]];
+
+    if (onBoard(advSpot) && advMark === '-') {
+      answer.push(advSpot);
+
+      if (origin[0] === (color === 'black' ? 1 : 6)) {
+        var advTwoSpot = [advSpot[0] + advDir, advSpot[1]];
+        var advTwoMark = grid[advTwoSpot[0]][advTwoSpot[1]];
+
+        if (advTwoMark === '-' && onBoard(advSpot)) {
+          answer.push(advTwoSpot);
+        }
+      }
+    }
+
+    var capSteps = [[advDir, 1], [advDir, -1]];
+    var capSpots = capSteps.map(function (step) {
+      return [origin[0] + step[0], origin[1] + step[1]];
+    });
+    capSpots.forEach(function (spot) {
+      if (onBoard(spot)) {
+        var capMark = grid[spot[0]][spot[1]];
+        var capColor = color === 'black' ? 'white' : 'black';
+
+        if (getPieceColor(capMark) === capColor) {
+          answer.push(spot);
+        }
+      }
+    });
+  }
+
+  return answer;
+};
+var getPawnSpecialMoves = function getPawnSpecialMoves(origin, color, grid, game) {
+  var answer = [];
+
+  if (origin[0] === (color === 'white' ? 3 : 4)) {
+    var advDir = color === 'white' ? -1 : 1;
+    var enemyDirs = [1, -1];
+    enemyDirs.forEach(function (dir) {
+      var enemySpot = [origin[0], origin[1] + dir];
+      var enemy = grid[enemySpot[0]][enemySpot[1]];
+
+      if (enemy === (color === 'white' ? 'P' : 'p')) {
+        var snapshots = game.gameSoFar;
+        var prevGrid = Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["snapshotToGrid"])(snapshots[snapshots.length - 2]);
+        var enemyOrigin = [origin[0] + 2 * advDir, enemySpot[1]];
+
+        if (prevGrid[enemyOrigin[0]][enemyOrigin[1]] === enemy && prevGrid[enemySpot[0]][enemySpot[1]] === '-') {
+          answer.push([origin[0] + advDir, origin[1] + dir, 'special', 'enPassant']);
+        }
+      }
+    });
+  }
+
+  return answer;
+};
+var getKingMoves = function getKingMoves(origin, color, grid) {
+  var answer = [];
+  var steps = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+  var spots = steps.map(function (step) {
+    return [origin[0] + step[0], origin[1] + step[1]];
+  });
+  spots.forEach(function (spot) {
+    if (onBoard(spot)) {
+      var spotMark = grid[spot[0]][spot[1]];
+
+      if (spotMark === '-') {
+        answer.push(spot);
+      } else if (getPieceColor(spotMark) !== color) {
+        answer.push(spot);
+      }
+    }
+  });
+  return answer;
+};
+var getKingSpecialMoves = function getKingSpecialMoves(origin, color, grid, game) {
+  var answer = [];
+
+  if (canCastle(game, 7)) {
+    var newMove = [origin[0], origin[1] + 2, 'special', 'castleKing'];
+    answer.push(newMove);
+  }
+
+  if (canCastle(game, 0)) {
+    var _newMove = [origin[0], origin[1] - 2, 'special', 'castleQueen'];
+    answer.push(_newMove);
+  }
+
+  return answer;
+};
+var getKnightMoves = function getKnightMoves(origin, color, grid) {
+  var answer = [];
+  var steps = [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]];
+  var spots = steps.map(function (step) {
+    return [origin[0] + step[0], origin[1] + step[1]];
+  });
+  spots.forEach(function (spot) {
+    if (onBoard(spot)) {
+      var spotMark = grid[spot[0]][spot[1]];
+
+      if (spotMark === '-') {
+        answer.push(spot);
+      } else if (getPieceColor(spotMark) !== color) {
+        answer.push(spot);
+      }
+    }
+  });
+  return answer;
+};
+var getQueenMoves = function getQueenMoves(origin, color, grid) {
+  var answer = [];
+  var dirs = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+  dirs.forEach(function (dir) {
+    var dist = 1;
+
+    while (dist < 8) {
+      var spot = [origin[0] + dir[0] * dist, origin[1] + dir[1] * dist];
+
+      if (onBoard(spot)) {
+        var spotMark = grid[spot[0]][spot[1]];
+
+        if (spotMark === '-') {
+          answer.push(spot);
+        } else if (getPieceColor(spotMark) !== color) {
+          answer.push(spot);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        break;
+      }
+
+      dist++;
+    }
+  });
+  return answer;
+};
+var getBishopMoves = function getBishopMoves(origin, color, grid) {
+  var answer = [];
+  var dirs = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+  dirs.forEach(function (dir) {
+    var dist = 1;
+
+    while (dist < 8) {
+      var spot = [origin[0] + dir[0] * dist, origin[1] + dir[1] * dist];
+
+      if (onBoard(spot)) {
+        var spotMark = grid[spot[0]][spot[1]];
+
+        if (spotMark === '-') {
+          answer.push(spot);
+        } else if (getPieceColor(spotMark) !== color) {
+          answer.push(spot);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        break;
+      }
+
+      dist++;
+    }
+  });
+  return answer;
+};
+var getRookMoves = function getRookMoves(origin, color, grid) {
+  var answer = [];
+  var dirs = [[-1, 0], [0, -1], [0, 1], [1, 0]];
+  dirs.forEach(function (dir) {
+    var dist = 1;
+
+    while (dist < 8) {
+      var spot = [origin[0] + dir[0] * dist, origin[1] + dir[1] * dist];
+
+      if (onBoard(spot)) {
+        var spotMark = grid[spot[0]][spot[1]];
+
+        if (spotMark === '-') {
+          answer.push(spot);
+        } else if (getPieceColor(spotMark) !== color) {
+          answer.push(spot);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        break;
+      }
+
+      dist++;
+    }
+  });
+  return answer;
+};
+
+/***/ }),
+
 /***/ "./frontend/components/chess_table/chess/game.js":
 /*!*******************************************************!*\
   !*** ./frontend/components/chess_table/chess/game.js ***!
@@ -1978,6 +2505,440 @@ function () {
         for (var _i = 0; _i < outcomes.length; _i++) {
           if (outcomes[_i] === max) {
             indeces.push(_i);
+          }
+        }
+
+        setProgress(0);
+        return moves[indeces[Math.floor(Math.random() * indeces.length)]];
+      }
+
+      return moves[Math.floor(Math.random() * moves.length)];
+    }
+  }]);
+
+  return Game;
+}();
+
+/***/ }),
+
+/***/ "./frontend/components/chess_table/chess/gameNew.js":
+/*!**********************************************************!*\
+  !*** ./frontend/components/chess_table/chess/gameNew.js ***!
+  \**********************************************************/
+/*! exports provided: Game */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Game", function() { return Game; });
+/* harmony import */ var _util_chess_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../util/chess_util */ "./frontend/util/chess_util.js");
+/* harmony import */ var _chess_helperNew__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chess_helperNew */ "./frontend/components/chess_table/chess/chess_helperNew.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+var Game =
+/*#__PURE__*/
+function () {
+  function Game(gameType) {
+    _classCallCheck(this, Game);
+
+    this.gameSoFar = [];
+    this.moves = [];
+    this.capturedPieces = [[], []]; //black pieces, white pieces
+
+    this.gameTypes = ['Standard', 'Chess960', 'Pawn Clash'];
+    this.gameType = gameType;
+    this.levels = [0, 1, 2, 3];
+    this.level = 1;
+    this.started = false;
+    this.inCheck = false;
+    this.gameOverMessage = '';
+    this.AIMove = null;
+    this.getString = this.getString.bind(this);
+    this.makeMove = this.makeMove.bind(this);
+    this.isGameOver = this.isGameOver.bind(this);
+    this.isMoveLegal = this.isMoveLegal.bind(this);
+    this.getAIMove = this.getAIMove.bind(this);
+    this.makeAIMove = this.makeAIMove.bind(this);
+    this.handleSpecialMove = this.handleSpecialMove.bind(this);
+    this.initializeGrid = this.initializeGrid.bind(this);
+    this.initializeGameMap = this.initializeGameMap.bind(this);
+    this.makeFalseGrid = this.makeFalseGrid.bind(this);
+    this.initializeGrid();
+    this.initializeGameMap();
+    this.points = [Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(this.grid), Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(this.grid)];
+  }
+
+  _createClass(Game, [{
+    key: "makeFalseGrid",
+    value: function makeFalseGrid() {
+      var newGrid = [];
+
+      for (var i = 0; i < 8; i++) {
+        var row = [false, false, false, false, false, false, false, false];
+        newGrid.push(row);
+      }
+
+      return newGrid;
+    }
+  }, {
+    key: "initializeGameMap",
+    value: function initializeGameMap() {
+      var _this = this;
+
+      var gameMap = [];
+
+      for (var i = 0; i < 8; i++) {
+        //populate gameMap with empty all false dests and origins
+        var row = [];
+
+        for (var j = 0; j < 8; j++) {
+          row.push({
+            origins: this.makeFalseGrid(),
+            dests: this.makeFalseGrid()
+          });
+        }
+
+        gameMap.push(row);
+      }
+
+      for (var _i = 0; _i < 8; _i++) {
+        //now get moves for all the pieces
+        for (var _j = 0; _j < 8; _j++) {
+          var mark = this.grid[_i][_j];
+
+          if (mark !== '-') {
+            (function () {
+              var pieceType = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getPieceType"])(mark);
+              var color = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getPieceColor"])(mark);
+              var origin = [_i, _j];
+              var moves = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getPieceDumbMoves"])(origin, pieceType, color, _this.grid);
+              var dests = gameMap[_i][_j].dests;
+              moves.forEach(function (move) {
+                dests[move[0]][move[1]] = true;
+                gameMap[move[0]][move[1]].origins[origin[0]][origin[1]] = true;
+              });
+            })();
+          }
+        }
+      }
+
+      this.gameMap = gameMap;
+    }
+  }, {
+    key: "initializeGrid",
+    value: function initializeGrid() {
+      if (this.gameType === 'Pawn Clash') {
+        this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
+      } else if (this.gameType === 'Chess960') {
+        this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
+        var row = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'];
+        var newRow = [];
+
+        while (row.length > 0) {
+          var nextIdx = Math.floor(Math.random() * row.length);
+          newRow.push(row[nextIdx]);
+          row = row.slice(0, nextIdx).concat(row.slice(nextIdx + 1));
+        }
+
+        this.grid[0] = newRow;
+        this.grid[7] = newRow.map(function (mark) {
+          return mark.toLowerCase();
+        });
+      } else if (this.gameType instanceof Array) {
+        this.grid = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']];
+        this.grid[0] = this.gameType;
+        this.grid[7] = this.gameType.map(function (mark) {
+          return mark.toLowerCase();
+        });
+      } // else {
+      //     this.grid = [
+      //         ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+      //         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+      //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+      //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+      //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+      //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+      //         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+      //         ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
+      //     ];
+      // }
+      else {
+          this.grid = [['-', '-', '-', '-', '-', '-', '-', 'K'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-', '-', '-', '-'], ['-', '-', '-', '-', 'k', '-', 'r', '-']];
+        }
+
+      this.gameSoFar.push(this.getString());
+    }
+  }, {
+    key: "start",
+    value: function start() {
+      this.playing = true;
+      this.currentPlayer = 'white';
+      this.gameOverMessage = '';
+    }
+  }, {
+    key: "isGameOver",
+    value: function isGameOver() {
+      if (Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getAllMoves"])(this.currentPlayer, this.grid, this).length === 0) {
+        if (this.inCheck) {
+          this.gameOverMessage = 'Checkmate!';
+        } else {
+          this.gameOverMessage = 'Stalemate';
+        }
+
+        return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: "makeMove",
+    value: function makeMove(move) {
+      var origin = move[0];
+      var destination = move[1];
+      var mark = this.grid[origin[0]][origin[1]];
+
+      if (this.grid[destination[0]][destination[1]] !== '-') {
+        if (this.currentPlayer === 'white') {
+          this.capturedPieces[0].push(this.grid[destination[0]][destination[1]]);
+        } else {
+          this.capturedPieces[1].push(this.grid[destination[0]][destination[1]]);
+        }
+      }
+
+      if (destination[2] === 'special') {
+        this.handleSpecialMove(move);
+      } else {
+        this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+        this.grid[origin[0]][origin[1]] = '-';
+        this.gameSoFar.push(this.getString());
+        this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
+        this.inCheck = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["inCheck"])(this.currentPlayer, this.grid);
+        this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["getLastMove"])(this.gameSoFar));
+      }
+
+      this.points = [Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(this.grid), Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(this.grid)]; //update gameMap
+
+      var gameMap = this.gameMap; //delete origin from all of origin's dests' origins
+      //delete all dests at origin
+      //redo get dumb moves for destination
+      //redo get dumb moves for anywhere that could move to origin
+      //redo get dumb moves for anywhere that could move to destination
+
+      console.log(this.gameMap);
+    }
+  }, {
+    key: "handleSpecialMove",
+    value: function handleSpecialMove(move) {
+      var origin = move[0];
+      var destination = move[1];
+
+      if (move[1][3] === 'castleKing') {
+        this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+        this.grid[origin[0]][origin[1]] = '-';
+        var rookOrigin = [origin[0], 7];
+        var rookDestination = [origin[0], 5];
+        this.grid[rookDestination[0]][rookDestination[1]] = this.grid[rookOrigin[0]][rookOrigin[1]];
+        this.grid[rookOrigin[0]][rookOrigin[1]] = '-';
+        this.gameSoFar.push(this.getString());
+        this.moves.push('0-0');
+      } else if (move[1][3] === 'castleQueen') {
+        this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+        this.grid[origin[0]][origin[1]] = '-';
+        var _rookOrigin = [origin[0], 0];
+        var _rookDestination = [origin[0], 3];
+        this.grid[_rookDestination[0]][_rookDestination[1]] = this.grid[_rookOrigin[0]][_rookOrigin[1]];
+        this.grid[_rookOrigin[0]][_rookOrigin[1]] = '-';
+        this.gameSoFar.push(this.getString());
+        this.moves.push('0-0-0');
+      } else if (move[1][3] === 'enPassant') {
+        this.grid[destination[0]][destination[1]] = this.grid[origin[0]][origin[1]];
+        this.grid[origin[0]][origin[1]] = '-';
+        var capSpot = [origin[0], destination[1]];
+        this.grid[capSpot[0]][capSpot[1]] = '-';
+        this.gameSoFar.push(this.getString());
+        this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["getLastMove"])(this.gameSoFar));
+      } else {
+        console.log('making a special move');
+        this.grid[destination[0]][destination[1]] = move[1][3];
+        this.grid[origin[0]][origin[1]] = '-';
+        this.gameSoFar.push(this.getString());
+        this.moves.push(Object(_util_chess_util__WEBPACK_IMPORTED_MODULE_0__["getLastMove"])(this.gameSoFar));
+      }
+
+      this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
+      this.inCheck = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["inCheck"])(this.currentPlayer, this.grid);
+    }
+  }, {
+    key: "isMoveLegal",
+    value: function isMoveLegal(move, color) {
+      if (!this.playing) {
+        return false;
+      }
+
+      var origin = move[0];
+      var destination = move[1];
+      var mark = this.grid[origin[0]][origin[1]];
+      var pieceColor = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getPieceColor"])(mark);
+
+      if (pieceColor !== color) {
+        return false;
+      }
+
+      var pieceType = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getPieceType"])(mark);
+      var legalMoves = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getPieceMoves"])(origin, pieceType, pieceColor, this.grid, this);
+      var answer = false;
+      legalMoves.forEach(function (spot) {
+        if (destination[0] === spot[0] && destination[1] === spot[1]) {
+          answer = true;
+
+          if (spot[2] === 'special') {
+            move[1] = spot;
+          }
+        }
+      });
+      return answer;
+    }
+  }, {
+    key: "makeAIMove",
+    value: function makeAIMove(setProgress) {
+      if (!this.isGameOver()) {
+        this.AIMove = this.getAIMove(this.level, setProgress);
+        this.makeMove(this.AIMove);
+        return this.grid;
+      } else {
+        console.log(this.gameOverMessage);
+      }
+    }
+  }, {
+    key: "getString",
+    value: function getString() {
+      var answer = '';
+      this.grid.forEach(function (row) {
+        answer += row.join('');
+      });
+      return answer;
+    }
+  }, {
+    key: "getAIMove",
+    value: function getAIMove(level, setProgress) {
+      var _this2 = this;
+
+      var origins = [];
+      this.grid.forEach(function (row, rIdx) {
+        row.forEach(function (mark, cIdx) {
+          if (Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getPieceColor"])(mark) === _this2.currentPlayer) {
+            origins.push([rIdx, cIdx]);
+          }
+        });
+      });
+      var moves = [];
+      origins.forEach(function (origin) {
+        var mark = _this2.grid[origin[0]][origin[1]];
+        var pieceType = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getPieceType"])(mark);
+        Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getPieceMoves"])(origin, pieceType, _this2.currentPlayer, _this2.grid, _this2).forEach(function (destination) {
+          moves.push([origin, destination]);
+        });
+      });
+
+      if (level === 1) {
+        return moves[Math.floor(Math.random() * moves.length)];
+      }
+
+      return this.lookMovesAhead(level - 1, moves, setProgress);
+    }
+  }, {
+    key: "lookMovesAhead",
+    value: function lookMovesAhead(num, moves, setProgress) {
+      if (num > 0) {
+        var numMoves = moves.length;
+        var outcomes = [];
+
+        for (var i = 0; i < moves.length; i++) {
+          setProgress(i / numMoves);
+          var testGame = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["makeTestGame"])(this);
+          testGame.makeMove(moves[i]);
+
+          if (testGame.isGameOver() && testGame.inCheck) {
+            return moves[i];
+          }
+
+          var humanMoves = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getPossibleMoves"])(testGame);
+          var subOutcomes = [];
+
+          for (var j = 0; j < humanMoves.length; j++) {
+            var subTestGame = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["makeTestGame"])(testGame);
+            subTestGame.makeMove(humanMoves[j]);
+
+            if (num > 1) {
+              var subOutcomes1 = [];
+              var AIMoves = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getPossibleMoves"])(subTestGame);
+
+              for (var k = 0; k < AIMoves.length; k++) {
+                var subTestGame1 = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["makeTestGame"])(subTestGame);
+                subTestGame1.makeMove(AIMoves[k]);
+                var subOutcomes2 = [];
+
+                if (subTestGame1.isGameOver() && subTestGame1.inCheck) {
+                  subOutcomes2.push(100);
+                } else {
+                  var advantage = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(subTestGame1.grid) - Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(subTestGame1.grid);
+
+                  if (subTestGame1.currentPlayer === 'white') {
+                    advantage *= -1;
+                  }
+
+                  subOutcomes2.push(advantage); //////////takes freaking forever
+                  // let subHumanMoves = getPossibleMoves(subTestGame1);
+                  // for (let l = 0; l < subHumanMoves.length; l++) {
+                  //     let subTestGame2 = makeTestGame(subTestGame1);
+                  //     subTestGame2.makeMove(subHumanMoves[l]);
+                  //     let advantage = getWhitePoints(subTestGame2.grid) - getBlackPoints(subTestGame2.grid);
+                  //     if (subTestGame2.currentPlayer === 'black') {
+                  //         advantage *= -1;
+                  //     }
+                  //     if (subTestGame2.inCheck && subTestGame2.isGameOver()) {
+                  //         subOutcomes2.push(-100);
+                  //     }
+                  //     else {
+                  //         subOutcomes2.push(advantage);
+                  //     }
+                  // }
+                }
+
+                subOutcomes1.push(Math.min.apply(Math, subOutcomes2));
+              }
+
+              subOutcomes.push(Math.max.apply(Math, subOutcomes1));
+            } else {
+              var _advantage = Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getWhitePoints"])(subTestGame.grid) - Object(_chess_helperNew__WEBPACK_IMPORTED_MODULE_1__["getBlackPoints"])(subTestGame.grid);
+
+              if (subTestGame.currentPlayer === 'black') {
+                _advantage *= -1;
+              }
+
+              if (subTestGame.inCheck && subTestGame.isGameOver()) {
+                subOutcomes.push(-100);
+              } else {
+                subOutcomes.push(_advantage);
+              }
+            }
+          }
+
+          outcomes.push(Math.min.apply(Math, subOutcomes));
+        }
+
+        var max = Math.max.apply(Math, outcomes);
+        var indeces = [];
+
+        for (var _i2 = 0; _i2 < outcomes.length; _i2++) {
+          if (outcomes[_i2] === max) {
+            indeces.push(_i2);
           }
         }
 
@@ -2439,8 +3400,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _piece__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../piece */ "./frontend/components/chess_table/piece.jsx");
-/* harmony import */ var _chess_game__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../chess/game */ "./frontend/components/chess_table/chess/game.js");
-/* harmony import */ var _chess_chess_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../chess/chess_helper */ "./frontend/components/chess_table/chess/chess_helper.js");
+/* harmony import */ var _chess_gameNew__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../chess/gameNew */ "./frontend/components/chess_table/chess/gameNew.js");
+/* harmony import */ var _chess_chess_helperNew__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../chess/chess_helperNew */ "./frontend/components/chess_table/chess/chess_helperNew.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2477,7 +3438,7 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(PlayBoard).call(this, props));
     _this.flipped = false;
-    _this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"]('960');
+    _this.game = new _chess_gameNew__WEBPACK_IMPORTED_MODULE_2__["Game"]('960');
     _this.grid = _this.game.grid;
     _this.state = {
       grid: _this.grid,
@@ -2747,7 +3708,7 @@ function (_React$Component) {
     value: function resetGame() {
       this.highlightSquare = null;
       var level = this.game.level;
-      this.game = new _chess_game__WEBPACK_IMPORTED_MODULE_2__["Game"](this.typeSetting);
+      this.game = new _chess_gameNew__WEBPACK_IMPORTED_MODULE_2__["Game"](this.typeSetting);
       this.game.level = level;
       this.grid = this.game.grid;
       this.setState({
@@ -2896,6 +3857,13 @@ function (_React$Component) {
           popup: true
         });
       }
+
+      if (this.game.moves.length > 4 && !this.alreadyAsked && !this.props.userId) {
+        this.setState({
+          suggestLogin: true
+        });
+        this.alreadyAsked = true;
+      }
     }
   }, {
     key: "endDrag",
@@ -2915,7 +3883,7 @@ function (_React$Component) {
         var destination = e.target.id;
         var move = [[parseInt(this.origin[0]), parseInt(this.origin[2])], [parseInt(destination[0]), parseInt(destination[2])]];
 
-        if (Object(_chess_chess_helper__WEBPACK_IMPORTED_MODULE_3__["getPieceColor"])(this.grid[parseInt(this.origin[0])][parseInt(this.origin[2])]) === (this.currentPlayer === 'white' ? 'black' : 'white')) {
+        if (Object(_chess_chess_helperNew__WEBPACK_IMPORTED_MODULE_3__["getPieceColor"])(this.grid[parseInt(this.origin[0])][parseInt(this.origin[2])]) === (this.currentPlayer === 'white' ? 'black' : 'white')) {
           this.setHint("You're playing " + this.playerColor + "!");
           setTimeout(function () {
             _this6.setState({
@@ -2945,14 +3913,6 @@ function (_React$Component) {
           }
 
           this.highlightSquare = move[1];
-
-          if (this.game.moves.length > 4 && !this.alreadyAsked && !this.props.userId) {
-            this.setState({
-              suggestLogin: true
-            });
-            this.alreadyAsked = true;
-          }
-
           this.started = true;
           this.currentPlayer = this.game.currentPlayer; //pawn promotion has to replicate from here
 
