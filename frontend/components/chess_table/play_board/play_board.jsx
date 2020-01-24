@@ -1,7 +1,9 @@
 import React from 'react';
 import Piece from '../piece';
+//import { Game } from '../chess/game';
 import { Game } from '../chess/gameNew';
 import { getPieceIcon } from '../piece';
+//import { getPieceColor } from '../chess/chess_helper';
 import { getPieceColor } from '../chess/chess_helperNew';
 
 class PlayBoard extends React.Component {
@@ -459,6 +461,7 @@ class PlayBoard extends React.Component {
         let movesHeight = controlsHeight - 495;
         return (
             <div className="chess_table">
+                
                 {this.state.popup ? this.popupWindow() : ''}
                 {this.state.hint ? this.showHint() : ''}
                 <div

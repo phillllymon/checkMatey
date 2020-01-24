@@ -199,14 +199,44 @@ const onBoard = (spot) => {
 
 export const inCheck = (color, grid, game) => {
     let kingSpot = findKing(color, grid);
-    let moves = getAllDumbMoves((color === 'white' ? 'black' : 'white'), grid, game);
-    let answer = false;
-    moves.forEach((spot) => {
-        if (spot[0] === kingSpot[0] && spot[1] === kingSpot[1]) {
-            answer = true;
+    // let moves = getAllDumbMoves((color === 'white' ? 'black' : 'white'), grid, game);
+    // let answer = false;
+    // moves.forEach((spot) => {
+    //     if (spot[0] === kingSpot[0] && spot[1] === kingSpot[1]) {
+    //         answer = true;
+    //     }
+    // });
+    // return answer;
+
+    let diags = [
+        [1, 1],
+        [-1, -1],
+        [-1, 1],
+        [1, -1]
+    ];
+    for (let n = 0; n < diags.length; n++) {
+        let dir = diags[n];
+        let i = 1;
+        while (i < 8) {
+            let spot = [kingSpot[0] + (i * dir[0]), kingSpot[1] + (i * dir[1])];
+            if (onBoard(spot)) {
+                let mark = grid[spot[0]][spot[1]];
+                if (getPieceColor(mark) === color) {
+                    break;
+                }
+                if (getPieceColor(mark) === (color === 'black' ? 'white' : 'black') 
+                && (getPieceType(mark) === 'bishop' || getPieceType(mark) === 'queen')) {
+                    return true;
+                }
+            }
+            else {
+                break;
+            }
+            i++;
         }
-    });
-    return answer;
+    }
+
+    return false;
 };
 
 export const purgeCheckMoves = (moves, origin, color, grid) => {

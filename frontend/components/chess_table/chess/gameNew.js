@@ -132,30 +132,30 @@ export class Game {
                 return mark.toLowerCase();
             });
         }
-        // else {
-        //     this.grid = [
-        //         ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
-        //         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
-        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
-        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
-        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
-        //         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-        //         ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
-        //     ];
-        // }
         else {
             this.grid = [
-                ['-', '-', '-', '-', '-', '-', '-', 'K'],
+                ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+                ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
                 ['-', '-', '-', '-', '-', '-', '-', '-'],
                 ['-', '-', '-', '-', '-', '-', '-', '-'],
                 ['-', '-', '-', '-', '-', '-', '-', '-'],
                 ['-', '-', '-', '-', '-', '-', '-', '-'],
-                ['-', '-', '-', '-', '-', '-', '-', '-'],
-                ['-', '-', '-', '-', '-', '-', '-', '-'],
-                ['-', '-', '-', '-', 'k', '-', 'r', '-']
+                ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+                ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
             ];
         }
+        // else {
+        //     this.grid = [
+        //         ['-', '-', '-', '-', '-', '-', '-', 'K'],
+        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //         ['-', '-', '-', '-', '-', '-', '-', '-'],
+        //         ['-', '-', '-', '-', 'k', '-', 'r', '-']
+        //     ];
+        // }
         this.gameSoFar.push(this.getString());
     }
 
@@ -204,7 +204,7 @@ export class Game {
         this.points = [getBlackPoints(this.grid), getWhitePoints(this.grid)];
 
         //update gameMap
-        let gameMap = this.gameMap;
+        //let gameMap = this.gameMap;
         //delete origin from all of origin's dests' origins
         
         //delete all dests at origin
@@ -214,8 +214,12 @@ export class Game {
         //redo get dumb moves for anywhere that could move to origin
         
         //redo get dumb moves for anywhere that could move to destination
+
+
+        ////////!!provisional only:
+        this.initializeGameMap();
         
-        console.log(this.gameMap);
+        //console.log(this.gameMap);
     }
 
     handleSpecialMove(move) {
