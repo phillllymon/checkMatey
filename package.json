@@ -17,7 +17,7 @@
     "redux-thunk": "^2.2.0",
     "stockfish": "^10.0.2",
     "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8"
+    "webpack-cli": "^3.3.12"
   },
   "engines": {
     "node": "10.13.0",
