@@ -1,0 +1,13 @@
+.git
+.bundle
+log/*
+tmp/*
+!log/.keep
+!tmp/.keep
+storage/*
+!storage/.keep
+node_modules
+public/assets
+.byebug_history
+config/master.key
+.env

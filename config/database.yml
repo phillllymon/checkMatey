@@ -80,6 +80,4 @@ test:
 #
 production:
   <<: *default
-  database: checkMatey_production
-  username: checkMatey
-  password: <%= ENV['CHECKMATEY_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>

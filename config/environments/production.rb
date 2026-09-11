@@ -1,17 +1,17 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  config.action_mailer.default_url_options = { :host => 'portal.herokuapp.com' }
+  config.action_mailer.default_url_options = { host: ENV.fetch('APP_HOST', 'localhost') }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-      :address              => 'smtp.gmail.com',
-      :port                 => 587,
-      :domain               => 'gmail.com',
-      :user_name            => 'checkmateycaptain@gmail.com',
-      :password             => 'go_checkmatey_go',
-      :authentication       => 'plain',
-      :enable_starttls_auto => true
+      address:              'smtp.gmail.com',
+      port:                 587,
+      domain:               'gmail.com',
+      user_name:            ENV['SMTP_USERNAME'],
+      password:             ENV['SMTP_PASSWORD'],
+      authentication:       'plain',
+      enable_starttls_auto: true
   }
-  config.action_mailer.raise_delivery_errors = true 
+  config.action_mailer.raise_delivery_errors = false
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -53,13 +53,14 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options)
   config.active_storage.service = :local
 
-  # Mount Action Cable outside main process or domain
-  # config.action_cable.mount_path = nil
-  # config.action_cable.url = 'wss://example.com/cable'
-  # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
+  # Action Cable's WebSocket handshake checks the request's Origin header
+  # against this list; without it, every cable connection is rejected in production.
+  config.action_cable.allowed_request_origins = [
+    "https://#{ENV['APP_HOST']}", "http://#{ENV['APP_HOST']}"
+  ] if ENV['APP_HOST'].present?
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = ENV['FORCE_SSL'].present?
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.

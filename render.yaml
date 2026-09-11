@@ -1,0 +1,40 @@
+databases:
+  - name: checkmatey-db
+    plan: free
+    databaseName: checkmatey
+    user: checkmatey
+
+services:
+  - type: redis
+    name: checkmatey-redis
+    plan: free
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: everywhere
+
+  - type: web
+    name: checkmatey
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: checkmatey-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: checkmatey-redis
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: APP_HOST
+        value: checkmatey.onrender.com
+      - key: FORCE_SSL
+        value: "true"
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
