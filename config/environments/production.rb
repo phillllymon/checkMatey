@@ -11,7 +11,7 @@ Rails.application.configure do
       authentication:       'plain',
       enable_starttls_auto: true
   }
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   # Code is not reloaded between requests.
   config.cache_classes = true
