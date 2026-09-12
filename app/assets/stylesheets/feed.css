@@ -1,8 +1,10 @@
 .feed {
-    /* Matches the combined width of the two .play_bar boxes (250px content +
-       1px border each side + 8px margin each side) so the forum lines up
-       edge-to-edge with the multiplayer/play-computer boxes above it. */
-    width: 520px;
+    /* Matches the span from the multiplayer box's left edge to the play-computer
+       box's right edge: two .play_bar boxes (250px content + 1px border each
+       side + 8px margin each side = 268px per box) plus the .flag_two pirate
+       flag between them, which is sized 15vw with a 150px floor (see
+       pirate_images.css.erb). */
+    width: calc(520px + max(150px, 15vw));
     margin: 8px;
     border-radius: 4px;
     overflow: hidden;
