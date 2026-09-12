@@ -4,4 +4,4 @@ Ahoy<%= @friendName === '' ? '' : ' ' + @friendName %>!
 
 <%= @message %>
 
-https://checkmatey.herokuapp.com/challenges/<%= @username %>/<%= @yourName == 'A User' ? 'User' : @yourName%>/<%= @challengeId %>/<%= @gameType %>/<%= @gameTime %>
+<%= @base_url %>/challenges/<%= @username %>/<%= @yourName == 'A User' ? 'User' : @yourName%>/<%= @challengeId %>/<%= @gameType %>/<%= @gameTime %>

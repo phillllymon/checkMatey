@@ -7,6 +7,7 @@ class UserMailer < ApplicationMailer
     end
 
     def challenge_email(address, friendName, yourName, message, challengeId, gameType, gameTime)
+        @base_url = "https://#{ENV.fetch('APP_HOST', 'localhost:3000')}"
         @friendName = friendName
         @yourName = yourName
         @message = message
