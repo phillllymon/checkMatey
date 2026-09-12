@@ -2,7 +2,7 @@
 set -euo pipefail
 
 for i in $(seq 1 10); do
-  bundle _2.4.22_ exec rails db:create db:migrate && break
+  bundle _2.4.22_ exec rails db:create db:migrate db:seed && break
   echo "Database not ready yet, retrying ($i/10)..."
   sleep 3
 done
