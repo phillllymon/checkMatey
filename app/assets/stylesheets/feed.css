@@ -1,4 +1,8 @@
 .feed {
+    /* Matches the combined width of the two .play_bar boxes (250px content +
+       1px border each side + 8px margin each side) so the forum lines up
+       edge-to-edge with the multiplayer/play-computer boxes above it. */
+    width: 520px;
     margin: 8px;
     border-radius: 4px;
     overflow: hidden;
