@@ -1,16 +1,9 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
   config.action_mailer.default_url_options = { host: ENV.fetch('APP_HOST', 'localhost') }
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-      address:              'smtp.gmail.com',
-      port:                 587,
-      domain:               'gmail.com',
-      user_name:            ENV['SMTP_USERNAME'],
-      password:             ENV['SMTP_PASSWORD'],
-      authentication:       'plain',
-      enable_starttls_auto: true
-  }
+  # Render blocks/times out on outbound raw SMTP, so mail goes through
+  # SendGrid's HTTPS API instead (see lib/sendgrid_delivery_method.rb).
+  config.action_mailer.delivery_method = :sendgrid
   config.action_mailer.raise_delivery_errors = true
 
   # Code is not reloaded between requests.

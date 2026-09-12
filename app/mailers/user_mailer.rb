@@ -1,6 +1,6 @@
 class UserMailer < ApplicationMailer
 
-    default from: ENV.fetch('SMTP_USERNAME', 'checkmateycaptain@gmail.com')
+    default from: ENV.fetch('MAIL_FROM_ADDRESS', 'checkmateycaptain@gmail.com')
 
     def test_email
         mail(to: 'rparkerharris@gmail.com', subject: 'demo login')
