@@ -21,8 +21,8 @@ const Home = (props) => {
                 <div className="home">
                     
                     <MenuContainer />
-                    <div>
-                        <div id="ahoy" className="home_stack"> 
+                    <div className="home_content">
+                        <div id="ahoy" className="home_stack">
                             Ahoy, {props.user.username}!
                         </div>
                         <PlayBarContainer />
