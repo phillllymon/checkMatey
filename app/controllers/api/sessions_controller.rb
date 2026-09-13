@@ -4,19 +4,19 @@ class Api::SessionsController < ApplicationController
         @user = User.find_by_credentials(user_params[:username], user_params[:password])
         if @user
             if @user.username == 'DemoUser' && user_params[:demo]
-                UserMailer.test_email.deliver_later
-                if !@user.logged_out 
+                if !@user.logged_out
                     @user = User.find_by(username: 'DemoUser2')
                 end
-                if !@user.logged_out 
+                if !@user.logged_out
                     @user = User.find_by(username: 'DemoUser3')
                 end
-                if !@user.logged_out 
+                if !@user.logged_out
                     @user = User.find_by(username: 'DemoUser4')
                 end
                 if !@user.logged_out
                     @user = pick_demo_account
                 end
+                NtfyNotifier.notify("#{@user.username} just logged in - go challenge them!", title: 'CheckMatey demo login')
             end
             login(@user)
             redirect_to api_user_url(@user)
